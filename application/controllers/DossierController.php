@@ -3346,6 +3346,10 @@ class DossierController extends Zend_Controller_Action
         foreach ($pjs as $pj) {
             $pjPath = Service_Utils::getPjPath($pj);
 
+            if (!is_readable($pjPath)) {
+                continue;
+            }
+
             if (!$zip->addFile($pjPath, $pj['NOM_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE'])) {
                 error_log("Erreur lors de l'ajout de la pièce jointe \"{$pj['NOM_PIECEJOINTE']}{$pj['EXTENSION_PIECEJOINTE']}\" au fichier ZIP");
             }

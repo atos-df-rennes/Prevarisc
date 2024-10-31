@@ -3210,7 +3210,7 @@ class DossierController extends Zend_Controller_Action
 
         foreach ($rubriques as $rubrique) {
             $champs = $rubrique['CHAMPS'];
-            
+
             foreach ($champs as $champ) {
                 if ($service_champ->hasValue($champ)) {
                     $hasData = true;

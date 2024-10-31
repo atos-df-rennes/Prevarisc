@@ -37,7 +37,7 @@ class Service_DossierEffectifsDegagements extends Service_Descriptif
 
                     continue;
                 }
-                
+
                 foreach ($champ['FILS']['VALEURS'] as $index => $champs) {
                     foreach ($champs as $idChamp => $data) {
                         $this->saveValeurChamp(

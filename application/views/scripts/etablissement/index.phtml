@@ -476,15 +476,20 @@
                     <table class='table table-condensed champ_adresse champs'>
                         <thead>
                             <tr>
-                                <th>Localisation</th>
+                                <th>Localisation A</th> 
                                 <th>Type</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($this->etablissement['adresses'] as $adresse) : ?>
                                 <tr>
-                                    <td><?php echo strtolower($adresse["NUMERO_ADRESSE"]." ".$adresse["LIBELLE_RUE"]." ".$adresse["COMPLEMENT_ADRESSE"]." ".$adresse["CODEPOSTAL_COMMUNE"])." ".$adresse["LIBELLE_COMMUNE"] ?></td>
-                                    <td>Adresse postale</td>
+                                <td>
+                                <?php 
+                                    if (getenv('PREVARISC_API_ADRESSE')==1) {echo strtolower($adresse["ADRESSE_COMPLETE"]);}
+                                    else {echo strtolower($adresse["NUMERO_ADRESSE"] . " " . $adresse["LIBELLE_RUE"] . " " . $adresse["COMPLEMENT_ADRESSE"] . " " . $adresse["CODEPOSTAL_COMMUNE"] . " " . $adresse["LIBELLE_COMMUNE"]);}
+                                ?>
+                                </td>
+                                <td>Adresse postale</td>
                                 </tr>
                             <?php endforeach ?>
                         </tbody>

@@ -1141,7 +1141,35 @@ a.list-group-item-danger.active:focus {
 #tabPieceJointe .msg{  
     background: url('../images/msg.png') no-repeat;  
 }
+/*liste de suggestion*/
+/* Conteneur de la liste */
+#suggestions-list-ajout, #suggestions-list-edit {
+    list-style-type: none; 
+    padding-left: 0; 
+    margin: 0; 
+    max-height: 150px; 
+    overflow-y: auto; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    background-color: #fff; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    position: absolute;
+    z-index: 1000; 
+}
+/* Élément de la liste */
+#suggestions-list-ajout li,
+#suggestions-list-edit li {
+    padding: 5px 10px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+}
 
+/* Changement de couleur au survol */
+#suggestions-list-ajout li:hover,
+#suggestions-list-edit li:hover { 
+    background-color: blue; 
+    color: white; 
+}
 /* Fix provenant d'un problème IE11 / bootstrap*/
 #geoportail-container img, #geoconcept-container img {
     max-width: none;

@@ -26,6 +26,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
         $this->view->assign('isAllowedEffectifsDegagements', unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_ets'));
         $this->view->assign('isAllowedAvisDerogations', unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations'));
+        $this->view->assign('useApiAdresse', getenv('PREVARISC_API_ADRESSE'));
 
         $this->serviceEtablissement = new Service_Etablissement();
 
@@ -35,6 +36,11 @@ class EtablissementController extends Zend_Controller_Action
             $this->view->assign('avis', $this->serviceEtablissement->getAvisEtablissement($this->etablissement['general']['ID_ETABLISSEMENT'], $this->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
             $this->view->assign('hasAvisDerogations', array_key_exists('AVIS_DEROGATIONS', $this->serviceEtablissement->getHistorique($this->_request->id)));
         }
+
+        /** @var Zend_Controller_Action_Helper_ContextSwitch $ajaxContext */
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $ajaxContext->addActionContext('getAdresseApi', 'json')
+            ->initContext();
     }
 
     public function indexAction()
@@ -82,7 +88,6 @@ class EtablissementController extends Zend_Controller_Action
         $viewHeadLink->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
 
         $service_carto = new Service_Carto();
-
         $this->view->assign('key_ign', getenv('PREVARISC_PLUGIN_IGNKEY'));
         $this->view->assign('geoconcept_url', getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL'));
         $this->view->assign('default_lon', getenv('PREVARISC_CARTO_DEFAULT_LON') ?: '2.71490430425517');
@@ -140,7 +145,7 @@ class EtablissementController extends Zend_Controller_Action
                     }
                 }
 
-                $date = date('Y-m-d');
+                $date = date('Y-m-d');  
                 $this->serviceEtablissement->save($post['ID_GENRE'], $post, $request->id, $date);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'établissement a bien été mis à jour.'.$options]);
                 $this->_helper->redirector('index', null, null, ['id' => $request->id]);
@@ -554,6 +559,25 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('historique', $this->serviceEtablissement->getHistorique($this->_request->id));
     }
 
+    public function getAdresseApiAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
+
+        $serviceEtablissement = new Api_Service_Etablissement();        
+        $query = $this->getRequest()->getParam('query');
+        $type = $this->getRequest()->getParam('type');
+        $limit = $this->getRequest()->getParam('limit');
+        $data = $serviceEtablissement->getAdresseApi($query, $type, (int) $limit);
+        
+        echo Zend_Json::encode($data);
+        // if ($data !== null) {
+        //     $this->_helper->json($data);
+        // } else {
+        //     $this->_helper->json(['error' => 'No data found'], false);
+        // }
+        
+    }
+   
     public function deleteAction()
     {
         try {

@@ -1,7 +1,7 @@
 <?php
 
 class Service_Adresse
-{
+{               
     public const LONGUEUR_CODE_POSTAL = 5;
 
     /**
@@ -91,7 +91,7 @@ class Service_Adresse
         return $select->query()->fetch();
     }
 
-    public function getAdresseById($idAdresse)
+    public function getAdresseById($idAdresse)   
     {
         $dbEtablissementAdresse = new Model_DbTable_EtablissementAdresse();
 

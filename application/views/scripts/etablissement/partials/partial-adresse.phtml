@@ -1,22 +1,27 @@
 <tr <?= $this->adresse === null ? "id='prototype_adresse' class='prototypes hide'" : "class='adresse'" ?>>
-    <td id="adresse<?= $this->adresse['ID_ADRESSE'] ?>">
-        <input type='hidden' value='<?php echo $this->adresse["NUMINSEE_COMMUNE"] ?>' name='ADRESSES[<?php echo $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][NUMINSEE_COMMUNE]' />
-        <input type='hidden' value='<?php echo $this->adresse["LON_ETABLISSEMENTADRESSE"] ?>' name='ADRESSES[<?php echo $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][LON_ETABLISSEMENTADRESSE]' />
-        <input type='hidden' value='<?php echo $this->adresse["LAT_ETABLISSEMENTADRESSE"] ?>' name='ADRESSES[<?php echo $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][LAT_ETABLISSEMENTADRESSE]' />
-        <input type='hidden' value='<?php echo $this->adresse["NUMERO_ADRESSE"] ?>' name='ADRESSES[<?php echo $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][NUMERO_ADRESSE]' />
-        <input type='hidden' value='<?php echo $this->adresse["ID_RUE"] ?>' name='ADRESSES[<?php echo $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][ID_RUE]' />
-        <input type='hidden' value='<?php echo $this->adresse["COMPLEMENT_ADRESSE"] ?>' name='ADRESSES[<?php echo $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][COMPLEMENT_ADRESSE]' />
-        <span><?php echo strtolower($this->adresse["NUMERO_ADRESSE"]." ".$this->adresse["LIBELLE_RUE"]." ".$this->adresse["COMPLEMENT_ADRESSE"]." ".$this->adresse["CODEPOSTAL_COMMUNE"]). " " .$this->adresse["LIBELLE_COMMUNE"] ?></span>
-    </td>
+<td id="adresse<?= $this->adresse['ID_ADRESSE'] ?>">
+    <input type='hidden' value='<?= $this->adresse["NUMINSEE_COMMUNE"] ?>' name='ADRESSES[<?= $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][NUMINSEE_COMMUNE]' />
+    <input type='hidden' value='<?= $this->adresse["LON_ETABLISSEMENTADRESSE"] ?>' name='ADRESSES[<?= $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][LON_ETABLISSEMENTADRESSE]' />
+    <input type='hidden' value='<?= $this->adresse["LAT_ETABLISSEMENTADRESSE"] ?>' name='ADRESSES[<?= $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][LAT_ETABLISSEMENTADRESSE]' />
+    <input type='hidden' value='<?= $this->adresse["NUMERO_ADRESSE"] ?>' name='ADRESSES[<?= $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][NUMERO_ADRESSE]' />
+    <input type='hidden' value='<?= $this->adresse["ID_RUE"] ?>' name='ADRESSES[<?= $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][ID_RUE]' />
+    <input type='hidden' value='<?= $this->adresse["COMPLEMENT_ADRESSE"] ?>' name='ADRESSES[<?= $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][COMPLEMENT_ADRESSE]' />
+
+    <span>
+        <?php if (isset($this->adresse["LIBELLE_RUE"])): ?>
+            <?= strtolower($this->adresse["NUMERO_ADRESSE"] . " " . $this->adresse["LIBELLE_RUE"] . " " . $this->adresse["COMPLEMENT_ADRESSE"] . " " . $this->adresse["CODEPOSTAL_COMMUNE"] . " " . $this->adresse["LIBELLE_COMMUNE"]) ?>
+        <?php else: ?>
+            <?= htmlspecialchars($this->adresse["ADRESSE"]) ?>
+        <?php endif; ?>
+    </span>
+</td>
     <td>
-        Adresse postale
+            Adresse postale
     </td>
     <td>
         <small>
             <a class="modifierAdresse" data-id="<?= $this->adresse['ID_ADRESSE'] ?>" data-toggle="modal" data-backdrop="static" href="#adresse-modal-edit">Modifier</a>
+            <a href="#" onclick='$(this).closest("tr").remove(); return false;' class="text-danger">Retirer</a>
         </small>
-    </td>
-    <td>
-        <small><a href="#" onclick='$(this).parent().parent().parent().remove(); return false;' >Retirer</a></small>
     </td>
 </tr>

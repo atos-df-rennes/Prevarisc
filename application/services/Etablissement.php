@@ -1,5 +1,5 @@
 <?php
-
+require_once 'EtablissementManager.php';
 class Service_Etablissement implements Service_Interface_Etablissement
 {
     public const STATUT_CHANGE = 1;
@@ -273,7 +273,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 'rubriques' => $DB_rubriques->fetchAll('ID_ETABLISSEMENTINFORMATIONS = '.$informations->ID_ETABLISSEMENTINFORMATIONS, 'ID_ETABLISSEMENTINFORMATIONSRUBRIQUE')->toArray(),
                 'etablissement_lies' => $etablissement_lies,
                 'preventionnistes' => $search->setItem('utilisateur')->setCriteria('etablissementinformations.ID_ETABLISSEMENT', $id_etablissement)->run()->getAdapter()->getItems(0, 50)->toArray(),
-                'adresses' => $DB_adresse->get($id_etablissement),
+                'adresses' => $DB_adresse->get($id_etablissement),             
                 'presence_dus' => [] !== $contacts_dus,
             ];
 
@@ -283,7 +283,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         return $etablissement;
     }
-
+   
     /**
      * Récupération de l'historique d'un établissement.
      *
@@ -1091,21 +1091,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
             // Sauvegarde des adresses en fonction du genre
             if (in_array($id_genre, [2, 4, 5, 6, 7, 8, 9, 10]) && array_key_exists('ADRESSES', $data) && count($data['ADRESSES']) > 0) {
                 foreach ($data['ADRESSES'] as $key => $adresse) {
-                    if (
-                        $key > 0
-                        && array_key_exists('ID_RUE', $adresse)
-                        && (int) $adresse['ID_RUE'] > 0
-                    ) {
-                        $DB_adresse->createRow([
-                            'NUMERO_ADRESSE' => $adresse['NUMERO_ADRESSE'],
-                            'COMPLEMENT_ADRESSE' => $adresse['COMPLEMENT_ADRESSE'],
-                            'LON_ETABLISSEMENTADRESSE' => empty($adresse['LON_ETABLISSEMENTADRESSE']) ? null : $adresse['LON_ETABLISSEMENTADRESSE'],
-                            'LAT_ETABLISSEMENTADRESSE' => empty($adresse['LAT_ETABLISSEMENTADRESSE']) ? null : $adresse['LAT_ETABLISSEMENTADRESSE'],
-                            'ID_ETABLISSEMENT' => $etablissement->ID_ETABLISSEMENT,
-                            'ID_RUE' => $adresse['ID_RUE'],
-                            'NUMINSEE_COMMUNE' => $adresse['NUMINSEE_COMMUNE'],
-                        ])->save();
-                    }
+                    $etablissementManager = new EtablissementManager();
+                    $etablissementManager->getEtablissementAdresse()->save($adresse, $etablissement->ID_ETABLISSEMENT);
                 }
             }
 

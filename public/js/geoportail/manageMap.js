@@ -308,8 +308,19 @@ function geocodeWithJsAutoconf(geoContainerId, adresse, filterOptionsType, proje
                 y: t.locations[0].position.lat,
                 projection: projection
             };
-            viewer.setCenter(newCenter);
-            $("span.result").text("Géolocalisée IGN");
+
+
+
+            if (viewer.getLibMap()) {
+                viewer.setCenter(newCenter);
+                viewer.getLibMap().updateSize();  // Forcer le redimensionnement si la carte est déjà là
+                $("span.result").text("Géolocalisée IGN");
+            } else {
+                viewer.setCenter(newCenter); // Si c'est la première fois, on centre la carte aussi
+                $("span.result").text("Géolocalisée IGN");
+            }
+            
+          
             $(`#${geoContainerId}`).css('visibility', 'visible');
             // Changement des coordonnées et du marker 
             lonlat = updateCoordinates([viewer.getCenter().x, viewer.getCenter().y], 'EPSG:3857', 'EPSG:4326');

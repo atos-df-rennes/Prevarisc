@@ -1,6 +1,6 @@
 <?php
 
-class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
+class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract implements Service_Interface_EtablissementAdresse
 {
     protected $_name = 'etablissementadresse'; // Nom de la base
     protected $_primary = 'ID_ADRESSE'; // Clé primaire
@@ -69,6 +69,42 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                 return $this->fetchAll($select)->toArray();
         }
     }
+
+    public function save($adresse, $etablissementID)
+    {
+        if (
+            array_key_exists('ID_RUE', $adresse) &&
+            (int) $adresse['ID_RUE'] > 0
+        ) {
+       
+        $row = $this->createRow([
+            'NUMERO_ADRESSE' => $adresse['NUMERO_ADRESSE'],
+            'COMPLEMENT_ADRESSE' => $adresse['COMPLEMENT_ADRESSE'],
+            'LON_ETABLISSEMENTADRESSE' => empty($adresse['LON_ETABLISSEMENTADRESSE']) ? null : $adresse['LON_ETABLISSEMENTADRESSE'],
+            'LAT_ETABLISSEMENTADRESSE' => empty($adresse['LAT_ETABLISSEMENTADRESSE']) ? null : $adresse['LAT_ETABLISSEMENTADRESSE'],
+            'ID_ETABLISSEMENT' => $etablissementID,
+            'ID_RUE' => $adresse['ID_RUE'],
+            'NUMINSEE_COMMUNE' => $adresse['NUMINSEE_COMMUNE'],
+        ]);
+    
+
+        return $row->save(); 
+    }
+    
+    }
+
+    public function getAllAdresses()
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from('etablissementadresse') 
+            ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', ['LIBELLE_COMMUNE', 'CODEPOSTAL_COMMUNE'])
+            ->joinLeft('adresserue', 'etablissementadresse.ID_RUE = adresserue.ID_RUE AND etablissementadresse.NUMINSEE_COMMUNE = adresserue.NUMINSEE_COMMUNE', 'LIBELLE_RUE')
+            ->joinLeft('adresseruetype', 'adresseruetype.ID_RUETYPE = adresserue.ID_RUETYPE', ['LIBELLE_RUETYPE', 'ABREVIATION_RUETYPE']);
+    
+        return $this->fetchAll($select)->toArray();
+    }
+    
 
     public function getAdresse($idAdresse)
     {

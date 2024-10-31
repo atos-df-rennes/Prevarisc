@@ -1,20 +1,25 @@
-<?php 
-class AdresseAPIService
+<?php
+
+class Service_AdresseApi
 {
     private $baseUrl = 'https://api-adresse.data.gouv.fr/search/';
 
-    public function getAdresse_api(string $query, string $type, int $limit)
+    public function getAdresseApi(string $query, string $type, int $limit): ?array
     {
         $client = new Zend_Http_Client();
         $client->setUri($this->baseUrl);
         $client->setParameterGet('q', $query);
         $client->setParameterGet('type', $type);
         $client->setParameterGet('limit', $limit);
+        $client->setConfig([
+            'adapter' => Zend_Http_Client_Adapter_Curl::class,
+        ]);
 
         try {
-            $response = $client->request('GET');
+            $response = $client->request(Zend_Http_Client::GET);
         } catch (Zend_Http_Client_Exception $e) {
             error_log("Erreur lors de l'accès à l'API : " . $e->getMessage());
+
             return null;
         }
 

@@ -36,11 +36,6 @@ class EtablissementController extends Zend_Controller_Action
             $this->view->assign('avis', $this->serviceEtablissement->getAvisEtablissement($this->etablissement['general']['ID_ETABLISSEMENT'], $this->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
             $this->view->assign('hasAvisDerogations', array_key_exists('AVIS_DEROGATIONS', $this->serviceEtablissement->getHistorique($this->_request->id)));
         }
-
-        /** @var Zend_Controller_Action_Helper_ContextSwitch $ajaxContext */
-        $ajaxContext = $this->_helper->getHelper('AjaxContext');
-        $ajaxContext->addActionContext('getAdresseApi', 'json')
-            ->initContext();
     }
 
     public function indexAction()
@@ -557,25 +552,6 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('etablissement');
 
         $this->view->assign('historique', $this->serviceEtablissement->getHistorique($this->_request->id));
-    }
-
-    public function getAdresseApiAction()
-    {
-        $this->_helper->viewRenderer->setNoRender();
-
-        $serviceEtablissement = new Api_Service_Etablissement();        
-        $query = $this->getRequest()->getParam('query');
-        $type = $this->getRequest()->getParam('type');
-        $limit = $this->getRequest()->getParam('limit');
-        $data = $serviceEtablissement->getAdresseApi($query, $type, (int) $limit);
-        
-        echo Zend_Json::encode($data);
-        // if ($data !== null) {
-        //     $this->_helper->json($data);
-        // } else {
-        //     $this->_helper->json(['error' => 'No data found'], false);
-        // }
-        
     }
    
     public function deleteAction()

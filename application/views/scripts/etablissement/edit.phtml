@@ -1165,10 +1165,9 @@
 
 
 $('input[name="adresse_complete"]').on('input', function () {
-
     let query = $(this).val();
     const formId = $(this).closest('form').attr('id');
-    const type = 'street'; 
+    const type = 'housenumber'; 
     const limit = 5;
 
     if (query.length > 3) {
@@ -1178,12 +1177,9 @@ $('input[name="adresse_complete"]').on('input', function () {
                 type: type,
                 limit: limit,
             },
-            url: '/api/1.0/etablissement/get_adresseapi', 
+            url: '/api/1.0/etablissement/get_adresse_api',
             type: 'GET',
-            // dataType: 'json',
             success: function(data) {
-                console.log('Data:', data);
-
                 const suggestionsList = (formId === 'adresse-modal-ajout') ? 
                     $('#suggestions-list-ajout') : 
                     $('#suggestions-list-edit');
@@ -1193,12 +1189,10 @@ $('input[name="adresse_complete"]').on('input', function () {
                 }
 
                 suggestionsList.empty(); 
-
                 
-                if (data) {
-                    data.forEach(feature => {
+                if (data.response) {
+                    data.response.forEach(feature => {
                         const li = $('<li>').text(feature.ADRESSE); 
-                        console.log("hiii")
                      
                         li.on('click', function() {
                             $('input[name="adresse_complete"]').val(feature.ADRESSE); 

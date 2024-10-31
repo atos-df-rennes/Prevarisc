@@ -1,5 +1,10 @@
 <div class='action-buttons pull-right'>
-    <a class='btn' href="<?= $this->url(array('action' => 'effectifs-degagements-dossier-edit')) ?>">Modifier les effectifs et dégagements</a>
+    <?php if (!$this->hasData): ?>
+        <button type="button" class="btn btn-info">
+            Reprendre les données d'une étude précédente
+        </button>
+    <?php endif ?>
+    <a class='btn btn' href="<?= $this->url(array('action' => 'effectifs-degagements-dossier-edit')) ?>">Modifier les effectifs et dégagements</a>
 </div>
 
 <div id='descriptif-personnalise'>

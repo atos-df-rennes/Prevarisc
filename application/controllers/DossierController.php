@@ -3167,13 +3167,30 @@ class DossierController extends Zend_Controller_Action
 
         $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
         $service_dossier = new Service_Dossier();
+        $service_champ = new Service_Champ();
 
         if ($this->idDossier) {
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
         }
 
-        $this->view->assign('rubriques', $serviceDossierEffectifsDegagements->getRubriques($this->idDossier, 'Dossier'));
+        $rubriques = $serviceDossierEffectifsDegagements->getRubriques($this->idDossier, 'Dossier');
+        $hasData = false;
+
+        foreach ($rubriques as $rubrique) {
+            $champs = $rubrique['CHAMPS'];
+            
+            foreach ($champs as $champ) {
+                if ($service_champ->hasValue($champ)) {
+                    $hasData = true;
+
+                    break;
+                }
+            }
+        }
+
+        $this->view->assign('rubriques', $rubriques);
         $this->view->assign('champsvaleurliste', $serviceDossierEffectifsDegagements->getValeursListe());
+        $this->view->assign('hasData', $hasData);
     }
 
     public function effectifsDegagementsDossierEditAction(): void

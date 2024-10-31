@@ -232,7 +232,7 @@ class FormulaireController extends Zend_Controller_Action
                 }
             }
 
-            if ($this->serviceChamp->isTableau($champ)) {
+            if ($this->serviceChamp->isTableau($champ->toArray())) {
                 $fieldNames = [];
                 $fieldValues = [];
 
@@ -295,7 +295,7 @@ class FormulaireController extends Zend_Controller_Action
 
             if (
                 !$this->serviceChamp->isTableau(
-                    $this->modelChamp->find($infosParent['ID_CHAMP'])->current()
+                    $this->modelChamp->find($infosParent['ID_CHAMP'])->current()->toArray()
                 )
             ) {
                 $champFusionValue = $this->serviceUtils->getFullFusionName(

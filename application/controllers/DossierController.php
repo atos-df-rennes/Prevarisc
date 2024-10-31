@@ -3073,6 +3073,38 @@ class DossierController extends Zend_Controller_Action
         $service_dossier->copyPrescriptionDossier($prescriptionAmelioration, $idDossier, $idDossierInitial);
     }
 
+    public function formrecupeffectifsdegagementsAction(): void
+    {
+        // récupération de l'établissement attaché au dossier
+        $dbEtabDossier = new Model_DbTable_EtablissementDossier();
+        $listeEtab = $dbEtabDossier->getEtablissementListe($this->_getParam('idDossier'));
+
+        $this->view->assign('nbEtab', count($listeEtab));
+        $this->view->assign('idDossier', $this->_getParam('idDossier'));
+
+        if (1 == $this->view->nbEtab) {
+            // si il n'y a qu'un établissement, on affiche la liste des dossiers qu'il contient
+            $service_etablissement = new Service_Etablissement();
+            $dossiers = $service_etablissement->getDossiers($listeEtab['0']['ID_ETABLISSEMENT']);
+            $this->view->assign('etudes', $dossiers['etudes']);
+            $this->view->assign('visites', $dossiers['visites']);
+            $this->view->assign('autres', $dossiers['autres']);
+        }
+    }
+
+    public function recupeffectifsdegagementsAction(): void
+    {
+        $this->_helper->viewRenderer->setNoRender();
+
+        $idDossierInitial = (int) $this->_getParam('dossierSelect');
+        $idDossier = (int) $this->_getParam('idDossier');
+
+        $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
+
+        $rubriques = $serviceDossierEffectifsDegagements->getRubriques($idDossierInitial, 'Dossier');
+        $serviceDossierEffectifsDegagements->copyValeurs($idDossier, $rubriques);
+    }
+
     public function lienmultipleAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();

@@ -1,29 +1,29 @@
 {
-  "name": "prevarisc",
-  "version": "1.0.0",
-  "description": "![Prevarisc](https://github.com/atos-df-rennes/prevarisc/actions/workflows/actions.yml/badge.svg?event=push)",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
-  },
-  "scripts": {
-    "test": "cypress run"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/atos-df-rennes/prevarisc.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/atos-df-rennes/prevarisc/issues"
-  },
-  "homepage": "https://github.com/atos-df-rennes/prevarisc#readme",
-  "dependencies": {
-    "cypress": "^13.13.1"
-  },
-  "devDependencies": {
-    "@faker-js/faker": "^8.4.1"
-  }
+    "name": "prevarisc",
+    "version": "2.6.0",
+    "description": "![Prevarisc](https://github.com/atos-df-rennes/prevarisc/actions/workflows/actions.yml/badge.svg?event=push)",
+    "main": "index.js",
+    "directories": {
+        "doc": "docs",
+        "test": "tests"
+    },
+    "scripts": {
+        "test": "cypress run"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/atos-df-rennes/prevarisc.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/atos-df-rennes/prevarisc/issues"
+    },
+    "homepage": "https://github.com/atos-df-rennes/prevarisc#readme",
+    "dependencies": {
+        "cypress": "^13.13.1"
+    },
+    "devDependencies": {
+        "@faker-js/faker": "^8.4.1"
+    }
 }

@@ -5,7 +5,8 @@
         "rector/rector": "^1.0",
         "friendsofphp/php-cs-fixer": "^3.22",
         "povils/phpmnd": "^3.2",
-        "tomasvotruba/class-leak": "^0.2.16"
+        "tomasvotruba/class-leak": "^0.2.16",
+        "marcocesarato/php-conventional-changelog": "^1.17"
     },
     "config": {
         "allow-plugins": {

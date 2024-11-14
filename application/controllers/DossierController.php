@@ -3036,12 +3036,14 @@ class DossierController extends Zend_Controller_Action
 
     public function formrecupprescriptionAction(): void
     {
+        $idDossier = (int) $this->getRequest()->getParam('idDossier');
+
         // récupération de l'établissement attaché au dossier
         $dbEtabDossier = new Model_DbTable_EtablissementDossier();
-        $listeEtab = $dbEtabDossier->getEtablissementListe($this->_getParam('idDossier'));
+        $listeEtab = $dbEtabDossier->getEtablissementListe($idDossier);
 
         $this->view->assign('nbEtab', count($listeEtab));
-        $this->view->assign('idDossier', $this->_getParam('idDossier'));
+        $this->view->assign('idDossier', $idDossier);
 
         if (1 == $this->view->nbEtab) {
             // si il n'y a qu'un établissement, on affiche la liste des dossiers qu'il contient
@@ -3082,12 +3084,14 @@ class DossierController extends Zend_Controller_Action
 
     public function formrecupeffectifsdegagementsAction(): void
     {
+        $idDossier = (int) $this->getRequest()->getParam('idDossier');
+
         // récupération de l'établissement attaché au dossier
         $dbEtabDossier = new Model_DbTable_EtablissementDossier();
-        $listeEtab = $dbEtabDossier->getEtablissementListe($this->_getParam('idDossier'));
+        $listeEtab = $dbEtabDossier->getEtablissementListe($idDossier);
 
         $this->view->assign('nbEtab', count($listeEtab));
-        $this->view->assign('idDossier', $this->_getParam('idDossier'));
+        $this->view->assign('idDossier', $idDossier);
 
         if (1 == $this->view->nbEtab) {
             // si il n'y a qu'un établissement, on affiche la liste des dossiers qu'il contient

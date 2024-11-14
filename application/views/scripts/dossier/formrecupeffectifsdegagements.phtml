@@ -17,7 +17,11 @@
 				<?php if (count($this->etudes) > 0): ?>
 					<h4>Études</h4>
 					<ul class='recherche_liste'>
-						<?= $this->partialLoop('dossier/results/dossier.phtml', $this->etudes) ?>
+						<?= $this->partial('dossier/results/dossier.phtml', [
+							'dossiers' => $this->etudes,
+							'type' => 'single',
+							'idDossierCourant' => $this->idDossier,
+						]) ?>
 					</ul>
 				<?php endif ?>
 			</div>

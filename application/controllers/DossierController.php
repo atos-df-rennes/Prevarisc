@@ -3056,21 +3056,28 @@ class DossierController extends Zend_Controller_Action
     public function recupprescriptionAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
-        // On reprend les prescriptions du dossier ayant id : dossierSelect pui on les ajoute au dossier ayant id : idDossier
-
-        $idDossierInitial = (int) $this->_getParam('dossierSelect');
-        $idDossier = (int) $this->_getParam('idDossier');
-
         $service_dossier = new Service_Dossier();
 
-        $prescriptionRappelsReglementaire = $service_dossier->getPrescriptions($idDossierInitial, 0);
-        $service_dossier->copyPrescriptionDossier($prescriptionRappelsReglementaire, $idDossier, $idDossierInitial);
+        $idDossier = (int) $this->_getParam('idDossier');
+        $dossiersSelect = [];
+        $post = $this->getRequest()->getPost();
 
-        $prescriptionExploitation = $service_dossier->getPrescriptions($idDossierInitial, 1);
-        $service_dossier->copyPrescriptionDossier($prescriptionExploitation, $idDossier, $idDossierInitial);
+        foreach ($post as $key => $value) {
+            if (0 === strpos($key, 'dossierSelect-')) {
+                $dossiersSelect[] = $value;
+            }
+        }
 
-        $prescriptionAmelioration = $service_dossier->getPrescriptions($idDossierInitial, 2);
-        $service_dossier->copyPrescriptionDossier($prescriptionAmelioration, $idDossier, $idDossierInitial);
+        foreach ($dossiersSelect as $idDossierInitial) {
+            $prescriptionRappelsReglementaire = $service_dossier->getPrescriptions($idDossierInitial, 0);
+            $service_dossier->copyPrescriptionDossier($prescriptionRappelsReglementaire, $idDossier, $idDossierInitial);
+
+            $prescriptionExploitation = $service_dossier->getPrescriptions($idDossierInitial, 1);
+            $service_dossier->copyPrescriptionDossier($prescriptionExploitation, $idDossier, $idDossierInitial);
+
+            $prescriptionAmelioration = $service_dossier->getPrescriptions($idDossierInitial, 2);
+            $service_dossier->copyPrescriptionDossier($prescriptionAmelioration, $idDossier, $idDossierInitial);
+        }
     }
 
     public function formrecupeffectifsdegagementsAction(): void

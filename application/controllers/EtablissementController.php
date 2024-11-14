@@ -657,7 +657,8 @@ class EtablissementController extends Zend_Controller_Action
     public function avisDerogationsEtablissementAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
-        $this->view->assign('historiqueAvisDerogations', $this->serviceEtablissement->getHistorique($this->_request->id)['AVIS_DEROGATIONS'] ?? []);
+        $this->view->assign('historiqueAvisDerogations', $this->serviceEtablissement->getHistorique($this->getRequest()->getParam('id'))['AVIS_DEROGATIONS'] ?? []);
+        $this->view->assign('derogationsOriginales', $this->serviceEtablissement->getDescriptifs($this->getRequest()->getParam('id'))['derogations']);
     }
 
     public function retablirEtablissementAction(): void

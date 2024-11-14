@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e02a38f273dcad558831a10c6867f93",
+    "content-hash": "39cf0882390e174eda091591402ebd12",
     "packages": [
         {
             "name": "cybermonde/odtphp",

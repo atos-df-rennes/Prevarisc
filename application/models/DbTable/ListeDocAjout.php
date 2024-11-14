@@ -2,8 +2,11 @@
 
 class Model_DbTable_ListeDocAjout extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'listedocajout'; // Nom de la base
-    protected $_primary = 'ID_DOCAJOUT'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'listedocajout';
+
+    // Clé primaire
+    protected $_primary = 'ID_DOCAJOUT';
 
     // récupere les éventuels documents qui auraient été ajoutés
 

@@ -2,7 +2,7 @@
 
 class GestionDesCommunesController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         // Définition du layout
         $this->_helper->layout->setLayout('menu_admin');
@@ -14,7 +14,7 @@ class GestionDesCommunesController extends Zend_Controller_Action
         $this->view->assign('rowset_communes', $commune->fetchAll(null, 'LIBELLE_COMMUNE'));
     }
 
-    public function displayAction()
+    public function displayAction(): void
     {
         // Modèles de données
         $DB_informations = new Model_DbTable_UtilisateurInformations();
@@ -30,7 +30,7 @@ class GestionDesCommunesController extends Zend_Controller_Action
         $this->view->assign('ext', $this->_request->ext);
     }
 
-    public function saveAction()
+    public function saveAction(): void
     {
         try {
             if (
@@ -71,12 +71,12 @@ class GestionDesCommunesController extends Zend_Controller_Action
                     'message' => 'La commune '.$commune->LIBELLE_COMMUNE.' a été enregistrée.',
                 ]
             );
-        } catch (Exception $ex) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger(
                 [
                     'context' => 'error',
                     'title' => 'Aie',
-                    'message' => $ex->getMessage(),
+                    'message' => $exception->getMessage(),
                 ]
             );
         }

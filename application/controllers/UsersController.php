@@ -2,7 +2,7 @@
 
 class UsersController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -15,7 +15,7 @@ class UsersController extends Zend_Controller_Action
         $this->view->assign('groupes', $service_user->getAllGroupes());
     }
 
-    public function editAction()
+    public function editAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -49,7 +49,7 @@ class UsersController extends Zend_Controller_Action
         }
     }
 
-    public function addAction()
+    public function addAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -84,7 +84,7 @@ class UsersController extends Zend_Controller_Action
         $this->render('edit');
     }
 
-    public function matriceDesDroitsAction()
+    public function matriceDesDroitsAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -123,6 +123,7 @@ class UsersController extends Zend_Controller_Action
                         }
                     }
                 }
+
                 $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
                 $cache->remove('acl');
 
@@ -144,7 +145,7 @@ class UsersController extends Zend_Controller_Action
         }
     }
 
-    public function editGroupAction()
+    public function editGroupAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -166,7 +167,7 @@ class UsersController extends Zend_Controller_Action
         }
     }
 
-    public function addGroupAction()
+    public function addGroupAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -188,7 +189,7 @@ class UsersController extends Zend_Controller_Action
         $this->render('edit-group');
     }
 
-    public function deleteGroupAction()
+    public function deleteGroupAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -199,14 +200,14 @@ class UsersController extends Zend_Controller_Action
         try {
             $service_user->deleteGroup($this->_request->gid);
             $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'Le groupe a été supprimé.']);
-        } catch (Exception $e) {
-            $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'Erreur dans la suppression du groupe. Veuillez rééssayez. ('.$e->getMessage().')']);
+        } catch (Exception $exception) {
+            $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'Erreur dans la suppression du groupe. Veuillez rééssayez. ('.$exception->getMessage().')']);
         }
 
         $this->_helper->redirector('index', null, null);
     }
 
-    public function ressourcesSpecialiseesAction()
+    public function ressourcesSpecialiseesAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -249,7 +250,7 @@ class UsersController extends Zend_Controller_Action
         $this->view->assign('classes', $service_classe->getAll());
     }
 
-    public function addRessourceSpecialiseeAction()
+    public function addRessourceSpecialiseeAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
@@ -260,76 +261,79 @@ class UsersController extends Zend_Controller_Action
         $array = null;
         if ($this->_request->isPost()) {
             try {
-                $name = $text = '';
+                $name = '';
+                $text = '';
 
                 switch ($this->_request->type_ressource) {
                     case 'etablissement':
                         switch ($this->_request->genre) {
                             case '2':
                                 $name = 'etablissement_erp_';
-                                $name .= (is_array($this->_request->types) ? implode($this->_request->types, '-') : '0').'_';
-                                $name .= (is_array($this->_request->categories) ? implode($this->_request->categories, '-') : '0').'_';
+                                $name .= (is_array($this->_request->types) ? implode('-', $this->_request->types) : '0').'_';
+                                $name .= (is_array($this->_request->categories) ? implode('-', $this->_request->categories) : '0').'_';
                                 $name .= $this->_request->commissions.'_';
                                 $name .= $this->_request->groupements.'_';
                                 $name .= $this->_request->commune;
 
                                 if (is_array($this->_request->types)) {
                                     $array = $this->_request->types;
-                                    array_walk($array, function (&$val, $key) use (&$array) {
+                                    array_walk($array, function (&$val, $key) use (&$array): void {
                                         $service_type = new Service_TypeActivite();
                                         $tmp_types = $service_type->getAll();
                                         $types = [];
                                         foreach ($tmp_types as $t) {
                                             $types[$t['ID_TYPEACTIVITE']] = $t['LIBELLE_ACTIVITE'];
                                         }
+
                                         $array[$key] = $types[$val];
                                     });
                                 }
 
                                 $text = 'Établissement (';
-                                $text .= (is_array($this->_request->types) ? 'Types '.implode($array, '-') : 'Tous les types').' - ';
-                                $text .= (is_array($this->_request->categories) ? 'Catégories '.implode($this->_request->categories, '-') : 'Toutes les catégories').' - ';
-                                $text .= (0 == $this->_request->commissions ? 'Ignorer les commissions' : 'Sur les commissions de l\'utilisateur').' - ';
-                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : 'Sur les groupements de l\'utilisateur').' - ';
-                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
+                                $text .= (is_array($this->_request->types) ? 'Types '.implode('-', $array) : 'Tous les types').' - ';
+                                $text .= (is_array($this->_request->categories) ? 'Catégories '.implode('-', $this->_request->categories) : 'Toutes les catégories').' - ';
+                                $text .= (0 == $this->_request->commissions ? 'Ignorer les commissions' : "Sur les commissions de l'utilisateur").' - ';
+                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : "Sur les groupements de l'utilisateur").' - ';
+                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : "Sur la commune de l'utilisateur");
                                 $text .= ')';
 
                                 break;
 
                             case '3':
                                 $name = 'etablissement_cell_';
-                                $name .= (is_array($this->_request->types) ? implode($this->_request->types, '-') : '0').'_';
-                                $name .= (is_array($this->_request->categories) ? implode($this->_request->categories, '-') : '0');
+                                $name .= (is_array($this->_request->types) ? implode('-', $this->_request->types) : '0').'_';
+                                $name .= (is_array($this->_request->categories) ? implode('-', $this->_request->categories) : '0');
 
                                 if (is_array($this->_request->types)) {
                                     $array = $this->_request->types;
-                                    array_walk($array, function (&$val, $key) use (&$array) {
+                                    array_walk($array, function (&$val, $key) use (&$array): void {
                                         $service_type = new Service_TypeActivite();
                                         $tmp_types = $service_type->getAll();
                                         $types = [];
                                         foreach ($tmp_types as $t) {
                                             $types[$t['ID_TYPEACTIVITE']] = $t['LIBELLE_ACTIVITE'];
                                         }
+
                                         $array[$key] = $types[$val];
                                     });
                                 }
 
                                 $text = 'Cellule (';
-                                $text .= (is_array($this->_request->types) ? 'Types '.implode($array, '-') : 'Tous les types').' - ';
-                                $text .= (is_array($this->_request->categories) ? 'Catégories '.implode($this->_request->categories, '-') : 'Toutes les catégories');
+                                $text .= (is_array($this->_request->types) ? 'Types '.implode('-', $array) : 'Tous les types').' - ';
+                                $text .= (is_array($this->_request->categories) ? 'Catégories '.implode('-', $this->_request->categories) : 'Toutes les catégories');
                                 $text .= ')';
 
                                 break;
 
                             case '4':
                                 $name = 'etablissement_hab_';
-                                $name .= (is_array($this->_request->familles) ? implode($this->_request->familles, '-') : '0').'_';
+                                $name .= (is_array($this->_request->familles) ? implode('-', $this->_request->familles) : '0').'_';
                                 $name .= $this->_request->groupements.'_';
                                 $name .= $this->_request->commune;
 
                                 if (is_array($this->_request->familles)) {
                                     $array = $this->_request->familles;
-                                    array_walk($array, function (&$val, $key) use (&$array) {
+                                    array_walk($array, function (&$val, $key) use (&$array): void {
                                         $service_famille = new Service_Famille();
                                         $tmp_familles = $service_famille->getAll();
                                         $types = [];
@@ -343,38 +347,39 @@ class UsersController extends Zend_Controller_Action
                                 }
 
                                 $text = 'Habitation (';
-                                $text .= (is_array($this->_request->familles) ? 'Familles '.implode($array, '-') : 'Toutes les familles').' - ';
-                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : 'Sur les groupements de l\'utilisateur').' - ';
-                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
+                                $text .= (is_array($this->_request->familles) ? 'Familles '.implode('-', $array) : 'Toutes les familles').' - ';
+                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : "Sur les groupements de l'utilisateur").' - ';
+                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : "Sur la commune de l'utilisateur");
                                 $text .= ')';
 
                                 break;
 
                             case '5':
                                 $name = 'etablissement_igh_';
-                                $name .= (is_array($this->_request->classes) ? implode($this->_request->classes, '-') : '0').'_';
+                                $name .= (is_array($this->_request->classes) ? implode('-', $this->_request->classes) : '0').'_';
                                 $name .= $this->_request->commissions.'_';
                                 $name .= $this->_request->groupements.'_';
                                 $name .= $this->_request->commune;
 
                                 if (is_array($this->_request->classes)) {
                                     $array = $this->_request->classes;
-                                    array_walk($array, function (&$val, $key) use (&$array) {
+                                    array_walk($array, function (&$val, $key) use (&$array): void {
                                         $service_classe = new Service_Classe();
                                         $tmp_classes = $service_classe->getAll();
                                         $classes = [];
                                         foreach ($tmp_classes as $t) {
                                             $classes[$t['ID_CLASSE']] = $t['LIBELLE_CLASSE'];
                                         }
+
                                         $array[$key] = $classes[$val];
                                     });
                                 }
 
                                 $text = 'IGH (';
-                                $text .= (is_array($this->_request->classes) ? 'Classes '.implode($array, '-') : 'Toutes les classes').' - ';
-                                $text .= (0 == $this->_request->commissions ? 'Ignorer les commissions' : 'Sur les commissions de l\'utilisateur').' - ';
-                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : 'Sur les groupements de l\'utilisateur').' - ';
-                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
+                                $text .= (is_array($this->_request->classes) ? 'Classes '.implode('-', $array) : 'Toutes les classes').' - ';
+                                $text .= (0 == $this->_request->commissions ? 'Ignorer les commissions' : "Sur les commissions de l'utilisateur").' - ';
+                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : "Sur les groupements de l'utilisateur").' - ';
+                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : "Sur la commune de l'utilisateur");
                                 $text .= ')';
 
                                 break;
@@ -385,8 +390,8 @@ class UsersController extends Zend_Controller_Action
                                 $name .= $this->_request->commune;
 
                                 $text = 'EIC (';
-                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : 'Sur les groupements de l\'utilisateur').' - ';
-                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
+                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : "Sur les groupements de l'utilisateur").' - ';
+                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : "Sur la commune de l'utilisateur");
                                 $text .= ')';
 
                                 break;
@@ -397,8 +402,8 @@ class UsersController extends Zend_Controller_Action
                                 $name .= $this->_request->commune;
 
                                 $text = 'Camping (';
-                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : 'Sur les groupements de l\'utilisateur').' - ';
-                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
+                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : "Sur les groupements de l'utilisateur").' - ';
+                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : "Sur la commune de l'utilisateur");
                                 $text .= ')';
 
                                 break;
@@ -409,8 +414,8 @@ class UsersController extends Zend_Controller_Action
                                 $name .= $this->_request->commune;
 
                                 $text = 'Manifestation temporaire (';
-                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : 'Sur les groupements de l\'utilisateur').' - ';
-                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
+                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : "Sur les groupements de l'utilisateur").' - ';
+                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : "Sur la commune de l'utilisateur");
                                 $text .= ')';
 
                                 break;
@@ -421,35 +426,36 @@ class UsersController extends Zend_Controller_Action
                                 $name .= $this->_request->commune;
 
                                 $text = 'IOP (';
-                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : 'Sur les groupements de l\'utilisateur').' - ';
-                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
+                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : "Sur les groupements de l'utilisateur").' - ';
+                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : "Sur la commune de l'utilisateur");
                                 $text .= ')';
 
                                 break;
 
                             case '10':
                                 $name = 'etablissement_zone_';
-                                $name .= (is_array($this->_request->classements) ? implode($this->_request->classements, '-') : '0').'_';
+                                $name .= (is_array($this->_request->classements) ? implode('-', $this->_request->classements) : '0').'_';
                                 $name .= $this->_request->groupements.'_';
                                 $name .= $this->_request->commune;
 
                                 if (is_array($this->_request->classements)) {
                                     $array = $this->_request->classements;
-                                    array_walk($array, function (&$val, $key) use (&$array) {
+                                    array_walk($array, function (&$val, $key) use (&$array): void {
                                         $service_genre = new Service_Genre();
                                         $tmp_classement = $service_genre->getClassements();
                                         $classement = [];
                                         foreach ($tmp_classement as $t) {
                                             $classement[$t['ID_CLASSEMENT']] = $t['LIBELLE_CLASSEMENT'];
                                         }
+
                                         $array[$key] = $classement[$val];
                                     });
                                 }
 
                                 $text = 'Zone (';
-                                $text .= (is_array($this->_request->classements) ? 'Classes '.implode($array, '-') : 'Tous les classements').' - ';
-                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : 'Sur les groupements de l\'utilisateur').' - ';
-                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
+                                $text .= (is_array($this->_request->classements) ? 'Classes '.implode('-', $array) : 'Tous les classements').' - ';
+                                $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : "Sur les groupements de l'utilisateur").' - ';
+                                $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : "Sur la commune de l'utilisateur");
                                 $text .= ')';
 
                                 break;
@@ -466,29 +472,30 @@ class UsersController extends Zend_Controller_Action
 
                     case 'dossier':
                         $name = 'dossier_';
-                        $name .= (is_array($this->_request->dossier_natures) ? implode($this->_request->dossier_natures, '-') : '0');
+                        $name .= (is_array($this->_request->dossier_natures) ? implode('-', $this->_request->dossier_natures) : '0');
 
                         if (is_array($this->_request->dossier_natures)) {
                             $array = $this->_request->dossier_natures;
-                            array_walk($array, function (&$val, $key) use (&$array) {
+                            array_walk($array, function (&$val, $key) use (&$array): void {
                                 $service_dossier = new Service_Dossier();
                                 $tmp_natures = $service_dossier->getAllNatures();
                                 $natures = [];
                                 foreach ($tmp_natures as $n) {
                                     $natures[$n['ID_DOSSIERNATURE']] = $n['LIBELLE_DOSSIERNATURE'];
                                 }
+
                                 $array[$key] = $natures[$val];
                             });
                         }
 
                         $text = 'Dossier (';
-                        $text .= (is_array($this->_request->dossier_natures) ? 'Natures '.implode($array, '-') : 'Toutes les natures');
+                        $text .= (is_array($this->_request->dossier_natures) ? 'Natures '.implode('-', $array) : 'Toutes les natures');
                         $text .= ')';
 
                         $id_resource = $model_resource->createRow(['name' => $name, 'text' => '' == $this->_request->text ? $text : $this->_request->text])->save();
                         $model_privilege->createRow(['name' => 'view_doss', 'text' => 'Lecture', 'id_resource' => $id_resource])->save();
                         $model_privilege->createRow(['name' => 'edit_doss', 'text' => 'Modifier', 'id_resource' => $id_resource])->save();
-                        $model_privilege->createRow(['name' => 'verrouillage_dossier', 'text' => 'Verrouillage d\'un dossier', 'id_resource' => $id_resource])->save();
+                        $model_privilege->createRow(['name' => 'verrouillage_dossier', 'text' => "Verrouillage d'un dossier", 'id_resource' => $id_resource])->save();
 
                         break;
 
@@ -505,7 +512,7 @@ class UsersController extends Zend_Controller_Action
         }
     }
 
-    public function deleteRessourceSpecialiseeAction()
+    public function deleteRessourceSpecialiseeAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);

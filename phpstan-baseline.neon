@@ -267,7 +267,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
-			count: 15
+			count: 16
 			path: application/controllers/DossierController.php
 
 		-
@@ -557,7 +557,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$nbEtab\\.$#"
-			count: 1
+			count: 2
 			path: application/controllers/DossierController.php
 
 		-
@@ -607,7 +607,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getPost\\(\\)\\.$#"
-			count: 5
+			count: 6
 			path: application/controllers/DossierController.php
 
 		-
@@ -672,7 +672,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id\\.$#"
-			count: 33
+			count: 32
 			path: application/controllers/EtablissementController.php
 
 		-
@@ -1871,6 +1871,11 @@ parameters:
 			path: application/services/Dossier.php
 
 		-
+			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOSSIER_REPRISE\\.$#"
+			count: 1
+			path: application/services/Dossier.php
+
+		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ETABLISSEMENT\\.$#"
 			count: 1
 			path: application/services/Dossier.php
@@ -2114,6 +2119,11 @@ parameters:
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PASSWD_UTILISATEUR\\.$#"
 			count: 1
 			path: application/services/Login.php
+
+		-
+			message: "#^Access to an undefined property Zend_Session_Namespace\\:\\:\\$date\\.$#"
+			count: 1
+			path: application/services/Notification.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ARTICLE\\.$#"

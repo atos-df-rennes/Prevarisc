@@ -98,6 +98,12 @@
             <a href='<?= $this->url(array("controller" => "dossier", "action" => "piece-jointe", "id" => $this->idDossier), false, true) ?>'>
                 <i class="icon-share icon-black"></i>
                 Pièces jointes
+
+                <?php if($this->nombreNouvellesPiecesJointes > 0): ?>
+                    <div class="label label-important pull-right">
+                        <?= $this->nombreNouvellesPiecesJointes ?>
+                    </div>
+                <?php endif ?>
             </a>
         </li>
 

@@ -47,8 +47,9 @@ class Service_Utils
 
     private function formatFusionName(string $name): string
     {
-        $loweredName = strtolower($name);
+        $trimmedName = trim($name);
+        $loweredName = strtolower($trimmedName);
 
-        return preg_replace(['/\s+/', '/\'+/', '/\"+/'], '_', $loweredName);
+        return preg_replace(['/\s+/', "/'+/", '/\"+/'], '_', $loweredName);
     }
 }

@@ -31,7 +31,14 @@
         </thead>
         <tbody>
         <?=
-            $this->partial("piece-jointe/display.phtml", array("path" => $this->path, "listePj" => $this->listePj, "type" => $this->type, "id" => $this->identifiant, "verrou" => $this->verrou, "isPlatau" => $this->isPlatau))
+            $this->partial("piece-jointe/display.phtml", array(
+                "path" => $this->path,
+                "listePj" => $this->listePj,
+                "type" => $this->type,
+                "id" => $this->identifiant,
+                "verrou" => $this->verrou,
+                "isPlatau" => $this->isPlatau,
+            ))
         ?>
         </tbody>
     </table>

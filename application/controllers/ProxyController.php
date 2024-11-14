@@ -2,7 +2,7 @@
 
 class ProxyController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->getHelper('viewRenderer')->setNoRender();
         $this->_helper->layout()->disableLayout();

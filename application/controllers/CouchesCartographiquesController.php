@@ -18,7 +18,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
         $this->serviceCarto = new Service_Carto();
     }
 
-    public function listAction()
+    public function listAction(): void
     {
         $this->view->assign('couches_cartographiques', $this->serviceCarto->getAll());
 
@@ -28,7 +28,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
         $this->view->assign('default_lat', getenv('PREVARISC_CARTO_DEFAULT_LAT') ?: '50.4727273438818');
     }
 
-    public function addAction()
+    public function addAction(): void
     {
         if ($this->_request->isPost()) {
             try {
@@ -51,7 +51,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
         $this->addAction();
     }
 
-    public function editAction()
+    public function editAction(): void
     {
         $id = $this->getRequest()->getParam('id');
         $this->view->assign('row', $this->serviceCarto->findById($id));
@@ -71,7 +71,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
         $this->render('add');
     }
 
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
@@ -79,8 +79,8 @@ class CouchesCartographiquesController extends Zend_Controller_Action
         try {
             $this->serviceCarto->delete($this->getRequest()->getParam('id'));
             $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'La couche cartographique a été supprimée.']);
-        } catch (Exception $e) {
-            $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'La couche cartographique n\'a pas été supprimée. Veuillez rééssayez. ('.$e->getMessage().')']);
+        } catch (Exception $exception) {
+            $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'La couche cartographique n\'a pas été supprimée. Veuillez rééssayez. ('.$exception->getMessage().')']);
         }
 
         $this->_helper->redirector('list');

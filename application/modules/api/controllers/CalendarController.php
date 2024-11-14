@@ -2,7 +2,7 @@
 
 class Api_CalendarController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         $idCommission = 0;
         if ($this->_getParam('commission')) {

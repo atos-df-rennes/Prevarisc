@@ -2,7 +2,7 @@
 
 class ErrorController extends Zend_Controller_Action
 {
-    public function errorAction()
+    public function errorAction(): void
     {
         $this->_helper->layout->setLayout('error');
 
@@ -12,7 +12,7 @@ class ErrorController extends Zend_Controller_Action
             !$errors
             || !$errors instanceof ArrayObject
         ) {
-            $this->view->assign('message', 'Vous avez atteint la page d\'erreur');
+            $this->view->assign('message', "Vous avez atteint la page d'erreur");
 
             return;
         }

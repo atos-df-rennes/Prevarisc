@@ -2,8 +2,11 @@
 
 class Model_DbTable_DossierDocUrba extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'dossierdocurba'; // Nom de la base
-    protected $_primary = 'ID_DOCURBA'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'dossierdocurba';
+
+    // Clé primaire
+    protected $_primary = 'ID_DOCURBA';
 
     // prend en parametre un type et retourne toutes les natures associées à ce dossier
 

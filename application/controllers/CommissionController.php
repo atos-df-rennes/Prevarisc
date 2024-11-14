@@ -3,10 +3,12 @@
 class CommissionController extends Zend_Controller_Action
 {
     public const ID_COMMISSION_COMMUNALE = 2;
+
     public const ID_GENRE_ETABLISSEMENT = 2;
+
     public const ID_GENRE_IGH = 5;
 
-    public function deleteAction()
+    public function deleteAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -39,18 +41,18 @@ class CommissionController extends Zend_Controller_Action
                 'title' => 'La commission a bien été supprimée',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression de la commission',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
     // Champ de compétence de la commission
 
-    public function competencesAction()
+    public function competencesAction(): void
     {
         // Les modèles
         $model_regles = new Model_DbTable_CommissionRegle();
@@ -58,7 +60,7 @@ class CommissionController extends Zend_Controller_Action
         $this->view->assign('array_regles', $model_regles->get($this->_request->id_commission));
     }
 
-    public function addRegleAction()
+    public function addRegleAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -75,16 +77,16 @@ class CommissionController extends Zend_Controller_Action
                 'title' => 'La régle a bien été enregistrées',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de l\'ajout de la régle',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function deleteRegleAction()
+    public function deleteRegleAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -110,16 +112,16 @@ class CommissionController extends Zend_Controller_Action
                 'title' => 'Les régles ont bien été supprimées',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression des régles',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function saveReglesAction()
+    public function saveReglesAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -147,11 +149,11 @@ class CommissionController extends Zend_Controller_Action
                 $row_commission = $model_commission->find($rowset_regle->ID_COMMISSION)->current();
 
                 // On supprime les porteuses de la règle
-                $model_reglesTypes->delete("ID_REGLE = {$id_regle}");
-                $model_reglesClasses->delete("ID_REGLE = {$id_regle}");
-                $model_reglesCategories->delete("ID_REGLE = {$id_regle}");
-                $model_reglesLocalSommeil->delete("ID_REGLE = {$id_regle}");
-                $model_reglesEtudeVisite->delete("ID_REGLE = {$id_regle}");
+                $model_reglesTypes->delete('ID_REGLE = '.$id_regle);
+                $model_reglesClasses->delete('ID_REGLE = '.$id_regle);
+                $model_reglesCategories->delete('ID_REGLE = '.$id_regle);
+                $model_reglesLocalSommeil->delete('ID_REGLE = '.$id_regle);
+                $model_reglesEtudeVisite->delete('ID_REGLE = '.$id_regle);
 
                 // On met à jour la commune et le groupement
                 $rowset_regle->NUMINSEE_COMMUNE = (self::ID_COMMISSION_COMMUNALE == $row_commission->ID_COMMISSIONTYPE) ? $_POST[$id_regle.'_NUMINSEE_COMMUNE'] : null;
@@ -200,21 +202,22 @@ class CommissionController extends Zend_Controller_Action
                     ]);
                 }
             }
+
             $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Les régles ont bien été enregistrées',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de l\'enregistrement des régles',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function applyReglesAction()
+    public function applyReglesAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -272,17 +275,17 @@ class CommissionController extends Zend_Controller_Action
                 // removes cache if any changes
                 Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur inattendue',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
     // Membres de la commission
-    public function membresAction()
+    public function membresAction(): void
     {
         // Les modèles
         $model_types = new Model_DbTable_Type();
@@ -314,7 +317,7 @@ class CommissionController extends Zend_Controller_Action
         }
     }
 
-    public function addMembreAction()
+    public function addMembreAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -334,16 +337,16 @@ class CommissionController extends Zend_Controller_Action
                 'title' => 'Le membre a bien été ajouté',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
-                'title' => 'Erreur lors de l\'ajout du membre',
-                'message' => $e->getMessage(),
+                'title' => "Erreur lors de l'ajout du membre",
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function deleteMembreAction()
+    public function deleteMembreAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -376,16 +379,16 @@ class CommissionController extends Zend_Controller_Action
                 'title' => 'Le membre a bien été supprimé',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du membre',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function saveMembresAction()
+    public function saveMembresAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -409,11 +412,11 @@ class CommissionController extends Zend_Controller_Action
                 $rowset_membre = $model_membres->find($id_membre)->current();
 
                 // On supprime les porteuses de la règle
-                $model_membresTypes->delete("ID_COMMISSIONMEMBRE = {$id_membre}");
-                $model_membresClasses->delete("ID_COMMISSIONMEMBRE = {$id_membre}");
-                $model_membresCategories->delete("ID_COMMISSIONMEMBRE = {$id_membre}");
-                $model_membresDossierNatures->delete("ID_COMMISSIONMEMBRE = {$id_membre}");
-                $model_membresDossierTypes->delete("ID_COMMISSIONMEMBRE = {$id_membre}");
+                $model_membresTypes->delete('ID_COMMISSIONMEMBRE = '.$id_membre);
+                $model_membresClasses->delete('ID_COMMISSIONMEMBRE = '.$id_membre);
+                $model_membresCategories->delete('ID_COMMISSIONMEMBRE = '.$id_membre);
+                $model_membresDossierNatures->delete('ID_COMMISSIONMEMBRE = '.$id_membre);
+                $model_membresDossierTypes->delete('ID_COMMISSIONMEMBRE = '.$id_membre);
 
                 // On met à jour la commune et le groupement
                 $rowset_membre->LIBELLE_COMMISSIONMEMBRE = $_POST[$id_membre.'_LIBELLE_COMMISSIONMEMBRE'];
@@ -473,11 +476,11 @@ class CommissionController extends Zend_Controller_Action
                 'title' => 'Les modifications ont bien été sauvegardées',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde des modifications',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
@@ -486,7 +489,7 @@ class CommissionController extends Zend_Controller_Action
     public function contactsAction() {}
 
     // Courriers types des membres de la commission
-    public function courriersAction()
+    public function courriersAction(): void
     {
         // Les modèles
         $model_membres = new Model_DbTable_CommissionMembre();
@@ -496,7 +499,7 @@ class CommissionController extends Zend_Controller_Action
     }
 
     // Courriers types des membres de la commission
-    public function documentsAction()
+    public function documentsAction(): void
     {
         // Les modèles
         $model_commission = new Model_DbTable_Commission();
@@ -508,7 +511,7 @@ class CommissionController extends Zend_Controller_Action
     }
 
     // Courriers types des membres de la commission
-    public function addDocumentAction()
+    public function addDocumentAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -544,23 +547,23 @@ class CommissionController extends Zend_Controller_Action
             }
 
             // CALLBACK
-            echo "<script type='text/javascript'>window.top.window.callback('{$error}');</script>";
+            echo sprintf("<script type='text/javascript'>window.top.window.callback('%s');</script>", $error);
             $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le document a bien été sauvegardé',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde du document',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
     // Courriers types des membres de la commission
-    public function deleteDocumentAction()
+    public function deleteDocumentAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -582,17 +585,17 @@ class CommissionController extends Zend_Controller_Action
                 'title' => 'Le document a bien été supprimé',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du document',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
     // Courriers types des membres de la commission
-    public function addCourrierAction()
+    public function addCourrierAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -630,22 +633,22 @@ class CommissionController extends Zend_Controller_Action
             }
 
             // CALLBACK
-            echo "<script type='text/javascript'>window.top.window.callback('{$error}');</script>";
+            echo sprintf("<script type='text/javascript'>window.top.window.callback('%s');</script>", $error);
             $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le document a bien été sauvegardé',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde du document',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function deleteCourrierAction()
+    public function deleteCourrierAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -668,11 +671,11 @@ class CommissionController extends Zend_Controller_Action
                 'title' => 'Le document a bien été supprimé',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du document',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }

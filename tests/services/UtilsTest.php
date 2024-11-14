@@ -12,7 +12,7 @@ final class Service_UtilsTest extends TestCase
     /** @var Service_Utils */
     private $utils;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->utils = new Service_Utils();
     }
@@ -46,6 +46,7 @@ final class Service_UtilsTest extends TestCase
         return [
             'simple field with rubrique' => ['descriptifEtablissement', ['Ma Rubrique', 'Mon Champ'], 'descriptifEtablissement-ma_rubrique-mon_champ'],
             'formatted field without rubrique' => ['descriptifEtablissement', ['Mon Champ d\'enfer "Personnalisé"'], 'descriptifEtablissement-mon_champ_d_enfer__personnalisé_'],
+            'field with leading and trailing spaces' => ['descriptifEtablissement', ['  Mon champ avec des espaces '], 'descriptifEtablissement-mon_champ_avec_des_espaces'],
         ];
     }
 
@@ -54,6 +55,7 @@ final class Service_UtilsTest extends TestCase
         return [
             'simple field' => ['descriptif Rubrique Un champ', 'DescriptifRubriqueUnChamp'],
             'formatted field' => ['descriptif rUbrique un Champ d\'enfer "Personnalisé"', 'DescriptifRubriqueUnChampDEnferPersonnalisé'],
+            'field with leading and trailing spaces' => ['descriptif Rubrique   Un champ avec des espaces ', 'DescriptifRubriqueUnChampAvecDesEspaces'],
         ];
     }
 

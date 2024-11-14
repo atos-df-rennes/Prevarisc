@@ -44,6 +44,7 @@ class Service_Changement
     ];
 
     public const ID_GENRE_CELLULE = 3;
+
     public const ID_AVIS_DEFAVORABLE = 2;
 
     /**
@@ -78,7 +79,7 @@ class Service_Changement
      *
      * @param array $data Les données envoyés en post
      */
-    public function save($data)
+    public function save($data): void
     {
         if (is_array($data)) {
             foreach ($data as $key => $message) {
@@ -110,7 +111,7 @@ class Service_Changement
      *
      * @return string L'objet formaté
      */
-    public function getObjet($idChangement, $ets): string
+    public function getObjet($idChangement, array $ets): string
     {
         switch ($idChangement) {
             case '1':
@@ -169,11 +170,10 @@ class Service_Changement
      * Convertit les balises dans le message avec les bonnes valeurs.
      *
      * @param string $message Le message a envoyer avec des balises
-     * @param mixed  $ets
      *
      * @return string Le message convertit
      */
-    public function convertMessage($message, $ets): string
+    public function convertMessage($message, array $ets): string
     {
         $params = [];
         foreach (self::BALISES as $balise => $content) {
@@ -184,6 +184,7 @@ class Service_Changement
                 && array_key_exists($content['champ'], $ets[$content['model']])) {
                 $replacementstr = $ets[$content['model']][$content['champ']];
             }
+
             $params[$balise] = $replacementstr;
         }
 
@@ -197,7 +198,7 @@ class Service_Changement
      *
      * @return string L'avis de l'établissement
      */
-    public function getAvis($ets)
+    public function getAvis(array $ets): string
     {
         $avis = '';
         $serviceEts = new Service_Etablissement();

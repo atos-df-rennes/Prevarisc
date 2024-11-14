@@ -3,7 +3,9 @@ name: Prevarisc Lint
 on:
   pull_request:
   push:
-    branches: [ 2.5 ]
+    branches:
+      - 2.5
+      - develop
 
 jobs:
   validate-composer:

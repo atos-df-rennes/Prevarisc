@@ -3,8 +3,11 @@
 class Service_Dashboard
 {
     public const ID_DOSSIERTYPE_COURRIER = 5;
+
     public const ID_NATURE_LEVEE_PRESCRIPTIONS = 7;
+
     public const ID_NATURE_LEVEE_AVIS_DEF = 19;
+
     public const ID_NATURE_ECHEANCIER_TRAVAUX = 46;
 
     protected $options = [];
@@ -451,7 +454,7 @@ class Service_Dashboard
         $conditionEtudesSansAvis = 'd.AVIS_DOSSIER IS NULL AND (d.AVIS_DOSSIER_COMMISSION IS NULL OR d.AVIS_DOSSIER_COMMISSION = 0) AND d.TYPE_DOSSIER = 1';
         $conditionCourriersSansReponse = 'd.DATEREP_DOSSIER IS NULL AND d.TYPE_DOSSIER = 5';
 
-        $search->setCriteria("({$conditionEtudesSansAvis}) OR ({$conditionCourriersSansReponse})");
+        $search->setCriteria(sprintf('(%s) OR (%s)', $conditionEtudesSansAvis, $conditionCourriersSansReponse));
 
         $search->order('d.DATEINSERT_DOSSIER desc');
 
@@ -479,7 +482,18 @@ class Service_Dashboard
             return $search->run(false, null, false, true);
         }
 
-        return $search->run(false, null, false)->toArray();
+        $search->order('d.DATEINSERT_DOSSIER');
+
+        $serviceDossier = new Service_Dossier();
+        $serviceNotification = new Service_Notification();
+        $results = $search->run(false, null, false)->toArray();
+
+        foreach ($results as $key => $result) {
+            $results[$key]['IS_NEW'] = $serviceNotification->isNew($result, Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE);
+            $results[$key]['HAS_NEW_PJ'] = $serviceDossier->hasNewPj($result);
+        }
+
+        return $results;
     }
 
     /**

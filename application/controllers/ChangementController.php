@@ -2,7 +2,7 @@
 
 class ChangementController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->headScript()->appendFile('js/tinymce.min.js');
@@ -31,7 +31,7 @@ class ChangementController extends Zend_Controller_Action
         $this->view->assign('changements', $serviceChangement->getAll());
     }
 
-    public function alerteformAction()
+    public function alerteformAction(): void
     {
         $serviceEtablissement = new Service_Etablissement();
         $serviceChangement = new Service_Changement();
@@ -61,6 +61,7 @@ class ChangementController extends Zend_Controller_Action
                 $user['MAIL_UTILISATEURINFORMATIONS']
             );
         }
+
         $this->view->assign('tos', implode(', ', $tos));
         $this->view->assign('mails', implode(';', $mails));
 
@@ -75,13 +76,13 @@ class ChangementController extends Zend_Controller_Action
         ));
     }
 
-    public function balisesAction()
+    public function balisesAction(): void
     {
         $serviceChangement = new Service_Changement();
         $this->view->assign('balises', $serviceChangement->getBalises());
     }
 
-    public function sendmailalerteAction()
+    public function sendmailalerteAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);

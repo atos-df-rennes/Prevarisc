@@ -2,12 +2,12 @@
 
 class FusionDesCommunesController extends Zend_Controller_Action
 {
-    public function init()
+    public function init(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
     }
 
-    public function indexAction()
+    public function indexAction(): void
     {
         $form = new Form_FusionCommunes();
         $this->view->assign('form', $form);

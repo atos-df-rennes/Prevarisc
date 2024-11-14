@@ -37,7 +37,7 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
 
@@ -69,7 +69,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('is_allowed_delete_etablissement', unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'suppression', 'delete_etablissement'));
     }
 
-    public function editAction()
+    public function editAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
 
@@ -150,7 +150,7 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    public function addAction()
+    public function addAction(): void
     {
         $viewHeadScript = $this->view;
         $viewHeadScript->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
@@ -221,7 +221,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->render('edit');
     }
 
-    public function descriptifAction()
+    public function descriptifAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
 
@@ -260,7 +260,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('champsvaleurliste', $serviceEtablissementDescriptif->getValeursListe());
     }
 
-    public function editDescriptifAction()
+    public function editDescriptifAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
 
@@ -330,14 +330,14 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    public function textesApplicablesAction()
+    public function textesApplicablesAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
 
         $this->view->assign('textes_applicables_de_etablissement', $this->serviceEtablissement->getAllTextesApplicables($this->_request->id));
     }
 
-    public function editTextesApplicablesAction()
+    public function editTextesApplicablesAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
 
@@ -359,7 +359,7 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    public function piecesJointesAction()
+    public function piecesJointesAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
 
@@ -368,7 +368,7 @@ class EtablissementController extends Zend_Controller_Action
 
         $piecesJointes = array_filter(
             $allPiecesJointes,
-            function ($pieceJointe) use ($store) {
+            function (array $pieceJointe) use ($store): bool {
                 $pieceJointePath = $store->getFilePath($pieceJointe, 'etablissement', $pieceJointe['ID_ETABLISSEMENT']);
 
                 return is_readable($pieceJointePath);
@@ -379,12 +379,12 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('store', $store);
     }
 
-    public function getPieceJointeAction()
+    public function getPieceJointeAction(): void
     {
         $this->forward('get', 'piece-jointe');
     }
 
-    public function editPiecesJointesAction()
+    public function editPiecesJointesAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
 
@@ -393,7 +393,7 @@ class EtablissementController extends Zend_Controller_Action
 
         $piecesJointes = array_filter(
             $allPiecesJointes,
-            function ($pieceJointe) use ($store) {
+            function (array $pieceJointe) use ($store): bool {
                 $pieceJointePath = $store->getFilePath($pieceJointe, 'etablissement', $pieceJointe['ID_ETABLISSEMENT']);
 
                 return is_readable($pieceJointePath);
@@ -404,7 +404,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('store', $store);
     }
 
-    public function addPieceJointeAction()
+    public function addPieceJointeAction(): void
     {
         $this->_helper->layout->disableLayout();
 
@@ -424,7 +424,7 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    public function deletePieceJointeAction()
+    public function deletePieceJointeAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
@@ -441,7 +441,7 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    public function contactsAction()
+    public function contactsAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
 
@@ -456,14 +456,14 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('contacts_etablissements_parents', $contacts_etablissements_parents);
     }
 
-    public function editContactsAction()
+    public function editContactsAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
 
         $this->view->assign('contacts', $this->serviceEtablissement->getAllContacts($this->_request->id));
     }
 
-    public function addContactAction()
+    public function addContactAction(): void
     {
         $this->_helper->layout->disableLayout();
 
@@ -484,7 +484,7 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    public function addContactExistantAction()
+    public function addContactExistantAction(): void
     {
         $this->_helper->layout->disableLayout();
 
@@ -500,7 +500,7 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    public function deleteContactAction()
+    public function deleteContactAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
@@ -517,7 +517,7 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    public function dossiersAction()
+    public function dossiersAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
 
@@ -533,7 +533,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('nbAutres', $this->serviceEtablissement->getNbDossierTypeEtablissement($this->_request->id, 'autres'));
     }
 
-    public function getDossiersAfterNAction()
+    public function getDossiersAfterNAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
@@ -547,14 +547,14 @@ class EtablissementController extends Zend_Controller_Action
         echo $html;
     }
 
-    public function historiqueAction()
+    public function historiqueAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
 
         $this->view->assign('historique', $this->serviceEtablissement->getHistorique($this->_request->id));
     }
 
-    public function deleteAction()
+    public function deleteAction(): void
     {
         try {
             $idEtablissement = $this->_getParam('id');
@@ -572,12 +572,12 @@ class EtablissementController extends Zend_Controller_Action
 
             $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'établissement a bien été supprimé.']);
             $this->redirect('/search/etablissement?label=&page=1');
-        } catch (Exception $e) {
-            $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été supprimé. Veuillez rééssayez. ('.$e->getMessage().')']);
+        } catch (Exception $exception) {
+            $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été supprimé. Veuillez rééssayez. ('.$exception->getMessage().')']);
         }
     }
 
-    public function updateAdresseAction()
+    public function updateAdresseAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
@@ -586,7 +586,7 @@ class EtablissementController extends Zend_Controller_Action
         echo json_encode($postData);
     }
 
-    public function effectifsDegagementsEtablissementAction()
+    public function effectifsDegagementsEtablissementAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
 
@@ -608,7 +608,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('champsvaleurliste', $serviceEtablissementEffectifsDegagements->getValeursListe());
     }
 
-    public function effectifsDegagementsEtablissementEditAction()
+    public function effectifsDegagementsEtablissementEditAction(): void
     {
         $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
@@ -654,10 +654,11 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    public function avisDerogationsEtablissementAction()
+    public function avisDerogationsEtablissementAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
-        $this->view->assign('historiqueAvisDerogations', $this->serviceEtablissement->getHistorique($this->_request->id)['AVIS_DEROGATIONS'] ?? []);
+        $this->view->assign('historiqueAvisDerogations', $this->serviceEtablissement->getHistorique($this->getRequest()->getParam('id'))['AVIS_DEROGATIONS'] ?? []);
+        $this->view->assign('derogationsOriginales', $this->serviceEtablissement->getDescriptifs($this->getRequest()->getParam('id'))['derogations']);
     }
 
     public function retablirEtablissementAction(): void

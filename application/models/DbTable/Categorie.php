@@ -2,8 +2,11 @@
 
 class Model_DbTable_Categorie extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'categorie'; // Nom de la base
-    protected $_primary = 'ID_CATEGORIE'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'categorie';
+
+    // Clé primaire
+    protected $_primary = 'ID_CATEGORIE';
 
     // Donne la liste des catégories
 
@@ -20,7 +23,7 @@ class Model_DbTable_Categorie extends Zend_Db_Table_Abstract
         ;
 
         if (null != $id) {
-            $select->where("ID_CATEGORIE = {$id}");
+            $select->where('ID_CATEGORIE = '.$id);
 
             return $this->fetchRow($select)->toArray();
         }

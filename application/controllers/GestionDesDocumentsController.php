@@ -4,7 +4,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
 {
     public $path;
 
-    public function init()
+    public function init(): void
     {
         $this->path = REAL_DATA_PATH.DS.'uploads'.DS.'documents';
 
@@ -15,7 +15,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         ;
     }
 
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -41,6 +41,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
                 }
             }
         }
+
         closedir($dirVer);
         sort($fichierVer);
 
@@ -66,6 +67,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
                     }
                 }
             }
+
             closedir($dir);
             sort($fichier);
 
@@ -76,14 +78,14 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         $this->view->assign('liste_commission', $liste_commission);
     }
 
-    public function formAction()
+    public function formAction(): void
     {
         $service_commission = new Service_Commission();
 
         $this->view->assign('liste_commission', $service_commission->getAll());
     }
 
-    public function addAction()
+    public function addAction(): void
     {
         try {
             $this->_helper->layout->disableLayout();
@@ -100,18 +102,20 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             if (!move_uploaded_file($_FILES['fichier']['tmp_name'], $this->path.DS.$this->_getParam('commission').DS.$filename)) {
                 throw new Exception('Impossible de déplacer le fichier uploadé');
             }
+
             $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le document a bien été ajouté',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
-                'title' => 'Erreur lors de l\'ajout du document',
-                'message' => $e->getMessage(),
+                'title' => "Erreur lors de l'ajout du document",
+                'message' => $exception->getMessage(),
             ]);
         }
+
         echo '
             <script type="text/javascript">
                 window.top.window.location.reload();
@@ -119,7 +123,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         ';
     }
 
-    public function suppdocAction()
+    public function suppdocAction(): void
     {
         try {
             $this->_helper->layout->disableLayout();
@@ -137,13 +141,13 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             if ($exist === $exist2) {
                 throw new Exception('Impossible de supprimer le fichier '.$filename);
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du document',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
-            echo $e->getMessage();
+            echo $exception->getMessage();
         }
     }
 }

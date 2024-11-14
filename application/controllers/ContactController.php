@@ -2,7 +2,7 @@
 
 class ContactController extends Zend_Controller_Action
 {
-    public function init()
+    public function init(): void
     {
         // Actions à effectuées en AJAX
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
@@ -16,7 +16,7 @@ class ContactController extends Zend_Controller_Action
         ;
     }
 
-    public function indexAction()
+    public function indexAction(): void
     {
         $DB_contact = new Model_DbTable_UtilisateurInformations();
         $this->view->assign('contacts', $DB_contact->getContact($this->_request->item, $this->_request->id));
@@ -43,6 +43,7 @@ class ContactController extends Zend_Controller_Action
                     }
                 }
             }
+
             $this->view->assign('contacts_parent', $array);
         }
 
@@ -50,7 +51,7 @@ class ContactController extends Zend_Controller_Action
         $this->view->assign('size', ('dossier' == $this->_request->item) ? 3 : 4);
     }
 
-    public function formAction()
+    public function formAction(): void
     {
         // On récupère la liste des fonctions des contacts
         $DB_contactfonction = new Model_DbTable_Fonction();
@@ -69,7 +70,7 @@ class ContactController extends Zend_Controller_Action
         $this->view->assign('id', $this->_request->id);
     }
 
-    public function addAction()
+    public function addAction(): void
     {
         try {
             if (isset($_POST['ID_UTILISATEURCIVILITE']) && 'null' == $_POST['ID_UTILISATEURCIVILITE']) {
@@ -135,16 +136,16 @@ class ContactController extends Zend_Controller_Action
                 'title' => 'Le contact a bien été ajouté',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
-                'title' => 'Erreur lors de l\'ajout du contact',
-                'message' => $e->getMessage(),
+                'title' => "Erreur lors de l'ajout du contact",
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function editAction()
+    public function editAction(): void
     {
         try {
             if (isset($_POST['ID_UTILISATEURCIVILITE']) && 'null' == $_POST['ID_UTILISATEURCIVILITE']) {
@@ -175,16 +176,16 @@ class ContactController extends Zend_Controller_Action
                 'title' => 'Le contact a bien été modifié',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la modification du contact',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function deleteAction()
+    public function deleteAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -253,16 +254,16 @@ class ContactController extends Zend_Controller_Action
                 'title' => 'Le contact a bien été supprimé',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du contact',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function getAction()
+    public function getAction(): void
     {
         $DB_informations = new Model_DbTable_UtilisateurInformations();
         $this->view->assign('resultats', $DB_informations->getAllContacts($this->_request->q));

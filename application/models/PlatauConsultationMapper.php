@@ -4,7 +4,7 @@ class Model_PlatauConsultationMapper
 {
     private $dbTable;
 
-    public function setDbTable(string $dbTable)
+    public function setDbTable(string $dbTable): self
     {
         $dbTable = new $dbTable();
 
@@ -36,10 +36,7 @@ class Model_PlatauConsultationMapper
         $this->getDbTable()->update($data, ['ID_PLATAU = ?' => $consultation->getId()]);
     }
 
-    /**
-     * @return null|Model_PlatauConsultation
-     */
-    public function find(string $id, Model_PlatauConsultation $consultation)
+    public function find(string $id, Model_PlatauConsultation $consultation): ?Model_PlatauConsultation
     {
         $result = $this->getDbTable()->find($id);
 

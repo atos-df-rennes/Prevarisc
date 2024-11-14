@@ -2,7 +2,7 @@
 
 class Api_EtablissementController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         header('Content-type: application/json');
 

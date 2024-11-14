@@ -2,8 +2,11 @@
 
 class Model_DbTable_CapsuleRubrique extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'capsulerubrique'; // Nom de la base
-    protected $_primary = 'ID_CAPSULERUBRIQUE'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'capsulerubrique';
+
+    // Clé primaire
+    protected $_primary = 'ID_CAPSULERUBRIQUE';
 
     public function getCapsuleRubriqueIdByName(string $name): array
     {

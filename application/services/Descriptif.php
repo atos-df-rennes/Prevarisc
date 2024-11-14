@@ -3,15 +3,21 @@
 class Service_Descriptif
 {
     private $modelChamp;
+
     private $modelChampValeurListe;
+
     private $modelRubrique;
+
     private $modelValeur;
 
     private $serviceValeur;
+
     private $serviceFormulaire;
 
     private $capsuleRubrique;
+
     private $modelDisplayRubrique;
+
     private $serviceRubrique;
 
     public function __construct(string $capsuleRubrique, Zend_Db_Table_Abstract $modelDisplayRubrique, $serviceRubrique)
@@ -69,6 +75,7 @@ class Service_Descriptif
                             $champFils['VALEUR'] = $valeur['VALEUR'];
                             $champFils['ID_VALEUR'] = $valeur['ID_VALEUR'];
                         }
+
                         unset($champFils);
                     }
                 } else {
@@ -76,8 +83,10 @@ class Service_Descriptif
                     $champ['ID_VALEUR'] = $this->serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject)['ID_VALEUR'];
                 }
             }
+
             unset($champ);
         }
+
         unset($rubrique);
 
         return $rubriques;
@@ -130,7 +139,7 @@ class Service_Descriptif
         $serviceUtilsDescriptif->deleteTableValues($tableauDeComparaison);
     }
 
-    public function groupInputByOrder(array $initialList, int $idObject, string $classObject)
+    public function groupInputByOrder(array $initialList, int $idObject, string $classObject): array
     {
         $newList = [];
         $expectedValeurNumberOfArguments = 5;
@@ -160,9 +169,11 @@ class Service_Descriptif
             if (!array_key_exists($idParent, $newList)) {
                 $newList[$idParent] = [];
             }
+
             if (!array_key_exists($idxInput, $newList[$idParent])) {
                 $newList[$idParent][$idxInput] = [];
             }
+
             $newList[$idParent][$idxInput][$idInput]['VALEUR'] = $value;
             $newList[$idParent][$idxInput][$idInput]['ID_VALEUR'] = $idValeur;
         }
@@ -171,7 +182,7 @@ class Service_Descriptif
         foreach ($newList as $parent => $listIdx) {
             foreach ($listIdx as $idx => $input) {
                 foreach ($input as $idChamp => $valeur) {
-                    $tmpList[$parent][array_search($idx, array_keys($listIdx)) + 1][$idChamp] = $valeur;
+                    $tmpList[$parent][array_search($idx, array_keys($listIdx), true) + 1][$idChamp] = $valeur;
                 }
             }
         }

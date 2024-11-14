@@ -4,3 +4,8 @@
         "array" => $this->historiqueAvisDerogations
     ));
 ?>
+
+<?php if (null !== $this->derogationsOriginales && '' !== $this->derogationsOriginales): ?>
+    <h4>Dérogations originales</h4>
+    <?= nl2br($this->derogationsOriginales) ?>
+<?php endif ?>

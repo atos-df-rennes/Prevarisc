@@ -1477,7 +1477,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$text\\.$#"
-			count: 4
+			count: 2
 			path: application/controllers/UsersController.php
 
 		-
@@ -2066,7 +2066,7 @@ parameters:
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Comparison operation \"\\!\\=\" between 0 and 0\\|0\\.0\\|''\\|'0'\\|array\\{\\}\\|false\\|null results in an error\\.$#"
+			message: "#^Comparison operation \"\\!\\=\" between 0 and 0\\|0\\.0\\|''\\|array\\{\\}\\|false\\|null results in an error\\.$#"
 			count: 2
 			path: application/services/Etablissement.php
 

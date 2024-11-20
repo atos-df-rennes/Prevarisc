@@ -2,36 +2,48 @@
 
 class Service_Utils_Date
 {
-    public static function convertToMySQL(string $date): ?string
+    public static function convertToMySQL(?string $date): ?string
     {
-        if ('' === $date) {
+        $zendDate = self::convertStringToDate($date);
+
+        if (null === $zendDate) {
             return null;
         }
 
-        [$jour, $mois, $annee] = explode('/', $date);
-
-        return implode('-', [$annee, $mois, $jour]);
+        return $zendDate->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY);
     }
 
     public static function convertFromMySQL(?string $date): ?string
     {
-        if (null === $date) {
+        $zendDate = self::convertStringToDate($date);
+
+        if (null === $zendDate) {
             return null;
         }
 
-        [$annee, $mois, $jour] = explode('-', $date);
-
-        return implode('/', [$jour, $mois, $annee]);
+        return $zendDate->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR);
     }
 
-    public static function formatDateWithDayName(?string $date, string $dateFormat = 'dd/MM/yyyy'): ?string
+    public static function formatDateWithDayName(?string $date): ?string
     {
-        if (null === $date) {
+        $zendDate = self::convertStringToDate($date);
+
+        if (null === $zendDate) {
             return null;
         }
 
-        $zendDate = new Zend_Date($date, $dateFormat, 'fr');
+        return $zendDate->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR, 'fr');
+    }
 
-        return $zendDate->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR, 'fr');
+    private static function convertStringToDate(?string $date): ?Zend_Date
+    {
+        if (
+            null === $date
+            || '' === $date
+        ) {
+            return null;
+        }
+
+        return new Zend_Date($date, Zend_Date::DATES, 'fr');
     }
 }

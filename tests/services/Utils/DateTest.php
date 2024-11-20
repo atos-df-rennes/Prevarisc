@@ -12,7 +12,7 @@ final class Service_Utils_DateTest extends TestCase
     /**
      * @dataProvider convertToMySQLProvider
      */
-    public function testConvertToMySQL(string $date, ?string $expected): void
+    public function testConvertToMysql(?string $date, ?string $expected): void
     {
         $this->assertSame($expected, Service_Utils_Date::convertToMySQL($date));
     }
@@ -20,15 +20,17 @@ final class Service_Utils_DateTest extends TestCase
     public function convertToMySQLProvider(): array
     {
         return [
-            'valid date' => ['25/12/2020', '2020-12-25'],
-            'no value' => ['', null],
+            'valid date dd/mm/yyyy' => ['25/12/2020', '2020-12-25'],
+            'valid date yyyy-mm-dd' => ['2020-12-25', '2020-12-25'],
+            'empty value' => ['', null],
+            'no value' => [null, null],
         ];
     }
 
     /**
      * @dataProvider convertFromMySQLProvider
      */
-    public function testConvertFromMySQL(?string $date, ?string $expected): void
+    public function testConvertFromMysql(?string $date, ?string $expected): void
     {
         $this->assertSame($expected, Service_Utils_Date::convertFromMySQL($date));
     }
@@ -36,7 +38,9 @@ final class Service_Utils_DateTest extends TestCase
     public function convertFromMySQLProvider(): array
     {
         return [
-            'valid date' => ['2020-12-25', '25/12/2020'],
+            'valid date dd/mm/yyyy' => ['25/12/2020', '25/12/2020'],
+            'valid date yyyy-mm-dd' => ['2020-12-25', '25/12/2020'],
+            'empty value' => ['', null],
             'no value' => [null, null],
         ];
     }
@@ -52,7 +56,9 @@ final class Service_Utils_DateTest extends TestCase
     public function formatDateWithDayNameProvider(): array
     {
         return [
-            'valid date' => ['01/12/2020', 'mardi 1 déc. 2020'],
+            'valid date dd/mm/yyyy' => ['01/12/2020', 'mardi 1 déc. 2020'],
+            'valid date yyyy-mm-dd' => ['2020-12-01', 'mardi 1 déc. 2020'],
+            'empty value' => ['', null],
             'no value' => [null, null],
         ];
     }

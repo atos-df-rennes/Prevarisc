@@ -527,7 +527,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infosDossier\\.$#"
-			count: 108
+			count: 94
 			path: application/controllers/DossierController.php
 
 		-

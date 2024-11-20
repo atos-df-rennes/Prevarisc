@@ -52,7 +52,7 @@ final class Service_Utils_DateTest extends TestCase
     public function formatDateWithDayNameProvider(): array
     {
         return [
-            'valid date' => ['25/12/2020', 'vendredi 25 décembre 2020'],
+            'valid date' => ['01/12/2020', 'mardi 1 déc. 2020'],
             'no value' => [null, null],
         ];
     }

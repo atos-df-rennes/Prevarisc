@@ -32,6 +32,6 @@ class Service_Utils_Date
 
         $zendDate = new Zend_Date($date, $dateFormat, 'fr');
 
-        return $zendDate->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR, 'fr');
+        return $zendDate->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR, 'fr');
     }
 }

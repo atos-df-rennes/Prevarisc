@@ -466,119 +466,73 @@ class DossierController extends Zend_Controller_Action
             }
 
             // Conversion de la date d'insertion du dossier
-            if ('' != $this->view->infosDossier['DATEINSERT_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATEINSERT_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATEINSERT_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEINSERT_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATEINSERT_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEINSERT_DOSSIER']);
+            $this->view->assign('DATEINSERT_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEINSERT_DOSSIER']));
 
             // Conversion de la date de dépot en mairie pour l'afficher
-            if ('' != $this->view->infosDossier['DATEMAIRIE_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATEMAIRIE_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATEMAIRIE_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEMAIRIE_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATEMAIRIE_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEMAIRIE_DOSSIER']);
+            $this->view->assign('DATEMAIRIE_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEMAIRIE_DOSSIER']));
 
             // Conversion de la date de dépot en secrétariat pour l'afficher
-            if ('' != $this->view->infosDossier['DATESECRETARIAT_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATESECRETARIAT_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATESECRETARIAT_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATESECRETARIAT_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATESECRETARIAT_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATESECRETARIAT_DOSSIER']);
+            $this->view->assign('DATESECRETARIAT_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATESECRETARIAT_DOSSIER']));
 
             // Conversion de la date de dépot en secrétariat pour l'afficher
-            if ('' != $this->view->infosDossier['DATEENVTRANSIT_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATEENVTRANSIT_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATEENVTRANSIT_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEENVTRANSIT_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATEENVTRANSIT_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEENVTRANSIT_DOSSIER']);
+            $this->view->assign('DATEENVTRANSIT_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEENVTRANSIT_DOSSIER']));
 
             // Conversion de la date de réception SDIS
-            if ('' != $this->view->infosDossier['DATESDIS_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATESDIS_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATESDIS_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATESDIS_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATESDIS_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATESDIS_DOSSIER']);
+            $this->view->assign('DATESDIS_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATESDIS_DOSSIER']));
 
             // Conversion de la date prefecture
-            if ('' != $this->view->infosDossier['DATEPREF_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATEPREF_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATEPREF_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEPREF_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATEPREF_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEPREF_DOSSIER']);
+            $this->view->assign('DATEPREF_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEPREF_DOSSIER']));
 
             // Conversion de la date de réponse
-            if ('' != $this->view->infosDossier['DATEREP_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATEREP_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATEREP_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEREP_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATEREP_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEREP_DOSSIER']);
+            $this->view->assign('DATEREP_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEREP_DOSSIER']));
 
             // Conversion de la date de réunion
-            if ('' != $this->view->infosDossier['DATEREUN_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATEREUN_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATEREUN_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEREUN_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATEREUN_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEREUN_DOSSIER']);
+            $this->view->assign('DATEREUN_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEREUN_DOSSIER']));
 
             // Conversion de la date et l'heure d'intervention
             if ('' != $this->view->infosDossier['DATEINTERV_DOSSIER']) {
                 $dateHeure = explode(' ', $this->view->infosDossier['DATEINTERV_DOSSIER']);
-                $date = new Zend_Date($dateHeure[0], Zend_Date::DATES);
-                $this->view->infosDossier['DATEINTERV_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEINTERV_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
+                $this->view->infosDossier['DATEINTERV_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEINTERV_DOSSIER']);
+                $this->view->assign('DATEINTERV_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEINTERV_DOSSIER']));
                 $heure = explode(':', $dateHeure[1]);
                 $this->view->assign('HEUREINTERV_INPUT', $heure[0].':'.$heure[1]);
             }
 
             // Conversion de la date signature
-            if ('' != $this->view->infosDossier['DATESIGN_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATESIGN_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATESIGN_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATESIGN_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATESIGN_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATESIGN_DOSSIER']);
+            $this->view->assign('DATESIGN_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATESIGN_DOSSIER']));
 
             // Conversion date echeancier de travaux
-            if ('' != $this->view->infosDossier['ECHEANCIERTRAV_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['ECHEANCIERTRAV_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['ECHEANCIERTRAV_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('ECHEANCIERTRAV', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['ECHEANCIERTRAV_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['ECHEANCIERTRAV_DOSSIER']);
+            $this->view->assign('ECHEANCIERTRAV', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['ECHEANCIERTRAV_DOSSIER']));
 
             // Conversion date incomplet
-            if ('' != $this->view->infosDossier['DATEINCOMPLET_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATEINCOMPLET_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATEINCOMPLET_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEINCOMPLET', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATEINCOMPLET_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEINCOMPLET_DOSSIER']);
+            $this->view->assign('DATEINCOMPLET', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEINCOMPLET_DOSSIER']));
 
             // Conversion de transfert à la commission compétente
-            if ('' != $this->view->infosDossier['DATETRANSFERTCOMM_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATETRANSFERTCOMM_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATETRANSFERTCOMM_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATETRANSFERTCOMM', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATETRANSFERTCOMM_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATETRANSFERTCOMM_DOSSIER']);
+            $this->view->assign('DATETRANSFERTCOMM', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATETRANSFERTCOMM_DOSSIER']));
 
             // Conversion de reception à la commission compétente
-            if ('' != $this->view->infosDossier['DATERECEPTIONCOMM_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATERECEPTIONCOMM_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATERECEPTIONCOMM_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATERECEPTIONCOMM', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATERECEPTIONCOMM_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATERECEPTIONCOMM_DOSSIER']);
+            $this->view->assign('DATERECEPTIONCOMM', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATERECEPTIONCOMM_DOSSIER']));
 
             // Conversion de la date de reception du rvrat
-            if ('' != $this->view->infosDossier['DATERVRAT_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATERVRAT_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATERVRAT_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATERVRAT_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATERVRAT_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATERVRAT_DOSSIER']);
+            $this->view->assign('DATERVRAT_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATERVRAT_DOSSIER']));
 
             // Conversion de la date de levée de prescriptions
-            if ('' != $this->view->infosDossier['DELAIPRESC_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DELAIPRESC_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DELAIPRESC_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DELAIPRESC_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DELAIPRESC_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DELAIPRESC_DOSSIER']);
+            $this->view->assign('DELAIPRESC_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DELAIPRESC_DOSSIER']));
 
             // Conversion de la durée de l'intervention
             if ('' != $this->view->infosDossier['DUREEINTERV_DOSSIER']) {
@@ -689,10 +643,9 @@ class DossierController extends Zend_Controller_Action
                         $listeDateValue = '';
                         $listeDateInput = '';
                         foreach ($dateLiees as $ue) {
-                            $date = new Zend_Date($ue['DATE_COMMISSION'], Zend_Date::DATES);
                             $this->view->assign('idDateVisiteAffect', $ue['ID_DATECOMMISSION']);
-                            $listeDateValue .= $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                            $listeDateInput .= $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR);
+                            $listeDateValue .= Service_Utils_Date::formatDateWithDayName($ue['DATE_COMMISSION']);
+                            $listeDateInput .= Service_Utils_Date::convertFromMySQL($ue['DATE_COMMISSION']);
                             if ($nbDates > 1) {
                                 $listeDateValue .= ', ';
                                 $listeDateInput .= ', ';

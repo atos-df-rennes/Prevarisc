@@ -190,7 +190,7 @@ class DossierController extends Zend_Controller_Action
         $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
 
         if (!(property_exists($this->view, 'action') && null !== $this->view->action)) {
-            $this->view->assign('action', $this->_request->getActionName());
+            $this->view->assign('action', $this->getRequest()->getActionName());
         }
 
         $this->view->assign('idUser', Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR']);
@@ -266,16 +266,17 @@ class DossierController extends Zend_Controller_Action
     {
         $DBdossier = new Model_DbTable_Dossier();
         $service_dossier = new Service_Dossier();
+        $id = $this->getRequest()->getParam('id');
 
         if ($this->idDossier) {
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
         }
 
-        $this->infosDossier = $DBdossier->find((int) $this->_getParam('id'))->current();
+        $this->infosDossier = $DBdossier->find((int) $id)->current();
 
         $this->forward('index', 'piece-jointe', null, [
             'type' => 'dossier',
-            'id' => $this->_request->id,
+            'id' => $id,
             'verrou' => $this->infosDossier['VERROU_DOSSIER'],
         ]);
     }
@@ -1466,11 +1467,11 @@ class DossierController extends Zend_Controller_Action
         $search->limit(5);
 
         if (array_key_exists('ID_GENRE', $_GET)) {
-            $search->setCriteria('genre.ID_GENRE', $this->_request->ID_GENRE + 1);
+            $search->setCriteria('genre.ID_GENRE', $this->getRequest()->getParam('ID_GENRE') + 1);
         }
 
         // On recherche avec le libellé
-        $search->setCriteria('LIBELLE_ETABLISSEMENTINFORMATIONS', $this->_request->q, false);
+        $search->setCriteria('LIBELLE_ETABLISSEMENTINFORMATIONS', $this->getRequest()->getParam('q'), false);
 
         // On balance le résultat sur la vue
         $this->view->assign('selectEtab', $search->run()->getAdapter()->getItems(0, 99999999999)->toArray());
@@ -1496,9 +1497,9 @@ class DossierController extends Zend_Controller_Action
         $dbDossierLie = new Model_DbTable_DossierLie();
 
         // Enregistrement des dossiers si necessaire
-        if ($this->_request->isPost()) {
+        if ($this->getRequest()->isPost()) {
             try {
-                $post = $this->_request->getPost();
+                $post = $this->getRequest()->getPost();
                 if ('saveDossLink' == $post['do']) {
                     foreach ($post['idDossierLie'] as $idDossLink) {
                         $newLink = $dbDossierLie->createRow();
@@ -1513,7 +1514,7 @@ class DossierController extends Zend_Controller_Action
         }
 
         $this->view->assign('infosDossier', $DBdossier->find($idDossier)->current());
-        $this->view->assign('listeEtablissement', $DBdossier->getEtablissementDossier((int) $this->_getParam('id')));
+        $this->view->assign('listeEtablissement', $DBdossier->getEtablissementDossier((int) $this->getRequest()->getParam('id')));
 
         $service_dossier = new Service_Dossier();
         if ($this->idDossier) {
@@ -1963,15 +1964,15 @@ class DossierController extends Zend_Controller_Action
         $service_dossier = new Service_Dossier();
 
         // si on génére un document
-        if ($this->_request->isPost()) {
-            $idDossier = $this->_getParam('idDossier');
-            $commission = $this->_getParam('commission');
-            foreach ($this->_getParam('idEtab') as $etablissementId) {
+        if ($this->getRequest()->isPost()) {
+            $idDossier = $this->getRequest()->getParam('idDossier');
+            $commission = $this->getRequest()->getParam('commission');
+            foreach ($this->getRequest()->getParam('idEtab') as $etablissementId) {
                 $this->creationdocAction($idDossier, $etablissementId, $commission);
             }
         }
 
-        $idDossier = (int) $this->_getParam('id');
+        $idDossier = (int) $this->getRequest()->getParam('id');
 
         // informations sur le verrouillage
         $DBdossier = new Model_DbTable_Dossier();
@@ -2650,11 +2651,12 @@ class DossierController extends Zend_Controller_Action
 
     public function descriptifAction(): void
     {
-        if (0 !== (int) $this->_getParam('id')) {
+        $idDossier = (int) $this->getRequest()->getParam('id');
+
+        if (0 !== $idDossier) {
             // Cas d'affichage des infos d'un dossier existant
             $this->view->assign('do', 'edit');
             // On récupère l'id du dossier
-            $idDossier = (int) $this->_getParam('id');
             $this->view->assign('idDossier', $idDossier);
             // Récupération de tous les champs de la table dossier
             $DBdossier = new Model_DbTable_Dossier();
@@ -2670,13 +2672,13 @@ class DossierController extends Zend_Controller_Action
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
         }
 
-        if ($this->_request->DESCRIPTIF_DOSSIER) {
+        if ($this->getRequest()->isPost()) {
             $DBdossier = new Model_DbTable_Dossier();
-            $dossier = $DBdossier->find($this->_request->id)->current();
-            $dossier->DESCRIPTIF_DOSSIER = $this->_request->DESCRIPTIF_DOSSIER;
+            $dossier = $DBdossier->find($idDossier)->current();
+            $dossier->DESCRIPTIF_DOSSIER = $this->getRequest()->getParam('DESCRIPTIF_DOSSIER');
             $dossier->save();
 
-            $this->_helper->_redirector('descriptif', $this->_request->getControllerName(), null, ['id' => $this->_request->id]);
+            $this->_helper->_redirector('descriptif', $this->getRequest()->getControllerName(), null, ['id' => $idDossier]);
         }
     }
 
@@ -2690,27 +2692,28 @@ class DossierController extends Zend_Controller_Action
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
         }
 
-        $this->view->assign('textes_applicables_dossier', $service_dossier->getAllTextesApplicables($this->_request->id));
+        $this->view->assign('textes_applicables_dossier', $service_dossier->getAllTextesApplicables($this->getRequest()->getParam('id')));
     }
 
     public function editTextesApplicablesAction(): void
     {
         $service_dossier = new Service_Dossier();
         $service_textes_applicables = new Service_TextesApplicables();
+        $id = $this->getRequest()->getParam('id');
 
-        $this->view->assign('textes_applicables_dossier', $service_dossier->getAllTextesApplicables($this->_request->id));
+        $this->view->assign('textes_applicables_dossier', $service_dossier->getAllTextesApplicables($id));
         $this->view->assign('textes_applicables', $service_textes_applicables->getAll());
 
-        if ($this->_request->isPost()) {
+        if ($this->getRequest()->isPost()) {
             try {
-                $post = $this->_request->getPost();
-                $service_dossier->saveTextesApplicables($this->_request->id, $post['textes_applicables']);
+                $post = $this->getRequest()->getPost();
+                $service_dossier->saveTextesApplicables($id, $post['textes_applicables']);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les textes applicables ont bien été mis à jour.']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les textes applicables n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('textes-applicables', null, null, ['id' => $this->_request->id]);
+            $this->_helper->redirector('textes-applicables', null, null, ['id' => $id]);
         }
     }
 
@@ -2772,9 +2775,9 @@ class DossierController extends Zend_Controller_Action
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
         }
 
-        if ($this->_request->isPost()) {
+        if ($this->getRequest()->isPost()) {
             try {
-                $post = $this->_request->getPost();
+                $post = $this->getRequest()->getPost();
                 if (
                     'edit' == $post['action']
                     || 'edit-type' == $post['action']
@@ -3230,7 +3233,7 @@ class DossierController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('effectifs-degagements-dossier', null, null, ['id' => $this->_request->id]);
+            $this->_helper->redirector('effectifs-degagements-dossier', null, null, ['id' => $request->getParam('id')]);
         }
     }
 
@@ -3292,7 +3295,7 @@ class DossierController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les vérifications techniques n\'ont pas été mises à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('verifications-techniques', null, null, ['id' => $this->_request->id]);
+            $this->_helper->redirector('verifications-techniques', null, null, ['id' => $request->getParam('id')]);
         }
     }
 

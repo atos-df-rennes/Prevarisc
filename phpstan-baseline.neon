@@ -211,26 +211,6 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$DESCRIPTIF_DOSSIER\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$ID_GENRE\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id\\.$#"
-			count: 9
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$q\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$CREATEUR_DOSSIER\\.$#"
 			count: 1
 			path: application/controllers/DossierController.php
@@ -552,7 +532,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isPost\\(\\)\\.$#"
-			count: 8
+			count: 9
 			path: application/controllers/DossierController.php
 
 		-

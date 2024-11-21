@@ -81,11 +81,6 @@ parameters:
 			path: application/controllers/ChangementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id\\.$#"
-			count: 1
-			path: application/controllers/ChangementController.php
-
-		-
 			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
 			count: 2
 			path: application/controllers/ChangementController.php
@@ -113,31 +108,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
 			count: 12
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id\\.$#"
-			count: 4
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id_commission\\.$#"
-			count: 8
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id_membre\\.$#"
-			count: 14
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id_regle\\.$#"
-			count: 6
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$type\\.$#"
-			count: 5
 			path: application/controllers/CommissionController.php
 
 		-

@@ -7,18 +7,19 @@ class ChangementController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->headScript()->appendFile('js/tinymce.min.js');
 
+        $request = $this->getRequest();
         $serviceChangement = new Service_Changement();
 
-        if ($this->_request->isPost()) {
+        if ($request->isPost()) {
             try {
-                $post = $this->_request->getPost();
+                $post = $request->getPost();
                 $serviceChangement->save($post);
                 $this->_helper->flashMessenger([
                     'context' => 'success',
                     'title' => 'Mise à jour réussie !',
                     'message' => 'Les messages d\'alerte ont bien été mis à jour.',
                 ]);
-                $this->_helper->redirector('index', null, null, ['id' => $this->_request->id]);
+                $this->_helper->redirector('index', null, null, ['id' => $request->getParam('id')]);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger([
                     'context' => 'error',

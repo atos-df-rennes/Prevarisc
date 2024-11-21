@@ -12,7 +12,7 @@ class CommissionController extends Zend_Controller_Action
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
-            
+
             $requestId = $this->getRequest()->getParam('id');
 
             // Modèles de données
@@ -92,7 +92,7 @@ class CommissionController extends Zend_Controller_Action
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
-            
+
             $idRegle = $this->getRequest()->getParam('id_regle');
 
             // Les modèles
@@ -354,7 +354,7 @@ class CommissionController extends Zend_Controller_Action
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
-            
+
             $idMembre = $this->getRequest()->getParam('id_membre');
 
             // Les modèles

@@ -273,7 +273,7 @@ class DossierController extends Zend_Controller_Action
 
         $this->infosDossier = $DBdossier->find((int) $this->_getParam('id'))->current();
 
-        $this->_forward('index', 'piece-jointe', null, [
+        $this->forward('index', 'piece-jointe', null, [
             'type' => 'dossier',
             'id' => $this->_request->id,
             'verrou' => $this->infosDossier['VERROU_DOSSIER'],
@@ -283,7 +283,7 @@ class DossierController extends Zend_Controller_Action
     public function addAction(): void
     {
         $this->view->assign('action', 'add');
-        $this->_forward('index');
+        $this->forward('index');
     }
 
     public function indexAction(): void
@@ -747,7 +747,7 @@ class DossierController extends Zend_Controller_Action
 
     public function savenewAction(): void
     {
-        $this->_forward('save');
+        $this->forward('save');
     }
 
     // Permet de faire les insertions de dossier en base de données et de rediriger vers le dossier/index/id/X => X = id du dossier qui vient d'être crée
@@ -2825,7 +2825,7 @@ class DossierController extends Zend_Controller_Action
 
     public function prescriptionAddAction(): void
     {
-        $this->_forward('prescription-edit');
+        $this->forward('prescription-edit');
     }
 
     public function prescriptiontypeformAction(): void

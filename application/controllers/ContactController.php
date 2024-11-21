@@ -174,7 +174,7 @@ class ContactController extends Zend_Controller_Action
                     $cache->remove('etablissement_id_'.$item['ID_ETABLISSEMENT']);
                 }
             } else {
-                $this->_forward('form');
+                $this->forward('form');
             }
 
             $this->_helper->flashMessenger([

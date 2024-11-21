@@ -520,7 +520,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
 
     public function gestionRappelRegAddAction(): void
     {
-        $this->_forward('prescription-form');
+        $this->forward('prescription-form');
 
         // On envoi à la vue l'ensemble des textes et articles
         $dbTexte = new Model_DbTable_PrescriptionTexteListe();
@@ -534,7 +534,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
 
     public function gestionRappelRegEditAction(): void
     {
-        $this->_forward('prescription-form');
+        $this->forward('prescription-form');
 
         $dbTexte = new Model_DbTable_PrescriptionTexteListe();
         $dbArticle = new Model_DbTable_PrescriptionArticleListe();

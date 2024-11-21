@@ -17,6 +17,6 @@ class Api_CalendarController extends Zend_Controller_Action
         $server->setClass('Api_Service_Calendar');
         $server->setHeaders($headers);
         $server->setJsonResponse(false);
-        $server->handle($this->_request->getParams());
+        $server->handle($this->getRequest()->getParams());
     }
 }

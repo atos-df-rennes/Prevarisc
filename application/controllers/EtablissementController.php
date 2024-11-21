@@ -557,7 +557,7 @@ class EtablissementController extends Zend_Controller_Action
     public function deleteAction(): void
     {
         try {
-            $idEtablissement = $this->_getParam('id');
+            $idEtablissement = $this->getRequest()->getParam('id');
 
             // On supprime les dossiers de l'établissement
             $service_dossier = new Service_Dossier();
@@ -668,7 +668,7 @@ class EtablissementController extends Zend_Controller_Action
         $previousUrl = $_SERVER['HTTP_REFERER'];
         $serviceEtablissement = new Service_Etablissement();
 
-        $serviceEtablissement->retablirEtablissement($this->_getParam('idEtablissement'));
+        $serviceEtablissement->retablirEtablissement($this->getRequest()->getParam('idEtablissement'));
 
         $cacheSearch = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
         $cacheSearch->clean(Zend_Cache::CLEANING_MODE_ALL);

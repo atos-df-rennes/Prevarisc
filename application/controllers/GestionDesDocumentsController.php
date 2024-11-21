@@ -99,7 +99,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             }
 
             // Si besoin verificaiton de l'extension du fichier (uniquement odt)
-            if (!move_uploaded_file($_FILES['fichier']['tmp_name'], $this->path.DS.$this->_getParam('commission').DS.$filename)) {
+            if (!move_uploaded_file($_FILES['fichier']['tmp_name'], $this->path.DS.$this->getRequest()->getParam('commission').DS.$filename)) {
                 throw new Exception('Impossible de déplacer le fichier uploadé');
             }
 
@@ -129,9 +129,9 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             $this->_helper->layout->disableLayout();
             $this->_helper->viewRenderer->setNoRender();
 
-            $path = $this->path.DS.$this->_getParam('idCommission');
+            $path = $this->path.DS.$this->getRequest()->getParam('idCommission');
 
-            $filename = str_replace(DS, '', $this->_getParam('name'));
+            $filename = str_replace(DS, '', $this->getRequest()->getParam('name'));
 
             // On verifie si le fichier existe
             $exist = file_exists($path.DS.$filename);

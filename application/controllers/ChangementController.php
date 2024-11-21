@@ -39,10 +39,10 @@ class ChangementController extends Zend_Controller_Action
         $serviceUser = new Service_User();
 
         $etablissement = $serviceEtablissement->get(
-            $this->_getParam('id_etablissement')
+            $this->getRequest()->getParam('id_etablissement')
         );
 
-        $changement = $serviceChangement->get($this->_getParam('changement'));
+        $changement = $serviceChangement->get($this->getRequest()->getParam('changement'));
 
         $users = $serviceUser->getUtilisateursForAlterte(
             (int) $changement['ID_CHANGEMENT'],
@@ -88,14 +88,14 @@ class ChangementController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        $tos = $this->_getParam('mail-emails-dst');
+        $tos = $this->getRequest()->getParam('mail-emails-dst');
 
         $result = false;
 
         if ('' !== $tos) {
             $arrayMails = explode(';', $tos);
-            $object = $this->_getParam('alerte-objet');
-            $message = $this->_getParam('alerte-message');
+            $object = $this->getRequest()->getParam('alerte-objet');
+            $message = $this->getRequest()->getParam('alerte-message');
 
             $serviceMail = new Service_Mail();
             $result = $serviceMail->sendAlerteMail($object, $message, $arrayMails);

@@ -146,36 +146,6 @@ parameters:
 			path: application/controllers/ContactController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$ajax\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id\\.$#"
-			count: 12
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id_item\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$item\\.$#"
-			count: 9
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$q\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$verrou\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEURINFORMATIONS\\.$#"
 			count: 1
 			path: application/controllers/ContactController.php

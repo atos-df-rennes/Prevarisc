@@ -30,7 +30,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
 
     public function addAction(): void
     {
-        if ($this->_request->isPost()) {
+        if ($this->getRequest()->isPost()) {
             try {
                 $data = $this->getRequest()->getPost();
                 $this->serviceCarto->save($data);
@@ -56,7 +56,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $this->view->assign('row', $this->serviceCarto->findById($id));
 
-        if ($this->_request->isPost()) {
+        if ($this->getRequest()->isPost()) {
             try {
                 $data = $this->getRequest()->getPost();
                 $this->serviceCarto->save($data, $id);

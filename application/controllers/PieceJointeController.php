@@ -156,13 +156,13 @@ class PieceJointeController extends Zend_Controller_Action
     public function formAction(): void
     {
         // Placement
-        $this->view->assign('type', $this->_getParam('type'));
-        $this->view->assign('identifiant', $this->_getParam('id'));
+        $this->view->assign('type', $this->getRequest()->getParam('type'));
+        $this->view->assign('identifiant', $this->getRequest()->getParam('id'));
 
         // Ici suivant le type on change toutes les infos nécessaires pour lier aux différents établissements, dossiers
         if ('dossier' == $this->view->type) {
             $DBdossier = new Model_DbTable_Dossier();
-            $this->view->assign('listeEtablissement', $DBdossier->getEtablissementDossier((int) $this->_getParam('id')));
+            $this->view->assign('listeEtablissement', $DBdossier->getEtablissementDossier((int) $this->getRequest()->getParam('id')));
         }
     }
 
@@ -196,8 +196,8 @@ class PieceJointeController extends Zend_Controller_Action
 
             // Données de la pièce jointe
             $nouvellePJ->EXTENSION_PIECEJOINTE = $extension;
-            $nouvellePJ->NOM_PIECEJOINTE = '' == $this->_getParam('nomFichier') ? substr($_FILES['fichier']['name'], 0, -4) : $this->_getParam('nomFichier');
-            $nouvellePJ->DESCRIPTION_PIECEJOINTE = $this->_getParam('descriptionFichier');
+            $nouvellePJ->NOM_PIECEJOINTE = '' == $this->getRequest()->getParam('nomFichier') ? substr($_FILES['fichier']['name'], 0, -4) : $this->getRequest()->getParam('nomFichier');
+            $nouvellePJ->DESCRIPTION_PIECEJOINTE = $this->getRequest()->getParam('descriptionFichier');
             $nouvellePJ->DATE_PIECEJOINTE = $dateNow->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY.' '.Zend_Date::HOUR.':'.Zend_Date::MINUTE.':'.Zend_Date::SECOND);
 
             // Sauvegarde de la BDD
@@ -206,7 +206,7 @@ class PieceJointeController extends Zend_Controller_Action
             if ('dossier' === $this->getRequest()->getParam('type')) {
                 // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
                 $modelDossier = new Model_DbTable_Dossier();
-                $dossier = $modelDossier->find($this->_getParam('id'))->current();
+                $dossier = $modelDossier->find($this->getRequest()->getParam('id'))->current();
 
                 if (null !== $dossier['ID_PLATAU']) {
                     $file_path = implode(DS, [
@@ -216,10 +216,10 @@ class PieceJointeController extends Zend_Controller_Action
                         $nouvellePJ->ID_PIECEJOINTE.$nouvellePJ->EXTENSION_PIECEJOINTE,
                     ]);
                 } else {
-                    $file_path = $this->store->getFilePath($nouvellePJ, $this->_getParam('type'), $this->_getParam('id'), true);
+                    $file_path = $this->store->getFilePath($nouvellePJ, $this->getRequest()->getParam('type'), $this->getRequest()->getParam('id'), true);
                 }
             } else {
-                $file_path = $this->store->getFilePath($nouvellePJ, $this->_getParam('type'), $this->_getParam('id'), true);
+                $file_path = $this->store->getFilePath($nouvellePJ, $this->getRequest()->getParam('type'), $this->getRequest()->getParam('id'), true);
             }
 
             // On check si l'upload est okay
@@ -233,31 +233,31 @@ class PieceJointeController extends Zend_Controller_Action
             }
 
             // Dans le cas d'un dossier
-            if ('dossier' == $this->_getParam('type')) {
+            if ('dossier' == $this->getRequest()->getParam('type')) {
                 // Modèles
                 $DBetab = new Model_DbTable_EtablissementPj();
                 $DBsave = new Model_DbTable_DossierPj();
 
                 // On créé une nouvelle ligne, et on y met une bonne clé étrangère en fonction du type
                 $linkPj = $DBsave->createRow();
-                $linkPj->ID_DOSSIER = $this->_getParam('id');
+                $linkPj->ID_DOSSIER = $this->getRequest()->getParam('id');
 
                 // On fait les liens avec les différents établissements séléctionnés
-                if ($this->_getParam('etab')) {
-                    foreach ($this->_getParam('etab') as $etabLink) {
+                if ($this->getRequest()->getParam('etab')) {
+                    foreach ($this->getRequest()->getParam('etab') as $etabLink) {
                         $linkEtab = $DBetab->createRow();
                         $linkEtab->ID_ETABLISSEMENT = $etabLink;
                         $linkEtab->ID_PIECEJOINTE = $nouvellePJ->ID_PIECEJOINTE;
                         $linkEtab->save();
                     }
                 }
-            } elseif ('etablissement' == $this->_getParam('type')) { // Dans le cas d'un établissement
+            } elseif ('etablissement' == $this->getRequest()->getParam('type')) { // Dans le cas d'un établissement
                 // Modèles
                 $DBsave = new Model_DbTable_EtablissementPj();
 
                 // On créé une nouvelle ligne, et on y met une bonne clé étrangère en fonction du type
                 $linkPj = $DBsave->createRow();
-                $linkPj->ID_ETABLISSEMENT = $this->_getParam('id');
+                $linkPj->ID_ETABLISSEMENT = $this->getRequest()->getParam('id');
 
                 // Mise en avant d'une pièce jointe (null = nul part, 0 = plan, 1 = diapo)
                 if (
@@ -266,20 +266,20 @@ class PieceJointeController extends Zend_Controller_Action
                 ) {
                     $miniature = $nouvellePJ;
                     $miniature['EXTENSION_PIECEJOINTE'] = '.jpg';
-                    $miniature_path = $this->store->getFilePath($miniature, 'etablissement_miniature', $this->_getParam('id'), true);
+                    $miniature_path = $this->store->getFilePath($miniature, 'etablissement_miniature', $this->getRequest()->getParam('id'), true);
 
                     // On resize l'image
                     GD_Resize::run($file_path, $miniature_path, 450);
 
                     $linkPj->PLACEMENT_ETABLISSEMENTPJ = $this->_request->PLACEMENT_ETABLISSEMENTPJ;
                 }
-            } elseif ('dateCommission' == $this->_getParam('type')) {
+            } elseif ('dateCommission' == $this->getRequest()->getParam('type')) {
                 // Modèles
                 $DBsave = new Model_DbTable_DateCommissionPj();
 
                 // On créé une nouvelle ligne, et on y met une bonne clé étrangère en fonction du type
                 $linkPj = $DBsave->createRow();
-                $linkPj->ID_DATECOMMISSION = $this->_getParam('id');
+                $linkPj->ID_DATECOMMISSION = $this->getRequest()->getParam('id');
             }
 
             // On met l'id de la pièce jointe créée

@@ -32,18 +32,23 @@
 
         <!-- Description -->
         <td>
-            <?= nl2br(str_replace("<br />", "" ,$pj['DESCRIPTION_PIECEJOINTE'])) ?>
-            
-            <!-- @fixme: Prendre en compte si l'un des deux est vide -->
-            <p>
-                <?= $pj['TYPE'] ?> - <?= $pj['SOUS_TYPE'] ?>
-            </p>
-            <span class="label label-inverse">
-                <i class="icon-calendar icon-white"></i>&nbsp;Déposée le <?= Service_Utils_Date::convertFromMySQL($pj['DATE_DEPOT']) ?>
-            </span>
-            <span class="label label-success">
-                <i class="icon-tag icon-white"></i>&nbsp;<?= $pj['NATURE'] ?>
-            </span>
+            <?php if (null !== $pj['DESCRIPTION_PIECEJOINTE']): ?>
+                <?= nl2br(str_replace("<br />", "" ,$pj['DESCRIPTION_PIECEJOINTE'])) ?>
+            <?php else: ?>
+                <p>
+                    <?= $pj['TYPE'] ?>
+                    <?php if (null !== $pj['TYPE'] && null !== $pj['SOUS_TYPE']): ?>
+                        -
+                    <?php endif ?>
+                    <?= $pj['SOUS_TYPE'] ?>
+                </p>
+                <span class="label label-inverse">
+                    <i class="icon-calendar icon-white"></i>&nbsp;Déposée le <?= Service_Utils_Date::convertFromMySQL($pj['DATE_DEPOT']) ?>
+                </span>
+                <span class="label label-success">
+                    <i class="icon-tag icon-white" title="Nature de la pièce"></i>&nbsp;<?= $pj['NATURE'] ?>
+                </span>
+            <?php endif ?>
         </td>
 
         <!-- Date de création -->

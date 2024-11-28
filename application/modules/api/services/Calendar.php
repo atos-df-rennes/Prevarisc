@@ -37,8 +37,7 @@ class Api_Service_Calendar
         }
 
         // Le refresh est par défaut à 5 minutes
-        $refreshTime = (getenv('PREVARISC_CALENDAR_REFRESH_TIME')
-                        && '' !== getenv('PREVARISC_CALENDAR_REFRESH_TIME')) ?
+        $refreshTime = getenv('PREVARISC_CALENDAR_REFRESH_TIME') ?
                         getenv('PREVARISC_CALENDAR_REFRESH_TIME') : 'PT5M';
 
         $calendar = new VCalendar([

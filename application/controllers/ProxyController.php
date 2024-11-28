@@ -25,15 +25,15 @@ class ProxyController extends Zend_Controller_Action
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $daurl);
-        curl_setopt($ch, CURLOPT_VERBOSE, 1);
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_VERBOSE, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_REFERER, $_SERVER['HTTP_REFERER']);
 
         // are we under a proxy?
         if (1 == getenv('PREVARISC_PROXY_ENABLED')) {
             curl_setopt($ch, CURLOPT_PROXYTYPE, getenv('PREVARISC_PROXY_PROTOCOL'));
-            curl_setopt($ch, CURLOPT_PROXYPORT, getenv('PREVARISC_PROXY_PORT'));
+            curl_setopt($ch, CURLOPT_PROXYPORT, (int) getenv('PREVARISC_PROXY_PORT'));
             curl_setopt($ch, CURLOPT_PROXY, getenv('PREVARISC_PROXY_HOST'));
             if (getenv('PREVARISC_PROXY_USERNAME')) {
                 curl_setopt($ch, CURLOPT_PROXYUSERPWD, getenv('PREVARISC_PROXY_USERNAME').':'.getenv('PREVARISC_PROXY_PASSWORD'));

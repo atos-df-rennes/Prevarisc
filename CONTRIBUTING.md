@@ -11,7 +11,9 @@
 ## Conventions
 
 - Ajouter autant que possible des tests;
-> Les actions ci-dessous nécessitent de disposer de PHP en version 8.1. Un exemple d'utilisation des commandes est disponible dans la section **scripts** du fichier _composer.json_.
+> Pour les tests fonctionnels, l'utilisation de Cypress nécessite d'installer NodeJS en version 18. Nous vous recommandons pour cela d'installer NodeJS via [NVM](https://github.com/nvm-sh/nvm).
+
+> Les actions ci-dessous nécessitent de disposer de PHP en version 8.3. Un exemple d'utilisation des commandes est disponible dans la section **scripts** du fichier _composer.json_.
 - Exécuter Rector;
 - Exécuter PHP-CS-Fixer;
 - Exécuter PHPStan et ne pas ajouter d'erreur (dans la mesure du possible). Si la correction de l'erreur est trop complexe, l'ajouter dans la baseline;

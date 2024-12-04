@@ -27,6 +27,11 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('isAllowedEffectifsDegagements', unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_ets'));
         $this->view->assign('isAllowedAvisDerogations', unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations'));
 
+        // Noms des onglets paramétrables
+        $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
+        $this->view->assign('nomOngletDescriptif', $modelCapsuleRubrique->getCapsuleRubriqueByInternalName('descriptifEtablissement')['NOM']);
+        $this->view->assign('nomOngletEffectifsDegagements', $modelCapsuleRubrique->getCapsuleRubriqueByInternalName('effectifsDegagementsEtablissement')['NOM']);
+
         $this->serviceEtablissement = new Service_Etablissement();
 
         if ($this->getParam('id')) {

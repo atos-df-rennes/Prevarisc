@@ -1,9 +1,5 @@
 <?php if ($this->action != "add" && $this->do != "new") : ?>
     <?php $this->placeholder('lateral_navigation')->captureStart(); // Capture du 'lateral_navigation'?>
-    <?php
-    $db = Zend_Db_Table::getDefaultAdapter();
-    $VerificationsTechniques = $db->fetchOne('SELECT NOM FROM capsulerubrique WHERE NOM_INTERNE = ?', 'descriptifVerificationsTechniques');
-    $effectifsDegagements = $db->fetchOne('SELECT NOM FROM capsulerubrique WHERE NOM_INTERNE = ?', 'effectifsDegagementsDossier');?>
 
     <input type='hidden' name='ID_CREATEUR' id='ID_CREATEUR' value='<?= $this->idUser; ?>' />
 
@@ -46,7 +42,7 @@
             <li class="<?= strpos($this->action, 'verifications-techniques') !== false ? 'active' : '' ?>">
                 <a href= <?= $this->url(array("controller" => "dossier", "action" => "verifications-techniques", "id" => $this->idDossier), false, true) ?>>
                     <i class="icon-th-list icon-black"></i>
-                    <?= $VerificationsTechniques ?>
+                    <?= $this->nomOngletVerificationsTechniques ?>
                 </a>
             </li>
         <?php endif ?>
@@ -55,7 +51,7 @@
             <li class="<?= strpos($this->action, 'effectifs-degagements-dossier') !== false ? 'active' : '' ?>">
                 <a class='sep' href='<?= $this->url(array('action' => 'effectifs-degagements-dossier')) ?>' >
                     <i class="icon-th-list icon-black"></i>
-                    <?=  $effectifsDegagements ?>
+                    <?=  $this->nomOngletEffectifsDegagements ?>
                 </a>
             </li>
         <?php endif ?>

@@ -241,6 +241,11 @@ class DossierController extends Zend_Controller_Action
             $serviceDossier = new Service_Dossier();
             $this->view->assign('hasAvisDerogation', $serviceDossier->hasAvisDerogation($this->idDossier));
             $this->view->assign('dossierSupprime', null !== $dossier['DATESUPPRESSION_DOSSIER']);
+            
+            // Noms des onglets paramétrables
+            $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
+            $this->view->assign('nomOngletVerificationsTechniques', $modelCapsuleRubrique->getCapsuleRubriqueByInternalName('descriptifVerificationsTechniques')['NOM']);
+            $this->view->assign('nomOngletEffectifsDegagements', $modelCapsuleRubrique->getCapsuleRubriqueByInternalName('effectifsDegagementsDossier')['NOM']);
 
             // Définition des autorisations
             $this->view->assign('isAllowedAvisDerogation', unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations'));

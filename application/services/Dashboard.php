@@ -529,9 +529,8 @@ class Service_Dashboard
         }
 
         $search->order('d.DATEINSERT_DOSSIER');
-        $results = $search->run(false, null, false)->toArray();
 
-        return $results;
+        return $search->run(false, null, false)->toArray();
     }
 
     /**

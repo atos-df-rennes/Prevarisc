@@ -46,8 +46,8 @@ class Model_PlatauConsultationMapper
 
         $row = $result->current();
 
-        $datePec = Service_Utils_Date::formatDateWithDayName($row->DATE_PEC, 'yyyy-MM-dd');
-        $dateAvis = Service_Utils_Date::formatDateWithDayName($row->DATE_AVIS, 'yyyy-MM-dd');
+        $datePec = Service_Utils_Date::formatDateWithDayName($row->DATE_PEC);
+        $dateAvis = Service_Utils_Date::formatDateWithDayName($row->DATE_AVIS);
 
         $consultation->setId($row->ID_PLATAU)
             ->setStatutAvis($row->STATUT_AVIS ?? Model_Enum_PlatauStatutAvis::INCONNU)

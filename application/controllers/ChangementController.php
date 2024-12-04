@@ -7,18 +7,19 @@ class ChangementController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->headScript()->appendFile('js/tinymce.min.js');
 
+        $request = $this->getRequest();
         $serviceChangement = new Service_Changement();
 
-        if ($this->_request->isPost()) {
+        if ($request->isPost()) {
             try {
-                $post = $this->_request->getPost();
+                $post = $request->getPost();
                 $serviceChangement->save($post);
                 $this->_helper->flashMessenger([
                     'context' => 'success',
                     'title' => 'Mise à jour réussie !',
                     'message' => 'Les messages d\'alerte ont bien été mis à jour.',
                 ]);
-                $this->_helper->redirector('index', null, null, ['id' => $this->_request->id]);
+                $this->_helper->redirector('index', null, null, ['id' => $request->getParam('id')]);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger([
                     'context' => 'error',
@@ -38,10 +39,10 @@ class ChangementController extends Zend_Controller_Action
         $serviceUser = new Service_User();
 
         $etablissement = $serviceEtablissement->get(
-            $this->_getParam('id_etablissement')
+            $this->getRequest()->getParam('id_etablissement')
         );
 
-        $changement = $serviceChangement->get($this->_getParam('changement'));
+        $changement = $serviceChangement->get($this->getRequest()->getParam('changement'));
 
         $users = $serviceUser->getUtilisateursForAlterte(
             (int) $changement['ID_CHANGEMENT'],
@@ -87,14 +88,14 @@ class ChangementController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        $tos = $this->_getParam('mail-emails-dst');
+        $tos = $this->getRequest()->getParam('mail-emails-dst');
 
         $result = false;
 
         if ('' !== $tos) {
             $arrayMails = explode(';', $tos);
-            $object = $this->_getParam('alerte-objet');
-            $message = $this->_getParam('alerte-message');
+            $object = $this->getRequest()->getParam('alerte-objet');
+            $message = $this->getRequest()->getParam('alerte-message');
 
             $serviceMail = new Service_Mail();
             $result = $serviceMail->sendAlerteMail($object, $message, $arrayMails);

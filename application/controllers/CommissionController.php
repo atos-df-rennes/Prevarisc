@@ -13,6 +13,8 @@ class CommissionController extends Zend_Controller_Action
         try {
             $this->_helper->viewRenderer->setNoRender();
 
+            $requestId = $this->getRequest()->getParam('id');
+
             // Modèles de données
             $model_commission = new Model_DbTable_Commission();
             $model_ContactCommission = new Model_DbTable_CommissionContact();
@@ -20,22 +22,22 @@ class CommissionController extends Zend_Controller_Action
             $model_RegleCommission = new Model_DbTable_CommissionRegle();
 
             // Suppression des contacts
-            foreach ($model_ContactCommission->fetchAll('ID_COMMISSION = '.$this->_request->id) as $row) {
+            foreach ($model_ContactCommission->fetchAll('ID_COMMISSION = '.$requestId) as $row) {
                 $this->_helper->actionStack('delete', 'contact', 'default', ['item' => 'commission', 'id' => $row['ID_UTILISATEURINFORMATIONS'], 'id_item' => $row['ID_COMMISSION']]);
             }
 
             // Suppression des membres
-            foreach ($model_MembreCommission->fetchAll('ID_COMMISSION = '.$this->_request->id) as $row) {
+            foreach ($model_MembreCommission->fetchAll('ID_COMMISSION = '.$requestId) as $row) {
                 $this->_helper->actionStack('delete-membre', 'commission', 'default', ['id_membre' => $row['ID_COMMISSIONMEMBRE']]);
             }
 
             // Suppression des règles
-            foreach ($model_RegleCommission->fetchAll('ID_COMMISSION = '.$this->_request->id) as $row) {
+            foreach ($model_RegleCommission->fetchAll('ID_COMMISSION = '.$requestId) as $row) {
                 $this->_helper->actionStack('delete-regle', 'commission', 'default', ['id_regle' => $row['ID_REGLE']]);
             }
 
             // Suppression de la commission
-            $model_commission->delete('ID_COMMISSION = '.$this->_request->id);
+            $model_commission->delete('ID_COMMISSION = '.$requestId);
             $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'La commission a bien été supprimée',
@@ -57,7 +59,7 @@ class CommissionController extends Zend_Controller_Action
         // Les modèles
         $model_regles = new Model_DbTable_CommissionRegle();
         // On récupère les règles de la commission
-        $this->view->assign('array_regles', $model_regles->get($this->_request->id_commission));
+        $this->view->assign('array_regles', $model_regles->get($this->getRequest()->getParam('id_commission')));
     }
 
     public function addRegleAction(): void
@@ -70,7 +72,7 @@ class CommissionController extends Zend_Controller_Action
 
             // On ajoute une règle
             $row_regle = $model_regles->createRow();
-            $row_regle->ID_COMMISSION = $this->_request->id_commission;
+            $row_regle->ID_COMMISSION = $this->getRequest()->getParam('id_commission');
             $row_regle->save();
             $this->_helper->flashMessenger([
                 'context' => 'success',
@@ -91,6 +93,8 @@ class CommissionController extends Zend_Controller_Action
         try {
             $this->_helper->viewRenderer->setNoRender();
 
+            $idRegle = $this->getRequest()->getParam('id_regle');
+
             // Les modèles
             $model_regles = new Model_DbTable_CommissionRegle();
             $model_reglesTypes = new Model_DbTable_CommissionRegleType();
@@ -100,12 +104,12 @@ class CommissionController extends Zend_Controller_Action
             $model_reglesLocalSommeil = new Model_DbTable_CommissionRegleLocalSommeil();
 
             // On supprime la règle
-            $model_reglesTypes->delete('ID_REGLE = '.$this->_request->id_regle);
-            $model_reglesCategories->delete('ID_REGLE = '.$this->_request->id_regle);
-            $model_reglesClasses->delete('ID_REGLE = '.$this->_request->id_regle);
-            $model_reglesLocalSommeil->delete('ID_REGLE = '.$this->_request->id_regle);
-            $model_reglesEtudeVisite->delete('ID_REGLE = '.$this->_request->id_regle);
-            $model_regles->delete('ID_REGLE = '.$this->_request->id_regle);
+            $model_reglesTypes->delete('ID_REGLE = '.$idRegle);
+            $model_reglesCategories->delete('ID_REGLE = '.$idRegle);
+            $model_reglesClasses->delete('ID_REGLE = '.$idRegle);
+            $model_reglesLocalSommeil->delete('ID_REGLE = '.$idRegle);
+            $model_reglesEtudeVisite->delete('ID_REGLE = '.$idRegle);
+            $model_regles->delete('ID_REGLE = '.$idRegle);
 
             $this->_helper->flashMessenger([
                 'context' => 'success',
@@ -292,7 +296,7 @@ class CommissionController extends Zend_Controller_Action
         $model_membres = new Model_DbTable_CommissionMembre();
 
         // On récupère les règles de la commission
-        $this->view->assign('array_membres', $model_membres->get($this->_request->id_commission));
+        $this->view->assign('array_membres', $model_membres->get($this->getRequest()->getParam('id_commission')));
 
         // On met le libellé du type dans le tableau des activités
         $types = $model_types->fetchAll()->toArray();
@@ -327,7 +331,7 @@ class CommissionController extends Zend_Controller_Action
 
             // On ajoute une règle
             $row_membre = $model_membres->createRow();
-            $row_membre->ID_COMMISSION = $this->_request->id_commission;
+            $row_membre->ID_COMMISSION = $this->getRequest()->getParam('id_commission');
             $row_membre->LIBELLE_COMMISSIONMEMBRE = '';
             $row_membre->PRESENCE_COMMISSIONMEMBRE = 0;
             $row_membre->save();
@@ -351,6 +355,8 @@ class CommissionController extends Zend_Controller_Action
         try {
             $this->_helper->viewRenderer->setNoRender();
 
+            $idMembre = $this->getRequest()->getParam('id_membre');
+
             // Les modèles
             $model_membres = new Model_DbTable_CommissionMembre();
             $model_membresTypes = new Model_DbTable_CommissionMembreTypeActivite();
@@ -361,17 +367,17 @@ class CommissionController extends Zend_Controller_Action
 
             // On supprime les courriers
             $courrier_path = REAL_DATA_PATH.DS.'uploads'.DS.'courriers';
-            $row_membre = $model_membres->find($this->_request->id_membre)->current();
-            unlink($courrier_path.DS.$this->_request->id_membre.'ODJ'.$row_membre->COURRIER_ODJ);
-            unlink($courrier_path.DS.$this->_request->id_membre.'CONVOCATIONVISITE'.$row_membre->COURRIER_CONVOCATIONVISITE);
-            unlink($courrier_path.DS.$this->_request->id_membre.'CONVOCATIONSALLE'.$row_membre->COURRIER_CONVOCATIONSALLE);
+            $row_membre = $model_membres->find($idMembre)->current();
+            unlink($courrier_path.DS.$idMembre.'ODJ'.$row_membre->COURRIER_ODJ);
+            unlink($courrier_path.DS.$idMembre.'CONVOCATIONVISITE'.$row_membre->COURRIER_CONVOCATIONVISITE);
+            unlink($courrier_path.DS.$idMembre.'CONVOCATIONSALLE'.$row_membre->COURRIER_CONVOCATIONSALLE);
 
             // On supprime la règle
-            $model_membresTypes->delete('ID_COMMISSIONMEMBRE = '.$this->_request->id_membre);
-            $model_membresCategories->delete('ID_COMMISSIONMEMBRE = '.$this->_request->id_membre);
-            $model_membresClasses->delete('ID_COMMISSIONMEMBRE = '.$this->_request->id_membre);
-            $model_membresDossierNatures->delete('ID_COMMISSIONMEMBRE = '.$this->_request->id_membre);
-            $model_membresDossierTypes->delete('ID_COMMISSIONMEMBRE = '.$this->_request->id_membre);
+            $model_membresTypes->delete('ID_COMMISSIONMEMBRE = '.$idMembre);
+            $model_membresCategories->delete('ID_COMMISSIONMEMBRE = '.$idMembre);
+            $model_membresClasses->delete('ID_COMMISSIONMEMBRE = '.$idMembre);
+            $model_membresDossierNatures->delete('ID_COMMISSIONMEMBRE = '.$idMembre);
+            $model_membresDossierTypes->delete('ID_COMMISSIONMEMBRE = '.$idMembre);
             $row_membre->delete();
 
             $this->_helper->flashMessenger([
@@ -495,7 +501,7 @@ class CommissionController extends Zend_Controller_Action
         $model_membres = new Model_DbTable_CommissionMembre();
 
         // On récupère la liste des membres de la commission
-        $this->view->assign('rowset_membres', $model_membres->fetchAll('ID_COMMISSION = '.$this->_request->id_commission));
+        $this->view->assign('rowset_membres', $model_membres->fetchAll('ID_COMMISSION = '.$this->getRequest()->getParam('id_commission')));
     }
 
     // Courriers types des membres de la commission
@@ -504,7 +510,7 @@ class CommissionController extends Zend_Controller_Action
         // Les modèles
         $model_commission = new Model_DbTable_Commission();
 
-        $commission = $model_commission->find($this->_request->id_commission)->current();
+        $commission = $model_commission->find($this->getRequest()->getParam('id_commission'))->current();
 
         // On récupère la liste des membres de la commission
         $this->view->assign('name_document_cr', $commission->DOCUMENT_CR);
@@ -527,7 +533,7 @@ class CommissionController extends Zend_Controller_Action
                     // Les modèles
                     $model_commission = new Model_DbTable_Commission();
 
-                    $commission = $model_commission->find($this->_request->id_commission)->current();
+                    $commission = $model_commission->find($this->getRequest()->getParam('id_commission'))->current();
 
                     // Si il y a déjà un courrier, on le supprime
                     if (null != $commission->DOCUMENT_CR) {
@@ -571,7 +577,7 @@ class CommissionController extends Zend_Controller_Action
             // Les modèles
             $model_commission = new Model_DbTable_Commission();
 
-            $commission = $model_commission->find($this->_request->id_commission)->current();
+            $commission = $model_commission->find($this->getRequest()->getParam('id_commission'))->current();
 
             // On supprime le fichier
             unlink(REAL_DATA_PATH.DS.'uploads'.DS.'documents_commission'.DS.$commission->DOCUMENT_CR);
@@ -601,23 +607,25 @@ class CommissionController extends Zend_Controller_Action
             $this->_helper->viewRenderer->setNoRender();
 
             $error = 'null';
+            $idMembre = $this->getRequest()->getParam('id_membre');
+            $type = $this->getRequest()->getParam('type');
 
             // Extension du fichier uploadé
             $string_extension = strrchr($_FILES['COURRIER']['name'], '.');
 
             // On check si on veut uploader un document odt
             if ('.odt' == $string_extension) {
-                if (move_uploaded_file($_FILES['COURRIER']['tmp_name'], REAL_DATA_PATH.DS.'uploads'.DS.'courriers'.DS.$this->_request->id_membre.$this->_request->type.'_'.$_FILES['COURRIER']['name'])) {
+                if (move_uploaded_file($_FILES['COURRIER']['tmp_name'], REAL_DATA_PATH.DS.'uploads'.DS.'courriers'.DS.$idMembre.$type.'_'.$_FILES['COURRIER']['name'])) {
                     // Les modèles
                     $model_membres = new Model_DbTable_CommissionMembre();
 
                     // On récupère l'instance du membres
-                    $row_membre = $model_membres->find($this->_request->id_membre)->current();
-                    $row = 'COURRIER_'.$this->_request->type;
+                    $row_membre = $model_membres->find($idMembre)->current();
+                    $row = 'COURRIER_'.$type;
 
                     // Si il y a déjà un courrier, on le supprime
                     if (null != $row_membre->{$row} && $row_membre->{$row} !== $_FILES['COURRIER']['name']) {
-                        unlink(REAL_DATA_PATH.DS.'uploads'.DS.'courriers'.DS.$this->_request->id_membre.$this->_request->type.'_'.$row_membre->{$row});
+                        unlink(REAL_DATA_PATH.DS.'uploads'.DS.'courriers'.DS.$idMembre.$type.'_'.$row_membre->{$row});
                     }
 
                     // On met à jour le libellé du courrier modifié
@@ -653,15 +661,18 @@ class CommissionController extends Zend_Controller_Action
         try {
             $this->_helper->viewRenderer->setNoRender();
 
+            $idMembre = $this->getRequest()->getParam('id_membre');
+            $type = $this->getRequest()->getParam('type');
+
             // Les modèles
             $model_membres = new Model_DbTable_CommissionMembre();
 
             // On récupère l'instance du membres
-            $row_membre = $model_membres->find($this->_request->id_membre)->current();
-            $row = 'COURRIER_'.$this->_request->type;
+            $row_membre = $model_membres->find($idMembre)->current();
+            $row = 'COURRIER_'.$type;
 
             // On supprime le fichier
-            unlink(REAL_DATA_PATH.DS.'uploads'.DS.'courriers'.DS.$this->_request->id_membre.$this->_request->type.'_'.$row_membre->{$row});
+            unlink(REAL_DATA_PATH.DS.'uploads'.DS.'courriers'.DS.$idMembre.$type.'_'.$row_membre->{$row});
 
             // On met à null dans la DB
             $row_membre->{$row} = null;

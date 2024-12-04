@@ -51,7 +51,7 @@ class SessionController extends Zend_Controller_Action
                 // Si l'utilisateur n'est pas actif, on renvoie false
                 if (
                     null === $user
-                    || (null !== $user && !$user['ACTIF_UTILISATEUR'])
+                    || !$user['ACTIF_UTILISATEUR']
                 ) {
                     error_log(sprintf("Auth: utilisateur inexistant ou inactif '%s'", $username));
 

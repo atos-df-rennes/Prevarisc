@@ -65,7 +65,7 @@ $lastKey = end($arrayKeys);
                 var newName = $('#newName_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>').val();
                 if (newName) {
                     $.ajax({
-                        url: '<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-nom'], null, true) ?>',
+                        url: '<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-capsule-rubrique-nom'], null, true) ?>',
                         type: 'POST',
                         data: {
                             id: <?= $formulaire['ID_CAPSULERUBRIQUE'] ?>,

@@ -147,7 +147,7 @@ class FormulaireController extends Zend_Controller_Action
         }
     }
 
-    public function editNomAction(): void
+    public function editCapsuleRubriqueNomAction(): void
     {
         $request = $this->getRequest();
 

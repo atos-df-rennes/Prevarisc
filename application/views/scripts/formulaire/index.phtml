@@ -1,59 +1,55 @@
-<?php
-$arrayKeys = array_keys($this->formulaires);
-$lastKey = end($arrayKeys);
-?>
 <ul class="nav nav-tabs">
-    <li class="active"><a href="#etablissements" data-toggle="tab">Etablissements</a></li>
-    <li><a href="#dossiers" data-toggle="tab">Dossiers</a></li>
+    <li class="active">
+        <a href="#etablissements" data-toggle="tab">Etablissements</a>
+    </li>
+    <li>
+        <a href="#dossiers" data-toggle="tab">Dossiers</a>
+    </li>
 </ul>
 
 <div class="tab-content">
     <div class="tab-pane active" id="etablissements">
         <?php foreach ($this->formulaires as $key => $formulaire) : ?>
-            <?php if ($formulaire['NOM_INTERNE'] == 'effectifsDegagementsEtablissement' || $formulaire['NOM_INTERNE'] == 'descriptifEtablissement') : ?>
+            <?php if ($formulaire['NOM_INTERNE'] === 'effectifsDegagementsEtablissement' || $formulaire['NOM_INTERNE'] === 'descriptifEtablissement') : ?>
                 <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="row-fluid objet">
                     <div class="span12">
                         <div>
-                            <h2 style="display: inline;" id="nom_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
+                            <h2 id="nom_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
                                 <?= $formulaire['NOM'] ?>
+                                <button class="btn btn-link" data-toggle="modal" data-target="#editModal_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
+                                    <i title='Modifier' class="icon-pencil icon-black"></i>
+                                </button>
                             </h2>
-                            <a data-toggle="modal" data-target="#editModal_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
-                                <i title='Modifier' class="icon-pencil icon-black" style="margin-left: 10px;"></i>
-                            </a>
                         </div>
-                        <?php include 'partials/partial-modal-editNom-capsuleRubrique.phtml'; ?>
-                        <?php include 'partials/partial-infos-rubriques.phtml'; ?>
+
+                        <?php include 'partials/partial-modal-editNom-capsuleRubrique.phtml' ?>
+                        <?php include 'partials/partial-infos-rubriques.phtml' ?>
                     </div>
-                    <?php if ($key !== $lastKey) : ?>
-                        <hr>
-                    <?php endif; ?>
                 </div>
-            <?php endif; ?>
-        <?php endforeach; ?>
+            <?php endif ?>
+        <?php endforeach ?>
     </div>
 
     <div class="tab-pane" id="dossiers">
         <?php foreach ($this->formulaires as $key => $formulaire) : ?>
-            <?php if ($formulaire['NOM_INTERNE'] != 'effectifsDegagementsEtablissement' && $formulaire['NOM_INTERNE'] != 'descriptifEtablissement') : ?>
+            <?php if ($formulaire['NOM_INTERNE'] !== 'effectifsDegagementsEtablissement' && $formulaire['NOM_INTERNE'] !== 'descriptifEtablissement') : ?>
                 <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="row-fluid objet">
                     <div class="span12">
                         <div>
-                            <h2 style="display: inline;" id="nom_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
+                            <h2 id="nom_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
                                 <?= $formulaire['NOM'] ?>
+                                <button class="btn btn-link" data-toggle="modal" data-target="#editModal_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
+                                    <i title='Modifier' class="icon-pencil icon-black"></i>
+                                </button>
                             </h2>
-                            <a data-toggle="modal" data-target="#editModal_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
-                                <i title='Modifier' class="icon-pencil icon-black" style="margin-left: 10px;"></i>
-                            </a>
                         </div>
-                        <?php include 'partials/partial-modal-editNom-capsuleRubrique.phtml'; ?>
-                        <?php include 'partials/partial-infos-rubriques.phtml'; ?>
+
+                        <?php include 'partials/partial-modal-editNom-capsuleRubrique.phtml' ?>
+                        <?php include 'partials/partial-infos-rubriques.phtml' ?>
                     </div>
-                    <?php if ($key !== $lastKey) : ?>
-                        <hr>
-                    <?php endif; ?>
                 </div>
-            <?php endif; ?>
-        <?php endforeach; ?>
+            <?php endif ?>
+        <?php endforeach ?>
     </div>
 </div>
 
@@ -89,6 +85,6 @@ $lastKey = end($arrayKeys);
                     alert('Le nom ne peut pas être vide.');
                 }
             });
-        <?php endforeach; ?>
+        <?php endforeach ?>
     });
 </script>

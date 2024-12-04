@@ -522,7 +522,7 @@ class Service_Dashboard
         $search->setCriteria('d.ID_PLATAU IS NOT NULL');
         $search->setCriteria('d.ID_DOSSIER IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)');
         $search->setCriteria('platauconsultation.STATUT_AVIS', Model_Enum_PlatauStatutAvis::TRAITE);
-        $search->setCriteria('piecejointestatut.NOM_STATUT IN ("to_be_exported", "on_error")');
+        $search->setCriteria('piecejointestatut.NOM_STATUT IN ("to_be_exported", "on_error", "awaiting_status")');
 
         if ($getCount) {
             return $search->run(false, null, false, true);

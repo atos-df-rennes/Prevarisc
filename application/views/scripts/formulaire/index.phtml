@@ -1,53 +1,67 @@
-<ul class="nav nav-tabs">
-    <li class="active">
-        <a href="#etablissements" data-toggle="tab">Etablissements</a>
-    </li>
-    <li>
-        <a href="#dossiers" data-toggle="tab">Dossiers</a>
-    </li>
-</ul>
+<?php
+    $formulairesEtablissement = array_values(array_filter($this->formulaires, function($formulaire) {
+        return in_array($formulaire['NOM_INTERNE'], ['descriptifEtablissement', 'effectifsDegagementsEtablissement'], true);
+    }));
+    $formulairesDossier = array_values(array_filter($this->formulaires, function($formulaire) {
+        return !in_array($formulaire['NOM_INTERNE'], ['descriptifEtablissement', 'effectifsDegagementsEtablissement'], true);
+    }));
+?>
 
-<div class="tab-content">
-    <div class="tab-pane active" id="etablissements">
-        <?php foreach ($this->formulaires as $key => $formulaire) : ?>
-            <?php if ($formulaire['NOM_INTERNE'] === 'effectifsDegagementsEtablissement' || $formulaire['NOM_INTERNE'] === 'descriptifEtablissement') : ?>
-                <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="row-fluid">
-                    <div class="span12">
-                        <h2>
-                            <span id="nom_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
-                                <?= $formulaire['NOM'] ?>
-                            </span>
-                            <button class="btn btn-link" data-toggle="modal" data-target="#editModal_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
-                                <i title='Modifier' class="icon-pencil icon-black"></i>
-                            </button>
-                        </h2>
+<div class="panel panel-default" style="width: 100%; margin-bottom: 20px;">
+    <div class="panel-heading">
+        <h2>Onglets de l'établissement</h2>
+    </div>
 
-                        <?php include 'partials/partial-modal-editNom-capsuleRubrique.phtml' ?>
-                        <?php include 'partials/partial-infos-rubriques.phtml' ?>
-                    </div>
+    <div class="panel-body">
+        <?php foreach ($formulairesEtablissement as $key => $formulaire) : ?>
+            <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="row-fluid objet">
+                <div class="span12">
+                    <h3>
+                        <span id="nom_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
+                            <?= $formulaire['NOM'] ?>
+                        </span>
+                        <button class="btn btn-link" data-toggle="modal" data-target="#editModal_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
+                            <i title='Modifier' class="icon-pencil icon-black"></i>
+                        </button>
+                    </h3>
+
+                    <?php include 'partials/partial-modal-editNom-capsuleRubrique.phtml' ?>
+                    <?php include 'partials/partial-infos-rubriques.phtml' ?>
                 </div>
+            </div>
+
+            <?php if ($key !== count($formulairesEtablissement) - 1): ?>
+                <hr />
             <?php endif ?>
         <?php endforeach ?>
     </div>
+</div>
 
-    <div class="tab-pane" id="dossiers">
-        <?php foreach ($this->formulaires as $key => $formulaire) : ?>
-            <?php if ($formulaire['NOM_INTERNE'] !== 'effectifsDegagementsEtablissement' && $formulaire['NOM_INTERNE'] !== 'descriptifEtablissement') : ?>
-                <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="row-fluid">
-                    <div class="span12">
-                        <h2>
-                            <span id="nom_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
-                                <?= $formulaire['NOM'] ?>
-                            </span>
-                            <button class="btn btn-link" data-toggle="modal" data-target="#editModal_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
-                                <i title='Modifier' class="icon-pencil icon-black"></i>
-                            </button>
-                        </h2>
+<div class="panel panel-default" style="width: 100%;">
+    <div class="panel-heading">
+        <h2>Onglets du dossier</h2>
+    </div>
 
-                        <?php include 'partials/partial-modal-editNom-capsuleRubrique.phtml' ?>
-                        <?php include 'partials/partial-infos-rubriques.phtml' ?>
-                    </div>
+    <div class="panel-body">
+        <?php foreach ($formulairesDossier as $key => $formulaire) : ?>
+            <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="row-fluid objet">
+                <div class="span12">
+                    <h3>
+                        <span id="nom_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
+                            <?= $formulaire['NOM'] ?>
+                        </span>
+                        <button class="btn btn-link" data-toggle="modal" data-target="#editModal_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
+                            <i title='Modifier' class="icon-pencil icon-black"></i>
+                        </button>
+                    </h3>
+
+                    <?php include 'partials/partial-modal-editNom-capsuleRubrique.phtml' ?>
+                    <?php include 'partials/partial-infos-rubriques.phtml' ?>
                 </div>
+            </div>
+
+            <?php if ($key !== count($formulairesDossier) - 1): ?>
+                <hr />
             <?php endif ?>
         <?php endforeach ?>
     </div>

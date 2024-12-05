@@ -4,6 +4,7 @@
         <td>
             <?php if (
                 $this->isPlatau
+                && array_key_exists('IS_NEW', $pj)
                 && $pj['IS_NEW']
             ): ?>
                 <div class="label label-important mb-2">

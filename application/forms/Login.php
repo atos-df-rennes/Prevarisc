@@ -2,13 +2,13 @@
 
 class Form_Login extends Zend_Form
 {
-    public function init()
+    public function init(): void
     {
         $this->setMethod('post');
 
         $this->addElement('text', 'prevarisc_login_username', [
-            'label' => 'Nom d\'utilisateur',
-            'placeholder' => 'Nom d\'utilisateur',
+            'label' => "Nom d'utilisateur",
+            'placeholder' => "Nom d'utilisateur",
             'required' => true,
             'filters' => [new Zend_Filter_HtmlEntities(), new Zend_Filter_StripTags()],
             'validators' => [new Zend_Validate_StringLength(1, 255)],

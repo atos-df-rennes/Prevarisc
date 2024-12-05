@@ -2,7 +2,7 @@
 
 class ContactController extends Zend_Controller_Action
 {
-    public function init()
+    public function init(): void
     {
         // Actions à effectuées en AJAX
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
@@ -16,41 +16,46 @@ class ContactController extends Zend_Controller_Action
         ;
     }
 
-    public function indexAction()
+    public function indexAction(): void
     {
         $DB_contact = new Model_DbTable_UtilisateurInformations();
-        $this->view->assign('contacts', $DB_contact->getContact($this->_request->item, $this->_request->id));
+        $request = $this->getRequest();
+        $item = $request->getParam('item');
+        $id = $request->getParam('id');
+
+        $this->view->assign('contacts', $DB_contact->getContact($item, $id));
 
         // Placement
-        $this->view->assign('item', $this->_request->item);
-        $this->view->assign('id', $this->_request->id);
-        $this->view->assign('verrou', $this->_request->verrou);
-        $this->view->assign('ajax', $this->_request->ajax);
+        $this->view->assign('item', $item);
+        $this->view->assign('id', $id);
+        $this->view->assign('verrou', $request->getParam('verrou'));
+        $this->view->assign('ajax', $request->getParam('ajax'));
 
         // Si on est dans un établissement, on cherche les contacts des ets parents
-        if ('etablissement' == $this->_request->item) {
+        if ('etablissement' == $item) {
             $model_ets = new Model_DbTable_Etablissement();
-            $etablissement_parents = $model_ets->getAllParents($this->_request->id);
+            $etablissement_parents = $model_ets->getAllParents($id);
             $array = [];
 
             if (null != $etablissement_parents) {
                 foreach ($etablissement_parents as $ets) {
                     if (null != $ets) {
-                        $contacts = $DB_contact->getContact($this->_request->item, $ets['ID_ETABLISSEMENT']);
+                        $contacts = $DB_contact->getContact($item, $ets['ID_ETABLISSEMENT']);
                         if (null != $contacts) {
                             $array[] = $contacts;
                         }
                     }
                 }
             }
+
             $this->view->assign('contacts_parent', $array);
         }
 
         // Taille des cases
-        $this->view->assign('size', ('dossier' == $this->_request->item) ? 3 : 4);
+        $this->view->assign('size', ('dossier' == $item) ? 3 : 4);
     }
 
-    public function formAction()
+    public function formAction(): void
     {
         // On récupère la liste des fonctions des contacts
         $DB_contactfonction = new Model_DbTable_Fonction();
@@ -65,11 +70,11 @@ class ContactController extends Zend_Controller_Action
         $this->view->assign('groupes', $DB_groupe->fetchAll()->toArray());
 
         // Placement
-        $this->view->assign('item', $this->_request->item);
-        $this->view->assign('id', $this->_request->id);
+        $this->view->assign('item', $this->getRequest()->getParam('item'));
+        $this->view->assign('id', $this->getRequest()->getParam('id'));
     }
 
-    public function addAction()
+    public function addAction(): void
     {
         try {
             if (isset($_POST['ID_UTILISATEURCIVILITE']) && 'null' == $_POST['ID_UTILISATEURCIVILITE']) {
@@ -78,11 +83,12 @@ class ContactController extends Zend_Controller_Action
 
             $key = null;
             $DB_contact = null;
+            $item = $this->getRequest()->getParam('item');
 
             // Initalisation des modèles
             $DB_informations = new Model_DbTable_UtilisateurInformations();
 
-            switch ($this->_request->item) {
+            switch ($item) {
                 case 'etablissement':
                     $DB_contact = new Model_DbTable_EtablissementContact();
                     $key = 'ID_ETABLISSEMENT';
@@ -111,7 +117,7 @@ class ContactController extends Zend_Controller_Action
                     break;
             }
 
-            $id_item = $this->_request->id;
+            $id_item = $this->getRequest()->getParam('id');
             $exist = $_POST['exist'] ?? false;
 
             $id = null;
@@ -128,23 +134,23 @@ class ContactController extends Zend_Controller_Action
 
             // Suppression du cache de l'item
             $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
-            $cache->remove($this->_request->item.'_id_'.$id_item);
+            $cache->remove($item.'_id_'.$id_item);
 
             $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le contact a bien été ajouté',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
-                'title' => 'Erreur lors de l\'ajout du contact',
-                'message' => $e->getMessage(),
+                'title' => "Erreur lors de l'ajout du contact",
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function editAction()
+    public function editAction(): void
     {
         try {
             if (isset($_POST['ID_UTILISATEURCIVILITE']) && 'null' == $_POST['ID_UTILISATEURCIVILITE']) {
@@ -153,7 +159,8 @@ class ContactController extends Zend_Controller_Action
 
             $DB_informations = new Model_DbTable_UtilisateurInformations();
             $DB_contact = new Model_DbTable_EtablissementContact();
-            $row = $DB_informations->find($this->_request->id)->current();
+            $id = $this->getRequest()->getParam('id');
+            $row = $DB_informations->find($id)->current();
             $this->view->assign('user_info', $row);
 
             if ([] !== $_POST) {
@@ -162,12 +169,12 @@ class ContactController extends Zend_Controller_Action
 
                 // Suppression du cache des l'items associés
                 $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
-                $items = $DB_contact->fetchAll('ID_UTILISATEURINFORMATIONS = '.$this->_request->id)->toArray();
+                $items = $DB_contact->fetchAll('ID_UTILISATEURINFORMATIONS = '.$id)->toArray();
                 foreach ($items as $item) {
                     $cache->remove('etablissement_id_'.$item['ID_ETABLISSEMENT']);
                 }
             } else {
-                $this->_forward('form');
+                $this->forward('form');
             }
 
             $this->_helper->flashMessenger([
@@ -175,16 +182,16 @@ class ContactController extends Zend_Controller_Action
                 'title' => 'Le contact a bien été modifié',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la modification du contact',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function deleteAction()
+    public function deleteAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -198,9 +205,11 @@ class ContactController extends Zend_Controller_Action
                 new Model_DbTable_CommissionContact(),
             ];
             $primary = null;
+            $id = $this->getRequest()->getParam('id');
+            $item = $this->getRequest()->getParam('item');
 
             // Initalisation des modèles
-            switch ($this->_request->item) {
+            switch ($item) {
                 case 'etablissement':
                     $DB_current = $DB_contact[0];
                     $primary = 'ID_ETABLISSEMENT';
@@ -232,39 +241,39 @@ class ContactController extends Zend_Controller_Action
             // Appartient à d'autre ets ?
             $exist = false;
             foreach ($DB_contact as $model) {
-                if (count($model->fetchAll('ID_UTILISATEURINFORMATIONS = '.$this->_request->id)->toArray()) > (($model == $DB_current) ? 1 : 0)) {
+                if (count($model->fetchAll('ID_UTILISATEURINFORMATIONS = '.$id)->toArray()) > (($model == $DB_current) ? 1 : 0)) {
                     $exist = true;
                 }
             }
 
             // Est ce que le contact n'appartient pas à d'autre etablissement ?
             if (!$exist) {
-                $DB_current->delete('ID_UTILISATEURINFORMATIONS = '.$this->_request->id); // Porteuse
-                $DB_informations->delete('ID_UTILISATEURINFORMATIONS = '.$this->_request->id); // Contact
+                $DB_current->delete('ID_UTILISATEURINFORMATIONS = '.$id); // Porteuse
+                $DB_informations->delete('ID_UTILISATEURINFORMATIONS = '.$id); // Contact
             } else {
-                $DB_current->delete('ID_UTILISATEURINFORMATIONS = '.$this->_request->id.' AND '.$primary.' = '.$this->_request->id_item); // Porteuse
+                $DB_current->delete('ID_UTILISATEURINFORMATIONS = '.$id.' AND '.$primary.' = '.$this->getRequest()->getParam('id_item')); // Porteuse
             }
 
             $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
-            $cache->remove($this->_request->item.'_id_'.$this->_request->id);
+            $cache->remove($item.'_id_'.$id);
 
             $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le contact a bien été supprimé',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du contact',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function getAction()
+    public function getAction(): void
     {
         $DB_informations = new Model_DbTable_UtilisateurInformations();
-        $this->view->assign('resultats', $DB_informations->getAllContacts($this->_request->q));
+        $this->view->assign('resultats', $DB_informations->getAllContacts($this->getRequest()->getParam('q')));
     }
 }

@@ -2,7 +2,7 @@
 
 class Form_FusionCommunes extends Zend_Form
 {
-    public function init()
+    public function init(): void
     {
         $this->setMethod('post');
         $this->setAttrib('enctype', 'multipart/form-data');

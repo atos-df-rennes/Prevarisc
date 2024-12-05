@@ -2,8 +2,11 @@
 
 class Model_DbTable_Classe extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'classe'; // Nom de la base
-    protected $_primary = 'ID_CLASSE'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'classe';
+
+    // Clé primaire
+    protected $_primary = 'ID_CLASSE';
 
     public function fetchAllPK(): array
     {

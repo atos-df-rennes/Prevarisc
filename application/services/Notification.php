@@ -3,6 +3,7 @@
 class Service_Notification
 {
     public const DASHBOARD_DOSSIER_SESSION_NAMESPACE = 'dashboard_dossier';
+
     public const DOSSIER_PIECES_SESSION_NAMESPACE = 'dossier_pieces_jointes';
 
     private const NAMESPACE_MAP = [

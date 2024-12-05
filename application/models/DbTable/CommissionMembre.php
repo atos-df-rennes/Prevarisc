@@ -2,8 +2,11 @@
 
 class Model_DbTable_CommissionMembre extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'commissionmembre'; // Nom de la base
-    protected $_primary = ['ID_COMMISSIONMEMBRE']; // Clé primaire
+    // Nom de la base
+    protected $_name = 'commissionmembre';
+
+    // Clé primaire
+    protected $_primary = ['ID_COMMISSIONMEMBRE'];
 
     /**
      * @param int|string $id_commission
@@ -48,17 +51,14 @@ class Model_DbTable_CommissionMembre extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param float|int|string          $first_table
-     * @param array|string|Zend_Db_Expr $second_table
-     * @param float|int|string          $key
-     * @param float|int|string          $id_membre
+     * @param float|int|string $id_membre
      */
-    private function fullJoinRegle($first_table, $second_table, $key, $id_membre)
+    private function fullJoinRegle(string $first_table, string $second_table, string $key, $id_membre): array
     {
         // On fait une union entre ce qu'il y a dans la base et les critères enregistré
         $return = $this->fetchAll($this->select()->union([
-            $this->select()->setIntegrityCheck(false)->from($first_table)->joinLeft($second_table, "{$first_table}.{$key} = {$second_table}.{$key} AND ID_COMMISSIONMEMBRE = {$id_membre}"),
-            $this->select()->setIntegrityCheck(false)->from($first_table)->joinRight($second_table, "{$first_table}.{$key} = {$second_table}.{$key} AND ID_COMMISSIONMEMBRE = {$id_membre}"),
+            $this->select()->setIntegrityCheck(false)->from($first_table)->joinLeft($second_table, sprintf('%s.%s = %s.%s AND ID_COMMISSIONMEMBRE = %s', $first_table, $key, $second_table, $key, $id_membre)),
+            $this->select()->setIntegrityCheck(false)->from($first_table)->joinRight($second_table, sprintf('%s.%s = %s.%s AND ID_COMMISSIONMEMBRE = %s', $first_table, $key, $second_table, $key, $id_membre)),
         ]))->toArray();
 
         // Requete sur la table finale
@@ -77,7 +77,7 @@ class Model_DbTable_CommissionMembre extends Zend_Db_Table_Abstract
     }
 
     // Formaliser les resultats envoyés
-    private function mapResult($array, $key): array
+    private function mapResult(array $array, string $key): array
     {
         $result = [];
 

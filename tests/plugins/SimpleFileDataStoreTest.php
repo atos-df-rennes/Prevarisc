@@ -12,7 +12,7 @@ final class Plugin_SimpleFileDataStoreTest extends TestCase
     /** @var Plugin_SimpleFileDataStore */
     private $dataStore;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->dataStore = new Plugin_SimpleFileDataStore();
     }

@@ -3,6 +3,7 @@
 class Model_DbTable_Changement extends Zend_Db_Table_Abstract
 {
     protected $_name = 'changement';
+
     protected $_primary = 'ID_CHANGEMENT';
 
     /**

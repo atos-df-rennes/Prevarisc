@@ -12,7 +12,7 @@ final class Service_DescriptifTest extends TestCase
     /** @var Service_Descriptif */
     private $descriptif;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->descriptif = new Service_Descriptif(
             'descriptifEtablissement',

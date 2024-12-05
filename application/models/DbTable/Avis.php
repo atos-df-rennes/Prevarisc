@@ -2,8 +2,11 @@
 
 class Model_DbTable_Avis extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'avis'; // Nom de la base
-    protected $_primary = 'ID_AVIS'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'avis';
+
+    // Clé primaire
+    protected $_primary = 'ID_AVIS';
 
     // Fonction qui récupère tous les avis existant pour créer un select par exemple
 

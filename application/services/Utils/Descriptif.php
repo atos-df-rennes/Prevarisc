@@ -3,6 +3,7 @@
 class Service_Utils_Descriptif
 {
     private $modelValeur;
+
     private $serviceValeur;
 
     public function __construct()

@@ -2,8 +2,11 @@
 
 class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'listedocconsulte'; // Nom de la base
-    protected $_primary = 'ID_DOC'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'listedocconsulte';
+
+    // Clé primaire
+    protected $_primary = 'ID_DOC';
 
     // Fonction qui récupère tous les doc de viste
 

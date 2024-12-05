@@ -7,7 +7,7 @@ class IndexController extends Zend_Controller_Action
      */
     public $servicePlatau;
 
-    public function init()
+    public function init(): void
     {
         /** @var Zend_Controller_Action_Helper_ContextSwitch $ajaxContext */
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
@@ -19,7 +19,7 @@ class IndexController extends Zend_Controller_Action
         $this->servicePlatau = new Service_Platau();
     }
 
-    public function indexAction()
+    public function indexAction(): void
     {
         $service_user = new Service_User();
         $service_dashboard = new Service_Dashboard();
@@ -76,7 +76,7 @@ class IndexController extends Zend_Controller_Action
         $this->render('index');
     }
 
-    public function blocAction()
+    public function blocAction(): void
     {
         $this->_helper->layout->disableLayout();
 
@@ -111,7 +111,7 @@ class IndexController extends Zend_Controller_Action
         $this->view->assign('bloc', $bloc);
     }
 
-    public function addMessageAction()
+    public function addMessageAction(): void
     {
         $service_feed = new Service_Feed();
         $service_user = new Service_User();
@@ -122,22 +122,24 @@ class IndexController extends Zend_Controller_Action
                 $service_feed->addMessage($this->_request->getParam('type'), $this->_request->getParam('text'), Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'], $this->_request->getParam('conf'));
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Message ajouté !', 'message' => 'Le message a bien été ajouté.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur !', 'message' => 'Erreur lors de l\'ajout du message : '.$e->getMessage()]);
+                $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur !', 'message' => "Erreur lors de l'ajout du message : ".$e->getMessage()]);
             }
+
             $this->_helper->redirector('index', 'index');
         }
     }
 
-    public function deleteMessageAction()
+    public function deleteMessageAction(): void
     {
         $service_feed = new Service_Feed();
 
         try {
             $service_feed->deleteMessage($this->_request->getParam('id'));
             $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Message supprimé !', 'message' => 'Le message a bien été supprimé.']);
-        } catch (Exception $e) {
-            $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur !', 'message' => 'Erreur lors de la suppression du message : '.$e->getMessage()]);
+        } catch (Exception $exception) {
+            $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur !', 'message' => 'Erreur lors de la suppression du message : '.$exception->getMessage()]);
         }
+
         $this->_helper->redirector('index', 'index');
     }
 

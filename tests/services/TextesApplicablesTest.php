@@ -12,7 +12,7 @@ final class Service_TextesApplicablesTest extends TestCase
     /** @var Service_TextesApplicables */
     private $textesApplicables;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->textesApplicables = new Service_TextesApplicables();
     }

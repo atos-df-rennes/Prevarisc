@@ -3,6 +3,7 @@
 class Model_DbTable_EtsTextesAppl extends Zend_Db_Table_Abstract
 {
     protected $_name = 'etablissementtextapp';
+
     protected $_primary = ['ID_TEXTESAPPL', 'ID_ETABLISSEMENT'];
 
     /**

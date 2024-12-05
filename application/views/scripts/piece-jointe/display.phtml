@@ -32,14 +32,29 @@
         </td>
 
         <!-- Description -->
-        <td><?php echo nl2br(str_replace("<br />", "" ,$pj['DESCRIPTION_PIECEJOINTE'])) ?></td>
+        <td>
+            <?php if (null !== $pj['DESCRIPTION_PIECEJOINTE']): ?>
+                <?= nl2br(str_replace("<br />", "" ,$pj['DESCRIPTION_PIECEJOINTE'])) ?>
+            <?php else: ?>
+                <p>
+                    <?= $pj['TYPE'] ?>
+                    <?php if (null !== $pj['TYPE'] && null !== $pj['SOUS_TYPE']): ?>
+                        -
+                    <?php endif ?>
+                    <?= $pj['SOUS_TYPE'] ?>
+                </p>
+                <span class="label label-inverse">
+                    <i class="icon-calendar icon-white"></i>&nbsp;Déposée le <?= Service_Utils_Date::convertFromMySQL($pj['DATE_DEPOT']) ?>
+                </span>
+                <span class="label label-success">
+                    <i class="icon-tag icon-white" title="Nature de la pièce"></i>&nbsp;<?= $pj['NATURE'] ?>
+                </span>
+            <?php endif ?>
+        </td>
 
         <!-- Date de création -->
         <td>
-            <?php
-                $date = new Zend_Date($pj['DATE_PIECEJOINTE'], Zend_Date::DATES);
-                echo $date->get( Zend_Date::DAY."/".Zend_Date::MONTH."/".Zend_Date::YEAR );
-            ?>
+            <?= Service_Utils_Date::convertFromMySQL($pj['DATE_PIECEJOINTE']) ?>
         </td>
 
         <?php if ($this->isPlatau): ?>

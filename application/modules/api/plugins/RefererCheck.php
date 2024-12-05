@@ -5,7 +5,7 @@ class Api_Plugin_RefererCheck extends Zend_Controller_Plugin_Abstract
     /**
      * On se place dans le preDispatch pour autoriser ou non l'accès aux api.
      */
-    public function preDispatch(Zend_Controller_Request_Abstract $request)
+    public function preDispatch(Zend_Controller_Request_Abstract $request): void
     {
         // Récupération de la white-list
         $whitelist = new Zend_Config_Ini(APPLICATION_PATH.DS.'modules'.DS.'api'.DS.'configs'.DS.'whitelist.ini');

@@ -799,6 +799,12 @@ parameters:
 			path: application/controllers/FormulaireController.php
 
 		-
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:json\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: application/controllers/FormulaireController.php
+
+		-
 			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
 			identifier: method.notFound
 			count: 5
@@ -807,13 +813,13 @@ parameters:
 		-
 			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:getPost\(\)\.$#'
 			identifier: method.notFound
-			count: 6
+			count: 7
 			path: application/controllers/FormulaireController.php
 
 		-
 			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:isPost\(\)\.$#'
 			identifier: method.notFound
-			count: 6
+			count: 7
 			path: application/controllers/FormulaireController.php
 
 		-

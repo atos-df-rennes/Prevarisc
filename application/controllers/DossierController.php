@@ -254,7 +254,7 @@ class DossierController extends Zend_Controller_Action
             $this->view->assign('hasAvisDerogation', $serviceDossier->hasAvisDerogation($this->idDossier));
             $this->view->assign('dossierSupprime', null !== $dossier['DATESUPPRESSION_DOSSIER']);
             $this->view->assign('nombreNouvellesPiecesJointes', $serviceDossier->getNombreNouvellesPiecesJointes($this->idDossier));
-            
+
             // Noms des onglets paramétrables
             $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
             $this->view->assign('nomOngletVerificationsTechniques', $modelCapsuleRubrique->getCapsuleRubriqueByInternalName('descriptifVerificationsTechniques')['NOM']);

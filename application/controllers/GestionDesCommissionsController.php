@@ -2,7 +2,7 @@
 
 class GestionDesCommissionsController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         // Titre
         $this->view->assign('title', 'Gestion des commissions');
@@ -15,7 +15,7 @@ class GestionDesCommissionsController extends Zend_Controller_Action
         $this->view->assign('rowset_typesDesCommissions', $model_typesDesCommissions->fetchAll());
     }
 
-    public function formAction()
+    public function formAction(): void
     {
         // Modèles de données
         $model_typesDesCommissions = new Model_DbTable_CommissionType();
@@ -25,7 +25,7 @@ class GestionDesCommissionsController extends Zend_Controller_Action
         $this->view->assign('rowset_commissions', $model_commissions->fetchAll());
     }
 
-    public function saveAction()
+    public function saveAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -46,6 +46,7 @@ class GestionDesCommissionsController extends Zend_Controller_Action
                     $item->LIBELLE_COMMISSION = $_POST['nom_commission'][$i];
                     $item->save();
                 }
+
                 $dossier = REAL_DATA_PATH.DS.'uploads'.DS.'documents'.DS.$item->ID_COMMISSION;
                 if (!is_dir($dossier)) {
                     mkdir($dossier);
@@ -57,16 +58,16 @@ class GestionDesCommissionsController extends Zend_Controller_Action
                 'title' => 'Les informations ont été sauvegardées',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function getCommissionsAction()
+    public function getCommissionsAction(): void
     {
         // Modèles de données
         $model_commission = new Model_DbTable_Commission();
@@ -79,7 +80,7 @@ class GestionDesCommissionsController extends Zend_Controller_Action
         $this->view->assign('row_typeDesCommissions', $model_typesDesCommissions->fetchRow('ID_COMMISSIONTYPE = '.$this->_request->id_type_des_commissions));
     }
 
-    public function addCommissionAction()
+    public function addCommissionAction(): void
     {
         try {
             // Modèle
@@ -116,11 +117,11 @@ class GestionDesCommissionsController extends Zend_Controller_Action
                 'title' => 'La commission a bien été sauvegardée',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }

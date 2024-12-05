@@ -4,7 +4,7 @@ class Model_PlatauConsultationMapper
 {
     private $dbTable;
 
-    public function setDbTable(string $dbTable)
+    public function setDbTable(string $dbTable): self
     {
         $dbTable = new $dbTable();
 
@@ -36,10 +36,7 @@ class Model_PlatauConsultationMapper
         $this->getDbTable()->update($data, ['ID_PLATAU = ?' => $consultation->getId()]);
     }
 
-    /**
-     * @return null|Model_PlatauConsultation
-     */
-    public function find(string $id, Model_PlatauConsultation $consultation)
+    public function find(string $id, Model_PlatauConsultation $consultation): ?Model_PlatauConsultation
     {
         $result = $this->getDbTable()->find($id);
 
@@ -49,8 +46,8 @@ class Model_PlatauConsultationMapper
 
         $row = $result->current();
 
-        $datePec = Service_Utils_Date::formatDateWithDayName($row->DATE_PEC, 'yyyy-MM-dd');
-        $dateAvis = Service_Utils_Date::formatDateWithDayName($row->DATE_AVIS, 'yyyy-MM-dd');
+        $datePec = Service_Utils_Date::formatDateWithDayName($row->DATE_PEC);
+        $dateAvis = Service_Utils_Date::formatDateWithDayName($row->DATE_AVIS);
 
         $consultation->setId($row->ID_PLATAU)
             ->setStatutAvis($row->STATUT_AVIS ?? Model_Enum_PlatauStatutAvis::INCONNU)

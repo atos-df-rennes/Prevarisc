@@ -2,8 +2,11 @@
 
 class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'valeur'; // Nom de la base
-    protected $_primary = 'ID_VALEUR'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'valeur';
+
+    // Clé primaire
+    protected $_primary = 'ID_VALEUR';
 
     /**
      * Retourne l'unique valeur d'un champ n'étant pas un enfant d'un champ `tableau`

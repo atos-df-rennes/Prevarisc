@@ -2,8 +2,11 @@
 
 class Model_DbTable_EtablissementInformationsPreventionniste extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'etablissementinformationspreventionniste'; // Nom de la base
-    protected $_primary = ['ID_ETABLISSEMENTINFORMATIONS', 'ID_UTILISATEUR']; // Clé primaire
+    // Nom de la base
+    protected $_name = 'etablissementinformationspreventionniste';
+
+    // Clé primaire
+    protected $_primary = ['ID_ETABLISSEMENTINFORMATIONS', 'ID_UTILISATEUR'];
 
     public function getEtablissementsPreventioniste(string $groupement): array
     {

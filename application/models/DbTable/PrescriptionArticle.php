@@ -2,8 +2,11 @@
 
 class Model_DbTable_PrescriptionArticle extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'prescriptionarticle'; // Nom de la base
-    protected $_primary = 'ID_PRESCRIPTIONARTICLE'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'prescriptionarticle';
+
+    // Clé primaire
+    protected $_primary = 'ID_PRESCRIPTIONARTICLE';
 
     /**
      * @param mixed $idTexte

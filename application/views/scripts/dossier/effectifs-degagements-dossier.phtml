@@ -1,5 +1,10 @@
 <div class='action-buttons pull-right'>
-    <a class='btn' href="<?= $this->url(array('action' => 'effectifs-degagements-dossier-edit')) ?>">Modifier les effectifs et dégagements</a>
+    <?php if (!$this->hasData): ?>
+        <button type="button" class="btn btn-info recupEffectifsDegagementsDossier">
+            Reprendre les données d'une étude précédente
+        </button>
+    <?php endif ?>
+    <a class='btn btn' href="<?= $this->url(array('action' => 'effectifs-degagements-dossier-edit')) ?>">Modifier les effectifs et dégagements</a>
 </div>
 
 <div id='descriptif-personnalise'>
@@ -18,3 +23,64 @@
         ]); ?>
     </div>
 </div>
+
+<script type='text/javascript'>
+    $(document).ready(function() {
+	    var dialogRecupEffectifsDegagements = $('<div style="display:none;"></div>').appendTo('body');
+
+        dialogRecupEffectifsDegagements.dialog({
+            title: "Reprise des données d'un dossier précédent",
+            modal: true,
+            autoOpen: false,
+            width: 1200,
+            height: 'auto',
+            buttons: [
+                {
+                    text: 'Reprendre les effectifs et dégagements',
+                    class: 'btn btn-success',
+                    click: function() {
+                        if ($('input[type=radio][name=dossierSelect]:checked').length == 1) {
+                            $.ajax({
+                                type: "POST",
+                                url: "/dossier/recupeffectifsdegagements",
+                                data: $("#selectionDossier").serialize(),
+                                before: function(){
+                                    dialogRecupEffectifsDegagements.html("Veuillez patienter pendant la reprise des effectifs et dégagements <img src='/images/load.gif' />");
+                                },
+                                success: function(msg){ 
+                                    window.location='/dossier/effectifs-degagements-dossier/id/'+$("#idDossier").val();
+                                }
+                            });
+                        } else {
+                            return false;
+                        }
+
+                        return false;
+                    }
+                },
+                {
+                    text: 'Annuler',
+                    class: 'btn',
+                    click: function() {
+                        $(this).html("");
+                        $(this).dialog("close");
+                    }
+                }
+            ],
+        });
+
+        $(".recupEffectifsDegagementsDossier").live('click',function(){
+            $.ajax({
+                type: "POST",
+                url: "/dossier/formrecupeffectifsdegagements",
+                data: "&idDossier="+$("#idDossier").val(),
+                success: function(msg){
+                    dialogRecupEffectifsDegagements.html(msg);
+                    dialogRecupEffectifsDegagements.dialog("open");
+                }
+            });
+
+            return false;
+        });
+    })
+</script>

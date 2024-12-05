@@ -4,10 +4,8 @@ class Service_TypePlan
 {
     /**
      * Récupération de l'ensemble des types de plan.
-     *
-     * @return array
      */
-    public function getAll()
+    public function getAll(): array
     {
         $DB_typesplan = new Model_DbTable_TypePlan();
 

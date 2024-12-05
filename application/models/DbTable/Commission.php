@@ -2,8 +2,12 @@
 
 class Model_DbTable_Commission extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'commission'; // Nom de la base
-    protected $_primary = 'ID_COMMISSION'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'commission';
+
+    // Clé primaire
+    protected $_primary = 'ID_COMMISSION';
+
     protected $_referenceMap = [
         'commissiontype' => [
             'columns' => 'ID_COMMISSIONTYPE',
@@ -39,7 +43,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
         ;
 
         if (null != $id) {
-            $select->where("ID_COMMISSION = {$id}");
+            $select->where('ID_COMMISSION = '.$id);
 
             return $this->fetchRow($select)->toArray();
         }
@@ -60,7 +64,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from('commission')
             ->join('commissiontype', 'commissiontype.ID_COMMISSIONTYPE = commission.ID_COMMISSIONTYPE', [])
-            ->where("commission.ID_COMMISSIONTYPE = {$type}")
+            ->where('commission.ID_COMMISSIONTYPE = '.$type)
         ;
 
         return $this->fetchAll($select)->toArray();
@@ -272,6 +276,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
                         $groupement_cache[$result->ID_GROUPEMENT][] = $row['NUMINSEE_COMMUNE'];
                     }
                 }
+
                 $communes = $groupement_cache[$result->ID_GROUPEMENT];
             }
 

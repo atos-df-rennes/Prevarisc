@@ -2,8 +2,11 @@
 
 class Model_DbTable_DossierPj extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'dossierpj'; // Nom de la base
-    protected $_primary = ['ID_DOSSIER', 'ID_PIECEJOINTE']; // Clé primaire
+    // Nom de la base
+    protected $_name = 'dossierpj';
+
+    // Clé primaire
+    protected $_primary = ['ID_DOSSIER', 'ID_PIECEJOINTE'];
 
     /**
      * @param int|string $idDossier

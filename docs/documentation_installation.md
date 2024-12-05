@@ -1,38 +1,57 @@
-# Documentation d'installation #
+# Documentation d'installation
 
-## Etape 1 : installation d'un serveur web Debian ##
+## Table des matières
+
+1. [Installation d'un serveur web Debian](#installation-dun-serveur-web-debian)
+    1. [Installation d'un serveur Debian](#installation-dun-serveur-debian)
+    2. [Installation d'un serveur Debian sur Oracle VM VirtualBox](#installation-dun-serveur-debian-sur-oracle-vm-virtualbox)
+2. [Installation du serveur web](#installation-du-serveur-web)
+3. [Installation de Prevarisc](#installation-de-prevarisc)
+4. [Installation de la base de données](#installation-de-la-base-de-données)
+5. [Connexion d’un client Firefox](#connexion-dun-client-firefox)
+6. [Installation d'un cache mysql (optionnel)](#installation-dun-cache-mysql-optionnel)
+
+- [Mise à jour de la base de données de Prevarisc](#mise-à-jour-de-la-base-de-données-de-prevarisc)
+
+## Installation d'un serveur web Debian
 
 Deux options s'offrent à vous :
-* soit une installation définitive sur un serveur dédié (voir étape 1a)
-* soit une installation de test sur un poste de travail (ordinateur de bureau ou portable) (voir étape 1b)
+* soit une installation définitive sur un [serveur dédié](#installation-d-un-serveur-debian)
+* soit une installation de test sur un [poste de travail](#installation-d-un-serveur-debian-sur-oracle-vm-virtualbox) (ordinateur de bureau ou portable)
 
-### Etape 1a : installation d'un serveur Debian ###
+### Installation d'un serveur Debian
 
 * Télécharger la version stable de Debian (classiquement version i386 avec interface xfce)
 * Installer le serveur de préférence en anglais
 
-### Etape 1b : installation d'un serveur Debian sur Oracle VM VirtualBox ###
+### Installation d'un serveur Debian sur Oracle VM VirtualBox
 
 * Télécharger Oracle VM VirtualBox et son pack d'extensions (https://www.virtualbox.org/wiki/Downloads)
 * Télécharger la version stable de Debian (classiquement version i386 avec interface xfce)
 * Installer Oracle VM VirtualBox et exécuter le programme
 * Aller dans le menu Fichiers->Paramètres puis Extension et ajouter l’Extension Pack
-* Dans Oracle VM VirtualBox, cliquer sur Nouvelle, saisir un nom de machine (ex : Debian) et cliquer plusieurs fois sur “Suivant”. Votre machine apparait “Eteinte” dans la partie gauche.
-* Effectuer un clic droit sur Debian, choisir Démarrer, cliquer sur le dossier avec une flèche verte, sélectionner le fichier debian-X.X.X-i386-xfce-CD-1.iso et cliquer sur “Démarrer”
+* Dans Oracle VM VirtualBox, cliquer sur Nouvelle, saisir un nom de machine (ex : Debian) et cliquer plusieurs fois sur "Suivant". Votre machine apparait "Eteinte" dans la partie gauche.
+* Effectuer un clic droit sur Debian, choisir Démarrer, cliquer sur le dossier avec une flèche verte, sélectionner le fichier debian-X.X.X-i386-xfce-CD-1.iso et cliquer sur "Démarrer"
 
-## Etape 2 : installation du serveur web ##
+## Installation du serveur web
 
-* Ouvrir une invite de commande et taper “su” puis le mot de passe administrateur
-* Taper : ```aptitude install apache2 mysql-server php5 php5-gd php5-ldap php5-mysql php-apc mysql-workbench curl git p7zip-full```
-* A la demande, faire un clic droit sur le CD en bas pour remonter l’image debian-X.X.X-i386-xfce-CD-1.iso et appuyer sur “Enter”
-* Saisir le mot de passe “root” pour MySQL
-* Taper : ```a2enmod rewrite```
-* Taper : ```a2enmod expires```
-* Taper : ```a2enmod include```
+- Ouvrir une invite de commande et exécuter la commande `su` puis entrer le mot de passe administrateur
+- Installer les paquets nécessaires :
+```sh
+apt-get install apache2 mysql-server php7 php7-gd php7-ldap php7-mysql php-apc mysql-workbench curl git p7zip-full
+```
+- A la demande, faire un clic droit sur le CD en bas pour remonter l’image debian-X.X.X-i386-xfce-CD-1.iso et appuyer sur "Enter"
+- Saisir le mot de passe "root" pour MySQL
+- Activer les modules nécessaires :
+```sh
+a2enmod rewrite
+a2enmod expires
+a2enmod include
+```
 
-Votre serveur web est prêt à accueillir Prevarisc. Il faut maintenant configurer un VirtualHost afin de pouvoir d'une part y accéder via une URL bien définie, et d'autre part pour spécifier les valeurs de configuration.
+Votre serveur web est prêt à accueillir Prevarisc. Il faut maintenant configurer un VirtualHost afin de pouvoir d'une part y accéder via une URL bien définie et d'autre part pour spécifier les valeurs de configuration.
 
-* Taper : ```nano /etc/apache2/apache2.conf```, insérer à la fin le code suivant :
+* Ouvrir le fichier de configuration Apache : `nano /etc/apache2/apache2.conf` et insérer à la fin le code suivant :
 ```
 <VirtualHost *:80>
     ServerName prevarisc.sdisxx.fr
@@ -47,11 +66,11 @@ Votre serveur web est prêt à accueillir Prevarisc. Il faut maintenant configur
 </VirtualHost>
 ```
 
-Où xx est le numéro de département.
+Où **xx** est le numéro de département.
 
 Vous pouvez ajouter autant de clés de configuration associées à votre domaine que nécessaire.
 
-La liste complète des clés de configuration et des valeurs spécifiques associées :
+Voici la liste complète des clés de configuration et des valeurs spécifiques associées :
 
 Clé de configuration | Description | Valeur possible
 -------------------- | ----------- | ---------------
@@ -123,11 +142,11 @@ PREVARISC_COMMAND_PATH | [FACULTATIF] Chemin vers le dossier destiné à stocker
 PREVARISC_DEACTIVATE_PLATAU | [FACULTATIF] Permet de désactiver tous les affichages liés à Plat'AU | 0 ou 1 pour désactiver (affichages activés par défaut)
 PREVARISC_DOSSIERS_MAX_A_AFFICHER | [FACULTATIF] Permet de configurer le nombre de dossiers du même type à afficher dans la liste des dossiers, par défaut 5 | Entier
 
-* Taper :```/etc/init.d/apache2 restart```
+* Redémarrer Apache : `systemctl restart apache2`
 
-## Etape 3 : installation de Prevarisc ##
+## Installation de Prevarisc
 
-* Depuis le navigateur Iceweasel, télécharger le fichier compressé de prevarisc depuis “https://github.com/SDIS62/prevarisc” dans votre dossier “Downloads”
+* Depuis le navigateur Iceweasel, télécharger le fichier compressé de prevarisc depuis "https://github.com/atos-df-rennes/prevarisc" dans votre dossier "Downloads"
 * Taper : ```mv /home/$USER/Downloads/prevarisc-master.zip /var/www/``` ou $USER est votre nom d’utilisateur de la session
 * Taper : ```7z x prevarisc-master.zip```
 * Taper : ```mv prevarisc-master prevarisc```
@@ -139,31 +158,32 @@ PREVARISC_DOSSIERS_MAX_A_AFFICHER | [FACULTATIF] Permet de configurer le nombre 
 * Taper : ```chmod –R 555 *```
 * Taper : ```chmod –R 755 public/```
 
-## Etape 4 : installation de la base de données ##
+## Installation de la base de données
 
 * Ouvrir MySQL WorkBench dans le menu Development
-* Cliquer sur New Server Instance, cliquer sur Next, saisir le mot de passe “root”, choisir MySQL installation type “Debian”, Continue, Finish
+* Cliquer sur New Server Instance, cliquer sur Next, saisir le mot de passe "root", choisir MySQL installation type "Debian", Continue, Finish
 * Cliquer sur Manage Import/Export puis sur Data Import/Restore
-* Mot de passe : “root”
+* Mot de passe : "root"
 * Choisir Import from Self-Contained file et sélectionner le fichier prevarisc.sql dans le dossier prevarisc/docs/db
-* Cliquer sur “Start Import” et fermer l’onglet quand l’opération est terminée
+* Cliquer sur "Start Import" et fermer l’onglet quand l’opération est terminée
 * Fermer MySQL Workbench
 
-## Etape 5 : connexion d’un client Firefox ##
+## Connexion d’un client Firefox
 
 * Ouvrir le gestionnaire de machine Oracle VM VirtualBox
 * Faire un clic droit sur Debian et choisir Configuration …
-* Cliquer sur Réseau et choisir un mode d’accès réseau “Accès par pont”
+* Cliquer sur Réseau et choisir un mode d’accès réseau "Accès par pont"
 * Ouvrir une invite de commande sur Debian, taper : ```su``` et le mot de passe, puis ```ifconfig``` et noter l’adresse IP eth0 (inet addr)
 * Fermer l’invite de commande
-* Sur le poste Windows, ouvrir le fichier C:\windows\system32\drivers\etc\hosts et ajouter la ligne avec l’adresse IP du serveur Debian suivi de “prevarisc.sdis??.fr” (ou sinon, faire un enregistrement DNS)
+* Sur le poste Windows, ouvrir le fichier C:\windows\system32\drivers\etc\hosts et ajouter la ligne avec l’adresse IP du serveur Debian suivi de "prevarisc.sdis??.fr" (ou sinon, faire un enregistrement DNS)
 * Ouvrir Firefox et saisir http://prevarisc.sdis??.fr
 * A ce point vous devez être capable d'accéder à Prevarisc ! Le premier compte utilisateur est ```root```, mot de passe ```root``` (à désactiver le plus rapidement possible pour des raisons de sécurité).
 
 
-## Etape 6 (optionnelle) : installation d'un cache mysql (php>5.4) ##
+## Installation d'un cache mysql (optionnel)
 
-Pour les installations avec php > 5.4, APC n'est plus supporté. Il faut installer un cache alternatif, mysql par exemple :
+> Nécessite une version de PHP > 5.4
+
 * download du module php memcache
 * Taper : ```tar -xvzf memcache-2.2.7.tgz```
 * Taper : ```cd memcache-2.2.7```
@@ -177,7 +197,7 @@ Pour les installations avec php > 5.4, APC n'est plus supporté. Il faut install
 * Modifier le vhost apache pour modifier les variables PREVARISC_CACHE_ADAPTER en "Cache_MySQLMemcached" voir PREVARISC_CACHE_HOST si le backend est installé sur une machine distante.
 * Taper : ```sudo /etc/init.d/httpd restart```
 
-# Mise à jour de la base de données de Prevarisc #
+## Mise à jour de la base de données de Prevarisc
 
 Depuis un PC windows, installer le logiciel [MySQL WorkBench](http://www.mysql.fr/products/workbench/).
 Vous pouvez maintenant ouvrir le fichier "docs/MCD Prevarisc avec Mysql Workbench.mwb".

@@ -8,8 +8,11 @@
 */
 class Model_DbTable_Classement extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'classement'; // Nom de la base
-    protected $_primary = 'ID_CLASSEMENT'; // Cle primaire
+    // Nom de la base
+    protected $_name = 'classement';
+
+    // Cle primaire
+    protected $_primary = 'ID_CLASSEMENT';
 
     public function fetchAllPK(): array
     {

@@ -2,7 +2,7 @@
 
 class View_Helper_AfficheDoc
 {
-    public function afficheDoc($verrou, $natureId, $id, $libelle, $ref = null, $date = null, $type = null): string
+    public function afficheDoc($verrou, string $natureId, string $id, $libelle, $ref = null, $date = null, $type = null): string
     {
         if (!$date) {
             // document n'ayant PAS d'enregistrement dans la BD

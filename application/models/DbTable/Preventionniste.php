@@ -2,18 +2,19 @@
 
 class Model_DbTable_Preventionniste extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'utilisateur'; // Nom de la base
-    protected $_primary = 'ID_UTILISATEUR'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'utilisateur';
+
+    // Clé primaire
+    protected $_primary = 'ID_UTILISATEUR';
 
     /**
      * @psalm-return array<int, array{uid:mixed, nom:mixed, prenom:mixed}>|null
      *
      * @param mixed $commune
      * @param mixed $id_pere
-     *
-     * @return null|array[]
      */
-    public function getPrev($commune, $id_pere)
+    public function getPrev($commune, $id_pere): ?array
     {
         $array_result = [];
 

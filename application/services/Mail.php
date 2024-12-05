@@ -10,6 +10,7 @@ class Service_Mail
             if ('' !== getenv('PREVARISC_MAIL_PORT')) {
                 $config['port'] = getenv('PREVARISC_MAIL_PORT');
             }
+
             if ('' !== getenv('PREVARISC_MAIL_USERNAME')
                 && '' !== getenv('PREVARISC_MAIL_PASSWORD')) {
                 $config['auth'] = 'login';
@@ -39,7 +40,7 @@ class Service_Mail
                     $transport = null;
             }
 
-            if ($transport) {
+            if (null !== $transport) {
                 Zend_Mail::setDefaultTransport($transport);
             }
 

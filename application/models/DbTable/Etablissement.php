@@ -3,6 +3,7 @@
 class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
 {
     protected $_name = 'etablissement';
+
     protected $_primary = 'ID_ETABLISSEMENT';
 
     /**
@@ -35,9 +36,12 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     public function getIDWinprev($id)
     {
         $model_adresse = new Model_DbTable_EtablissementAdresse();
-
         // Variables
-        $genre = $codecommune = $nbetscommune = $rangcell = $commission = null;
+        $genre = null;
+        $codecommune = null;
+        $nbetscommune = null;
+        $rangcell = null;
+        $commission = null;
 
         // Récupération des infos de l'établissement
         $infos = $this->getInformations($id);
@@ -48,9 +52,11 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         if (null == $infos) {
             return false;
         }
+
         if (null == $infos->ID_GENRE) {
             return false;
         }
+
         if (empty($adresses)) {
             return false;
         }
@@ -162,8 +168,8 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from('etablissementinformations')
             ->joinLeft('etablissement', 'etablissement.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT')
-            ->where("etablissementinformations.ID_ETABLISSEMENT = '{$id_etablissement}'")
-            ->where("DATE_ETABLISSEMENTINFORMATIONS = (select max(DATE_ETABLISSEMENTINFORMATIONS) from etablissementinformations where ID_ETABLISSEMENT = '{$id_etablissement}' ) ")
+            ->where(sprintf("etablissementinformations.ID_ETABLISSEMENT = '%s'", $id_etablissement))
+            ->where(sprintf("DATE_ETABLISSEMENTINFORMATIONS = (select max(DATE_ETABLISSEMENTINFORMATIONS) from etablissementinformations where ID_ETABLISSEMENT = '%s' ) ", $id_etablissement))
             ->where('etablissement.DATESUPPRESSION_ETABLISSEMENT IS NULL')
         ;
 
@@ -242,7 +248,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->joinLeft('etablissementinformations', 'etablissementinformations.ID_ETABLISSEMENT = etablissementlie.ID_ETABLISSEMENT')
             ->joinLeft('categorie', 'categorie.ID_CATEGORIE = etablissementinformations.ID_CATEGORIE')
             ->joinLeft('etablissement', 'etablissement.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT')
-            ->where("etablissementlie.ID_FILS_ETABLISSEMENT = '{$id_etablissement}'")
+            ->where(sprintf("etablissementlie.ID_FILS_ETABLISSEMENT = '%s'", $id_etablissement))
             ->where('DATE_ETABLISSEMENTINFORMATIONS = (select max(DATE_ETABLISSEMENTINFORMATIONS) from etablissementinformations where ID_ETABLISSEMENT = etablissementlie.ID_ETABLISSEMENT ) ')
             ->where('etablissement.DATESUPPRESSION_ETABLISSEMENT IS NULL')
         ;
@@ -318,7 +324,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
 
     // Recalcule les périod et cat des enfants d'un ets
 
-    public function recalcEnfants($id_ets, $id_info, $historique)
+    public function recalcEnfants($id_ets, $id_info, $historique): void
     {
         $search = new Model_DbTable_Search();
         $etablissement_enfants = $search->setItem('etablissement')->setCriteria('etablissementlie.ID_ETABLISSEMENT', $id_ets)->run();

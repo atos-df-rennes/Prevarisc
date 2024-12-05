@@ -2,8 +2,11 @@
 
 class Model_DbTable_PrescriptionDossier extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'prescriptiondossier'; // Nom de la base
-    protected $_primary = 'ID_PRESCRIPTION_DOSSIER'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'prescriptiondossier';
+
+    // Clé primaire
+    protected $_primary = 'ID_PRESCRIPTION_DOSSIER';
 
     public function recupMaxNumPrescDossier($idDossier, $type)
     {
@@ -30,6 +33,10 @@ class Model_DbTable_PrescriptionDossier extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['pd' => 'prescriptiondossier'])
+            ->joinLeft(['d' => 'dossier'], 'pd.ID_DOSSIER_REPRISE = d.ID_DOSSIER', ['OBJET_DOSSIER', 'DATEINSERT_DOSSIER'])
+            ->joinLeft(['dt' => 'dossiertype'], 'd.TYPE_DOSSIER = dt.ID_DOSSIERTYPE', 'LIBELLE_DOSSIERTYPE')
+            ->joinLeft(['dn' => 'dossiernature'], 'd.ID_DOSSIER = dn.ID_DOSSIER', [])
+            ->joinLeft(['dnl' => 'dossiernatureliste'], 'dn.ID_NATURE = dnl.ID_DOSSIERNATURE', 'LIBELLE_DOSSIERNATURE')
             ->where('pd.ID_DOSSIER = ?', $idDossier)
             ->where('pd.TYPE_PRESCRIPTION_DOSSIER = ?', $type)
             ->order('pd.NUM_PRESCRIPTION_DOSSIER')

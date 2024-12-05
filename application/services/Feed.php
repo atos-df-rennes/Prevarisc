@@ -103,7 +103,7 @@ class Service_Feed
      *
      * @param int $id_message
      */
-    public function deleteMessage($id_message)
+    public function deleteMessage($id_message): void
     {
         $model = new Model_DbTable_News();
         $model->find($id_message)->current()->delete();

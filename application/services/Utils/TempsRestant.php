@@ -3,6 +3,7 @@
 class Service_Utils_TempsRestant
 {
     public const SEUIL_OK = 6;
+
     public const SEUIL_WARN = 3;
 
     public static function calculate(?string $limitDate): ?string
@@ -20,26 +21,28 @@ class Service_Utils_TempsRestant
 
         if ($diff->y > 0) {
             $ans = $diff->y > 1 ? 'ans' : 'an';
-            $readableDiff .= "{$diff->y} {$ans}";
+            $readableDiff .= sprintf('%d %s', $diff->y, $ans);
         }
 
         if ($diff->m > 0) {
             if ('' !== $readableDiff) {
                 $readableDiff .= ' et ';
             }
-            $readableDiff .= "{$diff->m} mois";
+
+            $readableDiff .= $diff->m.' mois';
         }
 
         if ($diff->d > 0) {
             if ('' !== $readableDiff) {
                 $readableDiff .= ' et ';
             }
+
             $jours = $diff->d > 1 ? 'jours' : 'jour';
-            $readableDiff .= "{$diff->d} {$jours}";
+            $readableDiff .= sprintf('%d %s', $diff->d, $jours);
         }
 
         if (1 === $diff->invert) {
-            return "- {$readableDiff}";
+            return '- '.$readableDiff;
         }
 
         return $readableDiff;

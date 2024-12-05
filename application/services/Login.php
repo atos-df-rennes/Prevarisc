@@ -4,11 +4,7 @@ class Service_Login
 {
     // login pour l'api
 
-    /**
-     * @param mixed $username
-     * @param mixed $password
-     */
-    public function login($username, $password): array
+    public function login(string $username, string $password): array
     {
         // Reponse
         $reponse = [];
@@ -73,7 +69,7 @@ class Service_Login
                     ],
                 ];
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $reponse = 'erreur';
             $results = [
                 'reponse' => $reponse,

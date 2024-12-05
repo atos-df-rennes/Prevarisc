@@ -3,10 +3,15 @@
 class Model_PlatauConsultation
 {
     private $id;
+
     private $statutAvis;
+
     private $dateAvis;
+
     private $statutPec;
+
     private $datePec;
+
     private $dateReponseAttendue;
 
     public function setId(string $id): self

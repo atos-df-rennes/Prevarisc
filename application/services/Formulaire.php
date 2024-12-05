@@ -72,7 +72,7 @@ class Service_Formulaire
 
         if ($idTypeChamp === $idListe) {
             // On récupère les valeurs de la liste séparément des autres champs
-            $listValueArray = array_filter($champ, function ($key) {
+            $listValueArray = array_filter($champ, function ($key): bool {
                 return 0 === strpos($key, 'valeur-ajout-');
             }, ARRAY_FILTER_USE_KEY);
 
@@ -121,6 +121,7 @@ class Service_Formulaire
                         $arrayReturn[$valeur['IDX_VALEUR']][$idChampPattern] = $pattern;
                     }
                 }
+
                 $arrayReturn[$valeur['IDX_VALEUR']][$idChampFils] = $valeur;
             }
         }

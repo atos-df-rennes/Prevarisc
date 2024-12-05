@@ -137,12 +137,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $options = $this->getOption('resources');
         $options = $options['dataStore'];
+
         $className = $options['adapter'];
 
         return new $className($options);
     }
 
-    public function _initTranslator()
+    public function _initTranslator(): void
     {
         $translator = new Zend_Translate(
             [
@@ -167,7 +168,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $options = $this->getOption('cache');
         $max_lifetime = isset($options['session_max_lifetime']) ? (int) $options['session_max_lifetime'] : 7200;
-        $namespace = new Zend_Session_Namespace(\Zend_Auth::class);
+        $namespace = new Zend_Session_Namespace(Zend_Auth::class);
         $namespace->setExpirationSeconds($max_lifetime);
 
         return $namespace;

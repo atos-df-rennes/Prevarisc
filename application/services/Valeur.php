@@ -9,7 +9,7 @@ class Service_Valeur
         $this->modelValeur = new Model_DbTable_Valeur();
     }
 
-    public function get(int $idChamp, int $idObject, string $classObject)
+    public function get(int $idChamp, int $idObject, string $classObject): array
     {
         $valeur = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject);
 
@@ -30,7 +30,10 @@ class Service_Valeur
         return ['ID_VALEUR' => $idValeur, 'VALEUR' => $valeur, 'IDX_VALEUR' => $idxValeur];
     }
 
-    public function getAll(int $idChamp, int $idObject, string $classObject)
+    /**
+     * @return array<mixed, array<'ID_CHAMP'|'ID_PARENT'|'ID_TYPECHAMP'|'ID_VALEUR'|'IDX_VALEUR'|'STR_DATA'|'TYPE'|'VALEUR', mixed>>
+     */
+    public function getAll(int $idChamp, int $idObject, string $classObject): array
     {
         $modelChamp = new Model_DbTable_Champ();
 
@@ -54,6 +57,7 @@ class Service_Valeur
                 if ('VALEUR_DATE' === $typeValeur) {
                     $value = Service_Utils_Date::convertFromMySQL($value);
                 }
+
                 $retourValeurs[] =
                     [
                         'VALEUR' => $value,
@@ -96,6 +100,7 @@ class Service_Valeur
                     ]
                 );
             }
+
             if (false !== strpos($classObject, 'Etablissement')) {
                 $modelEtablissementValeur = new Model_DbTable_EtablissementValeur();
 

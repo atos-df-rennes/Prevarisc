@@ -2,11 +2,10 @@
 
     <!-- Icone représentant le dropdown des fils -->
     <?php if($this->NB_DOSS_LIES > 0) : ?>
-    <span class="icone_enfants" ><i class='ui-icon ui-icon-triangle-1-e' style='position: relative; left: -25px; float: left; margin-right: -25px;' ></i></span>
+        <span class="icone_enfants" ><i class='ui-icon ui-icon-triangle-1-e' style='position: relative; left: -25px; float: left; margin-right: -25px;' ></i></span>
     <?php endif ?>
 
     <div class="pull-left">
-
         <span class="doss-nom">
             <?php if ($this->VERROU_DOSSIER == 1): ?>
                 <i class="icon-lock"></i>
@@ -63,6 +62,15 @@
             </a>
         </span>
 
+        <!-- Icone de chargement des enfants (si il y'en a, et si on est en mode niveau -->
+        <?php if($this->NB_DOSS_LIES > 0) : ?>
+            <span class='load ui-helper-hidden' ><img src='/images/load.gif' alt='Chargement ...' /></span>
+        <?php endif ?>
+    </div>
+
+    <div style='clear: both'></div>
+
+    <div class="pull-left mt-2">
         <?php
             if($this->DATECOMM_DOSSIER != null)
             {
@@ -97,64 +105,72 @@
                 }
                 $date_text = "créé le";
             }
-            echo "<small class='muted'>" . $date_text . " " . $date . "</small>";
         ?>
+        <span class='label label-inverse'>
+            <i class="icon-calendar icon-white"></i>&nbsp;<?= $date_text . " " . $date ?>
+        </span>
 
-        <!-- Icone de chargement des enfants (si il y'en a, et si on est en mode niveau -->
-        <?php if($this->NB_DOSS_LIES > 0) : ?>
-            <span class='load ui-helper-hidden' ><img src='/images/load.gif' alt='Chargement ...' /></span>
-        <?php endif ?>
+        <?php
+            $tempsRestant = Service_Utils_TempsRestant::calculate($this->DATE_REPONSE_ATTENDUE);
 
-    </div>
-
-    <div class="pull-left">
-        <?php $tempsRestant = Service_Utils_TempsRestant::calculate($this->DATE_REPONSE_ATTENDUE);
-
-            if (null !== $tempsRestant) {
+            if (null !== $tempsRestant):
                 $couleur = Service_Utils_TempsRestant::getCouleurTempsRestant($this->DATE_REPONSE_ATTENDUE);
-
-                echo "<span class='label label-$couleur'>Temps restant : ".$tempsRestant."</span>";
-            }
+            ?>
+                <span class="label label-<?= $couleur ?>">
+                    <i class='icon-time icon-white'></i>&nbsp;Temps restant : <?= $tempsRestant ?>
+                </span>
+            <?php endif
         ?>
+
+        <?php if ($this->IS_NEW): ?>
+            <span class="label label-important">
+                <i class="icon-folder-open icon-white"></i>&nbsp;Nouveau dossier !
+            </span>
+        <?php endif ?>
+        <?php if ($this->HAS_NEW_PJ): ?>
+            <span class="label label-warning">
+                <i class="icon-share icon-white"></i>&nbsp;Nouvelles pièces !
+            </span>
+        <?php endif ?>
     </div>
 
-    <div class="pull-right">
+    <div style='clear: both'></div>
+
+    <div class="pull-left mt-3">
         <?php if($this->ID_PLATAU !== null) : echo "<span class='label label-info'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
         <?php if($this->ID_PLATAU !== null && $this->INCOMPLET_DOSSIER === null) : echo "<span class='label label-info'>EN ATTENTE DE PEC</span>"; endif ?>
 
         <!-- Avis du dossier -->
         <?php if($this->INCOMPLET_DOSSIER == 1) : ?>
-        <span class='avis' style='background-color: #f89406;'>Dossier incomplet</span>
+            <span class='avis' style='background-color: #f89406;'>Dossier incomplet</span>
         <?php elseif($this->DIFFEREAVIS_DOSSIER == 1) : ?>
-        <span class='avis' style='background-color: #3a87ad;'>Avis différé</span>
+            <span class='avis' style='background-color: #3a87ad;'>Avis différé</span>
         <?php elseif($this->TYPE_DOSSIER == 5 && !is_null($this->DATEREP_DOSSIER)) : ?>
-        <span class="avis F">Répondu</span>
+            <span class="avis F">Répondu</span>
         <?php elseif($this->TYPE_DOSSIER == 5 && is_null($this->DATEREP_DOSSIER)) : ?>
-        <span class="avis">Réponse à faire
+            <span class="avis">Réponse à faire
                 <?php if (!is_null($this->DATESDIS_DOSSIER)): ?>
                     (<?php echo $this->formatDateDiff(new DateTime($this->DATESDIS_DOSSIER)) ?>)
                 <?php endif ?>
             </span>
         <?php elseif($this->ID_AVIS == 1) : ?>
-        <span class="avis F">Favorable <?php echo in_array($this->ID_DOSSIERNATURE, array(7, 16, 17, 19, 21, 23, 24, 47, 26, 28 ,29, 48)) ? ' à l\'exploitation' : '' ?></span>
+            <span class="avis F">Favorable <?php echo in_array($this->ID_DOSSIERNATURE, array(7, 16, 17, 19, 21, 23, 24, 47, 26, 28 ,29, 48)) ? ' à l\'exploitation' : '' ?></span>
         <?php elseif($this->ID_AVIS == 2) : ?>
-        <span class="avis D">Défavorable <?php echo in_array($this->ID_DOSSIERNATURE, array(7, 16, 17, 19, 21, 23, 24, 47, 26, 28 ,29, 48)) ? ' à l\'exploitation' : '' ?></span>
+            <span class="avis D">Défavorable <?php echo in_array($this->ID_DOSSIERNATURE, array(7, 16, 17, 19, 21, 23, 24, 47, 26, 28 ,29, 48)) ? ' à l\'exploitation' : '' ?></span>
         <?php else : ?>
-        <span class="avis">Avis indisponible</span>
+            <span class="avis">Avis indisponible</span>
         <?php endif ?>
 
         <!-- Alerte sur la reception de travaux -->
         <?php if($this->ALERTE_RECEPTION_TRAVAUX > 0) : ?>
-        <span class='avis' style='background-color: #3a87ad'>Présence d'un dossier de reception de travaux</span>
+            <span class='avis' style='background-color: #3a87ad'>Présence d'un dossier de reception de travaux</span>
         <?php endif ?>
 
         <!-- Alerte sur le fait que la visite fait partie d'un échéancier de travaux -->
         <?php if($this->ECHEANCIER_TRAVAUX > 0) : ?>
-        <span class='avis' style='background-color: #3a87ad'>Fait l'objet d'un échéancier de travaux</span>
+            <span class='avis' style='background-color: #3a87ad'>Fait l'objet d'un échéancier de travaux</span>
         <?php endif ?>
-
     </div>
 
     <div style='clear: both'></div>
-
 </li>

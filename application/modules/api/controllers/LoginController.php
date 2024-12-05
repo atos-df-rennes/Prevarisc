@@ -2,7 +2,7 @@
 
 class Api_LoginController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         header('Content-type: application/json');
 
@@ -11,6 +11,6 @@ class Api_LoginController extends Zend_Controller_Action
 
         $server = new SDIS62_Rest_Server();
         $server->setClass('Api_Service_Login');
-        $server->handle($this->_request->getParams());
+        $server->handle($this->getRequest()->getParams());
     }
 }

@@ -2,17 +2,17 @@
 
 class ErrorController extends Zend_Controller_Action
 {
-    public function errorAction()
+    public function errorAction(): void
     {
         $this->_helper->layout->setLayout('error');
 
-        $errors = $this->_getParam('error_handler');
+        $errors = $this->getRequest()->getParam('error_handler');
 
         if (
             !$errors
             || !$errors instanceof ArrayObject
         ) {
-            $this->view->assign('message', 'Vous avez atteint la page d\'erreur');
+            $this->view->assign('message', "Vous avez atteint la page d'erreur");
 
             return;
         }

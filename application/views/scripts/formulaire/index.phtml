@@ -11,16 +11,16 @@
     <div class="tab-pane active" id="etablissements">
         <?php foreach ($this->formulaires as $key => $formulaire) : ?>
             <?php if ($formulaire['NOM_INTERNE'] === 'effectifsDegagementsEtablissement' || $formulaire['NOM_INTERNE'] === 'descriptifEtablissement') : ?>
-                <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="row-fluid objet">
+                <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="row-fluid">
                     <div class="span12">
-                        <div>
-                            <h2 id="nom_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
+                        <h2>
+                            <span id="nom_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
                                 <?= $formulaire['NOM'] ?>
-                                <button class="btn btn-link" data-toggle="modal" data-target="#editModal_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
-                                    <i title='Modifier' class="icon-pencil icon-black"></i>
-                                </button>
-                            </h2>
-                        </div>
+                            </span>
+                            <button class="btn btn-link" data-toggle="modal" data-target="#editModal_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
+                                <i title='Modifier' class="icon-pencil icon-black"></i>
+                            </button>
+                        </h2>
 
                         <?php include 'partials/partial-modal-editNom-capsuleRubrique.phtml' ?>
                         <?php include 'partials/partial-infos-rubriques.phtml' ?>
@@ -33,16 +33,16 @@
     <div class="tab-pane" id="dossiers">
         <?php foreach ($this->formulaires as $key => $formulaire) : ?>
             <?php if ($formulaire['NOM_INTERNE'] !== 'effectifsDegagementsEtablissement' && $formulaire['NOM_INTERNE'] !== 'descriptifEtablissement') : ?>
-                <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="row-fluid objet">
+                <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="row-fluid">
                     <div class="span12">
-                        <div>
-                            <h2 id="nom_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
+                        <h2>
+                            <span id="nom_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
                                 <?= $formulaire['NOM'] ?>
-                                <button class="btn btn-link" data-toggle="modal" data-target="#editModal_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
-                                    <i title='Modifier' class="icon-pencil icon-black"></i>
-                                </button>
-                            </h2>
-                        </div>
+                            </span>
+                            <button class="btn btn-link" data-toggle="modal" data-target="#editModal_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>">
+                                <i title='Modifier' class="icon-pencil icon-black"></i>
+                            </button>
+                        </h2>
 
                         <?php include 'partials/partial-modal-editNom-capsuleRubrique.phtml' ?>
                         <?php include 'partials/partial-infos-rubriques.phtml' ?>
@@ -56,7 +56,7 @@
 <script>
     $(document).ready(function() {
         <?php foreach ($this->formulaires as $formulaire) : ?>
-            $('#editForm_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>').on('submit', function(e) {
+            $('#editModal_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>').on('submit', function(e) {
                 e.preventDefault();
                 var newName = $('#newName_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>').val();
                 if (newName) {
@@ -72,6 +72,7 @@
                             if (response.status === 'success') {
                                 $('#nom_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>').text(newName);
 
+                                $('#newName_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>').val('')
                                 $('#editModal_<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>').modal('hide');
                             } else {
                                 alert('Une erreur est survenue lors de la mise à jour : ' + response.message);

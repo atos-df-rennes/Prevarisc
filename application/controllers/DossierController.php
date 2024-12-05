@@ -3335,14 +3335,16 @@ class DossierController extends Zend_Controller_Action
 
         $idDossier = $this->getRequest()->getParam('id');
         $serviceDossier = new Service_Dossier();
-        $zip = new ZipArchive();
-
+        
         $pjs = $serviceDossier->getAllPiecesJointes($idDossier);
-
+        
+        // Création du ZIP
+        $zip = new ZipArchive();
         $zipname = $idDossier.'.zip';
         $zipPath = REAL_DATA_PATH.DS.'uploads'.DS.$zipname;
         $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
+        // Ajout des pièces si lisibles
         foreach ($pjs as $pj) {
             $pjPath = Service_Utils::getPjPath($pj);
 
@@ -3369,7 +3371,17 @@ class DossierController extends Zend_Controller_Action
         header('Content-disposition: attachment; filename='.$zipname);
         header('Content-Length: '.filesize($zipPath));
 
-        readfile($zipPath);
+        // Téléchargement du ZIP via un stream
+        $openedZip = fopen($zipPath, 'rb');
+
+        while (!feof($openedZip)) {
+            echo fread($openedZip, 8192);
+
+            ob_flush();
+            flush();
+        }
+
+        fclose($openedZip);
         unlink($zipPath);
     }
 

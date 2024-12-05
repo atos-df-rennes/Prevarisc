@@ -3404,9 +3404,9 @@ class DossierController extends Zend_Controller_Action
 
         $idDossier = $this->getRequest()->getParam('id');
         $serviceDossier = new Service_Dossier();
-        
+
         $pjs = $serviceDossier->getAllPiecesJointes($idDossier);
-        
+
         // Création du ZIP
         $zip = new ZipArchive();
         $zipname = $idDossier.'.zip';

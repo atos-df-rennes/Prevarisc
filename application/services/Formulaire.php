@@ -28,7 +28,7 @@ class Service_Formulaire
         $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
         $modelRubrique = new Model_DbTable_Rubrique();
 
-        $idCapsuleRubriqueArray = $modelCapsuleRubrique->getCapsuleRubriqueIdByName($rubrique['capsule_rubrique']);
+        $idCapsuleRubriqueArray = $modelCapsuleRubrique->getCapsuleRubriqueByInternalName($rubrique['capsule_rubrique']);
         $idCapsuleRubrique = $idCapsuleRubriqueArray['ID_CAPSULERUBRIQUE'];
 
         $idRubrique = $modelRubrique->insert([

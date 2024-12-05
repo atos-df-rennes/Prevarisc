@@ -1,0 +1,62 @@
+<div class="row-fluid titles">
+    <div class="span4">
+        <h4>Informations sur la rubrique</h4>
+    </div>
+    <?php if (count($formulaire['RUBRIQUES']) > 0) : ?>
+        <div class="span6 offset2">
+            <h4>Liste des rubriques</h4>
+        </div>
+    <?php endif ?>
+</div> 
+<div class="row-fluid">
+    <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="span4 infos-rubrique">
+        <form action class="form-inline" method="post">
+            <div>
+                <?= $this->form->nom_rubrique->setAttrib('id', sprintf('%s-nom_rubrique', $formulaire['NOM_INTERNE'])) ?>
+            </div>
+            <div>
+                <?= $this->form->afficher_rubrique->setAttrib('id', sprintf('%s-afficher_rubrique', $formulaire['NOM_INTERNE'])) ?>
+            </div>
+                <?= $this->form->save ?>
+        </form>
+    </div>
+    <div class="span6 offset2 saved-rubriques">
+         <?php if (count($formulaire['RUBRIQUES']) > 0) : ?>
+            <table class="table table-bordered table-condensed">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Nom de la rubrique</th>
+                        <th>Afficher la rubrique par défaut</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="capsule-rubrique-<?= $formulaire['ID_CAPSULERUBRIQUE'] ?>" class="grp">
+                    <?php foreach ($formulaire['RUBRIQUES'] as $rubrique) : ?>
+                        <tr id="<?= $rubrique['ID_RUBRIQUE'] ?>">
+                            <td class='tdMove'><i class="icon-move"></i></td>
+                            <td><?= $rubrique['NOM'] ?></td>
+                            <td id='default-display'>
+                                <?php if ($rubrique['DISPLAY']) : ?>
+                                    <div class="text-center">
+                                        <i class="icon-ok"></i>
+                                    </div>
+                                <?php endif ?>
+                            </td>
+                            <td id='actions'>
+                                <div class='text-center'>
+                                    <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-rubrique', 'rubrique' => $rubrique['ID_RUBRIQUE']], null, true) ?>">
+                                        <i title='Modifier' class='icon-pencil'></i>
+                                    </a>
+                                    <button data-id="<?= $rubrique['ID_RUBRIQUE'] ?>" data-nom="<?= $rubrique['NOM'] ?>" class="btn btn-link delete-rubrique">
+                                        <i title='Supprimer' class='icon-trash'></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        <?php endif ?>
+    </div>
+</div>

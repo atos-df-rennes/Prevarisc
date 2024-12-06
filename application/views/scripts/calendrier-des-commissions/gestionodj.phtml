@@ -389,81 +389,86 @@ $(document).ready(function() {
 });
 
 </script>
+
 <style>
 .fc-event-vert {
 	border-width:1px;
 }
 </style>
-<?php
 
-	echo "
-		<div>
-			<input type='hidden' id='tempVerrou' value='' />
-			<input type='hidden' name='dateOdj' id='dateOdj' value='".$this->infosDateComm['DATE_COMMISSION']."' />
-			<input type='hidden' name='heureDeb' id='heureDeb' value='".$this->infosDateComm['HEUREDEB_COMMISSION']."' />
-			<input type='hidden' name='heureFin' id='heureFin' value='".$this->infosDateComm['HEUREFIN_COMMISSION']."' />
-			<h3>".$this->infosDateComm['LIBELLE_DATECOMMISSION'];
+<div>
+	<input type='hidden' id='tempVerrou' value='' />
+	<input type='hidden' name='dateOdj' id='dateOdj' value='<?= $this->infosDateComm['DATE_COMMISSION'] ?>' />
+	<input type='hidden' name='heureDeb' id='heureDeb' value='<?= $this->infosDateComm['HEUREDEB_COMMISSION'] ?>' />
+	<input type='hidden' name='heureFin' id='heureFin' value='<?= $this->infosDateComm['HEUREFIN_COMMISSION'] ?>' />
+	
+	<h3>
+		<?= $this->infosDateComm['LIBELLE_DATECOMMISSION'] ?>
 
-            if ($this->infosDateComm['GESTION_HEURES'] === 1) {
-                echo "<span class='badge badge-info' style=' margin:10px;'>
-                    <span id='nbDossiersAffect'>$this->nbDossiersAffect</span> / $this->nbDossiers</span>";
-            }
+		<?php if ($this->infosDateComm['GESTION_HEURES'] === 1): ?>
+			<span class='badge badge-info' style=' margin:10px;'>
+				<span id='nbDossiersAffect'><?= $this->nbDossiersAffect ?></span> / <?= $this->nbDossiers ?>
+			</span>
+		<?php endif ?>
+	</h3>
 
-			echo "</h3>";
+	<input type='hidden' name='dateCommId' id='dateCommId' value='<?= $this->infosDateComm['ID_DATECOMMISSION'] ?>' />
 
-	echo "	<input type='hidden' name='dateCommId' id='dateCommId' value='".$this->infosDateComm['ID_DATECOMMISSION']."' />
-		";
+<?php if(count($this->recupCommLiees) > 1): ?>
+	<h4 style='margin:0px;'>Autres dates de la commission</h4>
 
-	if(count($this->recupCommLiees) > 1){
-		echo "<h4 style='margin:0px;'>Autres dates de la commission</h4>";
-		$i = 0;
-		echo "<br/><table><tr>";
-		foreach($this->recupCommLiees as $commLiees){
-			if($commLiees['ID_DATECOMMISSION'] != $this->infosDateComm['ID_DATECOMMISSION']){
-				$dateLiees =  new Zend_Date($commLiees['DATE_COMMISSION'],'yyyy-MM-dd');
-				echo "<td style='width:200px;text-align:center;' ><a href='/calendrier-des-commissions/gestionodj/dateCommId/".$commLiees['ID_DATECOMMISSION']."' >".$dateLiees->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr')."</a></td>";
-			}else{
-				$dateLiees =  new Zend_Date($commLiees['DATE_COMMISSION'],'yyyy-MM-dd');
-				echo "<td style='width:200px;text-align:center;' >".$dateLiees->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr')."</td>";
-			}
-			if($i<5){
+	<?php $i = 0 ?>
+
+	<br/>
+	<table>
+		<tr>
+		<?php foreach($this->recupCommLiees as $commLiees):
+			if($commLiees['ID_DATECOMMISSION'] != $this->infosDateComm['ID_DATECOMMISSION']):
+				$dateLiees =  new Zend_Date($commLiees['DATE_COMMISSION'],'yyyy-MM-dd') ?>
+
+				<td style='width:200px;text-align:center;'>
+					<a href='/calendrier-des-commissions/gestionodj/dateCommId/<?= $commLiees['ID_DATECOMMISSION'] ?>'>
+						<?= $dateLiees->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr') ?>
+					</a>
+				</td>
+			<?php else:
+				$dateLiees =  new Zend_Date($commLiees['DATE_COMMISSION'],'yyyy-MM-dd') ?>
+
+				<td style='width:200px;text-align:center;'>
+					<?= $dateLiees->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr') ?>
+				</td>
+			<?php endif;
+
+			if($i<5) {
 				$i++;
-			}else{
-				echo "</td></tr>";
-				$i=0;
-			}
-		}
-		echo "</table>";
-		echo "<br/><br/>";
-	}
+			} else { ?>
+				</tr>
+			<?php $i=0;
+			} ?>
+		<?php endforeach ?>
+	</table>
+	<br/><br/>
+<?php endif ?>
 
-	echo "
-                <div id='infoGeneration'></div>
-                <br/>
-	";
+	<div id='infoGeneration'></div>
+	<br/>
 
-	if($this->infosDateComm['GESTION_HEURES'] == 1){
-		//dans le cas ou on prend en compte les heures (cas par défaut)
-		echo "
-			<div class='container-fluid'>
-			<div class='row'>
-				<div id='calendar' name='calendar' class='col-md-9'>
-				</div>
-		";
-		echo "
+<?php if($this->infosDateComm['GESTION_HEURES'] == 1){
+	//dans le cas ou on prend en compte les heures (cas par défaut) ?>
+	<div class='container-fluid'>
+		<div class='row'>
+			<div id='calendar' name='calendar' class='col-md-9'></div>
+
 			<span style='margin-left:45px;color:black;font-size:15px;'>
 				<span style='font-weight:bold;'>Dossier :</span>
 				<span class='label' style='background-color:#83bff6;color:black;font-size:15px;'>Validé</span>
 				<span class='label' style='background-color:#E2A420;color:black;font-size:15px;'>En attente de Validation</span>
 			</span>
-		";
-		echo "
-				<div id='external-events' class='col-md-3' style='margin-top:5px;color:black;border:1px solid black;text-align:center;border-radius:10px 10px;-moz-border-radius:10px 10px; -webkit-border-radius:10px 10px;'>
-					<div style='' >
-		";
 
-				echo "<h3>Liste des dossiers prévus</h3>";
-				if( count($this->listeDossierNonAffect) != 0 ){
+			<div id='external-events' class='col-md-3' style='margin-top:5px;color:black;border:1px solid black;text-align:center;border-radius:10px 10px;-moz-border-radius:10px 10px; -webkit-border-radius:10px 10px;'>
+				<div>
+					<h3>Liste des dossiers prévus</h3>
+			<?php if( count($this->listeDossierNonAffect) != 0 ){
 					foreach ($this->listeDossierNonAffect as $dossierNonAffect){
 						if($dossierNonAffect['VERROU_DOSSIER'] == 1){
 							$background = "#83bff6";

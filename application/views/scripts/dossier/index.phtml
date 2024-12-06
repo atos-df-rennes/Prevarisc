@@ -1738,7 +1738,7 @@ $(".delaipresc").live('click', function() {
                     <?php echo $this->dateVisiteValue ?>
                 </div>
                 <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <input type='text' style='width: 400px;' name='DATEVISITE_DOSSIER' id='DATEVISITE_INPUT'
+                    <input class="form-control" type='text' style='width: 400px;' name='DATEVISITE_DOSSIER' id='DATEVISITE_INPUT'
                         value='<?php echo ($this->dateVisite) ? $this->dateVisiteInput : "" ?>' readonly='readonly' />
                     <input type='hidden' name='ID_AFFECTATION_DOSSIER_VISITE' id='ID_AFFECTATION_DOSSIER_VISITE'
                         value='<?php echo ($this->idDateVisiteAffect) ? $this->idDateVisiteAffect : "" ?>' />
@@ -1820,7 +1820,7 @@ $(".delaipresc").live('click', function() {
                     <?php endif ?>
                 </div>
                 <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <input class="form-control" type='text' name='DATECOMM_DOSSIER' id='DATECOMM_INPUT'
+                    <input class="form-control" type='text' style='width: 400px;' name='DATECOMM_DOSSIER' id='DATECOMM_INPUT'
                         value='<?php echo ($this->dateCommInput) ? $this->dateCommInput : "" ?>' readonly='readonly' />
                     <input type='hidden' name='ID_AFFECTATION_DOSSIER_COMMISSION' id='ID_AFFECTATION_DOSSIER_COMMISSION'
                         value='<?php echo ($this->idDateCommissionAffect) ? $this->idDateCommissionAffect : "" ?>' />
@@ -2440,11 +2440,19 @@ $(".delaipresc").live('click', function() {
                     <?php endif ?>
                 </div>
                 <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <div id='operationsdis_infos'>
-                        <input type='radio' name='OPERSDIS_DOSSIER' value='1'
-                            <?php echo (1 == $this->infosDossier['OPERSDIS_DOSSIER']) ? "checked" : "" ?>>&nbsp;Oui<br />
-                        <input type='radio' name='OPERSDIS_DOSSIER' value='0'
-                            <?php echo (0 == $this->infosDossier['OPERSDIS_DOSSIER']) ? "checked" : "" ?>>&nbsp;Non<br />
+                    <div class="radio">
+                        <label>
+                            <input type='radio' name='OPERSDIS_DOSSIER' value='1'
+                                <?php echo (1 == $this->infosDossier['OPERSDIS_DOSSIER']) ? "checked" : "" ?>>
+                            Oui
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type='radio' name='OPERSDIS_DOSSIER' value='0'
+                                <?php echo (0 == $this->infosDossier['OPERSDIS_DOSSIER']) ? "checked" : "" ?>>
+                            Non
+                        </label>
                     </div>
                 </div>
             </li>
@@ -2459,11 +2467,19 @@ $(".delaipresc").live('click', function() {
                     <?php endif ?>
                 </div>
                 <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <div id='rrci_infos'>
-                        <input type='radio' name='RCCI_DOSSIER' value='1'
-                            <?php echo (1 == $this->infosDossier['RCCI_DOSSIER']) ? "checked" : "" ?>>&nbsp;Oui<br />
-                        <input type='radio' name='RCCI_DOSSIER' value='0'
-                            <?php echo (0 == $this->infosDossier['RCCI_DOSSIER']) ? "checked" : "" ?>>&nbsp;Non<br />
+                    <div class="radio">
+                        <label>
+                            <input type='radio' name='RCCI_DOSSIER' value='1'
+                                <?php echo (1 == $this->infosDossier['RCCI_DOSSIER']) ? "checked" : "" ?>>
+                            Oui
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type='radio' name='RCCI_DOSSIER' value='0'
+                                <?php echo (0 == $this->infosDossier['RCCI_DOSSIER']) ? "checked" : "" ?>>
+                            Non
+                        </label>
                     </div>
                 </div>
             </li>
@@ -2473,8 +2489,8 @@ $(".delaipresc").live('click', function() {
                 <div class='value col-md-9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
                     <?php echo $this->infosDossier['REX_DOSSIER'] ?>
                 </div>
-                <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <input type='text' id='REX_DOSSIER' name='REX_DOSSIER'
+                <div class='form col-md-3' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
+                    <input class="form-control" type='text' id='REX_DOSSIER' name='REX_DOSSIER'
                         value='<?php echo ($this->infosDossier['REX_DOSSIER']) ? $this->infosDossier['REX_DOSSIER'] : "" ?>' />
                 </div>
             </li>
@@ -2517,8 +2533,8 @@ $(".delaipresc").live('click', function() {
                 <div class='value col-md-9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
                     <?php echo $this->infosDossier['NUMINTERV_DOSSIER'] ?>
                 </div>
-                <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <input type='text' id='NUMINTERV_DOSSIER' name='NUMINTERV_DOSSIER'
+                <div class='form col-md-3' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
+                    <input class="form-control" type='text' id='NUMINTERV_DOSSIER' name='NUMINTERV_DOSSIER'
                         value='<?php echo ($this->infosDossier['NUMINTERV_DOSSIER']) ? $this->infosDossier['NUMINTERV_DOSSIER'] : "" ?>' />
                 </div>
             </li>

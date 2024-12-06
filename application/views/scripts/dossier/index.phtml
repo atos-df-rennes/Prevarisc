@@ -1464,7 +1464,7 @@ $(".delaipresc").live('click', function() {
                 <div class='value col-md-9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
                     <?php echo $this->libelleType ?>
                 </div>
-                <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none'" : "" ?>>
+                <div class='form col-md-2' <?php echo ($action != 'new') ? "style='display:none'" : "" ?>>
                     <select class="form-control" name='TYPE_DOSSIER' id='TYPE_DOSSIER'>
                         <option value='0'>Sélectionnez un type</option>
 
@@ -1481,7 +1481,7 @@ $(".delaipresc").live('click', function() {
                 style='<?php echo ('new' == $action) ? "display:none;" : "" ?>margin-bottom:20px;'>
                 <div class='libelle col-md-3'>Nature</div>
                 <!-- @todo: Mettre la nature en texte plutôt qu'en select disabled -->
-                <div class='form col-md-9'
+                <div class='form col-md-2'
                     <?php echo ($action != 'new' && $action != 'edit') ? "style='display:none;'" : "" ?>>
                     <div id='listeNature'>
                         <select class="form-control" name='selectNature' id='selectNature'
@@ -1788,13 +1788,16 @@ $(".delaipresc").live('click', function() {
                 <div class='value col-md-9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
                     <?php echo $this->infosDossier['DATERVRAT_DOSSIER'] ?>
                 </div>
-                <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <input type='text' class='date' name='DATERVRAT_DOSSIER' id='DATERVRAT_INPUT'
-                        value='<?php echo ($this->DATERVRAT_INPUT) ? $this->DATERVRAT_INPUT : "" ?>' />
-                    &nbsp;
-                    <button class='today btn btn-default'>
-                        <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
-                    </button>
+                <div class="form col-md-3" <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
+                    <div class='input-group'>
+                        <input type='text' class='date form-control' name='DATERVRAT_DOSSIER' id='DATERVRAT_DOSSIER'
+                            value='<?php echo ($this->DATERVRAT_INPUT) ? $this->DATERVRAT_INPUT : "" ?>' />
+                        <span class="input-group-btn">
+                            <button type='button' class='today btn btn-default'>
+                                <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </li>
 
@@ -2161,17 +2164,20 @@ $(".delaipresc").live('click', function() {
                 <div class='value col-md-9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
                     <?php echo $this->infosDossier['DELAIPRESC_DOSSIER'] ?>
                 </div>
-                <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
+                <div class="form col-md-3" <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
                     <input type='checkbox' class='delaipresc'
                         <?php echo ($this->infosDossier['DELAIPRESC_DOSSIER']) ? "checked" : "" ?>>
                     <span id='delaipresc_form'
                         style='<?php echo ($action != 'new' && in_array('DELAIPRESC', $this->afficherChamps) && $this->infosDossier['DELAIPRESC_DOSSIER']  != '0000-00-00' && $this->infosDossier['DELAIPRESC_DOSSIER']  != '') ? "" : "display:none;" ?>'>
-                        <input type='text' class='date' name='DELAIPRESC_DOSSIER' id='DELAIPRESC_INPUT'
-                            value='<?php echo ($this->DELAIPRESC_INPUT) ? $this->DELAIPRESC_INPUT : "" ?>' />
-                        &nbsp;
-                        <button class='today btn btn-default'>
-                            <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
-                        </button>
+                        <div class='input-group'>
+                            <input type='text' class='date form-control' name='DELAIPRESC_DOSSIER' id='DELAIPRESC_INPUT'
+                                value='<?php echo ($this->DELAIPRESC_INPUT) ? $this->DELAIPRESC_INPUT : "" ?>' />
+                            <span class="input-group-btn">
+                                <button type='button' class='today btn btn-default'>
+                                    <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
+                                </button>
+                            </span>
+                        </div>
                     </span>
                 </div>
             </li>
@@ -2294,7 +2300,7 @@ $(".delaipresc").live('click', function() {
                     <?php echo nl2br($this->infosDossier['ANOMALIE_DOSSIER']) ?>
                 </div>
                 <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <textarea name='ANOMALIE_DOSSIER' id='ANOMALIE_DOSSIER' rows='3'
+                    <textarea class="form-control" name='ANOMALIE_DOSSIER' id='ANOMALIE_DOSSIER' rows='3'
                         cols='100'><?php echo ($this->infosDossier['ANOMALIE_DOSSIER']) ? htmlspecialchars($this->infosDossier['ANOMALIE_DOSSIER'], ENT_QUOTES) : "" ?></textarea>
                 </div>
             </li>
@@ -2305,7 +2311,7 @@ $(".delaipresc").live('click', function() {
                     <?php echo nl2br($this->infosDossier['OBSERVATION_DOSSIER']) ?>
                 </div>
                 <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <textarea name='OBSERVATION_DOSSIER' id='OBSERVATION_DOSSIER' rows='3'
+                    <textarea class="form-control" name='OBSERVATION_DOSSIER' id='OBSERVATION_DOSSIER' rows='3'
                         cols='100'><?php echo ($this->infosDossier['OBSERVATION_DOSSIER']) ? htmlspecialchars($this->infosDossier['OBSERVATION_DOSSIER'], ENT_QUOTES) : "" ?></textarea>
                 </div>
             </li>
@@ -2315,13 +2321,16 @@ $(".delaipresc").live('click', function() {
                 <div class='value col-md-9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
                     <?php echo $this->infosDossier['DATEPREF_DOSSIER'] ?>
                 </div>
-                <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <input type='text' class='date' id='DATEPREF_DOSSIER' name='DATEPREF_DOSSIER'
-                        value='<?php echo ($this->DATEPREF_INPUT) ? $this->DATEPREF_INPUT : "" ?>' />
-                    &nbsp;
-                    <button class='today btn btn-default'>
-                        <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
-                    </button>
+                <div class="form col-md-3" <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
+                    <div class='input-group'>
+                        <input type='text' class='date form-control' name='DATEPREF_DOSSIER' id='DATEPREF_DOSSIER'
+                            value='<?php echo ($this->DATEPREF_INPUT) ? $this->DATEPREF_INPUT : "" ?>' />
+                        <span class="input-group-btn">
+                            <button type='button' class='today btn btn-default'>
+                                <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </li>
             <li class='row' id='DATEREP'
@@ -2330,13 +2339,16 @@ $(".delaipresc").live('click', function() {
                 <div class='value col-md-9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
                     <?php echo $this->infosDossier['DATEREP_DOSSIER'] ?>
                 </div>
-                <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <input type='text' class='date' id='DATEREP_DOSSIER' name='DATEREP_DOSSIER'
-                        value='<?php echo ($this->DATEREP_INPUT) ? $this->DATEREP_INPUT : "" ?>' />
-                    &nbsp;
-                    <button class='today btn btn-default'>
-                        <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
-                    </button>
+                <div class='form col-md-3' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
+                    <div class="input-group">
+                        <input type='text' class='date form-control' id='DATEREP_DOSSIER' name='DATEREP_DOSSIER'
+                            value='<?php echo ($this->DATEREP_INPUT) ? $this->DATEREP_INPUT : "" ?>' />
+                        <span class="input-group-btn">
+                            <button class='today btn btn-default'>
+                                <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </li>
             <li class='row' id='DATETRANSFERTCOMM'
@@ -2345,19 +2357,23 @@ $(".delaipresc").live('click', function() {
                 <div class='value col-md-9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
                     <?php echo $this->infosDossier['DATETRANSFERTCOMM_DOSSIER'] ?>
                 </div>
-                <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
+                <div class='form col-md-3' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
                     <?php
                         $dateTransfertComm = "";
                         if ($this->DATETRANSFERTCOMM) {
                             $dateTransfertTemp= new Zend_Date($this->DATETRANSFERTCOMM, Zend_Date::DATES);
                             $dateTransfertComm = $dateTransfertTemp->get(Zend_Date::DAY."/".Zend_Date::MONTH."/".Zend_Date::YEAR);
                         } ?>
-                    <input type='text' class='date' id='DATETRANSFERTCOMM_DOSSIER' name='DATETRANSFERTCOMM_DOSSIER'
-                        value='<?php echo $dateTransfertComm ?>' />
-                    &nbsp;
-                    <button class='today btn btn-default'>
-                        <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
-                    </button>
+
+                    <div class="input-group">
+                        <input type='text' class='date form-control' id='DATETRANSFERTCOMM_DOSSIER' name='DATETRANSFERTCOMM_DOSSIER'
+                            value='<?php echo $dateTransfertComm ?>' />
+                        <span class="input-group-btn">
+                            <button class='today btn btn-default'>
+                                <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </li>
             <li class='row' id='DATERECEPTIONCOMM'
@@ -2366,19 +2382,23 @@ $(".delaipresc").live('click', function() {
                 <div class='value col-md-9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
                     <?php echo $this->infosDossier['DATERECEPTIONCOMM_DOSSIER'] ?>
                 </div>
-                <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
+                <div class="form col-md-3" <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
                     <?php
                         $dateReceptTemp = "";
                         if ($this->DATERECEPTIONCOMM) {
                             $dateReceptTemp= new Zend_Date($this->DATERECEPTIONCOMM, Zend_Date::DATES);
                             $dateReceptTemp = $dateReceptTemp->get(Zend_Date::DAY."/".Zend_Date::MONTH."/".Zend_Date::YEAR);
                         } ?>
-                    <input type='text' class='date' id='DATERECEPTIONCOMM_DOSSIER' name='DATERECEPTIONCOMM_DOSSIER'
+
+                    <div class='input-group'>
+                        <input type='text' class='date form-control' name='DATERECEPTIONCOMM_DOSSIER' id='DATERECEPTIONCOMM_DOSSIER'
                         value='<?php echo $dateReceptTemp ?>' />
-                    &nbsp;
-                    <button class='today btn btn-default'>
-                        <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
-                    </button>
+                        <span class="input-group-btn">
+                            <button type='button' class='today btn btn-default'>
+                                <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </li>
             <li class='row' id='DATEREUN'
@@ -2387,13 +2407,16 @@ $(".delaipresc").live('click', function() {
                 <div class='value col-md-9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
                     <?php echo $this->infosDossier['DATEREUN_DOSSIER'] ?>
                 </div>
-                <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <input type='text' class='date' id='DATEREUN_DOSSIER' name='DATEREUN_DOSSIER'
-                        value='<?php echo ($this->DATEREUN_INPUT) ? $this->DATEREUN_INPUT : "" ?>' />
-                    &nbsp;
-                    <button class='today btn btn-default'>
-                        <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
-                    </button>
+                <div class='form col-md-3' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
+                    <div class="input-group">
+                        <input type='text' class='date form-control' id='DATEREUN_DOSSIER' name='DATEREUN_DOSSIER'
+                            value='<?php echo ($this->DATEREUN_INPUT) ? $this->DATEREUN_INPUT : "" ?>' />
+                        <span class="input-group-btn">
+                            <button class='today btn btn-default'>
+                                <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </li>
             <li class='row' id='OPERSDIS'
@@ -2521,13 +2544,16 @@ $(".delaipresc").live('click', function() {
                 <div class='value col-md-9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
                     <?php echo $this->infosDossier['DATESIGN_DOSSIER'] ?>
                 </div>
-                <div class='form col-md-9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <input type='text' class='date' id='DATESIGN_INPUT' name='DATESIGN_DOSSIER'
-                        value='<?php echo ($this->DATESIGN_INPUT) ? $this->DATESIGN_INPUT : "" ?>' />
-                    &nbsp;
-                    <button class='today btn btn-default'>
-                        <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
-                    </button>
+                <div class='form col-md-3' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
+                    <div class="input-group">
+                        <input type='text' class='date form-control' id='DATESIGN_INPUT' name='DATESIGN_DOSSIER'
+                            value='<?php echo ($this->DATESIGN_INPUT) ? $this->DATESIGN_INPUT : "" ?>' />
+                        <span class="input-group-btn">
+                            <button class='today btn btn-default'>
+                                <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </li>
             <li class='row' id='PREVENTIONNISTE'
@@ -2555,7 +2581,7 @@ $(".delaipresc").live('click', function() {
                         </li>
                     </ul>
                     <div style='display: block;'>
-                        <input type='text' value='' id='preventionnistes-autocomplete' style='width:200px;'>
+                        <input class="form-control" type='text' value='' id='preventionnistes-autocomplete' style='width:200px;'>
                     </div>
                 </div>
             </li>

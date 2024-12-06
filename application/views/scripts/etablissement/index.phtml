@@ -602,19 +602,23 @@
 </div>
 
 <!-- Boite de confirmation de la suppression (cachée par défaut) -->
-<div id="confirm-modal" class="modal fade" >
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Confirmation de la suppression</h3>
-    </div>
+<div id="confirm-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title">Confirmation de la suppression</h3>
+            </div>
 
-    <div class="modal-body">
-        <p> Etes-vous sûr de vouloir supprimer l'établissement ? </p>
-    </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer l'établissement ?</p>
+            </div>
 
-    <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-default">Annuler</a>
-        <a href="<?php echo $this->url(array($this->idEtablissement, 'action' => 'delete')); ?>" class='btn btn-success'>Confirmer</a>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <a href="<?php echo $this->url(array($this->idEtablissement, 'action' => 'delete')); ?>" class='btn btn-danger'>Confirmer</a>
+            </div>
+        </div>
     </div>
 </div>
 

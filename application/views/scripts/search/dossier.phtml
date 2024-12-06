@@ -325,7 +325,7 @@
 
         $("a.pj").click(function(e){
             e.preventDefault();
-            var rowvalue = $(this).find('i').attr('id').substring(6);
+            var rowvalue = $(this).find('span').attr('id').substring(6);
             $('#rowpj'+rowvalue).toggle();
         });
     });

@@ -24,9 +24,11 @@
     </div>
 
     <div class='row'>
-        <div class='col'>
+        <div class='col-md-4'>
             Sélectionnez l'endroit dans lequel vous souhaitez ajouter cette prescription
-            <select name='TYPE_PRESCRIPTION_DOSSIER' style='width:300px;'>
+        </div>
+        <div class='col-md-3'>
+            <select class="form-control" name='TYPE_PRESCRIPTION_DOSSIER'>
                 <option value='0' <?= $this->infosPrescription['TYPE_PRESCRIPTION_DOSSIER'] == 0 ? "selected" : "" ?>>Rappels réglementaires</option>
                 <option value='1' <?=  $this->infosPrescription['TYPE_PRESCRIPTION_DOSSIER'] == 1 ? "selected" : "" ?>>Prescriptions liées à l'exploitation</option>
                 <option value='2' <?= $this->infosPrescription['TYPE_PRESCRIPTION_DOSSIER'] == 2 ? "selected" : "" ?>>Prescriptions liées à l'amélioration</option>
@@ -86,23 +88,25 @@
     <div class='row'>
         <div class='col-md-12'>
             Contenu :
-            <textarea name='PRESCRIPTION_LIBELLE' id='PRESCRIPTION_LIBELLE' rows='10'><?= $this->infosPrescription['LIBELLE_PRESCRIPTION_DOSSIER'] ?></textarea>
+            <textarea class="form-control" name='PRESCRIPTION_LIBELLE' id='PRESCRIPTION_LIBELLE' rows='10'><?= $this->infosPrescription['LIBELLE_PRESCRIPTION_DOSSIER'] ?></textarea>
         </div>
     </div>
 
     <div class='row'>
         <div class='col-md-3'>
             <label for="DATE_LEVEE">Date de levée</label>
-            <input class='date' type='text' name='DATE_LEVEE' id='DATE_LEVEE' value="<?= $this->infosPrescription['DATE_LEVEE'] ?>" />
-            &nbsp;
-            <button type='button' class='today btn btn-default'>
-                <i class='glyphicon glyphicon-calendar'></i>
-                &nbsp;Aujourd'hui
-            </button>
+            <div class="input-group">
+                <input class='date form-control' type='text' name='DATE_LEVEE' id='DATE_LEVEE' value="<?= $this->infosPrescription['DATE_LEVEE'] ?>" />
+                <span class="input-group-btn">
+                    <button class='today btn btn-default' type="button">
+                        <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
+                    </button>
+                </span>
+            </div>
         </div>
         <div class='col-md-9'>
             <label for="JUSTIFICATIF_LEVEE">Justification :</label>
-            <textarea name='JUSTIFICATIF_LEVEE' id='JUSTIFICATIF_LEVEE' rows='10'><?= $this->infosPrescription['JUSTIFICATIF_LEVEE'] ?></textarea>
+            <textarea class="form-control" name='JUSTIFICATIF_LEVEE' id='JUSTIFICATIF_LEVEE' rows='10'><?= $this->infosPrescription['JUSTIFICATIF_LEVEE'] ?></textarea>
         </div>
     </div>
 </form>

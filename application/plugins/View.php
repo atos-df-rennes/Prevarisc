@@ -60,7 +60,7 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
             $view->inlineScript()->appendFile('/js/jquery-ui.datepicker.fr.js');
             $view->inlineScript()->appendFile('/js/jquery.marquee.min.js');
             $view->inlineScript()->appendFile('/js/jquery.hoverintent.js');
-            $view->inlineScript()->appendFile('/js/typeahead.bundle.js');
+            $view->inlineScript()->appendFile('/js/tom-select.complete.min.js');
             $view->inlineScript()->appendFile('/js/main.js');
 
             // CSS
@@ -78,6 +78,7 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
             $view->headLink()->appendStylesheet('/css/dropzone/basic.css', 'all');
             $view->headLink()->appendStylesheet('/css/dropzone/basic.css', 'all');
             $view->headLink()->appendStylesheet('/css/dropzone/dropzone.css', 'all');
+            $view->headLink()->appendStylesheet('/css/tom-select.defualt.min.css', 'all');
 
             // Définition du partial de vue à utiliser pour le rendu d'une recherche
             Zend_View_Helper_PaginationControl::setDefaultViewPartial('search'.DIRECTORY_SEPARATOR.'pagination_control.phtml');

@@ -362,7 +362,7 @@
                     } elseif (isset($_GET["libelle"])) {
                         echo htmlspecialchars($_GET["libelle"], ENT_QUOTES);
                     }  ?></strong><br/>
-                    <input class='form-control' placeholder="Libellé de l'établissement père ..." type='text' style='width: 100%; box-sizing: border-box; height: 2.5em' />
+                    <input placeholder="Libellé de l'établissement père ..." type='text' style='width: 100%; box-sizing: border-box; height: 2.5em' />
                     <input type='hidden' name='ID_PERE' value='<?php if (count($this->etablissement['parents']) > 0) {
                         echo end($this->etablissement['parents'])["ID_ETABLISSEMENT"];
                     } elseif (isset($_GET["pere"])) {
@@ -927,54 +927,52 @@
         });
 
         // Auto-complétion de l'établissement père
-        // @fixme: Faire fonctionner
-        // $(".etablissement_pere input[type='text']").typeahead({
-        //     minLength: 3,
-        //     source: function(query, process) {
-        //         return $.ajax({
-        //             url: "/api/1.0/search/etablissements",
-        //             type: 'get',
-        //             data: {
-        //                 label: query
-        //             },
-        //             success: function (result) {
-        //                 etablissements = [];
-        //                 $.each(result.response.results, function (i, etablissement) {
-        //                     switch(etablissement.ID_GENRE)
-        //                     {
-        //                         case 1:
-        //                             LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_SITE;
-        //                             break;
+        new TomSelect(".etablissement_pere input[type='text']", {
+            valueField: 'ID_ETABLISSEMENT',
+            labelField: 'LIBELLE_ETABLISSEMENTINFORMATIONS',
+            searchField: 'LIBELLE_ETABLISSEMENTINFORMATIONS',
+            maxItems: 1,
+            load: function(query, process) {
+                $.ajax({
+                    url: "/api/1.0/search/etablissements",
+                    type: 'get',
+                    data: {
+                        label: query
+                    },
+                    success: function (result) {
+                        process(result.response.results);
+                    }
+                });
+            },
+            shouldLoad(query) {
+                return query.length >= 3
+            },
+            render: {
+                option: function(data, escape) {
+                    switch(data.ID_GENRE)
+                    {
+                        case 1:
+                            LIBELLE_COMMUNE = data.LIBELLE_COMMUNE_ADRESSE_SITE;
+                            break;
 
-        //                         case 3:
-        //                             LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_CELLULE;
-        //                             break;
+                        case 3:
+                            LIBELLE_COMMUNE = data.LIBELLE_COMMUNE_ADRESSE_CELLULE;
+                            break;
 
-        //                         default:
-        //                             LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT == null ? "non localisé" : etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT;
-        //                     }
+                        default:
+                            LIBELLE_COMMUNE = data.LIBELLE_COMMUNE_ADRESSE_DEFAULT == null ? "non localisé" : data.LIBELLE_COMMUNE_ADRESSE_DEFAULT;
+                    }
 
-        //                     etablissements.push("<span class='text-muted'>[" + etablissement.LIBELLE_GENRE + "]</span> <span data-id='" + etablissement.ID_ETABLISSEMENT + "' class='result'>" + etablissement.LIBELLE_ETABLISSEMENTINFORMATIONS + "</span> - <small>" + LIBELLE_COMMUNE + "</small>");
-        //                 });
-
-        //                 process(etablissements);
-        //             }
-        //         });
-        //     },
-        //     highlighter: function (item) {
-        //         libelle = $($.parseHTML(item)).last().prev().text();
-        //         libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
-        //         html = $.parseHTML(item);
-        //         $(html).last().prev().text(libelle);
-        //         html = $(html).text();
-        //         return item.replace( item, html );
-        //     },
-        //     updater: function (item) {
-        //         $(".etablissement_pere strong").text($($.parseHTML(item)).last().prev().text());
-        //         $(".etablissement_pere input[type='hidden']").val($($.parseHTML(item)).last().prev().data('id'));
-        //         return;
-        //     }
-        // });
+                    return "<div><span class='text-muted'>[" + escape(data.LIBELLE_GENRE) + "]</span> <span data-id='" + data.ID_ETABLISSEMENT + "'>" + escape(data.LIBELLE_ETABLISSEMENTINFORMATIONS) + "</span> - <small>" + escape(LIBELLE_COMMUNE) + "</small></div>"
+                },
+                no_results: function(data, escape) {
+                    return '<div class="no-results">Aucun résultat trouvé pour "'+escape(data.input)+'"</div>';
+                }
+            },
+            onChange(value) {
+                $(".etablissement_pere input[type='hidden']").val(value);
+            }
+        })
 
         // Auto-complétion des établissements enfants
         // @fixme: Faire fonctionner

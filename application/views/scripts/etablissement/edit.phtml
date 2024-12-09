@@ -159,7 +159,7 @@
                         <ul id='activite_ul' class='list-unstyled'>
                             <!-- Type et activité principal -->
                             <li class="row form-group">
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <select class='form-control type_select' name='ID_TYPE'>
                                         <?php foreach ($this->DB_type as $item) : ?>
                                             <option value='<?php echo $item["ID_TYPE"] ?>' <?php if ($item["ID_TYPE"] == $this->etablissement['informations']["ID_TYPE"]) {
@@ -170,7 +170,7 @@
                                         <?php endforeach ?>
                                     </select>
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col-md-9">
                                     <select class='form-control activite_select' id='activite_principal_select' name='ID_TYPEACTIVITE'>
                                         <?php foreach ($this->DB_activite as $item) : ?>
                                             <?php if ($item["ID_TYPE"] == $this->etablissement['informations']["ID_TYPE"]) : ?>
@@ -909,17 +909,19 @@
         // Fonction pour afficher les activités du type
         $("select.type_select").live("change", function() {
             activites = <?php echo Zend_Json::encode($this->DB_activite) ?>;
-            $(this).next().find("option").remove();
+            select_activites = $(this.closest('.row.form-group')).find('select.activite_select')
+            select_activites.find("option").remove();
             for( var x in activites) {
                 if( activites[x]["ID_TYPE"] == $(this).val() ) {
-                    $(this).next().append($("<option />").val(activites[x]["ID_TYPEACTIVITE"]).text(activites[x]["LIBELLE_ACTIVITE"]));
+                    select_activites.append($("<option />").val(activites[x]["ID_TYPEACTIVITE"]).text(activites[x]["LIBELLE_ACTIVITE"]));
                 }
             }
         });
 
         // On choisit d'initialiser ou de remettre à 0 les activités en fonction du type
         $("select.type_select").each(function(index) {
-            if($(this).next().find("option").length == 0) {
+            select_activites = $(this.closest('.row.form-group')).find('select.activite_select')
+            if(select_activites.find("option").length == 0) {
                 $(this).change();
             }
         });

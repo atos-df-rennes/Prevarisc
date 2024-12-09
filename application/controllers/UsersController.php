@@ -44,7 +44,7 @@ class UsersController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'utilisateur a bien été mis à jour.']);
                 $this->_helper->redirector('index', null, null);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'utilisateur n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => 'danger', 'title' => '', 'message' => 'L\'utilisateur n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
     }
@@ -77,7 +77,7 @@ class UsersController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'utilisateur a bien été ajouté.']);
                 $this->_helper->redirector('index', null, null);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'utilisateur n\'a pas été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => 'danger', 'title' => '', 'message' => 'L\'utilisateur n\'a pas été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
 
@@ -161,7 +161,7 @@ class UsersController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Le groupe a bien été mis à jour.']);
                 $this->_helper->redirector('index', null, null);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'Le groupe n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => 'danger', 'title' => '', 'message' => 'Le groupe n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
     }
@@ -181,7 +181,7 @@ class UsersController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Le groupe a bien été ajouté.']);
                 $this->_helper->redirector('index', null, null);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'Le groupe n\'a pas été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => 'danger', 'title' => '', 'message' => 'Le groupe n\'a pas été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
 
@@ -200,7 +200,7 @@ class UsersController extends Zend_Controller_Action
             $service_user->deleteGroup($this->_request->gid);
             $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'Le groupe a été supprimé.']);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'Erreur dans la suppression du groupe. Veuillez rééssayez. ('.$e->getMessage().')']);
+            $this->_helper->flashMessenger(['context' => 'danger', 'title' => '', 'message' => 'Erreur dans la suppression du groupe. Veuillez rééssayez. ('.$e->getMessage().')']);
         }
 
         $this->_helper->redirector('index', null, null);
@@ -498,7 +498,7 @@ class UsersController extends Zend_Controller_Action
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'La ressource a bien été ajoutée.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Ajout annulé', 'message' => 'La ressource n\'a été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Ajout annulé', 'message' => 'La ressource n\'a été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('ressources-specialisees');
@@ -517,7 +517,7 @@ class UsersController extends Zend_Controller_Action
                 $model_resource->find($this->_request->id)->current()->delete();
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'La ressource a bien été supprimée.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Suppression annulée', 'message' => 'La ressource n\'a été supprimée. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Suppression annulée', 'message' => 'La ressource n\'a été supprimée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('ressources-specialisees');

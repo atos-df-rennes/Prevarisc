@@ -270,7 +270,7 @@ class SearchController extends Zend_Controller_Action
 
                     $this->view->assign('results', $paginator);
                 } catch (Exception $e) {
-                    $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Problème de recherche', 'message' => 'La recherche n\'a pas été effectuée correctement. Veuillez réessayer. ('.$e->getMessage().')']);
+                    $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Problème de recherche', 'message' => 'La recherche n\'a pas été effectuée correctement. Veuillez réessayer. ('.$e->getMessage().')']);
                 }
             }
         }
@@ -533,7 +533,7 @@ class SearchController extends Zend_Controller_Action
 
                     $this->view->assign('results', $paginator);
                 } catch (Exception $e) {
-                    $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Problème de recherche', 'message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. ('.$e->getMessage().')']);
+                    $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Problème de recherche', 'message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. ('.$e->getMessage().')']);
                 }
             }
         }
@@ -565,7 +565,7 @@ class SearchController extends Zend_Controller_Action
 
                 $this->view->assign('results', $paginator);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Problème de recherche', 'message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Problème de recherche', 'message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
     }

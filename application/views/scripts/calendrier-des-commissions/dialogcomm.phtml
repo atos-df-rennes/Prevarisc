@@ -207,7 +207,7 @@ if(isset($this->do) && $this->do == 'edit'){
 			</p>
 			<br/>
 			<div class='container-fluid' id='listeDates'>
-				<ul class='list-unstyled row' style='text-align:center;font-weight:bold;border-bottom:1px solid black;float:left;padding:3px 0 3px 0;'>
+				<ul class='list-unstyled row' style='text-align:center;font-weight:bold;border-bottom:1px solid black;padding:3px 0 3px 0;'>
 					<li class='col-md-6'>Date</li>
 					<li class='col-md-2'>Heure début</li>
 					<li class='col-md-2'>Heure fin</li>
@@ -255,7 +255,7 @@ if(isset($this->do) && $this->do == 'edit'){
 	switch($this->do){
 		case 'addDateN':
 			echo "
-				<ul class='list-unstyled row' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
+				<ul class='list-unstyled row' style='text-align:center;font-weight:bold;padding:3px 0 3px 0;'>
 					<li class='col-md-6'>".$this->dateAjoutee."</li>
 					<li class='col-md-2'><input type='text' size='8' class='time' id='D_".$this->dateAjouteeInput."' name='D_".$this->dateAjouteeInput."' value='09:00'/></li>
 					<li class='col-md-2'><input type='text' size='8' class='time' id='F_".$this->dateAjouteeInput."' name='F_".$this->dateAjouteeInput."' value='18:00'/></li>
@@ -350,7 +350,7 @@ function afficheTabListeDates($listeDates){
 	//Affiche la liste des dates pour une édition
 	$affiche = "
 				<div class='container-fluid' id='listeDates'>
-					<ul class='list-unstyled row' style='text-align:center;font-weight:bold;border-bottom:1px solid black;float:left;padding:3px 0 3px 0;'>
+					<ul class='list-unstyled row' style='text-align:center;font-weight:bold;border-bottom:1px solid black;padding:3px 0 3px 0;'>
 						<li class='col-md-6'>Date</li>
 						<li class='col-md-2'>Heure début</li>
 						<li class='col-md-2'>Heure fin</li>
@@ -366,7 +366,7 @@ function afficheTabListeDates($listeDates){
 		$date = new Zend_Date($dates['DATE_COMMISSION'],'yyyy.MM.dd','fr');
 		$dateLibelle = $date->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr');
 		$affiche .= "
-					<ul class='list-unstyled row' id='ligne_".$dates['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
+					<ul class='list-unstyled row' id='ligne_".$dates['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;padding:3px 0 3px 0;'>
 						<li class='col-md-6'>".$dateLibelle."</li>
 						<li class='col-md-2'> ".$heureDebut." </li>
 						<li class='col-md-2'> ".$heureFin." </li>
@@ -422,7 +422,7 @@ function afficheDateValid($date,$first=null){
 	$dateLibelle = $dateE->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr');
 	$buttonEdition = $date['ID_DATECOMMISSION'];
 	$affiche = "
-			<ul class='list-unstyled row' id='ligne_".$date['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
+			<ul class='list-unstyled row' id='ligne_".$date['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;padding:3px 0 3px 0;'>
 				<li class='col-md-6'>".$dateLibelle."</li>
 				<li class='col-md-2'>".$heureDebut." </li>
 				<li class='col-md-2'>".$heureFin." </li>
@@ -444,7 +444,7 @@ function ajoutDateLiee($tabDate,$date){
 	$heureDebut =substr($tabDate['HEUREDEB_COMMISSION'],0,5);
 	$heureFin =substr($tabDate['HEUREFIN_COMMISSION'],0,5);
 	return "
-		<ul class='list-unstyled row' id='ligne_".$tabDate['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
+		<ul class='list-unstyled row' id='ligne_".$tabDate['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;padding:3px 0 3px 0;'>
 			<li class='col-md-6'>".$date."</li>
 			<li class='col-md-2'>".$heureDebut."</li>
 			<li class='col-md-2'>".$heureFin."</li>
@@ -502,7 +502,7 @@ function divAddDate(){
 	return "
 		<div id='divAddDate'  style='display:none;'>
 			&nbsp;&nbsp;
-			<ul class='list-unstyled row' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
+			<ul class='list-unstyled row' style='text-align:center;font-weight:bold;padding:3px 0 3px 0;'>
 				<li class='col-md-6'>
 					Selectionnez la date <input type='text' class='date' id='addDate' />
 				</li>

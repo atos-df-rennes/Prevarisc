@@ -354,25 +354,34 @@
 
             <!-- Etablissement lié -->
             <h4 class='h4_subtitle etablissements_lies'>Établissements liés <?php if ($this->etablissement['general']) : ?> <a id='add_etablissement' href='/etablissement/add?pere=<?php echo $this->etablissement['general']['ID_ETABLISSEMENT'] ?>&libelle=<?php echo htmlspecialchars($this->etablissement['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"], ENT_QUOTES) ?>' class='edit' style='font-size: 0.85em; float: right; font-weight: normal;' >Créer un établissement enfant</a> <?php endif ?></h4>
-            <dl class='dl-horizontal etablissements_lies' >
-                <dt class="etablissement_pere">Père de l'établissement</dt>
-                <dd class="etablissement_pere">
-                    Nom de l'établissement : <strong><?php if (count($this->etablissement['parents']) > 0) {
-                        echo htmlspecialchars(end($this->etablissement['parents'])["LIBELLE_ETABLISSEMENTINFORMATIONS"], ENT_QUOTES);
-                    } elseif (isset($_GET["libelle"])) {
-                        echo htmlspecialchars($_GET["libelle"], ENT_QUOTES);
-                    }  ?></strong><br/>
-                    <input placeholder="Libellé de l'établissement père ..." type='text' style='width: 100%; box-sizing: border-box; height: 2.5em' />
-                    <input type='hidden' name='ID_PERE' value='<?php if (count($this->etablissement['parents']) > 0) {
-                        echo end($this->etablissement['parents'])["ID_ETABLISSEMENT"];
-                    } elseif (isset($_GET["pere"])) {
-                        echo $_GET["pere"];
-                    } ?>' />
-                </dd>
+            <dl class='dl-horizontal etablissements_lies'>
+                <div class="form-group">
+                    <dt class="etablissement_pere">Père de l'établissement</dt>
+                    <dd class="etablissement_pere">
+                        <select id='etablissement-pere-autocomplete' placeholder="Libellé de l'établissement père ..." name='ID_PERE'>
+                            <?php if (count($this->etablissement['parents']) > 0): ?>
+                                <option value="<?= end($this->etablissement['parents'])["ID_ETABLISSEMENT"] ?>">
+                                    <?= htmlspecialchars(end($this->etablissement['parents'])["LIBELLE_ETABLISSEMENTINFORMATIONS"], ENT_QUOTES) ?>
+                                </option>
+                            <?php elseif (isset($_GET["libelle"]) && isset($_GET["pere"])) : ?>
+                                <option value="<?= $_GET["pere"] ?>">
+                                    <?= htmlspecialchars($_GET["libelle"], ENT_QUOTES) ?>
+                                </option>
+                            <?php endif ?>
+                        </select>
+                    </dd>
+                </div>
 
                 <dt class="etablissements_enfants">Enfants de l'établissement</dt>
                 <dd class="etablissements_enfants">
-                    <table id='etablissements_enfants' class='table table-condensed'>
+                    <select id='etablissement-autocomplete' placeholder="Libellé d'un établissement enfant ..." name="ID_FILS_ETABLISSEMENT[]" multiple>
+                        <?php foreach ($this->etablissement['etablissement_lies'] as $etablissement): ?>
+                            <option value="<?= $etablissement["ID_ETABLISSEMENT"] ?>">
+                                <?= $etablissement["LIBELLE_ETABLISSEMENTINFORMATIONS"] ?>
+                            </option>
+                        <?php endforeach ?>
+                    </select>
+                    <!-- <table id='etablissements_enfants' class='table table-condensed'>
                         <thead>
                             <tr>
                                 <th>Nom de l'établissement</th>
@@ -388,12 +397,12 @@
                             <?php endif ?>
                             <tr>
                                 <td>
-                                    <input class='form-control' type='text' placeholder="Libellé d'un établissement enfant ..." id='etablissement-autocomplete' />
+                                     <select id='etablissement-autocomplete' placeholder="Libellé d'un établissement enfant ..." name="ID_FILS_ETABLISSEMENT[]" multiple></select>
                                 </td>
                                 <td></td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table> -->
                 </dd>
             </dl>
         </div>
@@ -927,7 +936,7 @@
         });
 
         // Auto-complétion de l'établissement père
-        new TomSelect(".etablissement_pere input[type='text']", {
+        new TomSelect(".etablissement_pere select", {
             valueField: 'ID_ETABLISSEMENT',
             labelField: 'LIBELLE_ETABLISSEMENTINFORMATIONS',
             searchField: 'LIBELLE_ETABLISSEMENTINFORMATIONS',
@@ -973,9 +982,56 @@
                 $(".etablissement_pere input[type='hidden']").val(value);
             }
         })
-
+        
         // Auto-complétion des établissements enfants
-        // @fixme: Faire fonctionner
+        new TomSelect(".etablissements_enfants select", {
+            plugins: {
+                remove_button: {
+                    title: 'Supprimer cet élément'
+                }
+            },
+            valueField: 'ID_ETABLISSEMENT',
+            labelField: 'LIBELLE_ETABLISSEMENTINFORMATIONS',
+            searchField: 'LIBELLE_ETABLISSEMENTINFORMATIONS',
+            items: <?= json_encode($this->etablissement['etablissement_lies']) ?>.map((etablissement) => etablissement.ID_ETABLISSEMENT),
+            load: function(query, process) {
+                $.ajax({
+                    url: "/api/1.0/search/etablissements",
+                    type: 'get',
+                    data: {
+                        label: query
+                    },
+                    success: function (result) {
+                        process(result.response.results);
+                    }
+                });
+            },
+            shouldLoad(query) {
+                return query.length >= 3
+            },
+            render: {
+                option: function(data, escape) {
+                    switch(data.ID_GENRE)
+                    {
+                        case 1:
+                            LIBELLE_COMMUNE = data.LIBELLE_COMMUNE_ADRESSE_SITE;
+                            break;
+
+                        case 3:
+                            LIBELLE_COMMUNE = data.LIBELLE_COMMUNE_ADRESSE_CELLULE;
+                            break;
+
+                        default:
+                            LIBELLE_COMMUNE = data.LIBELLE_COMMUNE_ADRESSE_DEFAULT == null ? "non localisé" : data.LIBELLE_COMMUNE_ADRESSE_DEFAULT;
+                    }
+
+                    return "<div><span class='text-muted'>[" + escape(data.LIBELLE_GENRE) + "]</span> <span data-id='" + data.ID_ETABLISSEMENT + "'>" + escape(data.LIBELLE_ETABLISSEMENTINFORMATIONS) + "</span> - <small>" + escape(LIBELLE_COMMUNE) + "</small></div>"
+                },
+                no_results: function(data, escape) {
+                    return '<div class="no-results">Aucun résultat trouvé pour "'+escape(data.input)+'"</div>';
+                }
+            }
+        })
         // $(".etablissements_enfants input[type='text']").typeahead({
         //     minLength: 3,
         //     source: function(query, process) {

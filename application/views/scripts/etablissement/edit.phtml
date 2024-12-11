@@ -961,6 +961,7 @@
             }
         })
         
+        const etabsLies = <?= json_encode($this->etablissement['etablissement_lies']) ?> ?? []
         // Auto-complétion des établissements enfants
         new TomSelect(".etablissements_enfants select", {
             plugins: {
@@ -971,7 +972,7 @@
             valueField: 'ID_ETABLISSEMENT',
             labelField: 'LIBELLE_ETABLISSEMENTINFORMATIONS',
             searchField: 'LIBELLE_ETABLISSEMENTINFORMATIONS',
-            items: <?= json_encode($this->etablissement['etablissement_lies']) ?>.map((etablissement) => etablissement.ID_ETABLISSEMENT),
+            items: etabsLies.map((etablissement) => etablissement.ID_ETABLISSEMENT),
             load: function(query, process) {
                 $.ajax({
                     url: "/api/1.0/search/etablissements",

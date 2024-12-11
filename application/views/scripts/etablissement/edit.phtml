@@ -466,28 +466,13 @@
                 <div class="form-group">
                     <dt>Préventionnistes</dt>
                     <dd class='preventionnistes'>
-                        <table id='preventionnistes' class='table table-condensed'>
-                            <thead>
-                                <tr>
-                                    <th>Nom</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php echo $this->partial('etablissement/partials/partial-preventionniste.phtml') ?>
-                                <?php if ($this->etablissement['preventionnistes']) : ?>
-                                    <?php foreach ($this->etablissement['preventionnistes'] as $preventionniste) : ?>
-                                        <?php echo $this->partial('etablissement/partials/partial-preventionniste.phtml', array('preventionniste' => $preventionniste)) ?>
-                                    <?php endforeach ?>
-                                <?php endif ?>
-                                <tr>
-                                    <td>
-                                        <input class='form-control' type='text' placeholder="Ajouter un préventionniste ..." value='' />
-                                    </td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <select id="preventionnistes" placeholder="Ajouter un préventionniste ..." name="ID_UTILISATEUR[]" multiple>
+                            <?php foreach ($this->etablissement['preventionnistes'] as $preventionniste): ?>
+                                <option value="<?= $preventionniste["ID_UTILISATEUR"] ?>">
+                                    <?= $preventionniste["NOM_UTILISATEURINFORMATIONS"] . " " . $preventionniste["PRENOM_UTILISATEURINFORMATIONS"] ?>
+                                </option>
+                            <?php endforeach ?>
+                        </select>
                     </dd>
                 </div>
 
@@ -663,8 +648,12 @@
         // Action à la sauvegarde de l'établissement
         $("form#etablissement input[type='submit']").click(function() {
             // On va chercher les valeurs par défauts pour faire apparaitre la boite de confirmation
-            var etablissements_enfants = [];
-            $("table#etablissements_enfants tbody tr.etablissement_enfant").each(function(index) { etablissements_enfants[index] = $(this).find('input[name="ID_FILS_ETABLISSEMENT[]"]').first().val(); });
+            const etablissement_pere_select = document.getElementById('etablissement-pere-autocomplete')
+            const etablissement_pere_control = etablissement_pere_select.tomselect
+
+            const etablissements_enfants_select = document.getElementById('etablissement-autocomplete')
+            const etablissements_enfants_control = etablissements_enfants_select.tomselect
+
             $.post('/api/1.0/etablissement/defaults_values', {
                 genre: $("select[name='ID_GENRE']").find('option:selected').val(),
                 numinsee: $("#adresses").find('tr.adresse').first().find('input[type="hidden"]').first().val(),
@@ -672,20 +661,24 @@
                 categorie: $("select[name='ID_CATEGORIE']").find('option:selected').val(),
                 local_sommeil: $("input[name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS']:checked").val(),
                 classe: $("select[name='ID_CLASSE']").find('option:selected').val(),
-                id_etablissement_pere: $("input[name='ID_PERE']").val(),
-                ids_etablissements_enfants: etablissements_enfants
+                id_etablissement_pere: etablissement_pere_control.getValue(),
+                ids_etablissements_enfants: etablissements_enfants_control.getValue()
             }, function(data) {
                 // Si il y a des données disponibles dans les valeurs par défauts proposées, on ouvre la boite de confirmation, sinon on sauvegarde la fiche
                 if(data.status == 'success' && Object.keys(data.response).length > 0) {
                     // A l'apparition de la boite de confirmation on met à jour les valeurs saisies par l'utilisateur dans la boite
-                    var preventionnistes = [];
                     var date = new Date($('input[name="date"]').val());
                     var localSommeil = $('input[name="LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS"]:checked').val();
                     $('#confirm-modal-commission .confirm-modal-input').text($('select[name="ID_COMMISSION"] option:selected').text().replace(/ \(.*\)/gi, ""));
                     $('#confirm-modal-periodicite .confirm-modal-input').text($('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').val());
                     $('#confirm-modal-localsommeil .confirm-modal-input').text(localSommeil != undefined ? (localSommeil == 1 ? 'Oui' : 'Non') : '' );
-                    $('table#preventionnistes tbody tr.preventionniste').each(function(index) { preventionnistes[index] = $(this).find('td').first().find('span').text(); });
-                    $('#confirm-modal-preventionnistes .confirm-modal-input').text(preventionnistes.toString() == '' ? 'Aucuns' : preventionnistes.toString());
+                    
+                    const preventionnistes_select = document.getElementById('preventionnistes')
+                    const preventionnistes_control = preventionnistes_select.tomselect
+                    const preventionnistes_values = preventionnistes_control.getValue()
+                    const preventionnistes_names = preventionnistes_values.map((preventionniste_value) => preventionnistes_control.getItem(preventionniste_value).innerText.split('\n')[0])
+                    $('#confirm-modal-preventionnistes .confirm-modal-input').text(preventionnistes_values == '' ? 'Aucuns' : preventionnistes_names.join(', '));
+                    $('#confirm-modal-preventionnistes .confirm-modal-input').attr('ids', preventionnistes_values)
                     // On met à jour les valeurs par défauts
                     $('#confirm-modal-commission .confirm-modal-advisable').attr('id', data.response.commission ? data.response.commission.ID_COMMISSION : '').text(data.response.commission ? data.response.commission.LIBELLE_COMMISSION : '');
                     $('#confirm-modal-periodicite .confirm-modal-advisable').text(data.response.periodicite);
@@ -730,11 +723,28 @@
                 if($(this).hasClass('confirm-modal-advisable')) {
                     switch($(this).parent().attr('id')) {
                         case 'confirm-modal-preventionnistes':
-                            $('table#preventionnistes').remove();
-                            var preventionnistes_ids = $(this).attr('ids').split(",");
-                            for(var x in preventionnistes_ids) {
-                                $('<input>').attr({type: 'hidden', name: 'ID_UTILISATEUR[]', value: preventionnistes_ids[x]}).appendTo('form#etablissement');
-                            }
+                            const preventionnistes_ids = $(this).attr('ids').split(",");
+                            const preventionnistes_names = $(this).text().split(",")
+
+                            const preventionnistes_control = document.getElementById('preventionnistes').tomselect
+                            preventionnistes_control.clear()
+                            preventionnistes_control.clearOptions()
+                            preventionnistes_control.clearCache()
+
+                            preventionnistes_ids.forEach((preventionniste_id, index) => {
+                                preventionnistes_control.addOption({
+                                    ID_UTILISATEUR: preventionniste_id,
+                                    NOM_UTILISATEURINFORMATIONS: preventionnistes_names[index].split(' ')[0],
+                                    PRENOM_UTILISATEURINFORMATIONS: preventionnistes_names[index].split(' ')[1]
+                                })
+                            })
+                            preventionnistes_control.refreshOptions(false)
+
+                            preventionnistes_ids.forEach((preventionniste_id) => {
+                                preventionnistes_control.addItem(preventionniste_id)
+                            })
+                            preventionnistes_control.refreshItems()
+
                             break;
                         case 'confirm-modal-commission':
                             $('select[name="ID_COMMISSION"]').find('option[value=' + $(this).attr('id') + ']').attr('selected', true);
@@ -914,7 +924,7 @@
         });
 
         // Auto-complétion de l'établissement père
-        new TomSelect(".etablissement_pere select", {
+        new TomSelect("#etablissement-pere-autocomplete", {
             valueField: 'ID_ETABLISSEMENT',
             labelField: 'LIBELLE_ETABLISSEMENTINFORMATIONS',
             searchField: 'LIBELLE_ETABLISSEMENTINFORMATIONS',
@@ -961,9 +971,9 @@
             }
         })
         
-        const etabsLies = <?= json_encode($this->etablissement['etablissement_lies']) ?> ?? []
         // Auto-complétion des établissements enfants
-        new TomSelect(".etablissements_enfants select", {
+        const etabsLies = <?= json_encode($this->etablissement['etablissement_lies']) ?> ?? []
+        new TomSelect("#etablissement-autocomplete", {
             plugins: {
                 remove_button: {
                     title: 'Supprimer cet élément'
@@ -1013,43 +1023,62 @@
         })
 
         // Auto-complétion des préventionnistes
-        // @fixme: Faire fonctionner
-        // $(".preventionnistes input[type='text']").typeahead({
-        //     minLength: 3,
-        //     source: function(query, process) {
-        //         return $.ajax({
-        //             url: "/api/1.0/search/users",
-        //             type: 'post',
-        //             data: {
-        //                 name: query,
-        //                 fonctions: 13,
-        //                 limit: 100
-        //             },
-        //             success: function (result) {
-        //                 preventionnistes = [];
-        //                 $.each(result.response.results, function (i, preventionniste) {
-        //                     preventionnistes.push("<span data-id='" + preventionniste.uid + "'>" + preventionniste.NOM_UTILISATEURINFORMATIONS + " " + preventionniste.PRENOM_UTILISATEURINFORMATIONS + "</span>");
-        //                 });
+        const preventionnistes = <?= json_encode($this->etablissement['preventionnistes']) ?> ?? []
+        new TomSelect("#preventionnistes", {
+            plugins: {
+                remove_button: {
+                    title: 'Supprimer cet élément'
+                }
+            },
+            valueField: 'ID_UTILISATEUR',
+            labelField: 'NOM_UTILISATEURINFORMATIONS',
+            searchField: 'NOM_UTILISATEURINFORMATIONS',
+            items: preventionnistes.map((preventionniste) => preventionniste.ID_UTILISATEUR),
+            load: function(query, process) {
+                $.ajax({
+                    url: "/api/1.0/search/users",
+                    type: 'get',
+                    data: {
+                        name: query,
+                        fonctions: 13,
+                        limit: 100
+                    },
+                    success: function (result) {
+                        process(result.response.results);
+                    }
+                });
+            },
+            shouldLoad(query) {
+                return query.length >= 3
+            },
+            render: {
+                option: function(data, escape) {
+                    let res = "<div><span>" + escape(data.NOM_UTILISATEURINFORMATIONS) + " " + escape(data.PRENOM_UTILISATEURINFORMATIONS) + "</span>"
 
-        //                 process(preventionnistes);
-        //             }
-        //         });
-        //     },
-        //     highlighter: function (item) {
-        //         libelle = $($.parseHTML(item)).last().text();
-        //         libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
-        //         html = $.parseHTML(item);
-        //         $(html).last().text(libelle);
-        //         html = $(html).text();
-        //         return item.replace( item, html );
-        //     },
-        //     updater: function (item) {
-        //         node = $('#prototype_preventionniste').clone().prependTo( $('.preventionnistes table') ).removeClass('hide prototypes').addClass('preventionniste').attr('id', '');
-        //         node.find('span').text($($.parseHTML(item)).last().text());
-        //         node.find("input[type='hidden']").val($($.parseHTML(item)).last().data('id'));
-        //         return;
-        //     }
-        // });
+                    if ('' !== data.GRADE_UTILISATEURINFORMATIONS) {
+                        res += "<br /><span class='text-muted'>" + escape(data.GRADE_UTILISATEURINFORMATIONS) + "</span>"
+                    }
+
+                    res += "</div>"
+
+                    return res
+                },
+                item: function(data, escape) {
+                    let res = "<div>" + escape(data.NOM_UTILISATEURINFORMATIONS)
+
+                    if (data.PRENOM_UTILISATEURINFORMATIONS) {
+                        res += " " + escape(data.PRENOM_UTILISATEURINFORMATIONS)
+                    }
+
+                    res += "</div>"
+
+                    return res
+                },
+                no_results: function(data, escape) {
+                    return '<div class="no-results">Aucun résultat trouvé pour "'+escape(data.input)+'"</div>';
+                }
+            }
+        })
 
         // Auto complétion de la ville
         $("input[name='commune_ac']").autocomplete("/api/1.0/adresse/get_communes", {

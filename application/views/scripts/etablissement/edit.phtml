@@ -381,28 +381,6 @@
                             </option>
                         <?php endforeach ?>
                     </select>
-                    <!-- <table id='etablissements_enfants' class='table table-condensed'>
-                        <thead>
-                            <tr>
-                                <th>Nom de l'établissement</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php echo $this->partial('etablissement/partials/partial-etablissement-enfant.phtml') ?>
-                            <?php if ($this->etablissement['etablissement_lies']) : ?>
-                                <?php foreach ($this->etablissement['etablissement_lies'] as $etablissement) : ?>
-                                    <?php echo $this->partial('etablissement/partials/partial-etablissement-enfant.phtml', array('etablissement' => $etablissement)) ?>
-                                <?php endforeach ?>
-                            <?php endif ?>
-                            <tr>
-                                <td>
-                                     <select id='etablissement-autocomplete' placeholder="Libellé d'un établissement enfant ..." name="ID_FILS_ETABLISSEMENT[]" multiple></select>
-                                </td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table> -->
                 </dd>
             </dl>
         </div>
@@ -1032,54 +1010,6 @@
                 }
             }
         })
-        // $(".etablissements_enfants input[type='text']").typeahead({
-        //     minLength: 3,
-        //     source: function(query, process) {
-        //         return $.ajax({
-        //             url: "/api/1.0/search/etablissements",
-        //             type: 'get',
-        //             data: {
-        //                 label: query
-        //             },
-        //             success: function (result) {
-        //                 etablissements = [];
-        //                 $.each(result.response.results, function (i, etablissement) {
-        //                     switch(etablissement.ID_GENRE)
-        //                     {
-        //                         case 1:
-        //                             LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_SITE;
-        //                             break;
-
-        //                         case 3:
-        //                             LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_CELLULE;
-        //                             break;
-
-        //                         default:
-        //                             LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT == null ? "non localisé" : etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT;
-        //                     }
-
-        //                     etablissements.push("<span class='text-muted'>[" + etablissement.LIBELLE_GENRE + "]</span> <span data-id='" + etablissement.ID_ETABLISSEMENT + "' class='result'>" + etablissement.LIBELLE_ETABLISSEMENTINFORMATIONS + "</span> - <small>" + LIBELLE_COMMUNE + "</small>");
-        //                 });
-
-        //                 process(etablissements);
-        //             }
-        //         });
-        //     },
-        //     highlighter: function (item) {
-        //         libelle = $($.parseHTML(item)).last().prev().text();
-        //         libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
-        //         html = $.parseHTML(item);
-        //         $(html).last().prev().text(libelle);
-        //         html = $(html).text();
-        //         return item.replace( item, html );
-        //     },
-        //     updater: function (item) {
-        //         node = $('#prototype_etablissements_enfants').clone().prependTo( $('.etablissements_enfants table') ).removeClass('hide  prototypes').addClass('etablissement_enfant').attr('id', '');
-        //         node.find('span').text($($.parseHTML(item)).last().prev().text());
-        //         node.find("input[type='hidden']").val($($.parseHTML(item)).last().prev().data('id'));
-        //         return;
-        //     }
-        // });
 
         // Auto-complétion des préventionnistes
         // @fixme: Faire fonctionner

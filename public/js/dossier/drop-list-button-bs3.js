@@ -1,4 +1,8 @@
 window.onload = function() {
+    $('.buttonOpenClose').each((_index, button) => {
+        $('#' + button.getAttribute('type-dossier')).hide()
+    })
+
     $('.buttonOpenClose').click(function (event) {
         const clickedButton = event.target
 

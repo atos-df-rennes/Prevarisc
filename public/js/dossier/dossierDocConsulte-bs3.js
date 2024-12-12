@@ -65,7 +65,7 @@ $(document).ready(function(){
 			},
 			{
 				text: 'Annuler',
-				class: 'btn',
+				class: 'btn btn-default',
 				click: function() {
 					$(this).dialog('close');
 				}
@@ -132,7 +132,7 @@ $(document).ready(function(){
 			},
 			{
 				text: 'Annuler',
-				class: 'btn',
+				class: 'btn btn-default',
 				click: function() {
 					$(this).dialog('close');
 				}

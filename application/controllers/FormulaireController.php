@@ -61,13 +61,22 @@ class FormulaireController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('menu_admin');
 
         $viewInlineScript = $this->view;
-        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/capsule-rubrique.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $viewInlineScript->inlineScript()->appendFile('/js/formulaire/capsule-rubrique.js', 'text/javascript');
+        } else {
+            $viewInlineScript->inlineScript()->appendFile('/js/formulaire/capsule-rubrique-bs3.js', 'text/javascript');
+        }
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
 
         $viewHeadLink = $this->view;
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        } else {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/edit-table.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/formulaire.css', 'all');
+        }
 
         $form = new Form_CustomForm();
 
@@ -104,13 +113,22 @@ class FormulaireController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('menu_admin');
 
         $viewInlineScript = $this->view;
-        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
+        } else {
+            $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique-bs3.js', 'text/javascript');
+        }
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
 
         $viewHeadLink = $this->view;
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        } else {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/edit-table.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/formulaire.css', 'all');
+        }
 
         $fieldForm = new Form_CustomFormField();
 
@@ -212,14 +230,23 @@ class FormulaireController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('menu_admin');
 
         $viewInlineScript = $this->view;
-        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
+        } else {
+            $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique-bs3.js', 'text/javascript');
+        }
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/champ.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
 
         $viewHeadLink = $this->view;
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        } else {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/edit-table.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/formulaire.css', 'all');
+        }
 
         $idChamp = (int) $this->getParam('champ');
         $champ = $this->modelChamp->find($idChamp)->current();

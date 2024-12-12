@@ -9,3 +9,18 @@
     display: flex;
     flex-flow: column;
 }
+
+.colDate {
+    display: flex;
+    gap: .5rem;
+}
+
+.colTableInput .colDate,
+td .colDate {
+    flex-direction: column;
+}
+
+.colTableInput .colDate input,
+td .colDate input {
+    width: auto;
+}

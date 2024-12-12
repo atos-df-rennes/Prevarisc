@@ -17,15 +17,16 @@ $(document).ready(function() {
 
     if (deselectButton) {
         deselectButton.addEventListener('click', function() {
-            const idDossier = $('.avis-derogation__leve input:checked')[0].id
+            console.log($('#avis-derogations-leves input[type="radio"]:checked'))
+            const idDossier = $('#avis-derogations-leves input[type="radio"]:checked')[0].id
 
             document.getElementById(idDossier).checked = false
             
-            $('#deselect').hide()
+            $('#deselect').addClass('hidden')
         })
     }
 
-    $('.avis-derogation__leve input').on('change', function() {
-        $('#deselect').show()
+    $('#avis-derogations-leves input[type="radio"]').on('change', function() {
+        $('#deselect').removeClass('hidden')
     })
 })

@@ -249,8 +249,13 @@ class EtablissementController extends Zend_Controller_Action
     public function descriptifPersonnaliseAction(): void
     {
         $viewHeadLink = $this->view;
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        } else {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/tableauInputParent.css', 'all');
+        }
 
         $service_etablissement = new Service_Etablissement();
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
@@ -292,14 +297,23 @@ class EtablissementController extends Zend_Controller_Action
 
     public function editDescriptifPersonnaliseAction(): void
     {
-        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        } else {
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/formulaire.css', 'all');
+        }
 
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
-        $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        } else {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today-bs3.js', 'text/javascript');
+        }
 
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
 
@@ -608,8 +622,13 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('etablissement');
 
         $viewHeadLink = $this->view;
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        } else {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/tableauInputParent.css', 'all');
+        }
 
         $service_etablissement = new Service_Etablissement();
         $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
@@ -627,14 +646,23 @@ class EtablissementController extends Zend_Controller_Action
 
     public function effectifsDegagementsEtablissementEditAction(): void
     {
-        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        } else {
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/formulaire.css', 'all');
+        }
 
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
-        $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        } else {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today-bs3.js', 'text/javascript');
+        }
 
         $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
         $idEtablissement = $this->getRequest()->getParam('id');

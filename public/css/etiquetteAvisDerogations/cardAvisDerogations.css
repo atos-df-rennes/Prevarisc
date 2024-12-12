@@ -1,3 +1,38 @@
+:root {
+    --backCardColor : #eaeaea;
+    --margPaddpx : 1em;
+    --sizeRadius : 15px;
+}
+
+.cardAvisDerogations {
+    background:var(--backCardColor);
+    box-shadow: 1px 0px 10px 2px rgb(37 40 37 / 75%);
+    margin: var(--margPaddpx);
+    padding: var(--margPaddpx);
+    border-radius: var(--sizeRadius);
+}
+
+.cardAvisDerogations h1 {
+    font-size: 28px;
+}
+
+.avis-derogation__affichage-historique {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.controls label {
+    width: fit-content;
+}
+
+.avis-derogation__leve {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 #deselect {
     margin-left: 20px;
+    margin-bottom: 10px;
 }

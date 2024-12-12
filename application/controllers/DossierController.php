@@ -176,7 +176,11 @@ class DossierController extends Zend_Controller_Action
     public function init(): void
     {
         $this->_helper->layout->setLayout('dossier');
-        $this->view->inlineScript()->appendFile('/js/dossier/dossierGeneral.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->inlineScript()->appendFile('/js/dossier/dossierGeneral.js', 'text/javascript');
+        } else {
+            $this->view->inlineScript()->appendFile('/js/dossier/dossierGeneral-bs3.js', 'text/javascript');
+        }
         $this->view->inlineScript()->appendFile('/js/dossier/platau.js', 'text/javascript');
         $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/greenCircle.css', 'all');
 
@@ -1615,7 +1619,11 @@ class DossierController extends Zend_Controller_Action
     // GESTION DOCUMENTS CONSULTES
     public function docconsulteAction(): void
     {
-        $this->view->inlineScript()->appendFile('/js/dossier/dossierDocConsulte.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->inlineScript()->appendFile('/js/dossier/dossierDocConsulte.js', 'text/javascript');
+        } else {
+            $this->view->inlineScript()->appendFile('/js/dossier/dossierDocConsulte-bs3.js', 'text/javascript');
+        }
 
         // récupération du type de dossier (etude / visite)
         $service_dossier = new Service_Dossier();
@@ -2859,7 +2867,11 @@ class DossierController extends Zend_Controller_Action
 
     public function prescriptionEditAction(): void
     {
-        $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        } else {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today-bs3.js', 'text/javascript');
+        }
 
         $idDossier = $this->getRequest()->getParam('id');
         $id_prescription = $this->getRequest()->getParam('id-prescription');
@@ -3166,8 +3178,13 @@ class DossierController extends Zend_Controller_Action
     public function effectifsDegagementsDossierAction(): void
     {
         $viewHeadLink = $this->view;
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        } else {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/tableauInputParent.css', 'all');
+        }
 
         $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
         $service_dossier = new Service_Dossier();
@@ -3199,14 +3216,23 @@ class DossierController extends Zend_Controller_Action
 
     public function effectifsDegagementsDossierEditAction(): void
     {
-        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        } else {
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/formulaire.css', 'all');
+        }
 
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
-        $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        } else {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today-bs3.js', 'text/javascript');
+        }
 
         $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
 
@@ -3245,8 +3271,13 @@ class DossierController extends Zend_Controller_Action
     public function verificationsTechniquesAction(): void
     {
         $viewHeadLink = $this->view;
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        } else {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/tableauInputParent.css', 'all');
+        }
 
         $serviceDossierVerificationsTechniques = new Service_DossierVerificationsTechniques();
         $service_dossier = new Service_Dossier();
@@ -3261,14 +3292,23 @@ class DossierController extends Zend_Controller_Action
 
     public function editVerificationsTechniquesAction(): void
     {
-        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        } else {
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/formulaire.css', 'all');
+        }
 
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
-        $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        } else {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today-bs3.js', 'text/javascript');
+        }
 
         $serviceDossierVerificationsTechniques = new Service_DossierVerificationsTechniques();
 
@@ -3307,9 +3347,15 @@ class DossierController extends Zend_Controller_Action
     // Avis et derogations action donne une vue du/des avis et derogations donne sur ce dossier
     public function avisEtDerogationsAction(): void
     {
-        $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
-        $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
-        $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
+            $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
+            $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
+        } else {
+            $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations-bs3.css', 'all');
+            $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation-bs3.js');
+            $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button-bs3.js');
+        }
 
         $dbAvisDerogation = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();
@@ -3346,9 +3392,15 @@ class DossierController extends Zend_Controller_Action
      */
     public function avisEtDerogationsEditAction(): void
     {
-        $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
-        $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
-        $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
+            $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
+            $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
+        } else {
+            $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations-bs3.css', 'all');
+            $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation-bs3.js');
+            $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button-bs3.js');
+        }
 
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();

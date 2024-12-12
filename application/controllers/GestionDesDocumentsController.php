@@ -110,7 +110,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => "Erreur lors de l'ajout du document",
                 'message' => $exception->getMessage(),
             ]);
@@ -143,7 +143,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             }
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la suppression du document',
                 'message' => $exception->getMessage(),
             ]);

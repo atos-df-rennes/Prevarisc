@@ -47,7 +47,7 @@ class CommissionController extends Zend_Controller_Action
             $this->redirect('/gestion-des-commissions');
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la suppression de la commission',
                 'message' => $exception->getMessage(),
             ]);
@@ -83,7 +83,7 @@ class CommissionController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de l\'ajout de la régle',
                 'message' => $exception->getMessage(),
             ]);
@@ -120,7 +120,7 @@ class CommissionController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la suppression des régles',
                 'message' => $exception->getMessage(),
             ]);
@@ -216,7 +216,7 @@ class CommissionController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de l\'enregistrement des régles',
                 'message' => $exception->getMessage(),
             ]);
@@ -283,7 +283,7 @@ class CommissionController extends Zend_Controller_Action
             }
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur inattendue',
                 'message' => $exception->getMessage(),
             ]);
@@ -345,7 +345,7 @@ class CommissionController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => "Erreur lors de l'ajout du membre",
                 'message' => $exception->getMessage(),
             ]);
@@ -389,7 +389,7 @@ class CommissionController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la suppression du membre',
                 'message' => $exception->getMessage(),
             ]);
@@ -486,7 +486,7 @@ class CommissionController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la sauvegarde des modifications',
                 'message' => $exception->getMessage(),
             ]);
@@ -563,7 +563,7 @@ class CommissionController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la sauvegarde du document',
                 'message' => $exception->getMessage(),
             ]);
@@ -595,7 +595,7 @@ class CommissionController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la suppression du document',
                 'message' => $exception->getMessage(),
             ]);
@@ -651,7 +651,7 @@ class CommissionController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la sauvegarde du document',
                 'message' => $exception->getMessage(),
             ]);
@@ -686,7 +686,7 @@ class CommissionController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la suppression du document',
                 'message' => $exception->getMessage(),
             ]);

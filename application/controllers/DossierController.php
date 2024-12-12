@@ -1445,7 +1445,7 @@ class DossierController extends Zend_Controller_Action
             echo json_encode($idArray);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la sauvegarde du dossier',
                 'message' => $exception->getMessage(),
             ]);
@@ -1705,7 +1705,7 @@ class DossierController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => "Erreur lors de l'ajout du document",
                 'message' => $exception->getMessage(),
             ]);
@@ -1846,7 +1846,7 @@ class DossierController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de l\'ajout de l\'établissement',
                 'message' => $exception->getMessage(),
             ]);
@@ -1908,7 +1908,7 @@ class DossierController extends Zend_Controller_Action
             }
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => "Erreur lors de la suppression du lien à l'établissement.",
                 'message' => $exception->getMessage(),
             ]);
@@ -1932,7 +1932,7 @@ class DossierController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la suppression du lien avec ledossier',
                 'message' => $exception->getMessage(),
             ]);
@@ -3095,7 +3095,7 @@ class DossierController extends Zend_Controller_Action
                 ]);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger([
-                    'context' => 'error',
+                    'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                     'title' => 'Erreur lors de l\'ajout de l\'établissement',
                     'message' => $e->getMessage(),
                 ]);
@@ -3156,7 +3156,7 @@ class DossierController extends Zend_Controller_Action
             $this->redirect('/search/dossier?objet=&page=1');
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => '',
                 'message' => 'L\'établissement n\'a pas été mis à jour. Veuillez rééssayez. ('.$exception->getMessage().')',
             ]);
@@ -3431,7 +3431,7 @@ class DossierController extends Zend_Controller_Action
 
         if (!$zip->close()) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la création du fichier ZIP',
                 'message' => 'Le fichier est vide',
             ]);

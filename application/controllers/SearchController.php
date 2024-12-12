@@ -224,7 +224,7 @@ class SearchController extends Zend_Controller_Action
                     exit;
                 } catch (Exception $e) {
                     $this->_helper->flashMessenger([
-                        'context' => 'error',
+                        'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                         'title' => 'Problème d\'export',
                         'message' => 'L\'export a rencontré un problème. Veuillez rééssayez. ('.$e->getMessage().')',
                     ]);
@@ -483,7 +483,7 @@ class SearchController extends Zend_Controller_Action
                     exit;
                 } catch (Exception $e) {
                     $this->_helper->flashMessenger([
-                        'context' => 'error',
+                        'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                         'title' => 'Problème d\'export',
                         'message' => 'L\'export a rencontré un problème. Veuillez rééssayez. ('.$e->getMessage().')',
                     ]);

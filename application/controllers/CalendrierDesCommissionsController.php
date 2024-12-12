@@ -213,7 +213,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la modification de l\'événement',
                 'message' => $exception->getMessage(),
             ]);
@@ -237,7 +237,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $dossierAffectationUpdate->save();
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur inattendue',
                 'message' => $exception->getMessage(),
             ]);
@@ -416,7 +416,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => "Erreur lors de l'affectation du dossier",
                 'message' => $exception->getMessage(),
             ]);
@@ -787,7 +787,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             echo json_encode($listeDates);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur inattendue lors de la sauvegarde des dates',
                 'message' => $exception->getMessage(),
             ]);
@@ -823,7 +823,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors du déplacement de l\'événement',
                 'message' => $exception->getMessage(),
             ]);
@@ -847,7 +847,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la modification de l\'événement',
                 'message' => $exception->getMessage(),
             ]);
@@ -914,7 +914,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la modification de l\'événement',
                 'message' => $exception->getMessage(),
             ]);
@@ -942,7 +942,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             }
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur inattendue',
                 'message' => $exception->getMessage(),
             ]);
@@ -1099,7 +1099,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la génération du document',
                 'message' => $exception->getMessage(),
             ]);

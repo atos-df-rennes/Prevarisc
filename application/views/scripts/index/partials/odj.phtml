@@ -7,13 +7,13 @@
           </a>
           <?php echo " du " . $dateFormatter->format('d/m/Y') . " (" . $commission["heure"] . ")" ?></p>
       <?php if(count($commission["odj"]) == 0 ) : ?>
-        <p class="text-muted">Pas de dossier affecté.</p>
+        <p class="muted">Pas de dossier affecté.</p>
       <?php else : ?>
-        <ul class='recherche_liste list-unstyled no_slide'>
+        <ul class='recherche_liste unstyled no_slide'>
           <?php echo $this->partialLoop('search/results/dossier.phtml', $commission["odj"] ) ?>
         </ul>
       <?php endif ?>
     <?php endforeach ?>
 <?php else: ?>
-    <p class='text-muted'><small>Aucune prochaine commission</small></p>
+    <p class='muted'><small>Aucune prochaine commission</small></p>
 <?php endif ?>

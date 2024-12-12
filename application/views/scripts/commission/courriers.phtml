@@ -1,58 +1,66 @@
 <?php if(count($this->rowset_membres) == 0) : ?>
+
 	<br />
 	<p><strong>Il n'existe pas de membres pour cette commission.</p>
+
 <?php else : ?>
-    <?php foreach($this->rowset_membres as $row_membre) : ?>
-        <h3><?php echo $row_membre->LIBELLE_COMMISSIONMEMBRE ?></h3>
 
-        <!-- Tableau contenant les documents -->
-        <table class='table table-condensed'>
-            <thead>
-                <tr>
-                    <th class="text-center">Convocation en visite</th>
-                    <th class="text-center">Convocation en salle</th>
-                    <th class="text-center">Ordre du jour</th>
-                    <th class="text-center">
-                        <?php if($row_membre["ID_GROUPEMENT"] == NULL)echo "PV"; ?>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <?php
-                        // Convocation visite
-                        echo $this->partial("commission/partials/partial-ligne-regle-courrier.phtml", array(
-                            "type" => "CONVOCATIONVISITE",
-                            "name_courrier" => $row_membre->COURRIER_CONVOCATIONVISITE,
-                            "id_membre" => $row_membre->ID_COMMISSIONMEMBRE
-                        ));
-                        // Convocation salle
-                        echo $this->partial("commission/partials/partial-ligne-regle-courrier.phtml", array(
-                            "type" => "CONVOCATIONSALLE",
-                            "name_courrier" => $row_membre->COURRIER_CONVOCATIONSALLE,
-                            "id_membre" => $row_membre->ID_COMMISSIONMEMBRE
-                        ));
-                        // ODJ
-                        echo $this->partial("commission/partials/partial-ligne-regle-courrier.phtml", array(
-                            "type" => "ODJ",
-                            "name_courrier" => $row_membre->COURRIER_ODJ,
-                            "id_membre" => $row_membre->ID_COMMISSIONMEMBRE
-                        ));
-                        //PV
-                        if($row_membre["ID_GROUPEMENT"] == NULL) {
-                            echo $this->partial("commission/partials/partial-ligne-regle-courrier.phtml", array(
-                                "type" => "PV",
-                                "name_courrier" => $row_membre->COURRIER_PV,
-                                "id_membre" => $row_membre->ID_COMMISSIONMEMBRE
-                            ));
-                        }
-                    ?>
-                </tr>
-            </tbody>
-        </table>
+<?php foreach($this->rowset_membres as $row_membre) : ?>
 
-        <iframe id='iframe' name="iframe" marginheight="0" marginwidth="0" height="0" width="0" hidden></iframe>
-    <?php endforeach ?>
+	<h3><?php echo $row_membre->LIBELLE_COMMISSIONMEMBRE ?></h3>
+
+	<!-- Tableau contenant les documents -->
+	<table class='table table-condensed'>
+		<thead>
+			<tr>
+				<th style='text-align:center;'>Convocation en visite</th>
+				<th style='text-align:center;'>Convocation en salle</th>
+				<th style='text-align:center;'>Ordre du jour</th>
+				<th style='text-align:center;'>
+					<?php if($row_membre["ID_GROUPEMENT"] == NULL)echo "PV"; ?>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<?php
+					// Convocation visite
+					echo $this->partial("commission/partials/partial-ligne-regle-courrier.phtml", array(
+						"type" => "CONVOCATIONVISITE",
+						"name_courrier" => $row_membre->COURRIER_CONVOCATIONVISITE,
+						"id_membre" => $row_membre->ID_COMMISSIONMEMBRE
+					));
+					// Convocation salle
+					echo $this->partial("commission/partials/partial-ligne-regle-courrier.phtml", array(
+						"type" => "CONVOCATIONSALLE",
+						"name_courrier" => $row_membre->COURRIER_CONVOCATIONSALLE,
+						"id_membre" => $row_membre->ID_COMMISSIONMEMBRE
+					));
+                    // ODJ
+					echo $this->partial("commission/partials/partial-ligne-regle-courrier.phtml", array(
+						"type" => "ODJ",
+						"name_courrier" => $row_membre->COURRIER_ODJ,
+						"id_membre" => $row_membre->ID_COMMISSIONMEMBRE
+					));
+					//PV
+					if($row_membre["ID_GROUPEMENT"] == NULL) {
+						echo $this->partial("commission/partials/partial-ligne-regle-courrier.phtml", array(
+							"type" => "PV",
+							"name_courrier" => $row_membre->COURRIER_PV,
+							"id_membre" => $row_membre->ID_COMMISSIONMEMBRE
+						));
+					}
+				?>
+
+			</tr>
+
+		</tbody>
+	</table>
+
+	<iframe id='iframe' name="iframe" marginheight="0" marginwidth="0" height="0" width="0" hidden></iframe>
+
+<?php endforeach ?>
+
 <?php endif ?>
 
 <script type="text/javascript">

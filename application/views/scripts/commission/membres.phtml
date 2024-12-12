@@ -2,7 +2,7 @@
 	<br />
 	<p><strong>Pas de membres définis pour cette commission. <a class='add-membre' href='/commission/add-membre?id_commission=<?php echo $_GET["id_commission"] ?>'>Vous pouvez en ajouter un ici.</a></strong></p>
 <?php else : ?>
-	<p style='text-align: right' ><a class='add-membre btn btn-default' href='/commission/add-membre?id_commission=<?php echo $_GET["id_commission"] ?>'>Ajouter un membre</a></p>
+	<p style='text-align: right' ><a class='add-membre btn' href='/commission/add-membre?id_commission=<?php echo $_GET["id_commission"] ?>'>Ajouter un membre</a></p>
 
 	<form method='post' action='/commission/saveMembres?id_commission=<?php echo $_GET["id_commission"] ?>' >
 		<!-- Tableau contenant les membres -->

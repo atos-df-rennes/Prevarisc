@@ -1,30 +1,30 @@
-<h3 class='pull-left'>Gestion des pièces jointes</h3>
 <div class='pull-right' >
-    <a id="addPJQuick" class="btn btn-default"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Ajout rapide</a>
-    <a href='<?php echo $this->url(array('action' => 'add-piece-jointe')) ?>' class="btn btn-default" data-toggle="modal" data-target="#reponse-modal"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Ajouter une pièce jointe</a>
-    <a class='btn btn-default' href="<?php echo $this->url(array('action' => 'pieces-jointes')) ?>">Revenir sur l'affichage des pièces jointes</a>
+    <a id="addPJQuick" class="btn"><i class="icon-upload"></i> Ajout rapide</a>
+    <a href='<?php echo $this->url(array('action' => 'add-piece-jointe')) ?>' class="btn" data-toggle="modal" data-backdrop="false" data-target="#reponse-modal" ><i class="icon-upload"></i> Ajouter une pièce jointe</a>
+    <a class='btn' href="<?php echo $this->url(array('action' => 'pieces-jointes')) ?>">Revenir sur l'affichage des pièces jointes</a>
 </div>
-<div class="clearfix"></div>
+
+<h3>Gestion des pièces jointes</h3>
 
 <div id="dropzone" class="dropzone" style="display:none"></div>
 
 <?php if(count($this->pieces_jointes) == 0) : ?>
-    <p class='text-muted'>Il n'y a pas de pièce jointe.</p>
+    <p class='muted'>Il n'y a pas de pièce jointe.</p>
 <?php else : ?>
-<table id="table-pieces-jointes" class='table table-bordered table-condensed table-hover'>
-	<thead>
+<table id="table-pieces-jointes" class='table table-bordered table-condensed table-hover'> 
+	<thead> 
 		<tr>
-			<th>Nom</th>
+			<th>Nom</th> 
 			<th>Description</th>
 			<th>Date d'ajout</th>
 			<th></th>
-		</tr>
-	</thead>
+		</tr> 
+	</thead> 
 	<tbody>
 		<?php foreach ($this->pieces_jointes as $piecejointe) : ?>
-			<tr>
+			<tr>   
 				<td>
-                    <a href='<?php echo $this->url(array('controller' => 'etablissement', 'action' => 'get-piece-jointe', 'idpj' => $piecejointe['ID_PIECEJOINTE'], 'type' => 'etablissement')) ?>' target='_blank' >
+                                        <a href='<?php echo $this->url(array('controller' => 'etablissement', 'action' => 'get-piece-jointe', 'idpj' => $piecejointe['ID_PIECEJOINTE'], 'type' => 'etablissement')) ?>' target='_blank' >
 						<?php echo $piecejointe['NOM_PIECEJOINTE'] ?>
 					</a>
 				</td>
@@ -43,25 +43,26 @@
 </table>
 <?php endif ?>
 
-<div id="reponse-modal" class="modal fade" tabindex="-1" role="dialog"></div>
+<div id="reponse-modal" class="modal hide fade" ></div>
 
 <script type="text/javascript">
     Dropzone.autoDiscover = false;
-
-    $(document).ready(function() {
+    
+    $(document).ready(function() { 
         // Gestion des boites modales
         $("a[data-toggle='modal']").click(function() {
             var target = $(this).attr("data-target");
             var url = $(this).attr("href");
             $(target).load(url);
         });
-
+        
+        
         /* GESTION DU GLISSEZ DEPOSER */
         $("#addPJQuick").click(function() {
             $('#dropzone').toggle();
         });
 
-        var myDropzone = new Dropzone("#dropzone", {
+        var myDropzone = new Dropzone("#dropzone", { 
             url: "<?php echo $this->url(array('action' => 'add-piece-jointe')) ?>",
             paramName: "file"
         });

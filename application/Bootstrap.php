@@ -127,7 +127,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initLayout(): Zend_Layout
     {
-        return Zend_Layout::startMvc(['layoutPath' => APPLICATION_PATH.DS.'layouts']);
+        return getenv('PREVARISC_BOOTSTRAP_3') ? Zend_Layout::startMvc(['layoutPath' => APPLICATION_PATH.DS.'layoutsbs3']) : Zend_Layout::startMvc(['layoutPath' => APPLICATION_PATH.DS.'layouts']);
     }
 
     /**

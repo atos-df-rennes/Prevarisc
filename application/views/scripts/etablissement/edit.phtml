@@ -9,40 +9,36 @@
     <?php else : ?>
     <div class='pull-right'>
         <div class="btn-group">
-            <a class='btn btn-default' href="<?php echo $this->url(array('action' => 'index')) ?>">Annuler la modification</a>
+            <a class='btn' href="<?php echo $this->url(array('action' => 'index')) ?>">Annuler la modification</a>
             <input type='submit' class="btn btn-success" value='Sauvegarder'>
         </div>
     </div>
     <h3>Modification de l'établissement</h3>
     <?php endif ?>
 
-    <div class='row'>
+    <div class='row-fluid'>
 
         <!-- Informations générales de l'établissement -->
-        <div class='col-md-6'>
+        <div class='span6'>
             <h4 class='h4_subtitle'>Général</h4>
             <div>
-                <div class="form-group">
-                    <input class="form-control" type='text' placeholder="Libellé de l'établissement" name='LIBELLE_ETABLISSEMENTINFORMATIONS' value='<?php if ($this->etablissement['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"]) {
-                        echo htmlspecialchars($this->etablissement['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"], ENT_QUOTES);
-                    } ?>' />
-                </div>
+                <input style='width: 100%; box-sizing: border-box; height: 2.5em;' type='text' placeholder="Libellé de l'établissement" name='LIBELLE_ETABLISSEMENTINFORMATIONS' value='<?php if ($this->etablissement['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"]) {
+                    echo htmlspecialchars($this->etablissement['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"], ENT_QUOTES);
+                } ?>' />
 
                 <dl class='dl-horizontal'>
                     <!-- Numéro d'identification -->
-                    <div class="form-group">
-                        <dt>Identifiant</dt>
-                        <dd>
-                            <div>
-                                <input class='form-control' type='text' name='NUMEROID_ETABLISSEMENT' id='NUMEROID_INPUT' value='<?php echo $this->etablissement['general']["NUMEROID_ETABLISSEMENT"]?>' />
-                            </div>
-                        </dd>
-                    </div>
+                    <dt>Identifiant</dt>
+                    <dd>
+                        <div>
+                             <input type='text' name='NUMEROID_ETABLISSEMENT' id='NUMEROID_INPUT' value='<?php echo $this->etablissement['general']["NUMEROID_ETABLISSEMENT"]?>' />
+                        </div>
+                    </dd>
 
                     <!-- Statut de l'établissement -->
                     <dt>Statut</dt>
                     <dd>
-                        <select class='form-control' name='ID_STATUT' <?php if (!$this->is_allowed_change_statut) {
+                        <select name='ID_STATUT' <?php if (!$this->is_allowed_change_statut) {
                             echo "readonly";
                         } ?>>
                             <?php foreach ($this->DB_statut as $item) : ?>
@@ -63,49 +59,45 @@
 
             <h4 class='h4_subtitle'>Classement</h4>
             <dl class='dl-horizontal'>
-                <div class="form-group">
-                    <dt>Genre</dt>
-                    <dd>
-                        <select class='form-control' name='ID_GENRE'>
-                            <?php foreach ($this->DB_genre as $genre) : ?>
-                                <option value='<?php echo $genre["ID_GENRE"] ?>' <?php if ($genre["ID_GENRE"] == $this->etablissement['informations']["ID_GENRE"]) {
-                                    echo "selected";
-                                } ?> >
-                                    <?php echo $genre["LIBELLE_GENRE"] ?>
-                                </option>
-                            <?php endforeach ?>
-                        </select>
-                    </dd>
-                </div>
+                <dt>Genre</dt>
+                <dd>
+                    <select name='ID_GENRE'>
+                        <?php foreach ($this->DB_genre as $genre) : ?>
+                            <option value='<?php echo $genre["ID_GENRE"] ?>' <?php if ($genre["ID_GENRE"] == $this->etablissement['informations']["ID_GENRE"]) {
+                                echo "selected";
+                            } ?> >
+                                <?php echo $genre["LIBELLE_GENRE"] ?>
+                            </option>
+                        <?php endforeach ?>
+                    </select>
+                </dd>
 
-                <div class="form-group">
-                    <dt class="champ_icpe champs">ICPE ?</dt>
-                    <dd class="champ_icpe champs">
+                <dt class="champ_icpe champs">ICPE ?</dt>
+                <dd class="champ_icpe champs">
+                    <p>
                         <input type='hidden' name='ICPE_ETABLISSEMENTINFORMATIONS' value='0' />
                         <input type='checkbox' name='ICPE_ETABLISSEMENTINFORMATIONS' value='1' <?php if ($this->etablissement['informations']["ICPE_ETABLISSEMENTINFORMATIONS"]) {
                             echo "checked";
                         } ?> />
-                    </dd>
-                </div>
+                    </p>
+                </dd>
 
-                <div class="form-group">
-                    <dt class="champ_categorie champs">Catégorie</dt>
-                    <dd class="champ_categorie champs">
-                        <select class='form-control' name='ID_CATEGORIE'>
-                            <?php foreach ($this->DB_categorie as $item) : ?>
-                                <option value='<?php echo $item["ID_CATEGORIE"] ?>' <?php if ($item["ID_CATEGORIE"] == $this->etablissement['informations']["ID_CATEGORIE"]) {
-                                    echo "selected";
-                                } ?> >
-                                    <?php echo $item["LIBELLE_CATEGORIE"] ?>
-                                </option>
-                            <?php endforeach ?>
-                        </select>
-                    </dd>
-                </div>
+                <dt class="champ_categorie champs">Catégorie</dt>
+                <dd class="champ_categorie champs">
+                    <select name='ID_CATEGORIE'>
+                        <?php foreach ($this->DB_categorie as $item) : ?>
+                            <option value='<?php echo $item["ID_CATEGORIE"] ?>' <?php if ($item["ID_CATEGORIE"] == $this->etablissement['informations']["ID_CATEGORIE"]) {
+                                echo "selected";
+                            } ?> >
+                                <?php echo $item["LIBELLE_CATEGORIE"] ?>
+                            </option>
+                        <?php endforeach ?>
+                    </select>
+                </dd>
 
                 <dt class="champ_classement champs">Classement</dt>
                 <dd class="champ_classement champs">
-                    <select class='form-control' name='ID_CLASSEMENT'>
+                    <select name='ID_CLASSEMENT'>
                         <?php foreach ($this->DB_classement as $item) : ?>
                             <option value='<?php echo $item["ID_CLASSEMENT"] ?>' <?php if ($item["ID_CLASSEMENT"] == $this->etablissement['informations']["ID_CLASSEMENT"]) {
                                 echo "selected";
@@ -118,7 +110,7 @@
 
                 <dt class="champ_famille champs">Famille</dt>
                 <dd class="champ_famille champs">
-                    <select class='form-control' name='ID_FAMILLE'>
+                    <select name='ID_FAMILLE'>
                         <?php foreach ($this->DB_famille as $item) : ?>
                             <option value='<?php echo $item["ID_FAMILLE"] ?>' <?php if ($item["ID_FAMILLE"] == $this->etablissement['informations']["ID_FAMILLE"]) {
                                 echo "selected";
@@ -129,103 +121,100 @@
                     </select>
                 </dd>
 
-                <div class="form-group">
-                    <dt class="champ_classe champs">Classe</dt>
-                    <dd class="champ_classe champs">
-                        <select class='form-control' name='ID_CLASSE'>
-                            <?php foreach ($this->DB_classe as $item) : ?>
-                                <option value='<?php echo $item["ID_CLASSE"] ?>' <?php if ($item["ID_CLASSE"] == $this->etablissement['informations']["ID_CLASSE"]) {
-                                    echo "selected";
-                                } ?> >
-                                    <?php echo $item["LIBELLE_CLASSE"] ?>
-                                </option>
-                            <?php endforeach ?>
-                        </select>
-                    </dd>
-                </div>
+                <dt class="champ_classe champs">Classe</dt>
+                <dd class="champ_classe champs">
+                    <select name='ID_CLASSE'>
+                        <?php foreach ($this->DB_classe as $item) : ?>
+                            <option value='<?php echo $item["ID_CLASSE"] ?>' <?php if ($item["ID_CLASSE"] == $this->etablissement['informations']["ID_CLASSE"]) {
+                                echo "selected";
+                            } ?> >
+                                <?php echo $item["LIBELLE_CLASSE"] ?>
+                            </option>
+                        <?php endforeach ?>
+                    </select>
+                </dd>
 
                 <dt class="champ_periodicite champs">Périodicité (en mois)</dt>
                 <dd class="champ_periodicite champs">
-                    <input class='form-control' type='number' name='PERIODICITE_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["PERIODICITE_ETABLISSEMENTINFORMATIONS"] ?>' />
+                    <div>
+                        <input type='number' class="input-small" name='PERIODICITE_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["PERIODICITE_ETABLISSEMENTINFORMATIONS"] ?>' />
+                    </div>
                 </dd>
             </dl>
 
             <h4 class='champ_types champs h4_subtitle'>Activités <a href='#' style='font-size: 0.85em; float: right; font-weight: normal;' onclick="time = Date.now(); $('#prototype_types_activites_secondaires').clone().appendTo( $('#activite_ul') ).removeClass('hide prototypes').attr('id', '').find('input, select').each(function() {$(this).attr('name', $(this).attr('name').replace(/-1/gi, time)); }); $('#activite_ul li:last select').change(); return false;">Ajouter un type et une activité secondaire</a></h4>
             <dl class='dl-horizontal champ_types champs'>
                 <!-- Type et activités -->
-                <div class="form-group">
-                    <dt>Types & activités</dt>
-                    <dd>
-                        <ul id='activite_ul' class='list-unstyled'>
-                            <!-- Type et activité principal -->
-                            <li class="row form-group">
-                                <div class="col-md-3">
-                                    <select class='form-control type_select' name='ID_TYPE'>
-                                        <?php foreach ($this->DB_type as $item) : ?>
-                                            <option value='<?php echo $item["ID_TYPE"] ?>' <?php if ($item["ID_TYPE"] == $this->etablissement['informations']["ID_TYPE"]) {
-                                                echo "selected";
-                                            } ?> >
-                                                <?php echo $item["LIBELLE_TYPE"] ?>
-                                            </option>
-                                        <?php endforeach ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-9">
-                                    <select class='form-control activite_select' id='activite_principal_select' name='ID_TYPEACTIVITE'>
-                                        <?php foreach ($this->DB_activite as $item) : ?>
-                                            <?php if ($item["ID_TYPE"] == $this->etablissement['informations']["ID_TYPE"]) : ?>
-                                                <option value='<?php echo $item["ID_TYPEACTIVITE"] ?>' <?php if ($item["ID_TYPEACTIVITE"] == $this->etablissement['informations']["ID_TYPEACTIVITE"]) {
-                                                    echo "selected";
-                                                } ?> >
-                                                    <?php echo $item["LIBELLE_ACTIVITE"] ?>
-                                                </option>
-                                            <?php endif ?>
-                                        <?php endforeach ?>
-                                    </select>
-                                </div>
-                            </li>
-                            <!-- Types et activités secondaires -->
-                            <?php echo $this->partial('etablissement/partials/partial-type-activites-secondaire.phtml', array('types' => $this->DB_type, 'activites' => $this->DB_activite)) ?>
-                            <?php if ($this->etablissement['types_activites_secondaires']) : ?>
-                                <?php foreach ($this->etablissement['types_activites_secondaires'] as $type_activite_secondaire) : ?>
-                                    <?php echo $this->partial('etablissement/partials/partial-type-activites-secondaire.phtml', array('type_activite_secondaire' => $type_activite_secondaire, 'types' => $this->DB_type, 'activites' => $this->DB_activite)) ?>
+                <dt>Types & activités</dt>
+                <dd>
+                    <ul id='activite_ul' class='unstyled'>
+                        <!-- Type et activité principal -->
+                        <li>
+                            <select name='ID_TYPE' style='width: 85px' class='type_select'>
+                                <?php foreach ($this->DB_type as $item) : ?>
+                                    <option value='<?php echo $item["ID_TYPE"] ?>' <?php if ($item["ID_TYPE"] == $this->etablissement['informations']["ID_TYPE"]) {
+                                        echo "selected";
+                                    } ?> >
+                                        <?php echo $item["LIBELLE_TYPE"] ?>
+                                    </option>
                                 <?php endforeach ?>
-                            <?php endif ?>
-                        </ul>
-                    </dd>
-                </div>
+                            </select>
+                            <select id='activite_principal_select' class='activite_select' name='ID_TYPEACTIVITE' style='width: 70%' >
+                                <?php foreach ($this->DB_activite as $item) : ?>
+                                    <?php if ($item["ID_TYPE"] == $this->etablissement['informations']["ID_TYPE"]) : ?>
+                                        <option value='<?php echo $item["ID_TYPEACTIVITE"] ?>' <?php if ($item["ID_TYPEACTIVITE"] == $this->etablissement['informations']["ID_TYPEACTIVITE"]) {
+                                            echo "selected";
+                                        } ?> >
+                                            <?php echo $item["LIBELLE_ACTIVITE"] ?>
+                                        </option>
+                                    <?php endif ?>
+                                <?php endforeach ?>
+                            </select>
+                        </li>
+
+                        <!-- Types et activités secondaires -->
+                        <?php echo $this->partial('etablissement/partials/partial-type-activites-secondaire.phtml', array('types' => $this->DB_type, 'activites' => $this->DB_activite)) ?>
+                        <?php if ($this->etablissement['types_activites_secondaires']) : ?>
+                        <?php foreach ($this->etablissement['types_activites_secondaires'] as $type_activite_secondaire) : ?>
+                            <?php echo $this->partial('etablissement/partials/partial-type-activites-secondaire.phtml', array('type_activite_secondaire' => $type_activite_secondaire, 'types' => $this->DB_type, 'activites' => $this->DB_activite)) ?>
+                        <?php endforeach ?>
+                        <?php endif ?>
+                    </ul>
+                </dd>
 
                 <!-- R143-20 ? -->
-                <div class="form-group">
-                    <dt>R143-20 ?</dt>
-                    <dd>
+                <dt>R143-20 ?</dt>
+                <dd>
+                    <p>
                         <input type='hidden' name='R14320_ETABLISSEMENTINFORMATIONS' value='0' />
                         <input type='checkbox' name='R14320_ETABLISSEMENTINFORMATIONS' value='1' <?php if ($this->etablissement['informations']["R14320_ETABLISSEMENTINFORMATIONS"]) {
                             echo "checked";
                         } ?> />
-                    </dd>
-                </div>
+                    </p>
+                </dd>
 
                 <!-- Relève du droit public -->
-                <div class="form-group">
-                    <dt class='champs champ_droitpublic'>R143-16 ?</dt>
-                    <dd class='champs champ_droitpublic'>
+                <dt class='champs champ_droitpublic'>R143-16 ?</dt>
+                <dd class='champs champ_droitpublic'>
+                    <p>
                         <input type='hidden' name='DROITPUBLIC_ETABLISSEMENTINFORMATIONS' value='0' />
                         <input type='checkbox' name='DROITPUBLIC_ETABLISSEMENTINFORMATIONS' value='1' <?php if ($this->etablissement['informations']["DROITPUBLIC_ETABLISSEMENTINFORMATIONS"]) {
                             echo "checked";
                         } ?> />
-                    </dd>
-                </div>
+                    </p>
+                </dd>
 
                 <!-- Local à sommeil -->
                 <dt class='champs champ_localsommeil'>Local à sommeil ?</dt>
                 <dd class='champs champ_localsommeil'>
-                    <input type='radio' name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS' value='0' <?php if (!$this->add) {
-                        echo "checked";
-                    } ?> /> Non
-                    <input type='radio' name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS' value='1' <?php if ($this->etablissement['informations']["LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS"]) {
-                        echo "checked";
-                    } ?> /> Oui
+                    <p>
+                        <input type='radio' name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS' value='0' <?php if (!$this->add) {
+                            echo "checked";
+                        } ?> /> Non
+                        <input type='radio' name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS' value='1' <?php if ($this->etablissement['informations']["LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS"]) {
+                            echo "checked";
+                        } ?> /> Oui
+                    </p>
                 </dd>
             </dl>
 
@@ -257,33 +246,27 @@
             <h4 class='champ_effectifs champs h4_subtitle'>Les effectifs</h4>
             <dl class='dl-horizontal champ_effectifs champs'>
                 <!-- Effectif public -->
-                <div class="form-group">
-                    <dt class='effectif_public'>Public</dt>
-                    <dd class='effectif_public'>
-                        <input class='form-control' type='text' name='EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"] ?>' />
-                    </dd>
-                </div>
+                <dt class='effectif_public'>Public</dt>
+                <dd class='effectif_public'>
+                    <input type='text' name='EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"] ?>' />
+                </dd>
 
                 <!-- Effectif personnel -->
-                <div class="form-group">
-                    <dt>Personnel</dt>
-                    <dd>
-                        <input class='form-control' type='text' name='EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"] ?>' />
-                    </dd>
-                </div>
+                <dt>Personnel</dt>
+                <dd>
+                    <input type='text' name='EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"] ?>' />
+                </dd>
 
                 <!-- Effectif hebergé -->
-                <div class="form-group">
-                    <dt class='effectif_heberge'>Dont hebergé</dt>
-                    <dd class='effectif_heberge'>
-                        <input class='form-control' type='text' name='EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS"] ?>' />
-                    </dd>
-                </div>
+                <dt class='effectif_heberge'>Dont hebergé</dt>
+                <dd class='effectif_heberge'>
+                    <input type='text' name='EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS"] ?>' />
+                </dd>
 
                 <!-- Effectif justifant le classement (que pour les 5ème catégorie) -->
                 <dt class='effectif_justifiant_classement'>Justifiant le classement</dt>
                 <dd class='effectif_justifiant_classement'>
-                    <input class='form-control' type='text' name='EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS"] ?>' />
+                    <input type='text' name='EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS"] ?>' />
                 </dd>
             </dl>
 
@@ -291,41 +274,33 @@
             <h4 class='champ_effectif_camping champs h4_subtitle'>Nombre d'emplacements</h4>
             <dl class='dl-horizontal champ_effectif_camping champs'>
                 <!-- mobil-home ou habitation légère de loisir -->
-                <div class="form-group">
-                    <dt class='effectif_habitation'>Mobil-homes ou habitations</dt>
-                    <dd class='effectif_habitation'>
-                        <input class='form-control' type='text' name='EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS"] ?>' />
-                    </dd>
-                </div>
+                <dt class='effectif_habitation'>Mobil-homes ou habitations</dt>
+                <dd class='effectif_habitation'>
+                    <input type='text' name='EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS"] ?>' />
+                </dd>
 
                 <!-- Aire de stationnement pour autocaravanes -->
-                <div class="form-group">
-                    <dt class='effectif_caravane'>Autocaravanes</dt>
-                    <dd class='effectif_caravane'>
-                        <input class='form-control' type='text' name='EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS"] ?>' />
-                    </dd>
-                </div>
+                <dt class='effectif_caravane'>Autocaravanes</dt>
+                <dd class='effectif_caravane'>
+                    <input type='text' name='EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS"] ?>' />
+                </dd>
 
                 <!-- Emplacements nus -->
-                <div class="form-group">
-                    <dt class='effectif_emplacement_nu'>Emplacements nus</dt>
-                    <dd class='effectif_emplacement_nu'>
-                        <input class='form-control' type='text' name='EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS"] ?>' />
-                    </dd>
-                </div>
+                <dt class='effectif_emplacement_nu'>Emplacements nus</dt>
+                <dd class='effectif_emplacement_nu'>
+                    <input type='text' name='EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS"] ?>' />
+                </dd>
 
                 <!-- Emplacements autres -->
-                <div class="form-group">
-                    <dt class='effectif_autre_camping'>Autres emplacements</dt>
-                    <dd class='effectif_autre_camping'>
-                        <input class='form-control' type='text' name='EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS"] ?>' />
-                    </dd>
-                </div>
+                <dt class='effectif_autre_camping'>Autres emplacements</dt>
+                <dd class='effectif_autre_camping'>
+                    <input type='text' name='EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS"] ?>' />
+                </dd>
 
                 <!-- Total Camping emplacements / Règle => valeur pouvant être modifié par l'utilisateur -->
                 <dt class='effectif_total_camping'>Total</dt>
                 <dd class='effectif_total_camping'>
-                    <input class='form-control' type='text' name='EFFECTIFTOTALCAMPING_ETABLISSEMENTINFORMATIONS' value='' disabled />
+                    <input type='text' name='EFFECTIFTOTALCAMPING_ETABLISSEMENTINFORMATIONS' value='' disabled />
                 </dd>
 
             </dl>
@@ -354,39 +329,52 @@
 
             <!-- Etablissement lié -->
             <h4 class='h4_subtitle etablissements_lies'>Établissements liés <?php if ($this->etablissement['general']) : ?> <a id='add_etablissement' href='/etablissement/add?pere=<?php echo $this->etablissement['general']['ID_ETABLISSEMENT'] ?>&libelle=<?php echo htmlspecialchars($this->etablissement['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"], ENT_QUOTES) ?>' class='edit' style='font-size: 0.85em; float: right; font-weight: normal;' >Créer un établissement enfant</a> <?php endif ?></h4>
-            <dl class='dl-horizontal etablissements_lies'>
-                <div class="form-group">
-                    <dt class="etablissement_pere">Père de l'établissement</dt>
-                    <dd class="etablissement_pere">
-                        <select id='etablissement-pere-autocomplete' placeholder="Libellé de l'établissement père ..." name='ID_PERE'>
-                            <?php if (count($this->etablissement['parents']) > 0): ?>
-                                <option value="<?= end($this->etablissement['parents'])["ID_ETABLISSEMENT"] ?>">
-                                    <?= htmlspecialchars(end($this->etablissement['parents'])["LIBELLE_ETABLISSEMENTINFORMATIONS"], ENT_QUOTES) ?>
-                                </option>
-                            <?php elseif (isset($_GET["libelle"]) && isset($_GET["pere"])) : ?>
-                                <option value="<?= $_GET["pere"] ?>">
-                                    <?= htmlspecialchars($_GET["libelle"], ENT_QUOTES) ?>
-                                </option>
-                            <?php endif ?>
-                        </select>
-                    </dd>
-                </div>
+            <dl class='dl-horizontal etablissements_lies' >
+                <dt class="etablissement_pere">Père de l'établissement</dt>
+                <dd class="etablissement_pere">
+                    Nom de l'établissement : <strong><?php if (count($this->etablissement['parents']) > 0) {
+                        echo htmlspecialchars(end($this->etablissement['parents'])["LIBELLE_ETABLISSEMENTINFORMATIONS"], ENT_QUOTES);
+                    } elseif (isset($_GET["libelle"])) {
+                        echo htmlspecialchars($_GET["libelle"], ENT_QUOTES);
+                    }  ?></strong><br/>
+                    <input placeholder="Libellé de l'établissement père ..." type='text' style='width: 100%; box-sizing: border-box; height: 2.5em' />
+                    <input type='hidden' name='ID_PERE' value='<?php if (count($this->etablissement['parents']) > 0) {
+                        echo end($this->etablissement['parents'])["ID_ETABLISSEMENT"];
+                    } elseif (isset($_GET["pere"])) {
+                        echo $_GET["pere"];
+                    } ?>' />
+                </dd>
 
                 <dt class="etablissements_enfants">Enfants de l'établissement</dt>
                 <dd class="etablissements_enfants">
-                    <select id='etablissement-autocomplete' placeholder="Libellé d'un établissement enfant ..." name="ID_FILS_ETABLISSEMENT[]" multiple>
-                        <?php foreach ($this->etablissement['etablissement_lies'] as $etablissement): ?>
-                            <option value="<?= $etablissement["ID_ETABLISSEMENT"] ?>">
-                                <?= $etablissement["LIBELLE_ETABLISSEMENTINFORMATIONS"] ?>
-                            </option>
-                        <?php endforeach ?>
-                    </select>
+                    <table id='etablissements_enfants' class='table table-condensed'>
+                        <thead>
+                            <tr>
+                                <th>Nom de l'établissement</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php echo $this->partial('etablissement/partials/partial-etablissement-enfant.phtml') ?>
+                            <?php if ($this->etablissement['etablissement_lies']) : ?>
+                            <?php foreach ($this->etablissement['etablissement_lies'] as $etablissement) : ?>
+                                <?php echo $this->partial('etablissement/partials/partial-etablissement-enfant.phtml', array('etablissement' => $etablissement)) ?>
+                            <?php endforeach ?>
+                            <?php endif ?>
+                            <tr>
+                                <td>
+                                    <input type='text' placeholder="Libellé d'un établissement enfant ..." id='etablissement-autocomplete' />
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </dd>
             </dl>
         </div>
 
         <!-- Carte de l'emplacement de l'établissement / informations  -->
-        <div class='col-md-6'>
+        <div class='span6'>
             <h4 class="champ_adresse champs h4_subtitle">Adresse <a style='font-size: 0.85em; float: right; font-weight: normal;' data-toggle="modal" data-backdrop="static" href="#adresse-modal-ajout">Ajouter une adresse</a></h4>
             <table id='adresses' class='table table-condensed champ_adresse champs'>
                 <thead>
@@ -409,87 +397,78 @@
             <h4 class='h4_subtitle'>Coordonnées</h4>
             <dl class='dl-horizontal'>
                 <!-- Téléphone -->
-                <div class="form-group">
-                    <dt>Téléphone</dt>
-                    <dd>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class='glyphicon glyphicon-earphone'></i></span>
-                            <input class='form-control' type='text' name='TELEPHONE_ETABLISSEMENT' value='<?php echo $this->etablissement['general']["TELEPHONE_ETABLISSEMENT"] ?>' />
-                        </div>
-                    </dd>
-                </div>
+                <dt>Téléphone</dt>
+                <dd>
+                    <input type='text' name='TELEPHONE_ETABLISSEMENT' value='<?php echo $this->etablissement['general']["TELEPHONE_ETABLISSEMENT"] ?>' />
+                </dd>
 
                 <!-- Fax -->
-                <div class="form-group">
-                    <dt>Fax</dt>
-                    <dd>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class='glyphicon glyphicon-print'></i></span>
-                            <input class='form-control' type='text' name='FAX_ETABLISSEMENT' value='<?php echo $this->etablissement['general']["FAX_ETABLISSEMENT"] ?>' />
-                        </div>
-                    </dd>
-                </div>
+                <dt>Fax</dt>
+                <dd>
+                    <input type='text' name='FAX_ETABLISSEMENT' value='<?php echo $this->etablissement['general']["FAX_ETABLISSEMENT"] ?>' />
+                </dd>
 
                 <!-- Courriel -->
                 <dt>Courriel</dt>
                 <dd>
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class='glyphicon glyphicon-envelope'></i></span>
-                        <input class='form-control' type='text' name='COURRIEL_ETABLISSEMENT' value='<?php echo $this->etablissement['general']["COURRIEL_ETABLISSEMENT"] ?>' />
-                    </div>
+                    <input type='text' name='COURRIEL_ETABLISSEMENT' value='<?php echo $this->etablissement['general']["COURRIEL_ETABLISSEMENT"] ?>' />
                 </dd>
             </dl>
 
             <h4 class='h4_subtitle'>Données prévention</h4>
             <dl class='dl-horizontal'>
                 <!-- Commission compétente -->
-                <div class="form-group">
-                    <dt class="champ_commission champs">Commission</dt>
-                    <dd class="champ_commission champs">
-                        <select class='form-control' name='ID_COMMISSION' class="input-xlarge" >
-                            <?php foreach ($this->DB_commission as $commission_type) : ?>
-                                <optgroup label="<?php echo $commission_type['LIBELLE'] ?>">
-                                    <?php foreach ($commission_type['ARRAY'] as $item) : ?>
-                                        <option value='<?php echo $item["ID_COMMISSION"] ?>' <?php if ($item["ID_COMMISSION"] == $this->etablissement['informations']["ID_COMMISSION"]) {
-                                            echo "selected";
-                                        } ?> >
-                                            <?php echo $item["LIBELLE_COMMISSION"] ?> (<?php echo $commission_type['LIBELLE'] ?>)
-                                        </option>
-                                    <?php endforeach ?>
-                                </optgroup>
-                            <?php endforeach ?>
-                        </select>
-                    </dd>
-                </div>
+                <dt class="champ_commission champs">Commission</dt>
+                <dd class="champ_commission champs">
+                    <select name='ID_COMMISSION' class="input-xlarge" >
+                        <?php foreach ($this->DB_commission as $commission_type) : ?>
+                            <optgroup label="<?php echo $commission_type['LIBELLE'] ?>">
+                                <?php foreach ($commission_type['ARRAY'] as $item) : ?>
+                                    <option value='<?php echo $item["ID_COMMISSION"] ?>' <?php if ($item["ID_COMMISSION"] == $this->etablissement['informations']["ID_COMMISSION"]) {
+                                        echo "selected";
+                                    } ?> >
+                                        <?php echo $item["LIBELLE_COMMISSION"] ?> (<?php echo $commission_type['LIBELLE'] ?>)
+                                    </option>
+                                <?php endforeach ?>
+                            </optgroup>
+                        <?php endforeach ?>
+                    </select>
+                </dd>
 
                 <!-- Préventionnistes -->
-                <div class="form-group">
-                    <dt>Préventionnistes</dt>
-                    <dd class='preventionnistes'>
-                        <select id="preventionnistes" placeholder="Ajouter un préventionniste ..." name="ID_UTILISATEUR[]" multiple>
-                            <?php foreach ($this->etablissement['preventionnistes'] as $preventionniste): ?>
-                                <option value="<?= $preventionniste["ID_UTILISATEUR"] ?>">
-                                    <?= $preventionniste["NOM_UTILISATEURINFORMATIONS"] . " " . $preventionniste["PRENOM_UTILISATEURINFORMATIONS"] ?>
-                                </option>
+                <dt>Préventionnistes</dt>
+                <dd class='preventionnistes'>
+                    <table id='preventionnistes' class='table table-condensed'>
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php echo $this->partial('etablissement/partials/partial-preventionniste.phtml') ?>
+                            <?php if ($this->etablissement['preventionnistes']) : ?>
+                            <?php foreach ($this->etablissement['preventionnistes'] as $preventionniste) : ?>
+                                <?php echo $this->partial('etablissement/partials/partial-preventionniste.phtml', array('preventionniste' => $preventionniste)) ?>
                             <?php endforeach ?>
-                        </select>
-                    </dd>
-                </div>
+                            <?php endif ?>
+                            <tr>
+                                <td>
+                                    <input type='text' placeholder="Ajouter un préventionniste ..." value='' />
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </dd>
 
                 <!-- Données pratiques -->
                 <dt class="champ_donnees_pratiques champs">Données pratiques</dt>
                 <dd class="champ_donnees_pratiques champs">
-                    <div class="form-group">
-                        <label>Nb. de préventionnistes/visite</label>
-                        <input class='form-control' type='number'  name='NBPREV_ETABLISSEMENT' value='<?php echo $this->etablissement['donnees_pratiques']["NBPREV_ETABLISSEMENT"] ?>' />
-                    </div>
-                    <div class="form-group">
-                        <label>Durée d'une visite</label>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class='glyphicon glyphicon-time'></i></span>
-                            <input class='form-control' type='time' name='DUREEVISITE_ETABLISSEMENT' value='<?php echo $this->etablissement['donnees_pratiques']["DUREEVISITE_ETABLISSEMENT"] ?>' />
-                        </div>
-                    </div>
+                    <label>Nb. de préventionnistes/visite</label>
+                    <input type='number'  name='NBPREV_ETABLISSEMENT' value='<?php echo $this->etablissement['donnees_pratiques']["NBPREV_ETABLISSEMENT"] ?>' />
+                    <label>Durée d'une visite</label>
+                    <input type='time' name='DUREEVISITE_ETABLISSEMENT' value='<?php echo $this->etablissement['donnees_pratiques']["DUREEVISITE_ETABLISSEMENT"] ?>' />
                 </dd>
             </dl>
         </div>
@@ -499,145 +478,112 @@
 </form>
 
 <!-- Boite de confirmation de l'édition (cachée par défaut) -->
-<div id="confirm-modal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title">Confirmation de l'édition</h3>
-            </div>
+<div id="confirm-modal" class="modal hide fade" >
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Confirmation de l'édition</h3>
+    </div>
 
-            <div class="modal-body">
-                <dl>
-                    <dt>Valeurs conseillées</dt>
-                    <dd>
-                        <ul>
-                            <li id='confirm-modal-commission'>Commission renseignée : <a href="#" class='label label-primary confirm-modal-input'>Aucune</a>, la commission conseillée : <a href="#" class='label label-default confirm-modal-advisable'></a></li>
-                            <li id='confirm-modal-periodicite'>Périodicité renseignée : <a href="#" class='label label-primary confirm-modal-input'>Aucune</a>, la périodicité conseillée : <a href="#" class='label label-default confirm-modal-advisable'></a></li>
-                            <li id='confirm-modal-localsommeil'>Présence de local à sommeil renseignée : <a href="#" class='label label-primary confirm-modal-input'></a>, la présence conseillée : <a href="#" class='label label-default confirm-modal-advisable'></a></li>
-                            <li id='confirm-modal-preventionnistes'>Préventionnistes affectés : <a href="#" class='label confirm-modal-input label-primary'>Aucuns</a>, les préventionnistes conseillés : <a href="#" class='label label-default confirm-modal-advisable'></a></li>
-                        </ul>
-                    </dd>
-                </dl>
-            </div>
+    <div class="modal-body">
+        <dl>
+            <dt>Valeurs conseillées</dt>
+            <dd>
+                <ul>
+                    <li id='confirm-modal-commission'>Commission renseignée : <a href="#" class='label label-info confirm-modal-input'>Aucune</a>, la commission conseillée : <a href="#" class='label confirm-modal-advisable'></a></li>
+                    <li id='confirm-modal-periodicite'>Périodicité renseignée : <a href="#" class='label label-info confirm-modal-input'>Aucune</a>, la périodicité conseillée : <a href="#" class='label confirm-modal-advisable'></a></li>
+                    <li id='confirm-modal-localsommeil'>Présence de local à sommeil renseignée : <a href="#" class='label label-info confirm-modal-input'></a>, la présence conseillée : <a href="#" class='label confirm-modal-advisable'></a></li>
+                    <li id='confirm-modal-preventionnistes' >Préventionnistes affectés : <a href="#" class='label confirm-modal-input label-info'>Aucuns</a>, les préventionnistes conseillés : <a href="#" class='label confirm-modal-advisable'></a></li>
+                </ul>
+            </dd>
+        </dl>
+    </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                <input type='submit' value='Confirmer et sauvegarder les changements' class='btn btn-success' />
-            </div>
-        </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn">Annuler</a>
+        <input type='submit' value='Confirmer et sauvegarder les changements' class='btn btn-success' />
     </div>
 </div>
 
 <!-- Boite de construction d'adresse-->
-<form id="adresse-modal-ajout" class="modal adresse fade" tabindex="-1" role="dialog" action='#' method='post'>
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title">Ajouter une adresse</h3>
-            </div>
+<form id="adresse-modal-ajout" class="modal hide adresse fade" action='#' method='post'>
 
-            <div class="modal-body">
-                <dl class='dl-horizontal'>
-                    <div class="form-group">
-                        <dt>Ville</dt>
-                        <dd>
-                            <input class='form-control' name='commune_ac' type='text' placeholder='Nom de la commune ou code postal ...' />
-                            <input name='code_insee' type='hidden' />
-                            <input name='code_postal' type='hidden' />
-                        </dd>
-                    </div>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Ajouter une adresse</h3>
+    </div>
 
-                    <div class="form-group">
-                        <dt>Voie</dt>
-                        <dd>
-                            <input class='form-control' type='text' name='voie_ac' placeholder='Nom de la voie ...' disabled />
-                            <input type='hidden' name='type_voie' />
-                            <input type='hidden' name='voie' />
-                        </dd>
-                    </div>
+    <div class="modal-body">
+        <dl class='dl-horizontal'>
+            <dt>Ville</dt>
+            <dd>
+                <input name='commune_ac' type='text' placeholder='Nom de la commune ou code postal ...' />
+                <input name='code_insee' type='hidden' />
+                <input name='code_postal' type='hidden' />
+            </dd>
 
-                    <div class="form-group">
-                        <dt>Numéro</dt>
-                        <dd>
-                            <input class='form-control' type='text' name='numero' placeholder='Numéro ...' disabled />
-                        </dd>
-                    </div>
+            <dt>Voie</dt>
+            <dd>
+                <input type='text' name='voie_ac' placeholder='Nom de la voie ...' disabled />
+                <input type='hidden' name='type_voie' />
+                <input type='hidden' name='voie' />
+            </dd>
 
-                    <div class="form-group">
-                        <dt>Complément d'adresse</dt>
-                        <dd>
-                            <input class='form-control' type='text' name='complement' placeholder="Complément d'adresse" disabled />
-                        </dd>
-                    </div>
+            <dt>Numéro</dt>
+            <dd>
+                <input class="input-small" type='text' name='numero' placeholder='Numéro ...' disabled />
+            </dd>
 
-                    <div class="form-group">
-                        <dt>Type de l'adresse</dt>
-                        <dd>
-                            <select class='form-control'>
-                                <option>Adresse postale</option>
-                            </select>
-                        </dd>
-                    </div>
+            <dt>Complément d'adresse</dt>
+            <dd>
+                <input type='text' name='complement' placeholder="Complément d'adresse" disabled />
+            </dd>
 
-                    <div class="form-group">
-                        <dt>Géolocalisation</dt>
-                        <dd>
-                            <?php if ($this->key_ign != null) : ?>
-                                <button type="button" id="geolocme" class='btn btn-primary btn-sm'>
-                                    <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Géolocaliser cette adresse (Geoportail)
-                                </button>
-                            <?php endif ?>
-                            <?php if ($this->geoconcept_url != null) : ?>
-                                <button type="button" id="geolocme-geoconcept" class='btn btn-default btn-sm'>
-                                    <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Géolocaliser cette adresse (Geoconcept)
-                                </button>
-                            <?php endif ?>
-                            <button type="button" id="geolocme_nominatim" class='btn btn-default btn-sm'>
-                                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Géolocaliser cette adresse (Nominatim)
-                            </button>
-                            <br/>
-                            <small>Résultat : <span class='result'>Inconnu</span></small>
-                        </dd>
-                    </div>
+            <dt>Type de l'adresse</dt>
+            <dd>
+                <select>
+                    <option>Adresse postale</option>
+                </select>
+            </dd>
 
-                    <div class="form-group">
-                        <dt>Longitude</dt>
-                        <dd>
-                            <input class='form-control' id="addressLongitude" type='text' name='lon' maxlength="11" />
-                        </dd>
-                    </div>
+            <dt>Géolocalisation</dt>
+            <dd>
+                <?php if ($this->key_ign != null) : ?><button type="button" id="geolocme" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
+                <?php if ($this->geoconcept_url != null) : ?><button type="button" id="geolocme-geoconcept" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoconcept)</button><?php endif ?>
+                <button id="geolocme_nominatim" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Nominatim)</button>
+                <br/>
+                <small>Résultat : <span class='result'>Inconnu</span></small>
+            </dd>
 
-                    <dt>Latitude</dt>
-                    <dd>
-                        <input class='form-control' id="addressLatitude" type='text' name='lat' maxlength="10" />
-                    </dd>
-                </dl>
-                <?php if ($this->key_ign != null): ?>
-                    <div id="geoportail-container" style="height: 400px;"></div>
-                <?php endif ?>
+            <dt>Longitude</dt>
+            <dd>
+                <input id="addressLongitude" type='text' name='lon' maxlength="11" />
+            </dd>
 
-                <?php if ($this->geoconcept_url != null) : ?>
-                    <div id='geoconcept-container' style="height: 400px; width: 100%"></div>
-                    <script type="text/javascript" src="/js/geoconcept/OpenLayers.js"></script>
-                    <script type="text/javascript" src="/js/geoconcept/proj4js.js"></script>
-                    <script type="text/javascript" src="/js/geoconcept/htc-lite.js"></script>
+            <dt>Latitude</dt>
+            <dd>
+                <input id="addressLatitude" type='text' name='lat' maxlength="10" />
+            </dd>
+        </dl>
+        <?php if ($this->key_ign != null): ?>
+            <div id="geoportail-container" style="height: 400px;"></div>
+        <?php endif ?>
 
-                    <?php if ($projection = getenv('PREVARISC_PLUGIN_GEOCONCEPT_PROJECTION')): ?>
-                        <script type="text/javascript" src="/js/geoconcept/defs/<?php echo $projection ?>.js"></script>
-                    <?php endif ?>
+        <?php if ($this->geoconcept_url != null) : ?>
+            <div id='geoconcept-container' style="height: 400px; width: 100%"></div>
+            <script type="text/javascript" src="/js/geoconcept/OpenLayers.js"></script>
+            <script type="text/javascript" src="/js/geoconcept/proj4js.js"></script>
+            <script type="text/javascript" src="/js/geoconcept/htc-lite.js"></script>
+            <?php if ($projection = getenv('PREVARISC_PLUGIN_GEOCONCEPT_PROJECTION')): ?>
+            <script type="text/javascript" src="/js/geoconcept/defs/<?php echo $projection ?>.js"></script>
+            <?php endif ?>
+            <script type="text/javascript" src="/js/geoconcept/geoconcept.js"></script>
+            <link rel="stylesheet" href="/css/geoconcept/htc.css"/>
+        <?php endif ?>
+    </div>
 
-                    <script type="text/javascript" src="/js/geoconcept/geoconcept.js"></script>
-                    <link rel="stylesheet" href="/css/geoconcept/htc.css"/>
-                <?php endif ?>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default">Annuler</button>
-                <button type="button" data-dismiss="modal" class="btn btn-success" id='submit-adresse'>Sauvegarder</button>
-            </div>
-        </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn">Annuler</a>
+        <a href="#" data-dismiss="modal" class="btn btn-success" id='submit-adresse'>Sauvegarder</a>
     </div>
 </form>
 
@@ -648,12 +594,8 @@
         // Action à la sauvegarde de l'établissement
         $("form#etablissement input[type='submit']").click(function() {
             // On va chercher les valeurs par défauts pour faire apparaitre la boite de confirmation
-            const etablissement_pere_select = document.getElementById('etablissement-pere-autocomplete')
-            const etablissement_pere_control = etablissement_pere_select.tomselect
-
-            const etablissements_enfants_select = document.getElementById('etablissement-autocomplete')
-            const etablissements_enfants_control = etablissements_enfants_select.tomselect
-
+            var etablissements_enfants = [];
+            $("table#etablissements_enfants tbody tr.etablissement_enfant").each(function(index) { etablissements_enfants[index] = $(this).find('input[name="ID_FILS_ETABLISSEMENT[]"]').first().val(); });
             $.post('/api/1.0/etablissement/defaults_values', {
                 genre: $("select[name='ID_GENRE']").find('option:selected').val(),
                 numinsee: $("#adresses").find('tr.adresse').first().find('input[type="hidden"]').first().val(),
@@ -661,24 +603,20 @@
                 categorie: $("select[name='ID_CATEGORIE']").find('option:selected').val(),
                 local_sommeil: $("input[name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS']:checked").val(),
                 classe: $("select[name='ID_CLASSE']").find('option:selected').val(),
-                id_etablissement_pere: etablissement_pere_control.getValue(),
-                ids_etablissements_enfants: etablissements_enfants_control.getValue()
+                id_etablissement_pere: $("input[name='ID_PERE']").val(),
+                ids_etablissements_enfants: etablissements_enfants
             }, function(data) {
                 // Si il y a des données disponibles dans les valeurs par défauts proposées, on ouvre la boite de confirmation, sinon on sauvegarde la fiche
                 if(data.status == 'success' && Object.keys(data.response).length > 0) {
                     // A l'apparition de la boite de confirmation on met à jour les valeurs saisies par l'utilisateur dans la boite
+                    var preventionnistes = [];
                     var date = new Date($('input[name="date"]').val());
                     var localSommeil = $('input[name="LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS"]:checked').val();
                     $('#confirm-modal-commission .confirm-modal-input').text($('select[name="ID_COMMISSION"] option:selected').text().replace(/ \(.*\)/gi, ""));
                     $('#confirm-modal-periodicite .confirm-modal-input').text($('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').val());
                     $('#confirm-modal-localsommeil .confirm-modal-input').text(localSommeil != undefined ? (localSommeil == 1 ? 'Oui' : 'Non') : '' );
-                    
-                    const preventionnistes_select = document.getElementById('preventionnistes')
-                    const preventionnistes_control = preventionnistes_select.tomselect
-                    const preventionnistes_values = preventionnistes_control.getValue()
-                    const preventionnistes_names = preventionnistes_values.map((preventionniste_value) => preventionnistes_control.getItem(preventionniste_value).innerText.split('\n')[0])
-                    $('#confirm-modal-preventionnistes .confirm-modal-input').text(preventionnistes_values == '' ? 'Aucuns' : preventionnistes_names.join(', '));
-                    $('#confirm-modal-preventionnistes .confirm-modal-input').attr('ids', preventionnistes_values)
+                    $('table#preventionnistes tbody tr.preventionniste').each(function(index) { preventionnistes[index] = $(this).find('td').first().find('span').text(); });
+                    $('#confirm-modal-preventionnistes .confirm-modal-input').text(preventionnistes.toString() == '' ? 'Aucuns' : preventionnistes.toString());
                     // On met à jour les valeurs par défauts
                     $('#confirm-modal-commission .confirm-modal-advisable').attr('id', data.response.commission ? data.response.commission.ID_COMMISSION : '').text(data.response.commission ? data.response.commission.LIBELLE_COMMISSION : '');
                     $('#confirm-modal-periodicite .confirm-modal-advisable').text(data.response.periodicite);
@@ -714,37 +652,20 @@
 
         // Comportement des labels interactifs dans la boite de confirmation
         $('#confirm-modal a.label').click(function() {
-            $(this).parent().find('a.label').toggleClass('label-primary label-default');
+            $(this).parent().find('a.label').toggleClass('label-info');
         });
 
         // Gestion de la prise en compte des valeurs par défaut dans la boite de confirmation
         $('#confirm-modal input[type="submit"]').click(function() {
-            $('#confirm-modal').find('a.label-primary').each(function(index) {
+            $('#confirm-modal').find('a.label-info').each(function(index) {
                 if($(this).hasClass('confirm-modal-advisable')) {
                     switch($(this).parent().attr('id')) {
                         case 'confirm-modal-preventionnistes':
-                            const preventionnistes_ids = $(this).attr('ids').split(",");
-                            const preventionnistes_names = $(this).text().split(",")
-
-                            const preventionnistes_control = document.getElementById('preventionnistes').tomselect
-                            preventionnistes_control.clear()
-                            preventionnistes_control.clearOptions()
-                            preventionnistes_control.clearCache()
-
-                            preventionnistes_ids.forEach((preventionniste_id, index) => {
-                                preventionnistes_control.addOption({
-                                    ID_UTILISATEUR: preventionniste_id,
-                                    NOM_UTILISATEURINFORMATIONS: preventionnistes_names[index].split(' ')[0],
-                                    PRENOM_UTILISATEURINFORMATIONS: preventionnistes_names[index].split(' ')[1]
-                                })
-                            })
-                            preventionnistes_control.refreshOptions(false)
-
-                            preventionnistes_ids.forEach((preventionniste_id) => {
-                                preventionnistes_control.addItem(preventionniste_id)
-                            })
-                            preventionnistes_control.refreshItems()
-
+                            $('table#preventionnistes').remove();
+                            var preventionnistes_ids = $(this).attr('ids').split(",");
+                            for(var x in preventionnistes_ids) {
+                                $('<input>').attr({type: 'hidden', name: 'ID_UTILISATEUR[]', value: preventionnistes_ids[x]}).appendTo('form#etablissement');
+                            }
                             break;
                         case 'confirm-modal-commission':
                             $('select[name="ID_COMMISSION"]').find('option[value=' + $(this).attr('id') + ']').attr('selected', true);
@@ -763,7 +684,7 @@
         });
 
         // Ajout d'une adresse
-        $("form.adresse #submit-adresse").live('click', function() {
+        $("form.adresse a#submit-adresse").live('click', function() {
             time = Date.now();
             node = $('#prototype_adresse').clone().prependTo( $('table.champ_adresse') ).removeClass('hide prototypes').addClass('adresse').attr('id', '');
 
@@ -906,179 +827,157 @@
         // Fonction pour afficher les activités du type
         $("select.type_select").live("change", function() {
             activites = <?php echo Zend_Json::encode($this->DB_activite) ?>;
-            select_activites = $(this.closest('.row.form-group')).find('select.activite_select')
-            select_activites.find("option").remove();
+            $(this).next().find("option").remove();
             for( var x in activites) {
                 if( activites[x]["ID_TYPE"] == $(this).val() ) {
-                    select_activites.append($("<option />").val(activites[x]["ID_TYPEACTIVITE"]).text(activites[x]["LIBELLE_ACTIVITE"]));
+                    $(this).next().append($("<option />").val(activites[x]["ID_TYPEACTIVITE"]).text(activites[x]["LIBELLE_ACTIVITE"]));
                 }
             }
         });
 
         // On choisit d'initialiser ou de remettre à 0 les activités en fonction du type
         $("select.type_select").each(function(index) {
-            select_activites = $(this.closest('.row.form-group')).find('select.activite_select')
-            if(select_activites.find("option").length == 0) {
+            if($(this).next().find("option").length == 0) {
                 $(this).change();
             }
         });
 
         // Auto-complétion de l'établissement père
-        new TomSelect("#etablissement-pere-autocomplete", {
-            valueField: 'ID_ETABLISSEMENT',
-            labelField: 'LIBELLE_ETABLISSEMENTINFORMATIONS',
-            searchField: 'LIBELLE_ETABLISSEMENTINFORMATIONS',
-            maxItems: 1,
-            load: function(query, process) {
-                $.ajax({
+        $(".etablissement_pere input[type='text']").typeahead({
+            minLength: 3,
+            source: function(query, process) {
+                return $.ajax({
                     url: "/api/1.0/search/etablissements",
                     type: 'get',
                     data: {
                         label: query
                     },
                     success: function (result) {
-                        process(result.response.results);
+                        etablissements = [];
+                        $.each(result.response.results, function (i, etablissement) {
+                            switch(etablissement.ID_GENRE)
+                            {
+                                case 1:
+                                    LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_SITE;
+                                    break;
+
+                                case 3:
+                                    LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_CELLULE;
+                                    break;
+
+                                default:
+                                    LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT == null ? "non localisé" : etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT;
+                            }
+
+                            etablissements.push("<span class='muted'>[" + etablissement.LIBELLE_GENRE + "]</span> <span data-id='" + etablissement.ID_ETABLISSEMENT + "' class='result'>" + etablissement.LIBELLE_ETABLISSEMENTINFORMATIONS + "</span> - <small>" + LIBELLE_COMMUNE + "</small>");
+                        });
+
+                        process(etablissements);
                     }
                 });
             },
-            shouldLoad(query) {
-                return query.length >= 3
+            highlighter: function (item) {
+                libelle = $($.parseHTML(item)).last().prev().text();
+                libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
+                html = $.parseHTML(item);
+                $(html).last().prev().text(libelle);
+                html = $(html).text();
+                return item.replace( item, html );
             },
-            render: {
-                option: function(data, escape) {
-                    switch(data.ID_GENRE)
-                    {
-                        case 1:
-                            LIBELLE_COMMUNE = data.LIBELLE_COMMUNE_ADRESSE_SITE;
-                            break;
-
-                        case 3:
-                            LIBELLE_COMMUNE = data.LIBELLE_COMMUNE_ADRESSE_CELLULE;
-                            break;
-
-                        default:
-                            LIBELLE_COMMUNE = data.LIBELLE_COMMUNE_ADRESSE_DEFAULT == null ? "non localisé" : data.LIBELLE_COMMUNE_ADRESSE_DEFAULT;
-                    }
-
-                    return "<div><span class='text-muted'>[" + escape(data.LIBELLE_GENRE) + "]</span> <span data-id='" + data.ID_ETABLISSEMENT + "'>" + escape(data.LIBELLE_ETABLISSEMENTINFORMATIONS) + "</span> - <small>" + escape(LIBELLE_COMMUNE) + "</small></div>"
-                },
-                no_results: function(data, escape) {
-                    return '<div class="no-results">Aucun résultat trouvé pour "'+escape(data.input)+'"</div>';
-                }
-            },
-            onChange(value) {
-                $(".etablissement_pere input[type='hidden']").val(value);
+            updater: function (item) {
+                $(".etablissement_pere strong").text($($.parseHTML(item)).last().prev().text());
+                $(".etablissement_pere input[type='hidden']").val($($.parseHTML(item)).last().prev().data('id'));
+                return;
             }
-        })
-        
+        });
+
         // Auto-complétion des établissements enfants
-        const etabsLies = <?= json_encode($this->etablissement['etablissement_lies']) ?> ?? []
-        new TomSelect("#etablissement-autocomplete", {
-            plugins: {
-                remove_button: {
-                    title: 'Supprimer cet élément'
-                }
-            },
-            valueField: 'ID_ETABLISSEMENT',
-            labelField: 'LIBELLE_ETABLISSEMENTINFORMATIONS',
-            searchField: 'LIBELLE_ETABLISSEMENTINFORMATIONS',
-            items: etabsLies.map((etablissement) => etablissement.ID_ETABLISSEMENT),
-            load: function(query, process) {
-                $.ajax({
+        $(".etablissements_enfants input[type='text']").typeahead({
+            minLength: 3,
+            source: function(query, process) {
+                return $.ajax({
                     url: "/api/1.0/search/etablissements",
                     type: 'get',
                     data: {
                         label: query
                     },
                     success: function (result) {
-                        process(result.response.results);
+                        etablissements = [];
+                        $.each(result.response.results, function (i, etablissement) {
+                            switch(etablissement.ID_GENRE)
+                            {
+                                case 1:
+                                    LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_SITE;
+                                    break;
+
+                                case 3:
+                                    LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_CELLULE;
+                                    break;
+
+                                default:
+                                    LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT == null ? "non localisé" : etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT;
+                            }
+
+                            etablissements.push("<span class='muted'>[" + etablissement.LIBELLE_GENRE + "]</span> <span data-id='" + etablissement.ID_ETABLISSEMENT + "' class='result'>" + etablissement.LIBELLE_ETABLISSEMENTINFORMATIONS + "</span> - <small>" + LIBELLE_COMMUNE + "</small>");
+                        });
+
+                        process(etablissements);
                     }
                 });
             },
-            shouldLoad(query) {
-                return query.length >= 3
+            highlighter: function (item) {
+                libelle = $($.parseHTML(item)).last().prev().text();
+                libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
+                html = $.parseHTML(item);
+                $(html).last().prev().text(libelle);
+                html = $(html).text();
+                return item.replace( item, html );
             },
-            render: {
-                option: function(data, escape) {
-                    switch(data.ID_GENRE)
-                    {
-                        case 1:
-                            LIBELLE_COMMUNE = data.LIBELLE_COMMUNE_ADRESSE_SITE;
-                            break;
-
-                        case 3:
-                            LIBELLE_COMMUNE = data.LIBELLE_COMMUNE_ADRESSE_CELLULE;
-                            break;
-
-                        default:
-                            LIBELLE_COMMUNE = data.LIBELLE_COMMUNE_ADRESSE_DEFAULT == null ? "non localisé" : data.LIBELLE_COMMUNE_ADRESSE_DEFAULT;
-                    }
-
-                    return "<div><span class='text-muted'>[" + escape(data.LIBELLE_GENRE) + "]</span> <span data-id='" + data.ID_ETABLISSEMENT + "'>" + escape(data.LIBELLE_ETABLISSEMENTINFORMATIONS) + "</span> - <small>" + escape(LIBELLE_COMMUNE) + "</small></div>"
-                },
-                no_results: function(data, escape) {
-                    return '<div class="no-results">Aucun résultat trouvé pour "'+escape(data.input)+'"</div>';
-                }
+            updater: function (item) {
+                node = $('#prototype_etablissements_enfants').clone().prependTo( $('.etablissements_enfants table') ).removeClass('hide  prototypes').addClass('etablissement_enfant').attr('id', '');
+                node.find('span').text($($.parseHTML(item)).last().prev().text());
+                node.find("input[type='hidden']").val($($.parseHTML(item)).last().prev().data('id'));
+                return;
             }
-        })
+        });
 
         // Auto-complétion des préventionnistes
-        const preventionnistes = <?= json_encode($this->etablissement['preventionnistes']) ?> ?? []
-        new TomSelect("#preventionnistes", {
-            plugins: {
-                remove_button: {
-                    title: 'Supprimer cet élément'
-                }
-            },
-            valueField: 'ID_UTILISATEUR',
-            labelField: 'NOM_UTILISATEURINFORMATIONS',
-            searchField: 'NOM_UTILISATEURINFORMATIONS',
-            items: preventionnistes.map((preventionniste) => preventionniste.ID_UTILISATEUR),
-            load: function(query, process) {
-                $.ajax({
+        $(".preventionnistes input[type='text']").typeahead({
+            minLength: 3,
+            source: function(query, process) {
+                return $.ajax({
                     url: "/api/1.0/search/users",
-                    type: 'get',
+                    type: 'post',
                     data: {
                         name: query,
                         fonctions: 13,
                         limit: 100
                     },
                     success: function (result) {
-                        process(result.response.results);
+                        preventionnistes = [];
+                        $.each(result.response.results, function (i, preventionniste) {
+                            preventionnistes.push("<span data-id='" + preventionniste.uid + "'>" + preventionniste.NOM_UTILISATEURINFORMATIONS + " " + preventionniste.PRENOM_UTILISATEURINFORMATIONS + "</span>");
+                        });
+
+                        process(preventionnistes);
                     }
                 });
             },
-            shouldLoad(query) {
-                return query.length >= 3
+            highlighter: function (item) {
+                libelle = $($.parseHTML(item)).last().text();
+                libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
+                html = $.parseHTML(item);
+                $(html).last().text(libelle);
+                html = $(html).text();
+                return item.replace( item, html );
             },
-            render: {
-                option: function(data, escape) {
-                    let res = "<div><span>" + escape(data.NOM_UTILISATEURINFORMATIONS) + " " + escape(data.PRENOM_UTILISATEURINFORMATIONS) + "</span>"
-
-                    if ('' !== data.GRADE_UTILISATEURINFORMATIONS) {
-                        res += "<br /><span class='text-muted'>" + escape(data.GRADE_UTILISATEURINFORMATIONS) + "</span>"
-                    }
-
-                    res += "</div>"
-
-                    return res
-                },
-                item: function(data, escape) {
-                    let res = "<div>" + escape(data.NOM_UTILISATEURINFORMATIONS)
-
-                    if (data.PRENOM_UTILISATEURINFORMATIONS) {
-                        res += " " + escape(data.PRENOM_UTILISATEURINFORMATIONS)
-                    }
-
-                    res += "</div>"
-
-                    return res
-                },
-                no_results: function(data, escape) {
-                    return '<div class="no-results">Aucun résultat trouvé pour "'+escape(data.input)+'"</div>';
-                }
+            updater: function (item) {
+                node = $('#prototype_preventionniste').clone().prependTo( $('.preventionnistes table') ).removeClass('hide prototypes').addClass('preventionniste').attr('id', '');
+                node.find('span').text($($.parseHTML(item)).last().text());
+                node.find("input[type='hidden']").val($($.parseHTML(item)).last().data('id'));
+                return;
             }
-        })
+        });
 
         // Auto complétion de la ville
         $("input[name='commune_ac']").autocomplete("/api/1.0/adresse/get_communes", {

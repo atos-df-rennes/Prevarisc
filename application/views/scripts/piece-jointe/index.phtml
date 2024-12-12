@@ -2,8 +2,8 @@
 <input type='hidden' name='idLinkPJ' id='idLinkPJ' value='<?php echo $this->identifiant ?>' />
 
 <h3>Liste de pièces jointes
-    <button id='addPJ' class='btn btn-default' >Ajouter une piece jointe</button>
-    <button id='addPJQuick' class='btn btn-default' >Ajout rapide</button>
+    <button id='addPJ' class='btn' >Ajouter une piece jointe</button>
+    <button id='addPJQuick' class='btn' >Ajout rapide</button>
 
     <?php if (
         $this->displayDownloadButton
@@ -31,7 +31,14 @@
         </thead>
         <tbody>
         <?=
-            $this->partial("piece-jointe/display.phtml", array("path" => $this->path, "listePj" => $this->listePj, "type" => $this->type, "id" => $this->identifiant, "verrou" => $this->verrou, "isPlatau" => $this->isPlatau))
+            $this->partial("piece-jointe/display.phtml", array(
+                "path" => $this->path,
+                "listePj" => $this->listePj,
+                "type" => $this->type,
+                "id" => $this->identifiant,
+                "verrou" => $this->verrou,
+                "isPlatau" => $this->isPlatau,
+            ))
         ?>
         </tbody>
     </table>

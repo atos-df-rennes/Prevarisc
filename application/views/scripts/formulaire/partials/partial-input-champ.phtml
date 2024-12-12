@@ -15,7 +15,6 @@
         // Texte
         case 1: ?>
             <input
-                class='form-control'
                 type='text'
                 name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>'
                 value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'
@@ -23,11 +22,11 @@
         <?php break;
         // Texte long
         case 2: ?>
-            <textarea class='form-control' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>'><?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?></textarea>
+            <textarea name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>'><?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?></textarea>
         <?php break;
         // Liste
         case 3: ?>
-            <select class='form-control' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>'>
+            <select name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>'>
                 <option selected value>Sélectionnez un élément</option>
                 <?php foreach($this->champsvaleurliste[$this->champ['ID_CHAMP']] as $champvaleurliste): ?>
                     <option
@@ -41,7 +40,7 @@
         <?php break;
         // Nombre
         case 4: ?>
-            <input class='form-control' type='number' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' min='0' value='<?= $this->champ['VALEUR'] ?>'>
+            <input type='number' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' min='0' value='<?= $this->champ['VALEUR'] ?>'>
         <?php break;
         // Case à cocher
         case 5: ?>
@@ -107,7 +106,7 @@
                 <div class="tableInput">
                     <?php foreach ($this->champ["FILS"] as $champsFils): ?>
                         <div class="colTableInput">
-                            <label><?= $champsFils['NOM'] ?></label>
+                            <th><?= $champsFils['NOM'] ?></th>
                             <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
                                 'champ' => $champsFils,
                                 'champsvaleurliste' => $this->champsvaleurliste,
@@ -120,13 +119,12 @@
             break;
         // Date
         case 7: ?>
-            <div class="input-group">
-                <input type='text' class='date form-control' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'>
-                <span class="input-group-btn">
-                    <button type="button" class='today btn btn-default'>
-                        <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
-                    </button>
-                </span>
+            <div class="colDate" >
+                <input type='text' class='date' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'>
+                <button type="button" class='today btn'>
+                    <i class='icon-calendar' aria-hidden='true'></i>
+                    Aujourd'hui
+                </button>
             </div>
             <?php break;
         default:

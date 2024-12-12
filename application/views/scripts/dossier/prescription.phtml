@@ -2,16 +2,20 @@
 <?php
 if($this->infosDossier['VERROU_DOSSIER'] == 0){
 	echo "
-		<button class='addPresc btn btn-default' id='addPrescriptionType' >Ajouter une prescription type</button>
+		<button class='addPresc btn' id='addPrescriptionType' >Ajouter une prescription type</button>
 		&nbsp;&nbsp;
-		<a class='btn btn-default' href='".$this->url(array('controller' => 'dossier', 'action' => 'prescription-add'))."' >Ajouter une prescription</a>
+		<a class='btn' href='".$this->url(array('controller' => 'dossier', 'action' => 'prescription-add'))."' >Ajouter une prescription</a>
 	";
 	if(count($this->prescriptionExploitation) == 0 && count($this->prescriptionAmelioration) == 0){
 		echo "
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<button class='recupPrescDossier btn btn-default' id='recupPrescDossier' >Reprendre les prescriptions d'un dossier précédent</button>
+			<button class='recupPrescDossier btn' id='recupPrescDossier' >Reprendre les prescriptions d'un dossier précédent</button>
 		";
 	}
+	echo "
+		<br/><br/>
+		<div>
+	";
 }
 
 echo "
@@ -50,7 +54,7 @@ echo "
 		$nbPrescDossier = count($listePrescr);
 
 		if($nbPrescDossier == 0){
-			echo "<div class='col-md-12' style='font-style:italic;'>Actuellement aucune prescription dans cette catégorie</div>";
+			echo "<div class='span12' style='font-style:italic;'>Actuellement aucune prescription dans cette catégorie</div>";
 		}
 
 		for($i=0; $i < $nbPrescDossier; $i++)
@@ -69,50 +73,63 @@ echo "
 					$texte = $listePrescr[$i][$j]['LIBELLE_TEXTE'];
 					echo "
 						<tr>
-							<td class='col-md-3'>".$texte."</td>
-							<td class='col-md-2'>".$article."</td>
+							<td class='span3'>".$texte."</td>
+							<td class='span2'>".$article."</td>
 					";
 
 					if($cpt)
 					{
 						if($listePrescr[$i][$j]['TYPE_PRESCRIPTION_DOSSIER'] != 0){
 							echo "
-								<td rowspan='".$nbAssoc."' class='col-md-1 numPresc'>
+								<td rowspan='".$nbAssoc."' class='span1 numPresc'>
 									".$listePrescr[$i][0]['NUM_PRESCRIPTION_DOSSIER']."
 								</td>
 							";
 						}
+					?>
 
-						if($listePrescr[$i][0]["ID_PRESCRIPTION_TYPE"] == null){
-							echo "
-								<td rowspan='".$nbAssoc."' class='".( ( $listePrescr[$i][$j]['TYPE_PRESCRIPTION_DOSSIER'] != 0 )? "col-md-5" :"col-md-6" )."'>";
-                                    if ($listePrescr[$i][$j]['DATE_LEVEE'] !== null) {
-                                        echo "<span class='label label-info'>Levée le {$listePrescr[$i][$j]['DATE_LEVEE_FULL']}</span>";
-                                    }
-                                    if ($listePrescr[$i][$j]['JUSTIFICATIF_LEVEE']) {
-                                        echo "<i
-                                            class='icon-label-right glyphicon glyphicon-info-sign'
-                                            title='Justification'
-                                            data-content='".nl2br($listePrescr[$i][$j]['JUSTIFICATIF_LEVEE'])."'
-                                            data-html='true'
-                                            data-placement='top'
-                                        ></i>";
-                                    }
+						<td rowspan='<?= $nbAssoc ?>' class='<?= $listePrescr[$i][$j]['TYPE_PRESCRIPTION_DOSSIER'] != 0 ? "span5" : "span6" ?>'>
+							<?php if (null !== $listePrescr[$i][$j]['ID_DOSSIER_REPRISE']) : ?>
+								<div class='span12'>
+									<span class='label label-warning'>
+										Reprise du dossier
+										<a href="/dossier/index/id/<?= $listePrescr[$i][$j]['ID_DOSSIER_REPRISE'] ?>" target="_blank">
+											<?= $listePrescr[$i][$j]['OBJET_DOSSIER'] ?? $listePrescr[$i][$j]['LIBELLE_DOSSIERTYPE']. ' - ' . $listePrescr[$i][$j]['LIBELLE_DOSSIERNATURE'] ?>
+										</a>
+										<br />
+										créé le <?= $listePrescr[$i][$j]['DATEINSERT_DOSSIER'] ?>
+									</span>
+								</div>
+							<?php endif;
 
-                                    echo "<p>".nl2br($listePrescr[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER'])."</p>
-								</td>
-							";
-						}else{
-							echo "
-								<td rowspan='".$nbAssoc."' class='".( ( $listePrescr[$i][$j]['TYPE_PRESCRIPTION_DOSSIER'] != 0 )? "col-md-5" :"col-md-6" )."'>
-									".nl2br($listePrescr[$i][0]['PRESCRIPTIONTYPE_LIBELLE'])."
-								</td>
-							";
-						}
+							if ($listePrescr[$i][$j]['DATE_LEVEE'] !== null) : ?>
+								<span class='label label-info'>
+									Levée le <?= $listePrescr[$i][$j]['DATE_LEVEE_FULL'] ?>
+								</span>
+							<?php endif;
+
+							if ($listePrescr[$i][$j]['JUSTIFICATIF_LEVEE']) : ?>
+								<i
+									class='icon-label-right icon-info-sign'
+									title='Justification'
+									data-content='<?= nl2br($listePrescr[$i][$j]['JUSTIFICATIF_LEVEE']) ?>'
+									data-html='true'
+									data-placement='top'
+								></i>
+							<?php endif;
+
+							if ($listePrescr[$i][0]["ID_PRESCRIPTION_TYPE"] == null) : ?>
+								<p><?= nl2br($listePrescr[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER']) ?></p>
+							<?php else : ?>
+								<p><?= nl2br($listePrescr[$i][0]['PRESCRIPTIONTYPE_LIBELLE']) ?></p>
+							<?php endif ?>
+						</td>
+
+					<?php
 						if($verrou == 0){
 							echo "
-								<td class='col-md-1' rowspan='".$nbAssoc."'>
-									<a class='btn btn-default' href='/dossier/prescription-edit/id/".$id_dossier."/id-prescription/".$listePrescr[$i][0]['ID_PRESCRIPTION_DOSSIER']."' >Modifier</a>
+								<td class='span1' rowspan='".$nbAssoc."'>
+									<a class='btn' href='/dossier/prescription-edit/id/".$id_dossier."/id-prescription/".$listePrescr[$i][0]['ID_PRESCRIPTION_DOSSIER']."' >Modifier</a>
 								</td>
 							";
 						}
@@ -219,7 +236,7 @@ $(document).ready(function(){
 		buttons: [
             {
                 text: 'Fermer',
-                class: 'btn btn-default',
+                class: 'btn',
                 click: function() {
                     dialogPrescType.html("");
                     dialogPrescType.dialog("close");
@@ -402,38 +419,38 @@ $(document).ready(function(){
 		width: 1200,
 		height: 'auto',
 		buttons: [
-            {
-                text: 'Reprendre les prescriptions',
-                class: 'btn btn-success',
-                click: function() {
-                    if ($('input[type=radio][name=dossierSelect]:checked').length == 1) {
-                        $.ajax({
-                            type: "POST",
-                            url: "/dossier/recupprescription",
-                            data: $("#selectionDossier").serialize(),
-                            before: function(){
-                                dialogRecupPresc.html("Veuillez patienter pendant la reprise des prescriptions <img src='/images/load.gif' />");
-                            },
-                            success: function(msg){
-                                window.location='/dossier/prescription/id/'+$("#idDossier").val();
-                            }
-                        });
-                    } else {
-                        return false;
-                    }
+			{
+				text: 'Reprendre les prescriptions',
+				class: 'btn btn-success',
+				click: function() {
+					if ($('input[type=checkbox][name^=dossierSelect-]:checked').length > 0) {
+						$.ajax({
+							type: "POST",
+							url: "/dossier/recupprescription",
+							data: $("#selectionDossier").serialize(),
+							before: function(){
+								dialogRecupPresc.html("Veuillez patienter pendant la reprise des prescriptions <img src='/images/load.gif' />");
+							},
+							success: function(msg){ 
+								window.location='/dossier/prescription/id/'+$("#idDossier").val();
+							}
+						});
+					} else {
+						return false;
+					}
 
-                    return false;
-                }
-            },
-            {
-                text: 'Annuler',
-                class: 'btn btn-default',
-                click: function() {
-                    $(this).html("");
-                    $(this).dialog("close");
-                }
-            }
-        ],
+					return false;
+				}
+			},
+			{
+				text: 'Annuler',
+				class: 'btn',
+				click: function() {
+					$(this).html("");
+					$(this).dialog("close");
+				}
+			}
+		],
 	});
 
 	$(".recupPrescDossier").live('click',function(){

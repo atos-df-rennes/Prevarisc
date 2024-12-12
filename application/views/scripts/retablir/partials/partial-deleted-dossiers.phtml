@@ -1,4 +1,4 @@
-<div class="text-muted">
+<div class="muted">
     <small>Nombre total d'éléments : <?= count($this->data) ?></small>
 </div>
 
@@ -25,7 +25,7 @@
                                 <?php endif ?>
                             </div>
 
-                            <small class='text-muted'>
+                            <small class='muted'>
                                 <?php
                                     $dateSuppression = new Zend_Date($deletedElement['DATESUPPRESSION_DOSSIER'], 'yyyy-MM-dd');
                                     $dateSuppression = $dateSuppression
@@ -82,10 +82,10 @@
                                 ?>
                             </a>
                             <a
-                                class='btn btn-sm btn-default deleted-element__restore-button'
+                                class='btn btn-small deleted-element__restore-button'
                                 href=<?= '/dossier/retablir-dossier/idDossier/'.$deletedElement['ID_DOSSIER'] ?>
                             >
-                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                <i class="icon-ok icon-black"></i>
                                 Rétablir le dossier
                             </a>
                         </div>

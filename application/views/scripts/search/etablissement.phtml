@@ -1,22 +1,22 @@
 <!-- Onglets permettant de selectionner les entités à rechercher -->
 <h2 class="page-header">Etablissements</h2>
 <form method='get'>
-	<div class='navbar-form well well-sm'>
-        <div class="input-group">
-            <input type="text" name='label' class="form-control" placeholder="Libellé de l'établissement ou son #ID ..." value="<?php if(isset($_GET["label"])) echo htmlentities($_GET["label"]) ?>" onkeypress="masquerBoutonExportCalc()"/>
-            <span class="input-group-btn">
-                <input type='submit' class="btn btn-default" name='Rechercher' value="Rechercher" onsubmit="afficherBoutonExportCalc()"/>
-            </span>
+	<div class='navbar-form form-search well well-small' style='margin-bottom: 5px;'>
+        <div class="input-append pull-left">
+            <input type="text" name='label' class="input-xlarge search-query" placeholder="Libellé de l'établissement ou son #ID ..." value="<?php if(isset($_GET["label"])) echo htmlentities($_GET["label"]) ?>" onkeypress="masquerBoutonExportCalc()"/>
+            <input type='submit' class="btn btn_search" name='Rechercher' value="Rechercher" disabled onsubmit="afficherBoutonExportCalc()"/>
+            <input type='hidden' name='page' value="1" />
         </div>
-        <input type='hidden' name='page' value="1" />
 
-        <small>
-            <a href="/search/etablissement?label=&page=1">
-                Réinitialiser
-            </a>
-        </small>
+        <div class="pull-left" style='margin: 9px 0 0 5px'>
+            <small>
+                <a href="/search/etablissement?label=&page=1">
+                    Réinitialiser
+                </a>
+            </small>
+        </div>
 
-	    <p class='navbar-right' style='margin: 9px 0 0 5px'>
+	    <p class='pull-right' style='margin: 9px 0 0 5px'>
             <small>
                 Zone de recherche :
                 <a href='#' id="zone_de_recherche_edit">
@@ -24,7 +24,7 @@
                         <?php echo array_key_exists('zone_de_recherche_text', $_GET) && $_GET['zone_de_recherche_text'] != '' ? $_GET['zone_de_recherche_text'] : 'Département' ?>
                     </strong>
                 </a>
-                <a href='#' id="zone_de_recherche_reset"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+                <a href='#' id="zone_de_recherche_reset"><i class="icon-remove"></i></a>
                 <input type='hidden' name='zone_de_recherche_text' value="<?php if(array_key_exists('zone_de_recherche_text', $_GET)) echo $_GET['zone_de_recherche_text'] ?>" />
                 <input type='hidden' name='city' value="<?php if(array_key_exists('city', $_GET)) echo $_GET['city'] ?>" />
                 <input type='hidden' name='street' value="<?php if(array_key_exists('street', $_GET)) echo $_GET['street'] ?>" />
@@ -33,8 +33,8 @@
 	    </p>
 	</div>
 
-    <div id="filterContainer" class="well">
-        <div class="row">
+    <div id="filterContainer" class="well span12" style="margin-left: 0;">
+        <div class="row-fluid">
             <div>
                 <select name='statuts[]' multiple onchange="masquerBoutonExportCalc()">
                     <?php foreach( $this->DB_statut as $statut ) : ?>
@@ -58,36 +58,36 @@
             <div id='criteres_plus' style='margin-top: 4px;'>
                 <select name='genres[]' multiple onchange="masquerBoutonExportCalc()">
                 <?php foreach( $this->DB_genre as $genre ) : ?>
-                    <option value='<?php echo $genre["ID_GENRE"] ?>' <?php if(array_key_exists('genres', $_GET) && in_array($genre["ID_GENRE"], (array) $_GET["genres"])) echo 'selected' ?>><?php echo $genre["LIBELLE_GENRE"] ?></option>
+                        <option value='<?php echo $genre["ID_GENRE"] ?>' <?php if(array_key_exists('genres', $_GET) && in_array($genre["ID_GENRE"], (array) $_GET["genres"])) echo 'selected' ?>><?php echo $genre["LIBELLE_GENRE"] ?></option>
                 <?php endforeach ?>
                 </select>
-                <span id='categorie_span'>
+                <span id='categorie_span' class='hide'>
                     <select name='categories[]' multiple onchange="masquerBoutonExportCalc()">
                         <?php foreach( $this->DB_categorie as $categorie ) : ?>
                             <option value='<?php echo $categorie["ID_CATEGORIE"] ?>' <?php if(array_key_exists('categories', $_GET) && in_array($categorie["ID_CATEGORIE"], (array) $_GET["categories"])) echo 'selected' ?>><?php echo $categorie["LIBELLE_CATEGORIE"] ?></option>
                         <?php endforeach ?>
                     </select>
                 </span>
-                <span id='type_span'>
-                    <select name='types_activites[]' multiple onchange="masquerBoutonExportCalc()">
-                        <?php foreach( $this->DB_typeactivite as $type ) : ?>
-                            <optgroup label="<?php echo $type["LIBELLE_TYPE"] ?>">
-                                <option value='<?php echo $type["ID_TYPEACTIVITE"] ?>' <?php if(array_key_exists('types_activites', $_GET) && in_array($type["ID_TYPEACTIVITE"], (array) $_GET["types_activites"])) echo 'selected' ?>><?php echo $type["LIBELLE_TYPE"] . ' - ' . $type["LIBELLE_ACTIVITE"] ?></option>
-                            </optgroup>
-                        <?php endforeach ?>
-                    </select>
-                </span>
-                <span id='classe_span'>
+                <span id='classe_span' class='hide' >
                     <select name='classes[]' multiple onchange="masquerBoutonExportCalc()">
                         <?php foreach( $this->DB_classe as $classe ) : ?>
                             <option value='<?php echo $classe["ID_CLASSE"] ?>' <?php if(array_key_exists('classes', $_GET) && in_array($classe["ID_CLASSE"], (array) $_GET["classes"])) echo 'selected' ?>><?php echo $classe["LIBELLE_CLASSE"] ?></option>
                         <?php endforeach ?>
                     </select>
                 </span>
-                <span id='famille_span'>
+                <span id='famille_span' class='hide'>
                     <select name='familles[]' multiple onchange="masquerBoutonExportCalc()">
                         <?php foreach( $this->DB_famille as $famille ) : ?>
-                            <option value='<?php echo $famille["ID_FAMILLE"] ?>' <?php if(array_key_exists('familles', $_GET) && in_array($famille["ID_FAMILLE"], (array) $_GET["familles"])) echo 'selected' ?>><?php echo $famille["LIBELLE_FAMILLE"] ?></option>
+                                    <option value='<?php echo $famille["ID_FAMILLE"] ?>' <?php if(array_key_exists('familles', $_GET) && in_array($famille["ID_FAMILLE"], (array) $_GET["familles"])) echo 'selected' ?>><?php echo $famille["LIBELLE_FAMILLE"] ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </span>
+                <span id='type_span' class='hide'>
+                    <select name='types_activites[]' multiple onchange="masquerBoutonExportCalc()">
+                        <?php foreach( $this->DB_typeactivite as $type ) : ?>
+                                    <optgroup label="<?php echo $type["LIBELLE_TYPE"] ?>">
+                                        <option value='<?php echo $type["ID_TYPEACTIVITE"] ?>' <?php if(array_key_exists('types_activites', $_GET) && in_array($type["ID_TYPEACTIVITE"], (array) $_GET["types_activites"])) echo 'selected' ?>><?php echo $type["LIBELLE_TYPE"] . ' - ' . $type["LIBELLE_ACTIVITE"] ?></option>
+                                    </optgroup>
                         <?php endforeach ?>
                     </select>
                 </span>
@@ -111,15 +111,17 @@
                     <?php endforeach ?>
                 </select>
             </div>
+        </div>
 
-            <div style='margin-top: 24px;'>
-                <select name="preventionniste" class='chosen' data-placeholder='Sélectionnez un préventionniste' onchange="masquerBoutonExportCalc()">
-                    <option value=''></option>
-                    <?php foreach($this->liste_prev as $prev) : ?>
-                        <option value='<?php echo $prev["ID_PREVENTIONNISTE"] ?>' <?php if(isset($_GET["preventionniste"]) && $prev["ID_PREVENTIONNISTE"] == $_GET["preventionniste"]) echo 'selected' ?>><?php echo $prev["NOM_UTILISATEURINFORMATIONS"]." ".$prev["PRENOM_UTILISATEURINFORMATIONS"] ?></option>
-                    <?php endforeach ?>
-                </select>
-            </div>
+        <div class="span12"></div>
+
+        <div class="row-fluid">
+            <select name="preventionniste" class='chosen' data-placeholder='Sélectionnez un préventionniste' onchange="masquerBoutonExportCalc()">
+                <option value=''></option>
+                <?php foreach($this->liste_prev as $prev) : ?>
+                    <option value='<?php echo $prev["ID_PREVENTIONNISTE"] ?>' <?php if(isset($_GET["preventionniste"]) && $prev["ID_PREVENTIONNISTE"] == $_GET["preventionniste"]) echo 'selected' ?>><?php echo $prev["NOM_UTILISATEURINFORMATIONS"]." ".$prev["PRENOM_UTILISATEURINFORMATIONS"] ?></option>
+                <?php endforeach ?>
+            </select>
         </div>
     </div>
 
@@ -128,7 +130,7 @@
 <?php if( count($this->results) > 0 ) : ?>
     <div style='display:inline-block;width: 100%;' >
         <div class='pull-left'>
-            <p class='text-muted'><small>Nombre total d'éléments : <?php echo $this->results->getTotalItemCount() ?></small></p>
+            <p class='muted'><small>Nombre total d'éléments : <?php echo $this->results->getTotalItemCount() ?></small></p>
         </div>
         <?php if( $this->results->getTotalItemCount() <= 10000 ) : ?>
             <div class='pull-right'>
@@ -136,70 +138,62 @@
             </div>
         <?php else : ?>
             <div class='pull-right' <?php echo (($this->is_allowed_export_calc) ? '' : 'style="visibility: hidden;"') ?>>
-                <small class='text-danger'><b>La fonctionnalité d'export Calc est limitée à 10 000 éléments</b></small>
+                <small style='font-weight:bold;color:red;'>La fonctionnalité d'export Calc est limitée à 10 000 éléments</small>
             </div>
         <?php endif ?>
     </div>
-    <ul class='recherche_liste list-unstyled'>
+    <ul class='recherche_liste unstyled'>
     <?php echo $this->partialLoop('search/results/etablissement.phtml', $this->results ) ?>
     </ul>
+    <br/>
+    <div style='clear: both'></div>
     <?php echo $this->results ?>
 <?php else : ?>
-	<p class='text-muted'><small>Aucun résultat disponible.</small></p>
+	<p class='muted'><small>Aucun résultat disponible.</small></p>
     <h2 style='color: silver; text-align: center;' ></h2>
 <?php endif ?>
 
 </form>
 
 <!-- Boite modale de la zone de recherche -->
-<form id='zone_de_recherche_modal' class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h3 class="modal-title">Définir la zone de recherche</h3>
-            </div>
+<form id='zone_de_recherche_modal' class="modal hide adresse">
 
-            <div class="modal-body">
-                <dl class='dl-horizontal'>
-                    <div>
-                        <dt>Ville</dt>
-                        <dd>
-                            <input class="form-control" name='commune_ac' type='text' placeholder='Nom de la commune ou code postal ...' />
-                            <input name='code_insee' type='hidden' />
-                        </dd>
-                    </div>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Définir la zone de recherche</h3>
+    </div>
 
-                    <div style='margin-top: 10px;'>
-                        <dt>Voie</dt>
-                        <dd>
-                            <input class="form-control" type='text' name='voie_ac' placeholder='Nom de la voie ...' disabled />
-                            <input type='hidden' name='voie' />
-                        </dd>
-                    </div>
+    <div class="modal-body">
+        <dl class='dl-horizontal'>
+            <dt>Ville</dt>
+            <dd>
+                <input name='commune_ac' type='text' placeholder='Nom de la commune ou code postal ...' />
+                <input name='code_insee' type='hidden' />
+            </dd>
 
-                    <div style='margin-top: 10px;'>
-                        <dt>Numéro</dt>
-                        <dd>
-                            <input class="form-control" name='numero_ac' type='text' placeholder='Numéro de la voie ...' disabled />
-                        </dd>
-                    </div>
-                </dl>
-            </div>
+            <dt>Voie</dt>
+            <dd>
+                <input type='text' name='voie_ac' placeholder='Nom de la voie ...' disabled />
+                <input type='hidden' name='voie' />
+            </dd>
+            <dt>Numéro</dt>
+            <dd>
+                <input name='numero_ac' type='text' placeholder='Numéro de la voie ...' disabled />
+            </dd>
+        </dl>
+    </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                <button type="button" class='submit btn btn-success' onclick="masquerBoutonExportCalc()" >Définir la zone de recherche</button>
-            </div>
-        </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn">Annuler</a>
+        <a class='submit btn btn-success' onclick="masquerBoutonExportCalc()" >Définir la zone de recherche</a>
     </div>
 </form>
 
 <script>
     $(document).ready(function() {
+
     	// Si le champ de recherche est vide, on empêche l'envoi d'une recherche
+    	// $("input[name='label']").focus().keyup(function() {$('input[type="submit"]').attr('disabled', $(this).val() == '')}).keyup();
     	$("input[name='label']").focus();
     	$('input[type="submit"]').attr('disabled', false);
 
@@ -308,18 +302,19 @@
             $("input[name='numero_voie']").val("").blur();
         });
 
+
         // Validation de la zone de recherche
-        $('form#zone_de_recherche_modal .submit').click(function() {
+        $('form#zone_de_recherche_modal a.submit').click(function() {
             var text = 'Département';
 
             if($("input[name='code_insee']").val() != '') {
-                var text = $("input[name='commune_ac']").val();
-                if($("input[name='voie_ac']").val() != '') {
-                    var text = $("input[name='commune_ac']").val() + ', ' + $("input[name='voie_ac']").val();
-                    if($("input[name='numero_ac']").val() != '') {
-                        var text = $("input[name='commune_ac']").val() + ', ' + $("input[name='voie_ac']").val() + ', ' + $("input[name='numero_ac']").val();
+                    var text = $("input[name='commune_ac']").val();
+                    if($("input[name='voie_ac']").val() != '') {
+                            var text = $("input[name='commune_ac']").val() + ', ' + $("input[name='voie_ac']").val();
+                            if($("input[name='numero_ac']").val() != '') {
+                                var text = $("input[name='commune_ac']").val() + ', ' + $("input[name='voie_ac']").val() + ', ' + $("input[name='numero_ac']").val();
+                            }
                     }
-                }
             }
 
             $("input[name='zone_de_recherche_text']").val(text);
@@ -339,14 +334,10 @@
 
     function masquerBoutonExportCalc ()
     {
-        <?php if(count($this->results) > 0 && $this->results->getTotalItemCount() <= 10000 && $this->is_allowed_export_calc) :?>
-            document.getElementById('exporter').style.display = "none"
-        <?php endif ?>
+        document.getElementById('exporter').style.display = "none"
     }
     function afficherBoutonExportCalc ()
     {
-        <?php if(count($this->results) > 0 && $this->results->getTotalItemCount() <= 10000 && $this->is_allowed_export_calc) :?>
-            document.getElementById('exporter').style.display = "inline"
-        <?php endif ?>
+        document.getElementById('exporter').style.display = "inline"
     }
 </script>

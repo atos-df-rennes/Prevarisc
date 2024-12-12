@@ -1,7 +1,7 @@
 <!-- Titre -->
 <span style="float: right">
     <br/>
-	<button id='button-gdc' type="button" class='btn btn-default' data-toggle="modal" data-target="#modal-gdc">Gestion des commissions</button>
+	<button id='button-gdc' class='btn' >Gestion des commissions</button>
 </span>
 
 <h3 class='page-header'>Gestion des commissions</h3>
@@ -20,46 +20,65 @@
 	<?php echo $this->action("get-commissions", "gestion-des-commissions", null, array("id_type_des_commissions" => 1)); ?>
 </div>
 
-<div id="modal-gdc" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title">Gestion des commission</h3>
-            </div>
-
-            <div class="modal-body"></div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                <button id="save-gdc" type="button" class="btn btn-success">Sauvegarder</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script type="text/javascript">
+
 	// Ajout d'un type
 	$("#button-gdc").click(function() {
-		$('#modal-gdc .modal-body').load("/gestion-des-commissions/form");
+		dialog_gdc();
 	});
 
-    $('#save-gdc').click(function() {
-        $.ajax({
-            url: "/gestion-des-commissions/save",
-            data: $("#form-gdc").serialize(),
-            type: "POST",
-            success: function () {
-                window.location.reload();
-            }
-        });
-    })
+	function dialog_gdc() {
+
+		// $('#dialog-gdc').dialog("destroy");
+		$("#dialog-gdc").remove();
+
+		var dialog_gdc = $("<div id='dialog-gdc'></div>").appendTo("body");
+
+		dialog_gdc.dialog({
+			title: "Gestions des commissions",
+			width: 650,
+			draggable: false,
+			resizable: false,
+			modal: true,
+			create: function() {
+				dialog_gdc.load( "/gestion-des-commissions/form" );
+			},
+			buttons: [
+                {
+                    text: 'Sauvegarder',
+                    class: 'btn btn-success',
+                    click: function() {
+                        $.ajax({
+                            url: "/gestion-des-commissions/save",
+                            data: $("#form-gdc").serialize(),
+                            type: "POST",
+                            success: function () {
+                                $("#dialog-gdc").html('');
+                                dialog_gdc.dialog("destroy");
+                                window.location.reload();
+                            }
+                        });
+                    },
+                },
+                {
+                    text: 'Annuler',
+                    class: 'btn',
+                    click: function() {
+                        $("#dialog-gdc").html('');
+                        dialog_gdc.dialog("destroy");
+                    },
+                }
+            ]
+		});
+	}
 
 	// Affichage des commissions
 	$("ul#gestionCommissionMenu a").click(function() {
+
 		$("#content_commissions").load( $(this).attr("href") );
 		$("ul#gestionCommissionMenu li").removeClass("active");
 		$(this).parent().addClass("active");
 		return false;
 	});
+
 </script>

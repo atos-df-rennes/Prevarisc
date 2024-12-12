@@ -1,96 +1,74 @@
-<form id="adresse-modal-edit" class="modal adresse fade adresse-modal-edit" method='post' tabindex="-1" role="dialog">
+<form id="adresse-modal-edit" class="modal hide adresse fade adresse-modal-edit" method='post'>
     <input type='hidden' name='idAdresse' value=""/>
 
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3>Modifier une adresse</h3>
-            </div>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Modifier une adresse</h3>
+    </div>
 
-            <div class="modal-body">
-                <dl class='dl-horizontal'>
-                    <div class="form-group">
-                        <dt>Ville</dt>
-                        <dd>
-                            <input class='form-control' name='commune_ac' type='text' placeholder='Nom de la commune ou code postal ...' />
-                            <input name='code_insee' type='hidden' />
-                            <input name='code_postal' type='hidden' />
-                        </dd>
-                    </div>
+    <div class="modal-body">
+        <dl class='dl-horizontal'>
+            <dt>Ville</dt>
+            <dd>
+                <input name='commune_ac' type='text' placeholder='Nom de la commune ou code postal ...' />
+                <input name='code_insee' type='hidden' />
+                <input name='code_postal' type='hidden' />
+            </dd>
 
-                    <div class="form-group">
-                        <dt>Voie</dt>
-                        <dd>
-                            <input class='form-control' type='text' name='voie_ac' placeholder='Nom de la voie ...' disabled />
-                            <input type='hidden' name='type_voie' />
-                            <input type='hidden' name='voie' />
-                        </dd>
-                    </div>
+            <dt>Voie</dt>
+            <dd>
+                <input type='text' name='voie_ac' placeholder='Nom de la voie ...' disabled />
+                <input type='hidden' name='type_voie' />
+                <input type='hidden' name='voie' />
+            </dd>
 
-                    <div class="form-group">
-                        <dt>Numéro</dt>
-                        <dd>
-                            <input class='form-control' type='text' name='numero' placeholder='Numéro ...' disabled />
-                        </dd>
-                    </div>
+            <dt>Numéro</dt>
+            <dd>
+                <input class="input-small" type='text' name='numero' placeholder='Numéro ...' disabled />
+            </dd>
 
-                    <div class="form-group">
-                        <dt>Complément d'adresse</dt>
-                        <dd>
-                            <input class='form-control' type='text' name='complement' placeholder="Complément d'adresse" disabled />
-                        </dd>
-                    </div>
+            <dt>Complément d'adresse</dt>
+            <dd>
+                <input type='text' name='complement' placeholder="Complément d'adresse" disabled />
+            </dd>
 
-                    <div class="form-group">
-                        <dt>Type de l'adresse</dt>
-                        <dd>
-                            <select class='form-control'>
-                                <option>Adresse postale</option>
-                            </select>
-                        </dd>
-                    </div>
+            <dt>Type de l'adresse</dt>
+            <dd>
+                <select>
+                    <option>Adresse postale</option>
+                </select>
+            </dd>
 
-                    <div class="form-group">
-                        <dt>Géolocalisation</dt>
-                        <dd>
-                            <?php if ($this->key_ign !== null) : ?>
-                                <button id="geolocme" type='button' class='btn btn-primary btn-sm'>
-                                    <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Géolocaliser cette adresse (Geoportail)
-                                </button>
-                            <?php endif ?>
-                            <br/>
-                            <small>Résultat : <span class='result'>Inconnu</span></small>
-                        </dd>
-                    </div>
+            <dt>Géolocalisation</dt>
+            <dd>
+                <?php if ($this->key_ign !== null) : ?><button id="geolocme" type='button' class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
+                <br/>
+                <small>Résultat : <span class='result'>Inconnu</span></small>
+            </dd>
 
-                    <div class="form-group">
-                        <dt>Longitude</dt>
-                        <dd>
-                            <input class='form-control' id="addressLongitude" type='text' name='lon' />
-                        </dd>
-                    </div>
+            <dt>Longitude</dt>
+            <dd>
+                 <input id="addressLongitude" type='text' name='lon' />
+            </dd>
 
-                    <dt>Latitude</dt>
-                    <dd>
-                        <input class='form-control' id="addressLatitude" type='text' name='lat' />
-                    </dd>
-                </dl>
-                <?php if ($this->key_ign !== null): ?>
-                    <div id="edit-geoportail-container" style="height: 400px;"></div>
+            <dt>Latitude</dt>
+            <dd>
+                 <input id="addressLatitude" type='text' name='lat' />
+            </dd>
+        </dl>
+        <?php if ($this->key_ign !== null): ?>
+            <div id="edit-geoportail-container" style="height: 400px;"></div>
 
-                    <!-- Déplacement du bouton FullScreen (sinon supperposé avec le gestionnaire de couches) -->
-                    <style>
-                        .ol-full-screen {right:9px; top:49px}
-                    </style>
-                <?php endif ?>
-            </div>
+            <!-- Déplacement du bouton FullScreen (sinon supperposé avec le gestionnaire de couches) -->
+            <style>
+                .ol-full-screen {right:9px; top:49px}
+            </style>
+        <?php endif ?>
+    </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                <button type="button" id='submit-adresse-edit' class="btn btn-success">Modifier</a>
-            </div>
-        </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn">Annuler</a>
+        <button id='submit-adresse-edit' class="btn btn-success">Modifier</a>
     </div>
 </form>
 

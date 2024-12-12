@@ -294,7 +294,7 @@ echo "
 								</span>
 								<span style='display:none;' >
 									<button class='confirmDelete btn btn-danger'>Confirmer la suppression</button>
-									<button class='cancelDelete btn btn-default'>Annuler</button>
+									<button class='cancelDelete btn'>Annuler</button>
 								</span>
 							</div>
 						";
@@ -306,8 +306,8 @@ echo "
 					<input type='radio' name='linkType' value='etablissement'>Etablissement&nbsp;&nbsp;
 					<input type='text' id='saisieEtab' value='' style='width:500px;display:none;' />
 
-					<button class='add btn btn-default' id='add' style='display:none;' >Lier l'établissement au dossier</button>
-					<button class='cancelAdd btn btn-default' id='cancelAdd' style='display:none;' >Choisir un autre établissement</button>
+					<button class='add btn' id='add' style='display:none;' >Lier l'établissement au dossier</button>
+					<button class='cancelAdd btn' id='cancelAdd' style='display:none;' >Choisir un autre établissement</button>
 					<input type='hidden' name='idSelect' id='idSelect' value=''  />
 				</div>
 				";
@@ -315,7 +315,7 @@ echo "
 			echo "<br/><br/>";
 			echo "
 				<form id='listeEnfantEtab' >
-				<ul class='recherche_liste list-unstyled'>
+				<ul class='recherche_liste unstyled'>
 			";
 			if($this->infosDossier['VERROU_DOSSIER'] == 0){
 				if(isset($this->etablissement))
@@ -323,7 +323,7 @@ echo "
 					echo $this->partialLoop('dossier/results/etablissement.phtml', $this->etablissement['etablissement_lies']);
 					echo "
 						</ul>
-						<button class='btn btn-default' id='save-liens' >Sauvegarder les liaisons</button>
+						<button class='btn' id='save-liens' >Sauvegarder les liaisons</button>
 						</form>
 						<br/><br/><br/><br/>
 					";
@@ -339,8 +339,8 @@ echo "
 
 		foreach($this->listeDossierLies as $ref => $dossier){
 			echo "
-				<div class='row' style='margin-bottom:10px;'>
-                    <div class='col-md-10'>
+				<div class='row-fluid' style='margin-bottom:10px;'>
+                    <div class='span10'>
                     	<a href='/dossier/index/id/".$dossier['dossierInfo'][0]['ID_DOSSIER']."'>
 			";
 
@@ -396,10 +396,10 @@ echo "
                 }
                 $date_text = "créé le";
             }
-            echo "<small class='text-muted'>" . $date_text . " " . $date . "</small>
+            echo "<small class='muted'>" . $date_text . " " . $date . "</small>
 				<input type='hidden' value='".$dossier['ID_DOSSIERLIE']."' name='idDossierLie'>
 			</div>
-			<div class='col-md-2'>
+			<div class='span2'>
 				<span>
 					<button class='btn btn-warning deleteLienDossier'>Supprimer la liaison</button>
 				</span>
@@ -415,7 +415,7 @@ echo "
 			</div>
 			<br/>
 			<div class='grid_14 alpha form'>
-				<a class='btn btn-default' href='/dossier/liees-doss/id/".$this->infosDossier['ID_DOSSIER']."' >Lier à un dossier</a>
+				<a class='btn' href='/dossier/liees-doss/id/".$this->infosDossier['ID_DOSSIER']."' >Lier à un dossier</a>
 			</div>
 			<hr class='clear'/>
 		</div>

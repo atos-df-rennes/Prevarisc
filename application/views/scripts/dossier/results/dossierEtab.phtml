@@ -7,9 +7,9 @@
                 </span>
             ";
         ?>
-        <span>
+        <span class="doss-nom">
             <?php if ($this->VERROU_DOSSIER == 1): ?>
-                <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                <i class="icon-lock"></i>
             <?php endif;
 
             if (!empty($this->OBJET_DOSSIER)):
@@ -87,7 +87,7 @@
                 }
                 $date_text = "créé le";
             }
-            echo "<small class='text-muted'>" . $date_text . " " . $date . "</small>";
+            echo "<small class='muted'>" . $date_text . " " . $date . "</small>";
         ?>
 
         <!-- Icone de chargement des enfants (si il y'en a, et si on est en mode niveau -->
@@ -97,7 +97,7 @@
     </div>
 
     <div class="pull-right">
-	    <?php if ($this->ID_PLATAU !== null) : echo "<span class='label label-primary'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
+	    <?php if ($this->ID_PLATAU !== null) : echo "<span class='label label-info'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
         <?php if ($this->ID_PLATAU !== null && $this->INCOMPLET_DOSSIER === null) : echo "<span class='label label-info'>EN ATTENTE DE PEC</span>"; endif ?>
 
         <!-- Avis du dossier -->

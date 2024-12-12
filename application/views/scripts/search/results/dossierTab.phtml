@@ -28,7 +28,7 @@
     ?>
 
     <!-- Etablissement -->
-    <td>
+    <td class="doss-nom">
         <a href='/etablissement/index/id/<?php echo $this->ID_ETABLISSEMENT ?>' title='<?php echo htmlspecialchars($this->LIBELLE_ETABLISSEMENTINFORMATIONS , ENT_QUOTES) ?>'>
             <?php echo $this->LIBELLE_ETABLISSEMENTINFORMATIONS  ?>
         </a>
@@ -52,14 +52,14 @@
     <?php endif ?>
 
     <!-- Nom du dossier -->
-    <td>
+    <td class="doss-nom">
         <?php if ($this->VERROU_DOSSIER == 1): ?>
-            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+            <i class="icon-lock"></i>
         <?php endif ?>
         <a href='/dossier/index/id/<?php echo $this->ID_DOSSIER ?>' title='<?php echo htmlspecialchars($this->LIBELLE_DOSSIERTYPE . " - " . $this->LIBELLE_DOSSIERNATURE . (!empty($this->OBJET_DOSSIER) ? " - " . $this->OBJET_DOSSIER : ""), ENT_QUOTES) ?>'>
             <?php echo $this->LIBELLE_DOSSIERTYPE . " - " . $this->LIBELLE_DOSSIERNATURE . (!empty($this->OBJET_DOSSIER) ? " - " . substr($this->OBJET_DOSSIER, 0, 70) . ( strlen($this->OBJET_DOSSIER) > 70 ? "(...)" : "" ) : "") . ( $this->NB_URBA != '' ? " - " . $this->NB_URBA : '') ?>
         </a>
-        <?php echo "<small class='text-muted'>" . $date_text . " " . $date . "</small>"; ?>
+        <?php echo "<small class='muted'>" . $date_text . " " . $date . "</small>"; ?>
         <br/>
         <?php if($this->INCOMPLET_DOSSIER == 1) : ?>
         <span class='avis' style='background-color: #f89406;'>Dossier incomplet</span>
@@ -90,7 +90,7 @@
         <span class='avis' style='background-color: #3a87ad'>Fait l'objet d'un échéancier de travaux</span>
         <?php endif ?>
 
-	    <?php if($this->ID_PLATAU !== null) : echo "<span class='label label-primary'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
+	    <?php if($this->ID_PLATAU !== null) : echo "<span class='label label-info'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
         <?php if($this->ID_PLATAU !== null && $this->INCOMPLET_DOSSIER === null) : echo "<span class='label label-info'>EN ATTENTE DE PEC</span>"; endif ?>
 
         <?php $tempsRestant = Service_Utils_TempsRestant::calculate($this->DATE_REPONSE_ATTENDUE);
@@ -115,7 +115,7 @@
             }else{
                 $date = "00/00/0000";
             }
-            echo "<small class='text-muted'>Créé le " . $date . "</small><br/>";
+            echo "<small class='muted'>Créé le " . $date . "</small><br/>";
         }
         ?>
         <?php
@@ -128,7 +128,7 @@
             }else{
                 $date = "00/00/0000";
             }
-            echo "<small class='text-muted'>Reçu le " . $date . "</small><br/>";
+            echo "<small class='muted'>Reçu le " . $date . "</small><br/>";
         }
         ?>
         <?php
@@ -141,7 +141,7 @@
             }else{
                 $date = "00/00/0000";
             }
-            echo "<small class='text-muted'>Répondu le " . $date . "</small><br/>";
+            echo "<small class='muted'>Répondu le " . $date . "</small><br/>";
         }
         ?>
     </td>
@@ -162,7 +162,7 @@
     <!-- Pièces jointes -->
     <td>
         <?php if($this->PIECESJOINTES != null) : ?>
-            <a class="btn btn-default pj" href="#"><span class="glyphicon glyphicon-share" aria-hidden="true" ="<?php echo "iconpj".$this->ID_DOSSIER ?>"></span></a>
+        <a class="btn pj" href="#"><i class="icon-share icon-black" id="<?php echo "iconpj".$this->ID_DOSSIER ?>"></i></a>
         <?php endif ?>
     </td>
 </tr>

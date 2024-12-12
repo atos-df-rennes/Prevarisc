@@ -1,196 +1,228 @@
 <?php if(is_array($this->villes_tests) && count($this->villes_tests) > 0) : ?>
-    <span id='notif' class='ui-state-highlight' style='padding: 0.3em; display:none'></span>
 
-    <p class='pull-right'>
-        <br/>
-        <button type="button" class='btn btn-default' data-toggle="modal" data-target="#add-modal">Créer un nouveau groupement</button>
-    </p>
-    <h3 class='page-header'>Groupements de communes</h3>
+<span id='notif' class='ui-state-highlight' style='padding: 0.3em; display:none'></span>
 
-    <div id='save_div'>
-        <!-- Selection du groupement -->
-        <?php
-            echo $this->listeGroupement($this->groupement["ID_GROUPEMENT"], array(
-                "id" => "gpt",
-                "class" => "form-control",
-                "style" => "width: 400px; display: inline-block;"
-            ));
-        ?>
+<p class='pull-right'><br/><a href='#' id='new' class='btn' >Créer un nouveau groupement</a></p>
+<h3 class='page-header'>Groupements de communes</h3>
 
-        <!-- Icones -->
-        <div class="btn-group">
-            <button type="button" id='save' class='btn btn-success'>Sauvegarder le groupement</button>
-            <button type="button" class='btn btn-warning' data-toggle="modal" data-target="#delete-modal">Supprimer le groupement</button>
-        </div>
+<div id='save_div'>
+    <!-- Selection du groupement -->
+    <?php
+        echo $this->listeGroupement($this->groupement["ID_GROUPEMENT"], array(
+            "id" => "gpt",
+            "class" => "bigger",
+            "style" => "width: 400px"
+        ));
+    ?>
+
+    <!-- Icones -->
+    <div class="btn-group" style='margin-bottom: 10px;'>
+        <a id='save' href='#' class='btn btn-success' class='save' >Sauvegarder le groupement</a>
+        <a id='delete' href='#' class='btn btn-warning' >Supprimer le groupement</a>
     </div>
 
-    <br />
+</div>
 
-    <!-- affichage des onglets et de leur contenu -->
-    <form id='form' action='post' >
-        <input type='hidden' id='id_gpt' name='id_gpt' value='0' />
-        <div id='content'><p><strong>Pas de groupement disponible ...</strong></p></div>
+<br />
+
+<!-- affichage des onglets et de leur contenu -->
+<form id='form' action='post' >
+    <input type='hidden' id='id_gpt' name='id_gpt' value='0' />
+    <div id='content'><p><strong>Pas de groupement disponible ...</strong></p></div>
+</form>
+
+<div id='confirm' class='ui-helper-hidden' >
+    <p>Confirmez vous la suppression du groupement ? (cette action est irreversible)</p>
+</div>
+
+<div id='add' class='ui-helper-hidden' >
+    <form id='add-groupement'>
+        <dl>
+            <!-- Libellé du groupement -->
+            <dt>Libellé du groupement</dt>
+            <dd><input type='text' id='nom_groupement' name='nom_groupement' size=30 /></dd>
+
+            <!-- Type du groupement-->
+            <dt>Type</st>
+            <dd>
+                <select id='type_groupement' name='type_groupement'>
+                <?php
+                    foreach($this->array_groupementstypes as $value)
+                        echo "<option id='".$value["ID_GROUPEMENTTYPE"]."' value='".$value["ID_GROUPEMENTTYPE"]."' >".$value["LIBELLE_GROUPEMENTTYPE"]."</option>";
+                ?>
+                </select>
+            </dd>
+            <input type='hidden' name='id_gpt' value='0' />
+        </dl>
     </form>
+</div>
 
-    <div id="delete-modal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
-                    <h3 class="modal-title">Suppression d'un groupement</h3>
-                </div>
-
-                <div class="modal-body">
-                    Confirmez-vous la suppression du groupement ? (cette action est irreversible)
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                    <button id="delete" type="button" class="btn btn-danger">Supprimer le groupement</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id='add-modal' class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
-                    <h3 class="modal-title">Création d'un nouveau groupement</h3>
-                </div>
-
-                <div class="modal-body">
-                    <form id='add-groupement'>
-                        <dl class='dl-horizontal'>
-                            <!-- Libellé du groupement -->
-                            <div class="form-group">
-                                <dt>Libellé du groupement</dt>
-                                <dd>
-                                    <input class="form-control" type='text' id='nom_groupement' name='nom_groupement' size=30 />
-                                </dd>
-                            </div>
-
-                            <!-- Type du groupement-->
-                            <div>
-                                <dt>Type</dt>
-                                <dd>
-                                    <select class="form-control" id='type_groupement' name='type_groupement'>
-                                    <?php
-                                        foreach($this->array_groupementstypes as $value)
-                                            echo "<option id='".$value["ID_GROUPEMENTTYPE"]."' value='".$value["ID_GROUPEMENTTYPE"]."' >".$value["LIBELLE_GROUPEMENTTYPE"]."</option>";
-                                    ?>
-                                    </select>
-                                </dd>
-                                <input type='hidden' name='id_gpt' value='0' />
-                            </div>
-                        </dl>
-                    </form>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                    <button id="add" type="button" class="btn btn-success">Ajouter le groupement</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script type="text/javascript">
-        $('#delete').click(function() {
-            $.ajax({
-                url: "/groupement/delete?id="+$("#gpt option:selected").val(),
-                success: function( result ) {
-                    $("#notif").html("Le groupement a bien été supprimé.").show();
-                    setTimeout( function() { $("#notif").fadeOut(); }, 2500);
-
-                    $("#gpt option:selected").remove();
-                    $("#gpt option:first").attr("selected", "selected");
-                    $("#gpt").change();
-
-                    $("#delete-modal").modal('hide');
-                }
-            });
-        })
-
-        $('#add').click(function() {
-            $.ajax({
-                url: "/groupement/add?format=json",
-                type: "post",
-                data: $("#add-groupement").serialize(),
-                success: function( result ) {
-                    $("#notif").html("Le groupement a bien été ajouté.").show();
-                    $("select#gpt > optgroup#gpt_" + result["type"]).append( $("<option></option>").val( result["id"] ).html( result["libelle"] ).attr("selected", "selected") );
-                    $("select#gpt").change();
-                    setTimeout( function() { $("#notif").fadeOut(); }, 2500);
-                    $("#add-modal").modal('hide');
-                }
-            });
-        })
-
-        $( "#save" ).click( function() {
-            // Selection de toutes les villes pour les passer dans le formulaire
-            $("#villes_groupement option").each(function(){ $(this).attr("selected", true);	});
-
-            // On envoit le tout en ajax
-            $.ajax({
-                url: "/groupement/add?format=json",
-                type: "post",
-                data: $("#form").serialize() + "&" + $("#formulaire_contact").serialize(),
-                beforeSend: function() {
-                    $("#save").button("disable");
-                },
-                success: function( result ) {
-                    $("#save").button("enable");
-                    $("#notif").html("Le groupement a bien été mis à jour.").show();
-                    $("select#gpt option:selected").remove();
-                    $("select#gpt > optgroup#gpt_" + result["type"]).append( $("<option></option>").val( result["id"] ).html( result["libelle"] ).attr("selected", "selected") );
-                    $("select#gpt").change();
-                    setTimeout( function() { $("#notif").fadeOut(); }, 2500);
-                }
-            });
-
-            // On deselectionne les villes
-            $("#villes_groupement option").each(function(){ $(this).attr("selected", false); });
-        });
-
-        // Gestion des évenements de la liste déroulante
-        $("#gpt").change( function() {
-            if($("#gpt").val() != null)
+<script type="text/javascript">
+	$("#confirm").dialog({
+        title: "Suppression d'un groupement",
+		resizable: false,
+		draggable: false,
+		height: 'auto',
+        width: 500,
+		autoOpen: false,
+		modal: true,
+		buttons: [
             {
-                if( $("#gpt").val() == 0 )
-                    $("#delete").button("disable");
-                else
-                    $("#delete").button("enable");
+                text: 'Supprimer le groupement',
+                class: 'btn btn-danger',
+                click: function() {
+                    $.ajax({
+                        url: "/groupement/delete?id="+$("#gpt option:selected").val(),
+                        beforeSend: function() {
+                            $("#remove").button("disable");
+                        },
+                        success: function( result ) {
+                            $("#remove").button("enable");
+                            $("#notif").html("Le groupement a bien été supprimé.").show();
+                            setTimeout( function() { $("#notif").fadeOut(); }, 2500);
 
-                $.ajax({
-                    url: "/groupement/display?id=" + $("#gpt").val(),
-                    beforeSend: function() {
-                        $("#form > #content").css( "opacity", 0.5 );
-                    },
-                    success: function(result) {
-                        $("#form > #content").css( "opacity", 1 );
-                        $("#form > #content").html(result);
-                    }
-                });
+                            $("#gpt option:selected").remove();
+                            $("#gpt option:first").attr("selected", "selected");
+                            $("#gpt").change();
 
-                $("#id_gpt").val( $("#gpt").val() ); // On change la valeur de l'id en cours
-                $("#save").button("enable");
+                            $("#confirm").dialog( "close" );
+                        }
+                    });
+                }
+            },
+            {
+                text: 'Annuler',
+                class: 'btn',
+                click: function() {
+                    $("#confirm").dialog( "close" );
+                }
             }
+        ]
+	});
+
+	$("#add").dialog({
+		title: "Création d'un nouveau groupement",
+		resizable: false,
+		draggable: false,
+		height: 'auto',
+		width: 500,
+		modal: true,
+		autoOpen: false,
+		buttons: [
+            {
+                text: 'Ajouter le groupement',
+                class: 'btn btn-success',
+                click: function() {
+                    $.ajax({
+                        url: "/groupement/add?format=json",
+                        type: "post",
+                        data: $("#add-groupement").serialize(),
+                        success: function( result ) {
+
+                            $("#notif").html("Le groupement a bien été ajouté.").show();
+                            $("select#gpt > optgroup#gpt_" + result["type"]).append( $("<option></option>").val( result["id"] ).html( result["libelle"] ).attr("selected", "selected") );
+                            $("select#gpt").change();
+                            setTimeout( function() { $("#notif").fadeOut(); }, 2500);
+                            $("#add").dialog( "close" );
+                        }
+                    });
+                }
+            },
+            {
+                text: 'Annuler',
+                class: 'btn',
+                click: function() {
+                    $("#add").dialog( "close" );
+                }
+            }
+        ]
+	});
+
+	// Boutons de la toolbar
+	// Selection de l'option "nouveau groupement"
+	$("#new").button({
+		icons: { primary: "ui-icon-plus" }
+	}).click( function() {
+		//$("#gpt option[value=0]").attr("selected", "selected").change();
+        $('#add').find("input").val('');
+		$("#add").dialog("open");
+	// Sauvegarder
+	});
+
+	$( "#save" ).click( function() {
+		// Selection de toutes les villes pour les passer dans le formulaire
+		$("#villes_groupement option").each(function(){ $(this).attr("selected", true);	});
+
+		// On envoit le tout en ajax
+		$.ajax({
+			url: "/groupement/add?format=json",
+			type: "post",
+			data: $("#form").serialize() + "&" + $("#formulaire_contact").serialize(),
+			beforeSend: function() {
+				$("#save").button("disable");
+			},
+			success: function( result ) {
+				$("#save").button("enable");
+				$("#notif").html("Le groupement a bien été mis à jour.").show();
+				$("select#gpt option:selected").remove();
+				$("select#gpt > optgroup#gpt_" + result["type"]).append( $("<option></option>").val( result["id"] ).html( result["libelle"] ).attr("selected", "selected") );
+				$("select#gpt").change();
+				setTimeout( function() { $("#notif").fadeOut(); }, 2500);
+			}
+		});
+
+		// On deselectionne les villes
+		$("#villes_groupement option").each(function(){ $(this).attr("selected", false); });
+	// Suppression d'un groupement
+	});
+
+    $( "#delete" ).click( function() {
+		$("#confirm").dialog("open");
+	});
+
+	// Gestion des évenements de la liste déroulante
+	$("#gpt").change( function() {
+
+        if($("#gpt").val() != null)
+        {
+            if( $("#gpt").val() == 0 )
+                $("#delete").button("disable");
             else
-            {
-                $("#save").button("disable");
-            }
-        });
+                $("#delete").button("enable");
 
-        $("#gpt").change(); // Initalisation
-    </script>
+            $.ajax({
+                url: "/groupement/display?id=" + $("#gpt").val(),
+                beforeSend: function() {
+                    $("#form > #content").css( "opacity", 0.5 );
+                },
+                success: function(result) {
+                    $("#form > #content").html(result);
+                    $("#form > #content").css( "opacity", 1 );
+                }
+            });
+
+            $("#id_gpt").val( $("#gpt").val() ); // On change la valeur de l'id en cours
+            $("#save").button("enable");
+        }
+        else
+        {
+            $("#save").button("disable");
+        }
+	});
+
+	$("#gpt").change(); // Initalisation
+
+
+</script>
+
 <?php else : ?>
-    <div class='grid_16'>
-        <h2>
-            <i class='sprite sprite-application_view_columns' ></i>
-            Groupements de communes
-        </h2>
-        <p><strong>Il n'y a pas de communes dans la base de données.</strong></p>
-    </div>
+
+<div class='grid_16'>
+    <h2>
+		<i class='sprite sprite-application_view_columns' ></i>
+		Groupements de communes
+	</h2>
+    <p><strong>Il n'y a pas de communes dans la base de données.</strong></p>
+</div>
+
 <?php endif ?>

@@ -1,19 +1,19 @@
 <div class='pull-right btn-group'>
-    <a class='btn btn-default' href="<?php echo $this->url(array('action' => 'list')) ?>">Revenir sur la liste des couches cartographiques</a>
+    <a class='btn' href="<?php echo $this->url(array('action' => 'list')) ?>">Revenir sur la liste des couches cartographiques</a>
 </div>
 
 <h3>Ajout d'une couche cartographique IGN</h3>
 
-<div class="panel-group" id="ign-accordion" role="tablist" aria-multiselectable="true">
+<div class="accordion" id="ign-accordion">
     <?php foreach ($this->formats as $index => $format): ?>
-        <div class="panel panel-default">
-            <div class="panel-heading" role="tab">
-                <a role="button" class="accordion-toggle" data-toggle="collapse" data-parent="#ign-accordion" href="#<?= str_replace(' ', '-', $format) ?>">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#ign-accordion" href="#<?= str_replace(' ', '-', $format) ?>">
                     <?= strtoupper($format) ?>
                 </a>
             </div>
-            <div id="<?= str_replace(' ', '-', $format) ?>" class="panel-collapse collapse <?= $index === 0 ? 'in' : '' ?>" role="tabpanel">
-                <div class="panel-body">
+            <div id="<?= str_replace(' ', '-', $format) ?>" class="accordion-body collapse <?= $index === 0 ? 'in' : '' ?>">
+                <div class="accordion-inner">
                     <table class="table table-hover table-condensed">
                         <thead>
                             <tr>
@@ -49,7 +49,7 @@
                 const layers = getCapabilitiesLayers(parser, format, baseFormat, result)
 
                 if (layers.length > 0) {
-                    contentDiv = $(`#${format.replace(' ', '-')} .panel-body table tbody`)
+                    contentDiv = $(`#${format.replace(' ', '-')} .accordion-inner table tbody`)
 
                     for (let i = 0; i < layers.length; i++) {
                         contentDiv.append(`<tr id="${layers[i].internalName}-${format.replace(' ', '-')}">`)
@@ -74,7 +74,7 @@
 
                             row.append(`
                                 <td>
-                                    <select class="form-control" form="form-${layers[i].internalName}-${format.replace(' ', '-')}" name="FORMAT_COUCHECARTO">
+                                    <select form="form-${layers[i].internalName}-${format.replace(' ', '-')}" name="FORMAT_COUCHECARTO">
                                     </select>
                                 </td>
                             `)

@@ -1,9 +1,9 @@
 <form method='get'>
 
-	<div class='navbar-form well well-sm' style='margin-bottom: 5px;'>
+	<div class='navbar-form form-search well well-small' style='margin-bottom: 5px;'>
 		<div class="input-append">
-			<input type="text" name='name' class="col-md-6 form-control" placeholder="Nom de l'utilisateur ..." value='<?php if(isset($_GET["name"])) echo $_GET["name"] ?>' />
-			<input type='submit' class="btn btn-default" value="Rechercher dans Prevarisc" disabled />
+			<input type="text" name='name' class="span6 search-query" placeholder="Nom de l'utilisateur ..." value='<?php if(isset($_GET["name"])) echo $_GET["name"] ?>' />
+			<input type='submit' class="btn" value="Rechercher dans Prevarisc" disabled />
 			<input type='hidden' name='page' value="1" />
 		</div>
 	</div>
@@ -19,13 +19,13 @@
 <hr/>
 
 <?php if( count($this->results) > 0 ) : ?>
-    <p class='text-muted'><small>Nombre total d'éléments : <?php echo $this->results->getTotalItemCount() ?></small></p>
+    <p class='muted'><small>Nombre total d'éléments : <?php echo $this->results->getTotalItemCount() ?></small></p>
     <?php echo $this->partialLoop('users/embedded/user_medium.phtml', $this->results ) ?>
     <br/>
     <div style='clear: both'></div>
     <?php echo $this->results ?>
 <?php else : ?>
-	<p class='text-muted'><small>Aucun résultat disponible.</small></p>
+	<p class='muted'><small>Aucun résultat disponible.</small></p>
     <h2 style='color: silver; text-align: center;' ></h2>
 <?php endif ?>
 

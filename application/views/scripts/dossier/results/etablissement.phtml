@@ -22,7 +22,7 @@
 			echo "<input type='checkbox' name='etabId[]' value='".$this->ID_ETABLISSEMENT."' />";
 		?>
         <a href='/etablissement/index/id/<?php echo $this->ID_ETABLISSEMENT ?>'>
-            <?php echo empty($this->LIBELLE_ETABLISSEMENTINFORMATIONS) ? "<em class='text-muted'>Libellé non renseigné</em>" : $this->LIBELLE_ETABLISSEMENTINFORMATIONS ?>
+            <?php echo empty($this->LIBELLE_ETABLISSEMENTINFORMATIONS) ? "<em class='muted'>Libellé non renseigné</em>" : $this->LIBELLE_ETABLISSEMENTINFORMATIONS ?>
             <small>
 				<?php
                     switch($this->ID_GENRE)

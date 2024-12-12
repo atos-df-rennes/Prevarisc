@@ -4,12 +4,12 @@
 		<form name='listeDossierCheckBox' method='POST' action='/dossier/liees/id/".$this->idDossier."'>
 		<input type='hidden' name='do' id='do' value='saveDossLink' />
 		<div style='float:right;'>
-			<a class='btn btn-default' href='/dossier/liees/id/".$this->idDossier."'>Annuler</a>
+			<a class='btn' href='/dossier/liees/id/".$this->idDossier."'>Annuler</a>
 			<input type='submit' class='btn btn-success' name='saveLink' value='Sauvegarder les liaisons' />
 		</div>
 	";
 	echo "
-		<div class='col-md-12'>
+		<div class='span12'>
 			<input type='hidden' name='idDossier' id='idDossier' value='".$this->idDossier."' />
 	";
 		foreach($this->listeEtab as $lib => $val){			
@@ -19,7 +19,7 @@
 			";
 			if(count($this->listeDossierEtab[$val]["dossiers"]["visites"]) > 0){
 				echo "
-					Visite(s) <button  class='btn more'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span></button><button class='btn less' style='display:none;'><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button>
+					Visite(s) <button  class='btn more'><i class='icon-plus'></i></button><button class='btn less' style='display:none;'><i class='icon-minus'></i></button>
 					<ul style='display:none;'>
 				";
 				echo $this->partialLoop('dossier/results/dossierEtab.phtml', $this->listeDossierEtab[$val]["dossiers"]["visites"]);
@@ -31,7 +31,7 @@
 			";
 			if(count($this->listeDossierEtab[$val]["dossiers"]["etudes"]) > 0){
 				echo "
-					Etude(s) <button  class='btn more'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span></button><button class='btn less' style='display:none;'><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button>
+					Etude(s) <button  class='btn more'><i class='icon-plus'></i></button><button class='btn less' style='display:none;'><i class='icon-minus'></i></button>
 					<ul style='display:none;'>
 				";
 				echo $this->partialLoop('dossier/results/dossierEtab.phtml', $this->listeDossierEtab[$val]["dossiers"]["etudes"]);
@@ -43,7 +43,7 @@
 			";
 			if(count($this->listeDossierEtab[$val]["dossiers"]["autres"]) > 0){
 				echo "
-					Autre(s) <button  class='btn more'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span></button><button class='btn less' style='display:none;'><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button>
+					Autre(s) <button  class='btn more'><i class='icon-plus'></i></button><button class='btn less' style='display:none;'><i class='icon-minus'></i></button>
 					<ul style='display:none;'>
 				";
 				echo $this->partialLoop('dossier/results/dossierEtab.phtml', $this->listeDossierEtab[$val]["dossiers"]["autres"]);

@@ -1,13 +1,13 @@
 <div id='etablissement'>
-    <h3 class='pull-left'>Fiche d'informations générales</h3>
     <div class='pull-right'>
-        <a class='btn btn-default' href="<?php echo $this->url(array('action' => 'edit')) ?>">Modifier la fiche</a>
+        <a class='btn' href="<?php echo $this->url(array('action' => 'edit')) ?>">Modifier la fiche</a>
     </div>
-    <div class="clearfix"></div>
 
-    <div class='row'>
+    <h3>Fiche d'informations générales</h3>
+
+    <div class='row-fluid'>
         <!-- Informations générales de l'établissement -->
-        <div class='col-md-6'>
+        <div class='span6'>
             <!-- Classement de l'établissement -->
             <h4 class='h4_subtitle'>Classement</h4>
             <dl class='dl-horizontal'>
@@ -16,7 +16,7 @@
                     <p>
                         <strong><?php echo $this->etablissement['informations']['LIBELLE_GENRE'] ?></strong>
                         <?php if ($this->etablissement['informations']["ICPE_ETABLISSEMENTINFORMATIONS"]) {
-                            echo "<span class='label label-primary'>ICPE</span>";
+                            echo "<span class='badge badge-info'>ICPE</span>";
                         } ?>
                     </p>
                 </dd>
@@ -54,10 +54,10 @@
                 <dd>
                     <p>
                         <?php if ($this->etablissement['informations']['ID_GENRE'] == 1): ?>
-                            <span class="glyphicon glyphicon-info-sign" aria-hidden="true" title="Périodicité la plus contraignante des fils ERP"></span>
+                            <i class="icon-info-sign" title="Périodicité la plus contraignante des fils ERP"></i>
                         <?php endif ?>
                         <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2, 5)) && $this->etablissement['informations']['PERIODICITE_ETABLISSEMENTINFORMATIONS'] <> $this->default_periodicite): ?>
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" title="Periodicite non standard"></span>
+                            <i class="icon-exclamation-sign" title="Periodicite non standard"></i>
                         <?php endif ?>
                         <?= $this->periodicity ?>
                     </p>
@@ -69,13 +69,13 @@
             <!-- Activités de l'établissement -->
             <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2, 3))) : ?>
             <h4 class='h4_subtitle'>Activités <?php if ($this->etablissement['informations']["LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS"] && $this->etablissement['informations']['ID_GENRE'] == 2) {
-                echo "<span class='label label-primary pull-right'>Présence de locaux à sommeil</span>";
+                echo "<span class='badge badge-info pull-right'>Présence de locaux à sommeil</span>";
             } ?></h4>
             <dl class='dl-horizontal'>
                 <!-- Type et activités -->
                 <dt>Types & activités</dt>
                 <dd>
-                    <ul class='list-unstyled'>
+                    <ul class='unstyled'>
                         <li>
                             <strong>
                                 <?php
@@ -107,7 +107,7 @@
             <?php if ($this->etablissement['informations']["ICPE_ETABLISSEMENTINFORMATIONS"]) : ?>
                 <h4 class='h4_subtitle'>Rubriques ICPE</h4>
                 <?php if (count($this->etablissement['rubriques']) == 0) : ?>
-                    <p class='text-muted text-center'>Pas de rubriques disponible</p>
+                    <p class='muted text-center'>Pas de rubriques disponible</p>
                 <?php else : ?>
                     <table class='table table-condensed'>
                         <thead>
@@ -215,7 +215,7 @@
             <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2, 3, 5, 6))) : ?>
                 <h4 class='h4_subtitle'>Plans d'intervention</h4>
                 <?php if (count($this->etablissement['plans']) == 0) : ?>
-                    <p class='text-muted text-center'>Pas de plans disponible</p>
+                    <p class='muted text-center'>Pas de plans disponible</p>
                 <?php else : ?>
                     <table class='table table-condensed'>
                         <thead>
@@ -242,8 +242,8 @@
 
             <!-- Etablissement lié -->
             <?php if (count($this->etablissement['etablissement_lies']) > 0) : ?>
-            <h4 class='h4_subtitle'>Établissements liés <span class="badge"><?= count($this->etablissement['etablissement_lies']) ?></span>
-                <input type="text" class="pull-right" id="filterLinkedEts" placeholder="Filtrer les établissements" />
+            <h4 class='h4_subtitle'>Établissements liés <small><?php echo count($this->etablissement['etablissement_lies']) > 0 ? "(" . count($this->etablissement['etablissement_lies']) . ")" : "" ?></small>
+                <input type="text" class="pull-right input-medium" id="filterLinkedEts" placeholder="Filtrer les établissements" />
                 <script>
                     $(document).ready(function(){
                         $('#filterLinkedEts').keyup(function() {
@@ -259,14 +259,14 @@
                     });
                 </script>
             </h4>
-            <ul class='recherche_liste list-unstyled no_slide' style='max-height: 500px; overflow-y: scroll;'>
+            <ul class='recherche_liste unstyled no_slide' style='max-height: 500px; overflow-y: scroll;'>
                 <?php echo $this->partialLoop('search/results/etablissement.phtml', $this->etablissement['etablissement_lies']); ?>
             </ul>
             <?php endif ?>
         </div>
 
         <!-- Carte de l'emplacement de l'établissement / informations  -->
-        <div class='col-md-6'>
+        <div class='span6'>
             <!-- Cartes et diaporama -->
             <ul id='menu_nav' class="nav nav-tabs" style="margin: 0; padding: 0; border-bottom: none;">
                 <?php if (count($this->etablissement['diapo_plans']) > 0) : ?>
@@ -285,7 +285,7 @@
                     <li class='tabs-right' ><a href='#geoconcept' data-toggle="tab">Carte GeoConcept</a></li>
                 <?php endif ?>
             </ul>
-            <div id="reponse-modal" class="modal fade"></div>
+            <div id="reponse-modal" class="modal hide fade"></div>
             <div class="tab-content">
                 <!-- Carte IGN -->
                 <?php if (count($this->etablissement['adresses']) > 0 && $this->key_ign != null && $this->etablissement['adresses'][0]['LAT_ETABLISSEMENTADRESSE'] != null && $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] != null) : ?>
@@ -494,7 +494,7 @@
                 <?php if (count($this->groupements_de_communes) > 0) : ?>
                 <dt>Groupements</dt>
                 <dd>
-                    <ul class='list-unstyled'>
+                    <ul class='unstyled'>
                         <?php foreach ($this->groupements_de_communes as $groupement) : ?>
                         <li>
                             <a href="/groupement/view?id=<?php echo $groupement["ID_GROUPEMENT"] ?>"><?php echo $groupement["LIBELLE_GROUPEMENT"] ?> (<?php echo $groupement["LIBELLE_GROUPEMENTTYPE"] ?>)</a>
@@ -551,7 +551,7 @@
                 <dt>Préventionnistes</dt>
                 <dd>
                     <?php if (count($this->etablissement['preventionnistes']) == 0) : ?>
-                        <p class='text-muted'>Aucun préventionniste lié.</p>
+                        <p class='muted'>Aucun préventionniste lié.</p>
                     <?php else : ?>
                         <?php echo $this->partialLoop('users/embedded/user.phtml', $this->etablissement['preventionnistes']) ?>
                         <div style='clear: both; margin-bottom: 10px;'></div>
@@ -602,23 +602,19 @@
 </div>
 
 <!-- Boite de confirmation de la suppression (cachée par défaut) -->
-<div id="confirm-modal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 class="modal-title">Confirmation de la suppression</h3>
-            </div>
+<div id="confirm-modal" class="modal hide fade" >
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Confirmation de la suppression</h3>
+    </div>
 
-            <div class="modal-body">
-                <p>Êtes-vous sûr de vouloir supprimer l'établissement ?</p>
-            </div>
+    <div class="modal-body">
+        <p> Etes-vous sûr de vouloir supprimer l'établissement ? </p>
+    </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                <a href="<?php echo $this->url(array($this->idEtablissement, 'action' => 'delete')); ?>" class='btn btn-danger'>Confirmer</a>
-            </div>
-        </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn">Annuler</a>
+        <a href="<?php echo $this->url(array($this->idEtablissement, 'action' => 'delete')); ?>" class='btn btn-success'>Confirmer</a>
     </div>
 </div>
 

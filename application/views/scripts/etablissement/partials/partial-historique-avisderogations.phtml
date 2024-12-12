@@ -1,5 +1,5 @@
 <?php if (empty($this->array)) : ?>
-    <p class='text-muted'>Pas d'historique disponible.</p>
+    <p class='muted'>Pas d'historique disponible.</p>
 <?php else : ?>
     <table class='table table-bordered table-hover'>
         <thead>
@@ -26,7 +26,7 @@
                     <a href="<?= $item['url'] ?>" target="_blank" title="Ouvrir <?= $item['titre'] ?> (nouvel onglet)"><?= $item["titre"] ?></a>
 
                     <div>
-                        <small class="text-muted"><?= $item['type'] ?></small>
+                        <small class="muted"><?= $item['type'] ?></small>
 
                         <?php if ($item['leve']): ?>
                             <span class="label label-info">

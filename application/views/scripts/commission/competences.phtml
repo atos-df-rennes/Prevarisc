@@ -1,11 +1,14 @@
 <?php if(count($this->array_regles) == 0) : ?>
+
 	<br />
 	<p><strong>Pas de règles définies pour cette commission. <a class='add-regle' href='/commission/add-regle?id_commission=<?php echo $_GET["id_commission"] ?>'>Vous pouvez en ajouter une ici.</a></strong></p>
+
 <?php else : ?>
-	<p style='text-align: right' ><a class='add-regle btn btn-default' href='/commission/add-regle?id_commission=<?php echo $_GET["id_commission"] ?>'>Ajouter une règle</a></p>
+
+	<p style='text-align: right' ><a class='add-regle btn' href='/commission/add-regle?id_commission=<?php echo $_GET["id_commission"] ?>'>Ajouter une règle</a></p>
 
 	<form method='post' action='/commission/saveRegles?id_commission=<?php echo $_GET["id_commission"] ?>' >
-        <input type="hidden" name="ID_COMMISSION" value="<?php echo $_GET["id_commission"] ?>" />
+                <input type="hidden" name="ID_COMMISSION" value="<?php echo $_GET["id_commission"] ?>" />
 		<!-- Tableau contenant les règles -->
 		<table class='table table-condensed'>
 			<thead>
@@ -28,20 +31,22 @@
 				<?php echo $this->partialLoop("commission/partials/partial-ligne-regle-commission.phtml", $this->array_regles); ?>
 			</tbody>
 		</table>
+
 	</form>
 
 	<div id="save_div" style="text-align: center" >
-        <button class='save-competences save btn btn-success' data-loading-text="Sauvegarde des règles <img src='/images/load.gif' />">Sauvegarder les règles</button>
-        <button class='apply-competences save btn btn-primary' data-loading-text="Application des règles <img src='/images/load.gif' />">Appliquer les règles</button>
+			<button class='save-competences save btn btn-success' data-loading-text="Sauvegarde des règles <img src='/images/load.gif' />">Sauvegarder les règles</button>
+			<button class='apply-competences save btn btn-success' data-loading-text="Application des règles <img src='/images/load.gif' />">Appliquer les règles</button>
 
-        <span id='<?php echo $_GET["id_commission"] ?>_notification' class='ui-state-highlight ui-helper-hidden' style='padding: .5em;'>
-            Les compétences de la commission ont bien été sauvegardées.
-        </span>
+			<span id='<?php echo $_GET["id_commission"] ?>_notification' class='ui-state-highlight ui-helper-hidden' style='padding: .5em;'>
+				Les compétences de la commission ont bien été sauvegardées.
+			</span>
 
-        <span id='<?php echo $_GET["id_commission"] ?>_application' class='ui-state-highlight ui-helper-hidden' style='padding: .5em;'>
-            Les compétences de la commission ont bien été appliquées sur les établissements de Prevarisc.
-        </span>
+			<span id='<?php echo $_GET["id_commission"] ?>_application' class='ui-state-highlight ui-helper-hidden' style='padding: .5em;'>
+				Les compétences de la commission ont bien été appliquées sur les établissements de Prevarisc.
+			</span>
 	</div>
+
 <?php endif ?>
 
 <script type="text/javascript">
@@ -126,4 +131,5 @@
 		});
 		return false;
 	});
+
 </script>

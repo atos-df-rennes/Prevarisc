@@ -8,7 +8,7 @@
 
 </div>
 
-<div id="reponse-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="reponse-modal" class="modal hide fade" ></div>
 
 <br>
 
@@ -109,12 +109,12 @@
             });
         });
 
-        $(".panel-heading .glyphicon").click(function() {
+        $(".panel-heading .icon").click(function() {
             var $self = $(this);
             var $panel = $self.parents('.panel');
             $panel.toggleClass('folded');
-            if ($self.hasClass('glyphicon-chevron-right')) {
-                $self.removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');
+            if ($self.hasClass('icon-chevron-right')) {
+                $self.removeClass('icon-chevron-right').addClass('icon-chevron-down');
                 if ($panel.hasClass('empty') && !$panel.hasClass('loading')) {
                     $panel.find('.panel-body img').show();
                     loadBloc($panel);
@@ -123,7 +123,7 @@
                     $container.packery('fit', $panel.get(0));
                 }
             } else {
-                $self.removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
+                $self.removeClass('icon-chevron-down').addClass('icon-chevron-right');
                 $panel.find('.panel-body').hide();
                 $container.packery('fit', $panel.get(0));
             }
@@ -143,17 +143,17 @@
                     if (res.healthcheckOk) {
                         $("#bloc__connexion-platau").html(`<div class="alert alert-info">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            <strong>La connexion à Plat'AU a fonctionné.</strong>
+                            <strong>La connexion à Plat'AU a fonctionnée.</strong>
                         </div>`)
                     } else {
                         if (res.errorOrigin === 'prevarisc') {
-                            $("#bloc__connexion-platau").html(`<div class="alert alert-block alert-danger">
+                            $("#bloc__connexion-platau").html(`<div class="alert alert-block alert-error">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                <h4>La connexion à Plat'AU depuis Prevarisc a échoué.</h4>
-                                Veuillez contacter votre service informatique.
+                                <h4>La connexion à Plat'AU depuis Prevarisc a échouée.</h4>
+                                Veuillez suivre les instructions du Manuel Utilisateur §6.17.2
                             </div>`)
                         } else if (res.errorOrigin === 'PlatAU') {
-                            $("#bloc__connexion-platau").html(`<div class="alert alert-block alert-danger">
+                            $("#bloc__connexion-platau").html(`<div class="alert alert-block alert-error">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                                 <h4>Plat'AU est en erreur.</h4>
                                 Veuillez réessayer ultérieurement.
@@ -162,7 +162,7 @@
                     }
                 },
                 error: function() {
-                    $("#bloc__connexion-platau").html(`<div class="alert alert-danger">
+                    $("#bloc__connexion-platau").html(`<div class="alert alert-error">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                         <strong>Une erreur s'est produite lors de la vérification de la connexion à Plat'AU.</strong>
                     </div>`);

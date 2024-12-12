@@ -2,40 +2,38 @@
 <input type='hidden' name='idCommission' id='idCommission' value='<?php if($this->idComm){ echo $this->idComm; } ?>'/>
 <ul class="nav nav-tabs nav-stacked menu_dashboard" >
     <li>
-        <a href="#" id='commissionPj'><span class="glyphicon glyphicon-share" aria-hidden="true"></span> Pièces jointes</a>
+        <a href="#" id='commissionPj'><i class="icon-share icon-black"></i> Pièces jointes</a>
     </li>
     <li class="nav-header">Actions</li>
     <li>
-        <a id='exportCom' href='/calendrier-des-commissions/exportoutlook/dateCommId/<?php echo $this->infosDateComm['ID_DATECOMMISSION']; ?>' ><span class='glyphicon glyphicon-calendar' aria-hidden='true'></span> Exporter pour Outlook</a>
+        <a id='exportCom' href='/calendrier-des-commissions/exportoutlook/dateCommId/<?php echo $this->infosDateComm['ID_DATECOMMISSION']; ?>' ><em class='icon-calendar'></em> Exporter pour Outlook</a>
     </li>
     <li>
-        <a href="#" id='createConvoc'><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Générer Convocations</a>
+        <a href="#" id='createConvoc'><i class="icon-file"></i> Générer Convocations</a>
     </li>
     <li>
-        <a href="#" id='createOdj'><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Générer l'ordre du jour</a>
+        <a href="#" id='createOdj'><i class="icon-list-alt"></i> Générer l'ordre du jour</a>
     </li>
     <li>
-        <a href="#" id='createPv'><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Générer PV</a>
+        <a href="#" id='createPv'><i class="icon-file"></i> Générer PV</a>
     </li>
     <li>
-        <a href="#" id='creationCompteRendu'><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Générer le compte rendu</a>
+        <a href="#" id='creationCompteRendu'><i class="icon-book"></i> Générer le compte rendu</a>
     </li>
     <li>
         <?php if($this->infosDateComm['GESTION_HEURES'] == 1): ?>
-            <a href="#" class="heures" id='non' onclick="return confirm('Confirmez vous de ne pas prendre en compte les heures ?');"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Ne pas prendre en compte les heures</a>
+            <a href="#" class="heures" id='non' onclick="return confirm('Confirmez vous de ne pas prendre en compte les heures ?');"><i class="icon-time"></i> Ne pas prendre en compte les heures</a>
         <?php else : ?>
-            <a href="#" class="heures" id='oui' onclick="return confirm('Confirmez vous de prendre en compte les heures ?');"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Prendre en compte les heures</a>
+            <a href="#" class="heures" id='oui' onclick="return confirm('Confirmez vous de prendre en compte les heures ?');"><i class="icon-time"></i> Prendre en compte les heures</a>
         <?php endif ?>
     </li>
 </ul>
 <?php $this->placeholder('lateral_navigation')->captureEnd(); ?>
-
 <?php $this->placeholder('page_header')->captureStart();  ?>
     <h2 class="page-header">
-    	Ordre du jour de la <?php echo $this->infosCommissionType['LIBELLE_COMMISSIONTYPE'] ?> de <a href='/calendrier-des-commissions?idComm=<?php echo $this->infosDateComm["COMMISSION_CONCERNE"] ?>'><?php echo $this->infosCommission['LIBELLE_COMMISSION'] ?></a> du <?php echo $this->dateFr ?>
+    Ordre du jour de la <?php echo $this->infosCommissionType['LIBELLE_COMMISSIONTYPE'] ?> de <a href='/calendrier-des-commissions?idComm=<?php echo $this->infosDateComm["COMMISSION_CONCERNE"] ?>' ><?php echo $this->infosCommission['LIBELLE_COMMISSION'] ?></a> du <?php echo $this->dateFr ?>
     </h2>
 <?php $this->placeholder('page_header')->captureEnd(); ?>
-
 <?php $this->placeholder('before_content')->captureStart() // Capture du 'before_content' ?>
 <?php $this->placeholder('before_content')->captureEnd() ?>
 
@@ -235,7 +233,7 @@ $(document).ready(function() {
 		buttons: [
             {
                 text: 'Terminer',
-                class: 'btn btn-default',
+                class: 'btn',
                 click: function() {
                     dialogDateCommission.dialog("close");
                     return false;
@@ -391,240 +389,247 @@ $(document).ready(function() {
 });
 
 </script>
-
 <style>
 .fc-event-vert {
 	border-width:1px;
 }
 </style>
+<?php
 
-<div>
-	<input type='hidden' id='tempVerrou' value='' />
-	<input type='hidden' name='dateOdj' id='dateOdj' value='<?= $this->infosDateComm['DATE_COMMISSION'] ?>' />
-	<input type='hidden' name='heureDeb' id='heureDeb' value='<?= $this->infosDateComm['HEUREDEB_COMMISSION'] ?>' />
-	<input type='hidden' name='heureFin' id='heureFin' value='<?= $this->infosDateComm['HEUREFIN_COMMISSION'] ?>' />
-	
-	<h3>
-		<?= $this->infosDateComm['LIBELLE_DATECOMMISSION'] ?>
+	echo "
+		<div>
+			<input type='hidden' id='tempVerrou' value='' />
+			<input type='hidden' name='dateOdj' id='dateOdj' value='".$this->infosDateComm['DATE_COMMISSION']."' />
+			<input type='hidden' name='heureDeb' id='heureDeb' value='".$this->infosDateComm['HEUREDEB_COMMISSION']."' />
+			<input type='hidden' name='heureFin' id='heureFin' value='".$this->infosDateComm['HEUREFIN_COMMISSION']."' />
+			<h3>".$this->infosDateComm['LIBELLE_DATECOMMISSION'];
 
-		<?php if ($this->infosDateComm['GESTION_HEURES'] === 1): ?>
-			<span class='badge badge-info' style=' margin:10px;'>
-				<span id='nbDossiersAffect'><?= $this->nbDossiersAffect ?></span> / <?= $this->nbDossiers ?>
+            if ($this->infosDateComm['GESTION_HEURES'] === 1) {
+                echo "<span class='badge badge-info' style=' margin:10px;'>
+                    <span id='nbDossiersAffect'>$this->nbDossiersAffect</span> / $this->nbDossiers</span>";
+            }
+
+			echo "</h3>";
+
+	echo "	<input type='hidden' name='dateCommId' id='dateCommId' value='".$this->infosDateComm['ID_DATECOMMISSION']."' />
+		";
+
+	if(count($this->recupCommLiees) > 1){
+		echo "<h4 style='margin:0px;'>Autres dates de la commission</h4>";
+		$i = 0;
+		echo "<br/><table><tr>";
+		foreach($this->recupCommLiees as $commLiees){
+			if($commLiees['ID_DATECOMMISSION'] != $this->infosDateComm['ID_DATECOMMISSION']){
+				$dateLiees =  new Zend_Date($commLiees['DATE_COMMISSION'],'yyyy-MM-dd');
+				echo "<td style='width:200px;text-align:center;' ><a href='/calendrier-des-commissions/gestionodj/dateCommId/".$commLiees['ID_DATECOMMISSION']."' >".$dateLiees->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr')."</a></td>";
+			}else{
+				$dateLiees =  new Zend_Date($commLiees['DATE_COMMISSION'],'yyyy-MM-dd');
+				echo "<td style='width:200px;text-align:center;' >".$dateLiees->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr')."</td>";
+			}
+			if($i<5){
+				$i++;
+			}else{
+				echo "</td></tr>";
+				$i=0;
+			}
+		}
+		echo "</table>";
+		echo "<br/><br/>";
+	}
+
+	echo "
+                <div id='infoGeneration'></div>
+                <br/>
+	";
+
+	if($this->infosDateComm['GESTION_HEURES'] == 1){
+		//dans le cas ou on prend en compte les heures (cas par défaut)
+		echo "
+			<div class='container-fluid'>
+			<div class='row-fluid'>
+				<div id='calendar' name='calendar' class='span9'>
+				</div>
+		";
+		echo "
+			<span style='margin-left:45px;color:black;font-size:15px;'>
+				<span style='font-weight:bold;'>Dossier :</span>
+				<span class='label' style='background-color:#83bff6;color:black;font-size:15px;'>Validé</span>
+				<span class='label' style='background-color:#E2A420;color:black;font-size:15px;'>En attente de Validation</span>
 			</span>
-		<?php endif ?>
-	</h3>
+		";
+		echo "
+				<div id='external-events' class='span3' style='margin-top:5px;color:black;border:1px solid black;text-align:center;border-radius:10px 10px;-moz-border-radius:10px 10px; -webkit-border-radius:10px 10px;'>
+					<div style='' >
+		";
 
-	<input type='hidden' name='dateCommId' id='dateCommId' value='<?= $this->infosDateComm['ID_DATECOMMISSION'] ?>' />
+				echo "<h3>Liste des dossiers prévus</h3>";
+				if( count($this->listeDossierNonAffect) != 0 ){
+					foreach ($this->listeDossierNonAffect as $dossierNonAffect){
+						if($dossierNonAffect['VERROU_DOSSIER'] == 1){
+							$background = "#83bff6";
+						}else{
+							$background = "#E2A420";
+						}
+						echo "
+							<div class='external-event eventExtODJ' id='".$dossierNonAffect['ID_DOSSIER']."' style='padding:5px 0 5px 15px;margin:5px;text-align:left;border:1px solid #9FC6FF;background-color:".$background.";border-radius:10px 10px;-moz-border-radius:10px 10px; -webkit-border-radius:10px 10px;'>
+								<a href='/dossier/index/id/".$dossierNonAffect['ID_DOSSIER']."' style='color:black;'>
+						";
+						if(isset($dossierNonAffect['infosEtab'])){
+							//si le dossier est attaché à un établissement
+							echo $dossierNonAffect['infosEtab']['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS' ];
+						}
 
-	<?php if(count($this->recupCommLiees) > 1): ?>
-		<h4 style='margin:0px;'>Autres dates de la commission</h4>
-
-		<?php $i = 0 ?>
-
-		<br/>
-		<table>
-			<tr>
-			<?php foreach($this->recupCommLiees as $commLiees):
-				if($commLiees['ID_DATECOMMISSION'] != $this->infosDateComm['ID_DATECOMMISSION']):
-					$dateLiees =  new Zend_Date($commLiees['DATE_COMMISSION'],'yyyy-MM-dd') ?>
-
-					<td style='width:200px;text-align:center;'>
-						<a href='/calendrier-des-commissions/gestionodj/dateCommId/<?= $commLiees['ID_DATECOMMISSION'] ?>'>
-							<?= $dateLiees->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr') ?>
-						</a>
-					</td>
-				<?php else:
-					$dateLiees =  new Zend_Date($commLiees['DATE_COMMISSION'],'yyyy-MM-dd') ?>
-
-					<td style='width:200px;text-align:center;'>
-						<?= $dateLiees->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr') ?>
-					</td>
-				<?php endif;
-
-				if($i<5) {
-					$i++;
-				} else { ?>
-					</tr>
-				<?php $i=0;
-				} ?>
-			<?php endforeach ?>
-		</table>
-		<br/><br/>
-	<?php endif ?>
-
-	<div id='infoGeneration'></div>
-	<br/>
-
-	<?php if($this->infosDateComm['GESTION_HEURES'] == 1){
-		//dans le cas ou on prend en compte les heures (cas par défaut) ?>
-		<div class='container-fluid'>
-			<div class='row'>
-				<div id='calendar' name='calendar' class='col-md-9'></div>
-
-				<span style='margin-left:45px;color:black;font-size:15px;'>
-					<span style='font-weight:bold;'>Dossier :</span>
-					<span class='label' style='background-color:#83bff6;color:black;font-size:15px;'>Validé</span>
-					<span class='label' style='background-color:#E2A420;color:black;font-size:15px;'>En attente de Validation</span>
-				</span>
-
-				<div id='external-events' class='col-md-3' style='margin-top:5px;color:black;border:1px solid black;text-align:center;border-radius:10px 10px;-moz-border-radius:10px 10px; -webkit-border-radius:10px 10px;'>
-					<div>
-						<h3>Liste des dossiers prévus</h3>
-				<?php if( count($this->listeDossierNonAffect) != 0 ){
-						foreach ($this->listeDossierNonAffect as $dossierNonAffect){
-							if($dossierNonAffect['VERROU_DOSSIER'] == 1){
-								$background = "#83bff6";
-							}else{
-								$background = "#E2A420";
-							} ?>
-
-							<div class='external-event eventExtODJ' id='<?= $dossierNonAffect['ID_DOSSIER'] ?>' style='padding:5px 0 5px 15px;margin:5px;text-align:left;border:1px solid #9FC6FF;background-color:<?= $background ?>;border-radius:10px 10px;-moz-border-radius:10px 10px; -webkit-border-radius:10px 10px;'>
-								<a href='/dossier/index/id/<?= $dossierNonAffect['ID_DOSSIER'] ?>' style='color:black;'>
-									
-						<?php if(isset($dossierNonAffect['infosEtab'])){
-								//si le dossier est attaché à un établissement
-								echo $dossierNonAffect['infosEtab']['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS' ];
-							}
-
-							if(isset($dossierNonAffect['infosEtab']['adresses'])){
-								$nbAdresse = count($dossierNonAffect['infosEtab']['adresses']);
-								if($nbAdresse != 0){
-									echo " (";
-									foreach($dossierNonAffect['infosEtab']['adresses'] as $commune){
-										echo $commune['LIBELLE_COMMUNE'];
-										if($nbAdresse != 1) {
-											echo ", ";
-										}
-										$nbAdresse--;
+						if(isset($dossierNonAffect['infosEtab']['adresses'])){
+							$nbAdresse = count($dossierNonAffect['infosEtab']['adresses']);
+							if($nbAdresse != 0){
+								echo " (";
+								foreach($dossierNonAffect['infosEtab']['adresses'] as $commune){
+									echo $commune['LIBELLE_COMMUNE'];
+									if($nbAdresse != 1) {
+										echo ", ";
 									}
-									echo ") ";
+									$nbAdresse--;
 								}
-							}else{
-								echo " ( adresse non renseignée )";
+								echo ") ";
 							}
+						}else{
+							echo " ( adresse non renseignée )";
+						}
 
-							if(isset($dossierNonAffect['infosEtab']['parents']) && isset($dossierNonAffect['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])){
-								echo " - ".$dossierNonAffect['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'];
-							}
-							echo "<br/>";
-							if($dossierNonAffect['LIBELLE_DOSSIERNATURE'] != "")
-							{
-								echo $dossierNonAffect['LIBELLE_DOSSIERNATURE']."<br/>";
-							}
-							if($dossierNonAffect['OBJET_DOSSIER'] != "")
-							{
-								echo "Objet : ".$dossierNonAffect['OBJET_DOSSIER']."<br/>";
-							}
+						if(isset($dossierNonAffect['infosEtab']['parents']) && isset($dossierNonAffect['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])){
+							echo " - ".$dossierNonAffect['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'];
+						}
+						echo "<br/>";
+						if($dossierNonAffect['LIBELLE_DOSSIERNATURE'] != "")
+						{
+							echo $dossierNonAffect['LIBELLE_DOSSIERNATURE']."<br/>";
+						}
+						if($dossierNonAffect['OBJET_DOSSIER'] != "")
+						{
+							echo "Objet : ".$dossierNonAffect['OBJET_DOSSIER']."<br/>";
+						}
 
-							if(isset($dossierNonAffect['listeDocUrba']))
-							{
-								echo "Numéro document d'urbanisme : ";
-								foreach($dossierNonAffect['listeDocUrba'] as $val => $ue){
-									echo $ue['NUM_DOCURBA']." . ";
-								}
+						if(isset($dossierNonAffect['listeDocUrba']))
+						{
+							echo "Numéro document d'urbanisme : ";
+							foreach($dossierNonAffect['listeDocUrba'] as $val => $ue){
+								echo $ue['NUM_DOCURBA']." . ";
 							}
+						}
 
-							//affichage preventionniste(s)
-							if(isset($dossierNonAffect['preventionnistes'])){
-								$nbPrev = count($dossierNonAffect['preventionnistes']);
-								if($nbPrev >0){
-									echo "<br/><span style='font-size:10px'>";
-									foreach($dossierNonAffect['preventionnistes'] as $prev){
-										echo $prev['NOM_UTILISATEURINFORMATIONS']." ".$prev['PRENOM_UTILISATEURINFORMATIONS'];
-										if($nbPrev > 1) {
-											echo ", ";
-										}
-										$nbPrev--;
+						//affichage preventionniste(s)
+						if(isset($dossierNonAffect['preventionnistes'])){
+							$nbPrev = count($dossierNonAffect['preventionnistes']);
+							if($nbPrev >0){
+								echo "<br/><span style='font-size:10px'>";
+								foreach($dossierNonAffect['preventionnistes'] as $prev){
+									echo $prev['NOM_UTILISATEURINFORMATIONS']." ".$prev['PRENOM_UTILISATEURINFORMATIONS'];
+									if($nbPrev > 1) {
+										echo ", ";
 									}
-									echo "</span>";
+									$nbPrev--;
 								}
-							} ?>
+								echo "</span>";
+							}
+						}
 
+						echo "
 								</a>
 							</div>
-						<?php }
-						} else { ?>
-						<h5>Tous les dossiers ont déjà été affectés</h5>
-					<?php } ?>
+						";
+					}
+				}else{
+					echo "<h5>Tous les dossiers ont déjà été affectés</h5>";
+				}
+				echo "
 					</div>
 				</div>
 			</div>
-		</div>
-	<?php }else if($this->infosDateComm['GESTION_HEURES'] == 0){ //dans le cas ou on ne prend pas en compte les heures ?>
-		<h3 style='display:inline;'>Liste des dossiers prévus</h3>
+			</div>
+		";
+	}else if($this->infosDateComm['GESTION_HEURES'] == 0){
+		//dans le cas ou on ne prend pas en compte les heures
+		echo "
+			<h3 style='display:inline;'>Liste des dossiers prévus</h3>
+		";
+		echo "
+			<span style='margin-left:50px;color:black;font-size:15px;'>
+				<span style='font-weight:bold;'>Dossier :</span>
+				<span class='label' style='background-color:#83bff6;color:black;font-size:15px;'>Validé</span>
+				<span class='label' style='background-color:#E2A420;color:black;font-size:15px;'>En attente de Validation</span>
+			</span>
+		";
+		echo "
+			<ul class='unstyled sortable' id='listeDossierNoHours'>
+		";
+		if( count($this->listeDossierNonAffect) != 0 ){
+			foreach ($this->listeDossierNonAffect as $dossierNonAffect){
+				if($dossierNonAffect['VERROU_DOSSIER'] == 1){
+					$background = "#83bff6";
+				}else{
+					$background = "#E2A420";
+				}
+				echo "
+					<li num='".$dossierNonAffect['NUM_DOSSIER']."' >
+						<div class='dossierODJ external-event' id='".$dossierNonAffect['ID_DOSSIER_AFFECT']."' style='padding:5px 0 5px 15px;margin:5px;text-align:left;border:1px solid #9FC6FF;background-color:".$background.";border-radius:10px 10px;-moz-border-radius:10px 10px; -webkit-border-radius:10px 10px;'>
+							<a href='/dossier/index/id/".$dossierNonAffect['ID_DOSSIER_AFFECT']."' style='color:black;' >
+								".$dossierNonAffect['LIBELLE_ETABLISSEMENTINFORMATIONS'];
 
-		<span style='margin-left:50px;color:black;font-size:15px;'>
-			<span style='font-weight:bold;'>Dossier :</span>
-			<span class='label' style='background-color:#83bff6;color:black;font-size:15px;'>Validé</span>
-			<span class='label' style='background-color:#E2A420;color:black;font-size:15px;'>En attente de Validation</span>
-		</span>
-
-		<ul class='list-unstyled sortable' id='listeDossierNoHours'>
-			<?php if( count($this->listeDossierNonAffect) != 0 ){
-				foreach ($this->listeDossierNonAffect as $dossierNonAffect){
-					if($dossierNonAffect['VERROU_DOSSIER'] == 1){
-						$background = "#83bff6";
-					}else{
-						$background = "#E2A420";
-					} ?>
-
-					<li num='><?= $dossierNonAffect['NUM_DOSSIER'] ?>'>
-						<div class='dossierODJ external-event' id='<?= $dossierNonAffect['ID_DOSSIER_AFFECT'] ?>' style='padding:5px 0 5px 15px;margin:5px;text-align:left;border:1px solid #9FC6FF;background-color:<?= $background ?>;border-radius:10px 10px;-moz-border-radius:10px 10px; -webkit-border-radius:10px 10px;'>
-							<a href='/dossier/index/id/<?= $dossierNonAffect['ID_DOSSIER_AFFECT'] ?>' style='color:black;'>
-								<?= $dossierNonAffect['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
-
-					<?php $nbAdresse = isset($dossierNonAffect['infosEtab']['adresses']) ? count($dossierNonAffect['infosEtab']['adresses']) : 0;
-					if($nbAdresse != 0){
-						echo " (";
-						foreach($dossierNonAffect['infosEtab']['adresses'] as $commune){
-							echo $commune['LIBELLE_COMMUNE'];
-							if($nbAdresse != 1) {
-								echo ", ";
-							}
-							$nbAdresse--;
+				$nbAdresse = isset($dossierNonAffect['infosEtab']['adresses']) ? count($dossierNonAffect['infosEtab']['adresses']) : 0;
+				if($nbAdresse != 0){
+					echo " (";
+					foreach($dossierNonAffect['infosEtab']['adresses'] as $commune){
+						echo $commune['LIBELLE_COMMUNE'];
+						if($nbAdresse != 1) {
+							echo ", ";
 						}
-						echo ") ";
-					}else{
-						echo " ( adresse non renseignée )";
+						$nbAdresse--;
 					}
+					echo ") ";
+				}else{
+					echo " ( adresse non renseignée )";
+				}
 
-					if(isset($dossierNonAffect['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])){
-						echo " - ".$dossierNonAffect['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'];
-					}
-					echo "<br/>";
+				if(isset($dossierNonAffect['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])){
+					echo " - ".$dossierNonAffect['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'];
+				}
+				echo "<br/>";
 
-					if($dossierNonAffect['LIBELLE_DOSSIERNATURE'] != "")
-					{
-						echo $dossierNonAffect['LIBELLE_DOSSIERNATURE']."<br/>";
-					}
-					if($dossierNonAffect['OBJET_DOSSIER'] != "")
-					{
-						echo "Objet : ".$dossierNonAffect['OBJET_DOSSIER']."<br/>";
-					}
-					if(isset($dossierNonAffect['NUM_DOCURBA']))
-					{
-						echo "Numéro document d'urbanisme : ".$dossierNonAffect['NUM_DOCURBA'];
-					}
-					//affichage preventionniste(s)
-					$nbPrev = isset($dossierNonAffect['preventionnistes']) ? count($dossierNonAffect['preventionnistes']) : 0;
-					if($nbPrev >0){
-						echo "<span style='font-size:10px'>";
-						foreach($dossierNonAffect['preventionnistes'] as $prev){
-							echo $prev['NOM_UTILISATEURINFORMATIONS']." ".$prev['PRENOM_UTILISATEURINFORMATIONS'];
-							if($nbPrev > 1) {
-								echo ", ";
-							}
-							$nbPrev--;
+				if($dossierNonAffect['LIBELLE_DOSSIERNATURE'] != "")
+				{
+					echo $dossierNonAffect['LIBELLE_DOSSIERNATURE']."<br/>";
+				}
+				if($dossierNonAffect['OBJET_DOSSIER'] != "")
+				{
+					echo "Objet : ".$dossierNonAffect['OBJET_DOSSIER']."<br/>";
+				}
+				if(isset($dossierNonAffect['NUM_DOCURBA']))
+				{
+					echo "Numéro document d'urbanisme : ".$dossierNonAffect['NUM_DOCURBA'];
+				}
+				//affichage preventionniste(s)
+				$nbPrev = isset($dossierNonAffect['preventionnistes']) ? count($dossierNonAffect['preventionnistes']) : 0;
+				if($nbPrev >0){
+					echo "<span style='font-size:10px'>";
+					foreach($dossierNonAffect['preventionnistes'] as $prev){
+						echo $prev['NOM_UTILISATEURINFORMATIONS']." ".$prev['PRENOM_UTILISATEURINFORMATIONS'];
+						if($nbPrev > 1) {
+							echo ", ";
 						}
-						echo "</span>";
-					} ?>
+						$nbPrev--;
+					}
+					echo "</span>";
+				}
+				echo "
 							</a>
 						</div>
 					</li>
-				<?php }
-			}else{ ?>
-				<h5>Aucun dossier n'est associé à cette commission</h5>
-			<?php } ?>
-		</ul>
-	<?php } ?>
-</div>
+				";
+			}
+		}else{
+			echo "<h5>Aucun dossier n'est associé à cette commission</h5>";
+		}
+		echo "
+			</ul>
+		";
+	}

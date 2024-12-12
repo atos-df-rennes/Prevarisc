@@ -1,10 +1,10 @@
 <!-- Onglets permettant de selectionner les entités à rechercher -->
 <h2 class="page-header">Courriers</h2>
 <form method='get'>
-    <div class='navbar-form well well-sm' style='margin-bottom: 5px;'>
+    <div class='navbar-form form-search well well-small' style='margin-bottom: 5px;'>
         <div class="input-append">
-            <input type="text" name='objet' class="col-md-6 form-control" placeholder="Objet du courrier, de l'expéditeur, ..." value='<?php if(isset($_GET["objet"])) echo $_GET["objet"] ?>' />
-            <input type='submit' class="btn btn-default" value="Rechercher dans Prevarisc"  />
+            <input type="text" name='objet' class="span6 search-query" placeholder="Objet du courrier, de l'expéditeur, ..." value='<?php if(isset($_GET["objet"])) echo $_GET["objet"] ?>' />
+            <input type='submit' class="btn" value="Rechercher dans Prevarisc"  />
             <input type='hidden' name='page' value="1" />
         </div>
     </div>
@@ -13,15 +13,15 @@
 <hr/>
 
 <?php if( count($this->results) > 0 ) : ?>
-    <p class='text-muted'><small>Nombre total d'éléments : <?php echo $this->results->getTotalItemCount() ?></small></p>
-    <ul class='recherche_liste list-unstyled'>
+    <p class='muted'><small>Nombre total d'éléments : <?php echo $this->results->getTotalItemCount() ?></small></p>
+    <ul class='recherche_liste unstyled'>
     <?php echo $this->partialLoop('search/results/dossier.phtml', $this->results ) ?>
     </ul>
     <br/>
     <div style='clear: both'></div>
     <?php echo $this->results ?>
 <?php else : ?>
-	<p class='text-muted'><small>Aucun résultat disponible.</small></p>
+	<p class='muted'><small>Aucun résultat disponible.</small></p>
     <h2 style='color: silver; text-align: center;' ></h2>
 <?php endif ?>
 

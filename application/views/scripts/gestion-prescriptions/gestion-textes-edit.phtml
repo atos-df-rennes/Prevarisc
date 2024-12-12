@@ -4,9 +4,9 @@
 			<input type='hidden' name='id_texte' id='id_texte' value='".$this->texteInfo['ID_TEXTE']."' />
 			<input type='hidden' name='action' id='action' value='".$this->action."' />
 			<div class='row'>
-				<div class='col-md-12' >
-					<a href='/gestion-prescriptions'>Gestion des prescriptions types</a> <span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span> <a href='/gestion-prescriptions/gestion-textes'>Gestion des textes</a>
-					<span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span>
+				<div class='span12' >
+					<a href='/gestion-prescriptions'>Gestion des prescriptions types</a> <i class='icon-chevron-right'></i> <a href='/gestion-prescriptions/gestion-textes'>Gestion des textes</a>
+					<i class='icon-chevron-right'></i>
 	";
 	if($this->action == 'add'){
 		echo "Ajout d'un nouveau texte";
@@ -26,7 +26,7 @@
 	echo "
 			</h3>
 			<div class='row'>
-				<div class='col-md-12' style='text-align:right;'>
+				<div class='span12' style='text-align:right;'>
 					<a class='btn btn-default' href='/gestion-prescriptions/gestion-textes'>
 	";
 	if($this->action == 'add'){
@@ -39,24 +39,24 @@
 				</div>
 			</div>
 			<br/><br/>
-			<div class='row form-group'>
-				<div class='col-md-2'>
+			<div class='row'>
+				<div class='span2'>
 					Libellé du texte
 				</div>
-				<div class='col-md-10'>
+				<div class='span10'>
 	";
 	echo '
-				<input class="form-control" type="text" name="LIBELLE_TEXTE" id="LIBELLE_TEXTE" value="'.$this->texteInfo['LIBELLE_TEXTE'].'" style="width:100%;"/>
+				<input type="text" name="LIBELLE_TEXTE" id="LIBELLE_TEXTE" value="'.$this->texteInfo['LIBELLE_TEXTE'].'" style="width:100%;"/>
 	';
 	echo "
 				</div>
 			</div>
 			<div class='row'>
-				<div class='col-md-2'>
+				<div class='span2'>
 					Visibilité du texte
 				</div>
-				<div class='col-md-10'>
-					<select class='form-control' name='VISIBLE_TEXTE'>
+				<div class='span10'>
+					<select name='VISIBLE_TEXTE'>
 						<option value='1' ".( ($this->texteInfo['VISIBLE_TEXTE'] == 1)? "selected": "" )." >Afficher</option>
 						<option value='0' ".( ($this->texteInfo['VISIBLE_TEXTE'] == 0)? "selected": "" ).">Masquer</option>
 					</select>
@@ -64,7 +64,7 @@
 			</div>
 			<br/>
 			<div class='row' ".( ( $this->action != 'edit' )? "style='display:none;'" : "" ).">
-				<div class='col-md-12' style='text-align:center;' >
+				<div class='span12' style='text-align:center;' >
 					<a class='btn btn-warning' id='del-prescription' href='".$this->url(array('controller'=>'gestion-prescriptions', 'action' => 'gestion-textes-replace'))."'>
 						Supprimer le texte et le remplacer par un autre
 					</a>
@@ -72,3 +72,4 @@
 			</div>
 		</form>
 	";
+

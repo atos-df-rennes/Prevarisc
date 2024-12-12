@@ -1,10 +1,10 @@
-<h3 class='pull-left'>Effectifs et Dégagements</h3>
 <div class='action-buttons pull-right'>
-    <a class='btn btn-default' href="<?= $this->url(array('action' => 'effectifs-degagements-etablissement-edit')) ?>">Modifier les effectifs et dégagements</a>
+    <a class='btn' href="<?= $this->url(array('action' => 'effectifs-degagements-etablissement-edit')) ?>">Modifier les effectifs et dégagements</a>
 </div>
-<div class="clearfix"></div>
 
 <div id='descriptif-personnalise'>
+    <h3>Effectifs et Dégagements</h3>
+
     <h4 class='h4_subtitle'>Rubriques</h4>
     <div class="descriptif-personnalise_rubriques-infos">
         <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>

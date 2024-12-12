@@ -23,8 +23,8 @@
 			</tr>
 			<tr>
 				<?php for($i = 0; $i < count($array_types); $i++) : ?>
-					<th style='height: 26px; background: url(/css/images/avec_sans_local.gif) center -13px no-repeat' ></th>
-					<th style='height: 26px; background: url(/css/images/avec_sans_local.gif) center 6px no-repeat' ></th>
+					<th style='height: 16px; background: url(/css/images/avec_sans_local.gif) center -13px no-repeat' ></th>
+					<th style='height: 16px; background: url(/css/images/avec_sans_local.gif) center 6px no-repeat' ></th>
 				<?php endfor ?>
 			</tr>
 		</thead>
@@ -34,19 +34,21 @@
 				<td style='width: 150px;' ><?php echo $categorie["LIBELLE_CATEGORIE"] ?></td>
 
 				<?php foreach( $array_types as $type) : ?>
+
 					<?php $periodicite = $this->tableau[$categorie["ID_CATEGORIE"]][$type["ID_TYPE"]]; ?>
 
 					<td style='text-align: center' >
 						<?php if(!in_array($type["ID_TYPE"], $localsommeil_types)) : ?>
-							<input class="form-control" type='text' size='3' maxlength='3' value='<?= $periodicite[0] ?: 0 ?>' name='<?php echo $categorie["ID_CATEGORIE"]."_".$type["ID_TYPE"]."_0" ?>' />
+							<input type='text' size='3' maxlength='3' value='<?= $periodicite[0] ?: 0 ?>' name='<?php echo $categorie["ID_CATEGORIE"]."_".$type["ID_TYPE"]."_0" ?>' />
 						<?php else : ?>
 							<input type='text' size='3' style='visibility: hidden' />
 						<?php endif ?>
 					</td>
 
 					<td style='text-align: center' >
-                        <input class="form-control" type='text' size='3' maxlength='3' value='<?= $periodicite[1] ?: 0 ?>' name='<?php echo $categorie["ID_CATEGORIE"]."_".$type["ID_TYPE"]."_1" ?>' />
+                        <input type='text' size='3' maxlength='3' value='<?= $periodicite[1] ?: 0 ?>' name='<?php echo $categorie["ID_CATEGORIE"]."_".$type["ID_TYPE"]."_1" ?>' />
 					</td>
+
 				<?php endforeach ?>
 			</tr>
 			<?php endforeach ?>
@@ -66,11 +68,13 @@
 		<tbody>
 			<tr>
 				<?php foreach( $this->array_classes as $classe) : ?>
+
 					<?php $periodicite = $this->tableau[0][$classe["ID_CLASSE"]]; ?>
 
 					<td style='text-align: center' >
-						<input class="form-control" type='text' size='3' maxlength='3' value='<?= $periodicite[0] ?: 0 ?>' name='<?php echo "0_".$classe["ID_CLASSE"]."_0" ?>' />
+						<input type='text' size='3' maxlength='3' value='<?= $periodicite[0] ?: 0 ?>' name='<?php echo "0_".$classe["ID_CLASSE"]."_0" ?>' />
 					</td>
+
 				<?php endforeach ?>
 			</tr>
 		</tbody>
@@ -79,12 +83,13 @@
 
     <p class='text-center'>
 		<input type='submit' id='submit' value='Sauvegarder' class='btn btn-success' />
-        <a href="/tableau-des-periodicites/apply" onClick="return confirm('Etes-vous sûr de vouloir appliquer ces paramètres à l\'ensemble des établissements ?');"class='btn btn-primary'>Appliquer sur TOUS les établissements</a>
+        <a href="/tableau-des-periodicites/apply" onClick="return confirm('Etes-vous sûr de vouloir appliquer ces paramètres à l\'ensemble des établissements ?');"class='btn btn-success'>Appliquer sur TOUS les établissements</a>
     </p>
 
 </form>
 
 <script type="text/javascript">
+
 	$("input[type=text]").change(function() {
 		if($(this).val() == "0") {
 			$(this).css("opacity", .5);
@@ -92,4 +97,5 @@
 			$(this).css("opacity", 1);
 		}
 	}).change();
+
 </script>

@@ -1,90 +1,59 @@
 <h3>Historique</h3>
 
 <?php if(array_key_exists('avis', $this->historique)) : ?>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">Historique des avis d'exploitation</h4>
-        </div>
-        <?php
-            if(isset($this->historique["avis"])): ?>
-                <?= $this->partial("etablissement/partials/partial-historique.phtml", array(
-                    "array" => $this->historique["avis"]
-                )) ?>
-        <?php else: ?>
-            <div class="panel-body">
-                Pas d'historique disponible.
-            </div>
-        <?php endif ?>
-    </div>
+<h4>Historique des avis d'exploitation</h4>
+<?php
+    if(isset($this->historique["avis"]))
+    echo $this->partial("etablissement/partials/partial-historique.phtml", array(
+        "array" => $this->historique["avis"]
+    ));
+    else
+    echo "Pas d'historique disponible.";
+?>
 <?php endif ?>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="panel-title">Historique du libellé</h4>
-    </div>
-    <?php
-        if(isset($this->historique["LIBELLE_ETABLISSEMENTINFORMATIONS"])): ?>
-        <?= $this->partial("etablissement/partials/partial-historique.phtml", array(
-            "array" => $this->historique["LIBELLE_ETABLISSEMENTINFORMATIONS"]
-        )) ?>
-    <?php else: ?>
-        <div class="panel-body">
-            Pas d'historique disponible.
-        </div>
-    <?php endif ?>
-</div>
+<h4>Historique du libellé</h4>
+<?php
+    if(isset($this->historique["LIBELLE_ETABLISSEMENTINFORMATIONS"]))
+    echo $this->partial("etablissement/partials/partial-historique.phtml", array(
+        "array" => $this->historique["LIBELLE_ETABLISSEMENTINFORMATIONS"]
+    ));
+    else
+    echo "Pas d'historique disponible.";
+?>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="panel-title">Historique du statut</h4>
-    </div>
-    <?php
-        echo $this->partial("etablissement/partials/partial-historique.phtml", array(
-            "array" => $this->historique["ID_STATUT"]
-        ));
-    ?>
-</div>
+<h4>Historique du statut</h4>
+<?php
+    echo $this->partial("etablissement/partials/partial-historique.phtml", array(
+        "array" => $this->historique["ID_STATUT"]
+    ));
+?>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="panel-title">Historique de la catégorie</h4>
-    </div>
-    <?php
-        echo $this->partial("etablissement/partials/partial-historique.phtml",array(
-            "array" => $this->historique["ID_CATEGORIE"]
-        ));
-    ?>
-</div>
+<h4>Historique de la catégorie</h4>
+<?php
+    echo $this->partial("etablissement/partials/partial-historique.phtml",array(
+        "array" => $this->historique["ID_CATEGORIE"]
+    ));
+?>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="panel-title">Historique de la classe</h4>
-    </div>
-    <?php
-        echo $this->partial("etablissement/partials/partial-historique.phtml", array(
-            "array" => $this->historique["ID_CLASSE"]
-        ));
-    ?>
-</div>
+<h4>Historique de la classe</h4>
+<?php
+    echo $this->partial("etablissement/partials/partial-historique.phtml", array(
+        "array" => $this->historique["ID_CLASSE"]
+    ));
+?>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="panel-title">Historique de la famille</h4>
-    </div>
-    <?php
-        echo $this->partial("etablissement/partials/partial-historique.phtml", array(
-            "array" => $this->historique["ID_FAMILLE"]
-        ));
-    ?>
-</div>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="panel-title">Historique du type d'activité</h4>
-    </div>
-    <?php
-        echo $this->partial("etablissement/partials/partial-historique.phtml", array(
-            "array" => $this->historique["ID_TYPE"]
-        ));
-    ?>
-</div>
+<h4>Historique de la famille</h4>
+<?php
+    echo $this->partial("etablissement/partials/partial-historique.phtml", array(
+        "array" => $this->historique["ID_FAMILLE"]
+    ));
+?>
+
+<h4>Historique du type d'activité</h4>
+<?php
+    echo $this->partial("etablissement/partials/partial-historique.phtml", array(
+        "array" => $this->historique["ID_TYPE"]
+    ));
+?>

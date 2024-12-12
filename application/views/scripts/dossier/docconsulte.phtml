@@ -168,7 +168,7 @@ $(document).ready(function() {
 
 			$(this).next().remove();
 			$(this).remove();
-			$("#listeDocs_"+idDiv).prepend('<li id="'+idLi+'" class="divDoc col-md-12" name="divDoc">'+valeurDiv+'</li>');
+			$("#listeDocs_"+idDiv).prepend('<li id="'+idLi+'" class="divDoc row-fluid span12" style="display: block; margin: 0 15px 15px 15px;" name="divDoc">'+valeurDiv+'</li><br class="clear">');
 		}
 	});
 });
@@ -185,52 +185,53 @@ $(document).ready(function() {
 <?php
 foreach($this->listeNatures as $index => $nature) {
 	echo "
-		<div id='".$nature["ID_NATURE"]."' class='nature row'>
-            <h4 class='hideDocConsulte' >Liste des documents consultés concernant la nature '".$nature["LIBELLE_DOSSIERNATURE"]."'</h4>
-            <p class='col-md-5'><strong>Libelle</strong></p>
-            <div class='col-md-6'>
-                <p class='col-md-5'><strong>Référence</strong></p>
-                <p class='col-md-2'><strong>Date</strong></p>
+		<div id='".$nature["ID_NATURE"]."' class='nature row-fluid'>
+			<h4 class='hideDocConsulte' >Liste des documents consultés concernant la nature '".$nature["LIBELLE_DOSSIERNATURE"]."'</h4>
+			<p class='span5' style='padding-left:20px;'><strong>Libelle</strong></p>
+			<div class='span6'>
+                <p class='span5'><strong>Référence</strong></p>
+                <p class='span2'><strong>Date</strong></p>
             </div>
-            <ul id='listeDocs_".$nature["ID_NATURE"]."' class='list-unstyled'>";
+			<br class='clear' />
+			<ul id='listeDocs_".$nature["ID_NATURE"]."'>";
 
-        //on boucle sur les documents ajoutés à afficher
-        foreach($this->listeDocsAjout[$nature["ID_NATURE"]] as $documentAjout) {
-            echo $this->afficheDoc($this->infosDossier['VERROU_DOSSIER'],$nature["ID_NATURE"],$documentAjout['ID_DOCAJOUT'],$documentAjout['LIBELLE_DOCAJOUT'],$documentAjout['REF_DOCAJOUT'],$documentAjout['DATE_DOCAJOUT'],"_aj");
-        }
+	//on boucle sur les documents ajoutés à afficher
+	foreach($this->listeDocsAjout[$nature["ID_NATURE"]] as $documentAjout) {
+		echo $this->afficheDoc($this->infosDossier['VERROU_DOSSIER'],$nature["ID_NATURE"],$documentAjout['ID_DOCAJOUT'],$documentAjout['LIBELLE_DOCAJOUT'],$documentAjout['REF_DOCAJOUT'],$documentAjout['DATE_DOCAJOUT'],"_aj");
+	}
 
-        //on boucle sur les documents de base à afficher
-        if (count($this->listeDocs[$nature["ID_NATURE"]]) > 0)
-        {
-            $cpt = 0;
-            foreach($this->listeDocs[$nature["ID_NATURE"]] as $document) {
-                $exist = false;
-                foreach($this->dossierDocConsutle[$nature["ID_NATURE"]] as $docExistant) {
-                    if ($docExistant['ID_DOC'] == $document['ID_DOC']) {
-                        $exist = true;
-                        $ref = $docExistant['REF_CONSULTE'];
-                        $date = $docExistant['DATE_CONSULTE'];
-                    }
-                }
+	//on boucle sur les documents de base à afficher
+	if (count($this->listeDocs[$nature["ID_NATURE"]]) > 0)
+	{
+		$cpt = 0;
+		foreach($this->listeDocs[$nature["ID_NATURE"]] as $document) {
+			$exist = false;
+			foreach($this->dossierDocConsutle[$nature["ID_NATURE"]] as $docExistant) {
+				if ($docExistant['ID_DOC'] == $document['ID_DOC']) {
+					$exist = true;
+					$ref = $docExistant['REF_CONSULTE'];
+					$date = $docExistant['DATE_CONSULTE'];
+				}
+			}
 
-                if ($exist) {
-                    echo $this->afficheDoc($this->infosDossier['VERROU_DOSSIER'],$nature["ID_NATURE"],$document['ID_DOC'],$document['LIBELLE_DOC'],$ref,$date);
-                } else {
-                    echo $this->afficheDoc($this->infosDossier['VERROU_DOSSIER'],$nature["ID_NATURE"],$document['ID_DOC'],$document['LIBELLE_DOC']);
-                }
+			if ($exist) {
+				echo $this->afficheDoc($this->infosDossier['VERROU_DOSSIER'],$nature["ID_NATURE"],$document['ID_DOC'],$document['LIBELLE_DOC'],$ref,$date);
+			} else {
+				echo $this->afficheDoc($this->infosDossier['VERROU_DOSSIER'],$nature["ID_NATURE"],$document['ID_DOC'],$document['LIBELLE_DOC']);
+			}
 
-                $cpt++;
-            }
-        }
+			$cpt++;
+		}
+	}
 
-        if ($this->infosDossier['VERROU_DOSSIER'] == 0) {
-            echo "</ul>
-                    <div class='col-md-12'>
-                        <button type='button' id='docAjout_".$nature["ID_NATURE"]."' class='docAjout btn btn-default'>+ Ajouter un nouveau document</button>
-                    </div>
-                </div>
-            ";
-        }
+	if ($this->infosDossier['VERROU_DOSSIER'] == 0) {
+		echo "</ul>
+				<hr class='clear' />
+				<p><a href='' id='docAjout_".$nature["ID_NATURE"]."' class='docAjout' >+ Ajouter un nouveau document</a></p>
+			</div>
+			<hr class='clear' />
+		";
+	}
 }
 ?>
 	</form>
@@ -239,7 +240,7 @@ foreach($this->listeNatures as $index => $nature) {
 	<form id='formNewDoc' name='formNewDoc'>
 		<input type='hidden' name='natureDocAjout' id='natureDocAjout' value='' />
 		Saisir le libellé du document :<br/>
-		<textarea name='libelleNewDoc' id='libelleNewDoc' cols='100' rows='3'></textarea>
+		<textarea name='libelleNewDoc' id='libelleNewDoc' cols='100' rows='3' ></textarea>
 	</form>
 </div>
 <div id='dialogConfirmSuppDoc' style='display:none;'>

@@ -4,13 +4,13 @@
 			<input type='hidden' name='id_article' id='id_article' value='".$this->articleInfo['ID_ARTICLE']."' />
 			<input type='hidden' name='action' id='action' value='".$this->action."' />
 			<div class='row'>
-				<div class='col-md-12' >
+				<div class='span12' >
 					<a href='/gestion-prescriptions'>Gestion des prescriptions types</a>
-					<span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span>
+					<i class='icon-chevron-right'></i>
 					<a href='/gestion-prescriptions/gestion-articles'>Gestion des articles</a>
-					<span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span>
+					<i class='icon-chevron-right'></i>
 					<a href='/gestion-prescriptions/gestion-articles-edit/id/".$this->articleInfo['ID_ARTICLE']."'>Retour à la modification</a>
-					<span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span>
+					<i class='icon-chevron-right'></i>
 					Remplacer et supprimer un article existant
 				</div>
 			</div>
@@ -18,9 +18,9 @@
 				Remplacer et supprimer un article existant
 			</h3>
 			<div class='row'>
-				<div class='col-md-10' >
+				<div class='span10' >
 				</div>
-				<div class='col-md-2' style='text-align:right;'>
+				<div class='span2' style='text-align:right;'>
 					<a class='btn btn-default' href='".$this->url(array('controller'=>'gestion-prescriptions', 'action' => 'gestion-articles-edit'))."'>Annuler la suppression</a>
 				</div>
 			</div>
@@ -28,18 +28,18 @@
 			<h3>Article que vous allez supprimer</h3>
 			<div style='margin-left:40px;'>
 				<div class='row'>
-					<div class='col-md-1'>
+					<div class='span1'>
 						Libellé
 					</div>
-					<div class='col-md-11'>
+					<div class='span11'>
 						".$this->articleInfo['LIBELLE_ARTICLE']."
 					</div>
 				</div>
 				<div class='row'>
-					<div class='col-md-1'>
+					<div class='span1'>
 						Visibilité
 					</div>
-					<div class='col-md-11'>
+					<div class='span11'>
 						".( ($this->articleInfo['VISIBLE_ARTICLE'] == '1')? "Visible" : "Masqué")."
 					</div>
 				</div>
@@ -56,7 +56,7 @@
 			{
 				echo "
 					<div class='row texteRow' id='texteRow_".$article['ID_ARTICLE']."'>
-						<div class='col-md-12' >
+						<div class='span12' >
 							<input type='radio' class='texteRadio' name='idArticleReplace' value='".$article['ID_ARTICLE']."' /> ".$article['LIBELLE_ARTICLE']."
 						</div>
 					</div>
@@ -69,17 +69,17 @@
 		<br/><br/>
 		<div  id='confirm' style='display:none;'>
 			<div class='row'>
-				<div class='col-md-6'>
+				<div class='span6'>
 				</div>
-				<div class='col-md-6' style='text-align:right;'>
-					<span style='color:red;'><span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>&nbsp;Cette action est irréversible</span>
+				<div class='span6' style='text-align:right;'>
+					<span style='color:red;'><i class='icon-exclamation-sign'></i>&nbsp;Cette action est irréversible</span>
 				</div>
 			</div>
 			<div class='row'>
-				<div class='col-md-6'>
+				<div class='span6'>
 					<a class='btn btn-default' id='cancelTexte'>Choisir un autre texte</a>
 				</div>
-				<div class='col-md-6' style='text-align:right;'>
+				<div class='span6' style='text-align:right;'>
 					<input type='submit' class='btn btn-danger' value='Supprimer l&#145;article' />
 				</div>
 			</div>

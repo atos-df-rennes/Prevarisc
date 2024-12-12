@@ -106,12 +106,12 @@
 <?php if (count($this->couches_cartographiques) == 0) : ?>
     <div class='well well-large text-center'>
         <p class='lead'>Il n'y a pas de couche cartographique.</p>
-        <p><a href='<?php echo $this->url(array('action' => 'add')) ?>' class='btn btn-default btn-lg'>Ajouter une couche personnalisée</a></p>
+        <p><a href='<?php echo $this->url(array('action' => 'add')) ?>' class='btn btn-large'>Ajouter une couche personnalisée</a></p>
         <p>
-            <a href='<?php echo $this->url(array('action' => 'add-couche-ign')) ?>' class='btn btn-default btn-lg'>
+            <a href='<?php echo $this->url(array('action' => 'add-couche-ign')) ?>' class='btn btn-large'>
                 Ajouter une couche IGN
             </a>
-            <div class="alert alert-warning">
+            <div class="alert">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <strong>Attention !</strong> Le chargement de la page d'ajout d'une couche IGN peut prendre du temps si vous avez renseigné plusieurs clés.
             </div>
@@ -119,16 +119,16 @@
     </div>
 <?php else : ?>
     <p class='text-right'>
-        <a class='btn btn-primary' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add-couche-ign'), null, true) ?>'>Ajouter une couche IGN</a>
+        <a class='btn' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add'), null, true) ?>'>Ajouter une couche personnalisée</a>
     </p>
     <p class='text-right'>
-        <a class='btn btn-info' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add'), null, true) ?>'>Ajouter une couche personnalisée</a>
+        <a class='btn' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add-couche-ign'), null, true) ?>'>Ajouter une couche IGN</a>
     </p>
     <p class='text-right'>
-        <a class='btn btn-default' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'change-order'), null, true) ?>'>Changer l'ordre des couches</a>
+        <a class='btn' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'change-order'), null, true) ?>'>Changer l'ordre des couches</a>
     </p>
 
-    <div class="alert alert-warning pull-right col-md-4">
+    <div class="alert pull-right span4">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         <strong>Attention !</strong> Le chargement de la page d'ajout d'une couche IGN peut prendre du temps si vous avez renseigné plusieurs clés.
     </div>

@@ -3,14 +3,14 @@
 <?php else: ?>
     <h2>Gestion des éléments supprimés</h2>
 
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#dossiers" data-toggle="tab" aria-controls="dossiers">Dossiers</a></li>
-        <li role="presentation"><a href="#etablissements" data-toggle="tab" aria-controls="etablissements">Etablissements</a></li>
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#dossiers" data-toggle="tab">Dossiers</a></li>
+        <li><a href="#etablissements" data-toggle="tab">Etablissements</a></li>
     </ul>
 
     <div class="tab-content">
         <?php if ($this->is_allowed_delete_dossier): ?>
-            <div role="tabpanel" id="dossiers" class="tab-pane fade in active">
+            <div id="dossiers" class="tab-pane active">
                 <?= $this->partial('retablir/partials/partial-deleted-dossiers.phtml', [
                     'data' => $this->dossiersSupprimes
                 ]) ?>
@@ -18,7 +18,7 @@
         <?php endif ?>
 
         <?php if ($this->is_allowed_delete_etablissement): ?>
-            <div role="tabpanel" id="etablissements" class="tab-pane fade">
+            <div id="etablissements" class="tab-pane">
                 <?= $this->partial('retablir/partials/partial-deleted-etablissements.phtml', [
                     'data' => $this->etablissementsSupprimes
                 ]) ?>

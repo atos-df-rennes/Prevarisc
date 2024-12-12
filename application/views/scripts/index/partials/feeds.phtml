@@ -24,7 +24,7 @@
                 </td>
 
                 <td style="border: none">
-                    <small class='text-muted pull-right'><?php echo $date ?> - <?php echo $message['TYPE_NEWS'] ?> - <a href='<?php echo $this->url(array('controller' => 'index', 'action' => 'delete-message', 'id' => $message['ID_NEWS'])) ?>'>Supprimer</a></small>
+                    <small class='muted pull-right'><?php echo $date ?> - <?php echo $message['TYPE_NEWS'] ?> - <a href='<?php echo $this->url(array('controller' => 'index', 'action' => 'delete-message', 'id' => $message['ID_NEWS'])) ?>'>Supprimer</a></small>
                     <a href="#"><strong><?php echo $message['PRENOM_UTILISATEURINFORMATIONS'] . ' ' . $message['NOM_UTILISATEURINFORMATIONS'] ?></strong></a><br>
                     <p><?php echo $text_news_filtered ?></p>
                 </td>
@@ -32,5 +32,5 @@
         <?php endforeach ?>
     </table>
 <?php else: ?>
-  <small class='text-muted'>Aucun message disponible.</small>
+  <small class='muted'>Aucun message disponible.</small>
 <?php endif ?>

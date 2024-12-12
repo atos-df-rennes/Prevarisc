@@ -6,15 +6,15 @@
             <?php $article = $this->articles[$j]; ?>
             <?php $texte = $this->textes[$j]; ?>
             <tr>
-                <td class='col-md-3'><?php echo $texte ?></td>
-                <td class='col-md-2'><?php echo $article ?></td>
+                <td class='span3'><?php echo $texte ?></td>
+                <td class='span2'><?php echo $article ?></td>
 		<?php if($cpt): ?>
                     <?php if ($this->typePrescDossier > 0): ?>
-                        <td rowspan='<?php echo $nbAssoc ?>' class='col-md-1 numPresc'><?php echo $this->numPresc ?></td>
+                        <td rowspan='<?php echo $nbAssoc ?>' class='span1 numPresc'><?php echo $this->numPresc ?></td>
                     <?php endif ?>
                     <td rowspan='<?php echo $nbAssoc ?>' class='span<?php echo $this->typePrescDossier > 0 ? 5 : 6 ?>'><?php echo nl2br($this->libelle) ?></td>
-                    <td class='col-md-1' rowspan='<?php echo $nbAssoc ?>'>
-                        <a class='btn btn-default' href='<?php echo $this->url(array('controller' => 'dossier', 'action' => 'prescription-edit', 'id-prescription' => $this->idPrescriptionDossier, 'id' => $this->idDossier)) ?>' >Modifier</a>
+                    <td class='span1' rowspan='<?php echo $nbAssoc ?>'>
+                        <a class='btn' href='<?php echo $this->url(array('controller' => 'dossier', 'action' => 'prescription-edit', 'id-prescription' => $this->idPrescriptionDossier, 'id' => $this->idDossier)) ?>' >Modifier</a>
                     </td>
                     <?php $cpt = false; ?>
 		<?php endif ?>

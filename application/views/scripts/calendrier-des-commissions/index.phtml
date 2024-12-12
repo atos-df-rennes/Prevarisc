@@ -4,19 +4,19 @@
     <?php if (getenv('PREVARISC_SECURITY_KEY') && getenv('PREVARISC_SECURITY_KEY') !== '') : ?>
         <li>
             <a id='syncCom'  href='<?php echo $this->url_webcal ?>' style="display:none">
-                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Synchroniser le calendrier de cette commission
+                <i class="icon-repeat"></i> Synchroniser le calendrier de cette commission
             </a>
         </li>
     <?php endif ?>
     <li>
         <a id='exportCom'  href='#' style="display:none">
-            <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Exporter pour Outlook
+            <i class="icon-calendar"></i> Exporter pour Outlook
         </a>
     </li>
     <?php if ($this->is_view_all) : ?>
         <li>
             <a id='viewAllLink'  href='#'>
-                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Voir tous les évènements
+                <i class="icon-eye-open"></i> Voir tous les évènements
             </a>
         </li>
     <?php endif ?>
@@ -24,7 +24,7 @@
         <?php if (getenv('PREVARISC_SECURITY_KEY') && getenv('PREVARISC_SECURITY_KEY') !== '') : ?>
             <li>
                 <a id='syncCal'  href='<?php echo $this->url_webcal ?>'>
-                    <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Synchroniser le calendrier de toutes les commissions
+                    <i class="icon-repeat"></i> Synchroniser le calendrier de toutes les commissions
                 </a>
             </li>
         <?php endif ?>
@@ -252,7 +252,7 @@
                             },
                             {
                                 text: "Fermer la fenêtre d'édition",
-                                class: 'btn btn-default',
+                                class: 'btn',
                                 click: function() {
                                     $("#dialogComm").dialog('close').html('');
                                 }
@@ -381,7 +381,7 @@
                         },
                         {
                             text: "Fermer la fenêtre d'édition",
-                            class: 'btn btn-default',
+                            class: 'btn',
                             click: function() {
                                 $("#dialogComm").dialog('close').html('');
                             }

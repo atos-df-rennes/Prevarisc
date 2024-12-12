@@ -31,7 +31,7 @@ for($i=0; $i < $nbPrescType; $i++)
 		{       $libelle = nl2br($this->prescriptionType[$i][0]['PRESCRIPTIONTYPE_LIBELLE']);
                         $libelle = str_ireplace($this->tabMotCles, $tabMotClesHighlight, $libelle); 
 			echo "<td rowspan='".$nbAssoc."' style='width:70%;'>".$libelle."</td>";
-			echo "<td rowspan='".$nbAssoc."'><button class='add btn btn-default' id='prescType_".$this->prescriptionType[$i][$j]['ID_PRESCRIPTIONTYPE']."'>Ajouter</button></td>";
+			echo "<td rowspan='".$nbAssoc."'><button class='add' id='prescType_".$this->prescriptionType[$i][$j]['ID_PRESCRIPTIONTYPE']."'>Ajouter</button></td>";
 			$cpt = false;
 		}
 		echo "

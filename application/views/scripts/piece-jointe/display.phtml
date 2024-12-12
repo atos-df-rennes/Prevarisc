@@ -2,6 +2,16 @@
     <tr>
         <!-- Lien de la pièce jointe -->
         <td>
+            <?php if (
+                $this->isPlatau
+                && array_key_exists('IS_NEW', $pj)
+                && $pj['IS_NEW']
+            ): ?>
+                <div class="label label-important mb-2">
+                    Nouveau !
+                </div>
+                <br />
+            <?php endif ?>
             <a
                 class="file <?php echo substr(strtolower($pj['EXTENSION_PIECEJOINTE']), 1, 3) ?>"
                 href='<?php echo $this->url(array('controller' => 'piece-jointe', 'action' => 'get', 'id' => $this->id, 'idpj' => $pj['ID_PIECEJOINTE'], 'type' => $this->type)) ?>'
@@ -15,28 +25,43 @@
                 && $pj['ID_PLATAU']
             ): ?>
                 <br />
-                <div class="label label-info">
+                <div class="label label-info mt-2">
                     <?= $pj['ID_PLATAU'] ?>
                 </div>
             <?php endif ?>
         </td>
 
         <!-- Description -->
-        <td><?php echo nl2br(str_replace("<br />", "" ,$pj['DESCRIPTION_PIECEJOINTE'])) ?></td>
+        <td>
+            <?php if (null !== $pj['DESCRIPTION_PIECEJOINTE']): ?>
+                <?= nl2br(str_replace("<br />", "" ,$pj['DESCRIPTION_PIECEJOINTE'])) ?>
+            <?php else: ?>
+                <p>
+                    <?= $pj['TYPE'] ?>
+                    <?php if (null !== $pj['TYPE'] && null !== $pj['SOUS_TYPE']): ?>
+                        -
+                    <?php endif ?>
+                    <?= $pj['SOUS_TYPE'] ?>
+                </p>
+                <span class="label label-inverse">
+                    <i class="icon-calendar icon-white"></i>&nbsp;Déposée le <?= Service_Utils_Date::convertFromMySQL($pj['DATE_DEPOT']) ?>
+                </span>
+                <span class="label label-success">
+                    <i class="icon-tag icon-white" title="Nature de la pièce"></i>&nbsp;<?= $pj['NATURE'] ?>
+                </span>
+            <?php endif ?>
+        </td>
 
         <!-- Date de création -->
         <td>
-            <?php
-                $date = new Zend_Date($pj['DATE_PIECEJOINTE'], Zend_Date::DATES);
-                echo $date->get( Zend_Date::DAY."/".Zend_Date::MONTH."/".Zend_Date::YEAR );
-            ?>
+            <?= Service_Utils_Date::convertFromMySQL($pj['DATE_PIECEJOINTE']) ?>
         </td>
 
         <?php if ($this->isPlatau): ?>
             <td>
                 <?php switch ($pj['NOM_STATUT']):
                     case 'not_exported': ?>
-                        <div class="label label-default"><?= $pj['NOM_LISIBLE'] ?></div>
+                        <div class="label"><?= $pj['NOM_LISIBLE'] ?></div>
                 <?php break;
                     case 'to_be_exported': ?>
                         <div class="label label-info"><?= $pj['NOM_LISIBLE'] ?></div>
@@ -48,9 +73,9 @@
                         <div class="label label-success"><?= $pj['NOM_LISIBLE'] ?></div>
                 <?php break;
                     case 'on_error': ?>
-                        <div class="label label-danger"><?= $pj['NOM_LISIBLE'] ?></div>
+                        <div class="label label-important"><?= $pj['NOM_LISIBLE'] ?></div>
                         <i
-                            class='icon-label-right glyphicon glyphicon-info-sign'
+                            class='icon-label-right icon-info-sign'
                             title='Erreur'
                             data-content="<?= $pj['MESSAGE_ERREUR'] ?>"
                             data-html='true'
@@ -69,7 +94,7 @@
         <td>
             <?php if($this->verrou != 1 && !in_array($pj['NOM_STATUT'], ['to_be_exported', 'exported', 'awaiting_status'])): ?>
                 <a class='delete' href='/piece-jointe/delete?id_pj=<?php echo $pj["ID_PIECEJOINTE"] ?>&type=<?php echo $this->type ?>&id=<?php echo $this->id ?>'>
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    <i class="icon-trash"></i>
                 </a>
             <?php endif ?>
         </td>

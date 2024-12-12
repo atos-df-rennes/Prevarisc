@@ -1,9 +1,4 @@
 <form action="<?= $this->url(array('controller' => 'couches-cartographiques', 'action' => 'change-order'), null, true) ?>" method="post">
-    <div class='btn-group pull-right'>
-        <a class='btn btn-default' href="<?php echo $this->url(array('action' => 'list')) ?>">Revenir sur la liste des couches cartographiques</a>
-        <button type='submit' class='btn btn-success'>Sauvegarder</button>
-    </div>
-
     <table class="table">
         <thead>
             <tr>
@@ -16,10 +11,15 @@
                 <tr>
                     <td><?= $coucheCarto['NOM_COUCHECARTO'] ?></td>
                     <td>
-                        <input class="form-control" type="number" name="ORDRE_COUCHECARTO-<?= $coucheCarto['ID_COUCHECARTO'] ?>" required value="<?= $coucheCarto['ORDRE_COUCHECARTO'] ?>" min="1" />
+                        <input type="number" name="ORDRE_COUCHECARTO-<?= $coucheCarto['ID_COUCHECARTO'] ?>" required value="<?= $coucheCarto['ORDRE_COUCHECARTO'] ?>" min="1" />
                     </td>
                 </tr>
             <?php endforeach ?>
         </tbody>
     </table>
+
+    <div class='btn-group pull-right'>
+        <a class='btn' href="<?php echo $this->url(array('action' => 'list')) ?>">Revenir sur la liste des couches cartographiques</a>
+        <button type='submit' class='btn btn-success'>Sauvegarder</button>
+    </div>
 </form>

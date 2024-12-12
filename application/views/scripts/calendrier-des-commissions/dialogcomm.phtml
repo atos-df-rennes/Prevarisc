@@ -207,12 +207,12 @@ if(isset($this->do) && $this->do == 'edit'){
 			</p>
 			<br/>
 			<div class='container-fluid' id='listeDates'>
-				<ul class='list-unstyled row' style='text-align:center;font-weight:bold;border-bottom:1px solid black;padding:3px 0 3px 0;'>
-					<li class='col-md-6'>Date</li>
-					<li class='col-md-2'>Heure début</li>
-					<li class='col-md-2'>Heure fin</li>
-					<li class='col-md-2'>
-						<button class='addDate btn btn-default'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>&nbsp;</button>
+				<ul class='unstyled row-fluid' style='text-align:center;font-weight:bold;border-bottom:1px solid black;float:left;padding:3px 0 3px 0;'>
+					<li class='span6'>Date</li>
+					<li class='span2'>Heure début</li>
+					<li class='span2'>Heure fin</li>
+					<li class='span2'>
+						<button class='addDate btn'><i class='icon-plus'></i>&nbsp;</button>
 					</li>
 				</ul>
 	";
@@ -226,14 +226,14 @@ if(isset($this->do) && $this->do == 'edit'){
 			$HF = $dates['heureF'];
 		}
 		echo "
-					<ul class='list-unstyled row' style='text-align: center; font-weight: bold; float: left; padding: 3px 0pt;'>
-						<li class='col-md-6'>".$dates['date']."</li>
-						<li class='col-md-2'><input type='text' size='8' class='time' id='D_".$dates['inputH']."' name='D_".$dates['inputH']."' value='".$HD."' /></li>
-						<li class='col-md-2'><input type='text' size='8' class='time' id='F_".$dates['inputH']."' name='F_".$dates['inputH']."' value='".$HF."'/></li>
-						<li class='col-md-2'>
+					<ul class='unstyled row-fluid' style='text-align: center; font-weight: bold; float: left; padding: 3px 0pt;'>
+						<li class='span6'>".$dates['date']."</li>
+						<li class='span2'><input type='text' size='8' class='time' id='D_".$dates['inputH']."' name='D_".$dates['inputH']."' value='".$HD."' /></li>
+						<li class='span2'><input type='text' size='8' class='time' id='F_".$dates['inputH']."' name='F_".$dates['inputH']."' value='".$HF."'/></li>
+						<li class='span2'>
 		";
 		if($paspremier != 0) {
-			echo "<button class='suppression btn btn-default'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span>&nbsp;</button>";
+			echo "<button class='suppression btn'><i class='icon-trash'></i>&nbsp;</button>";
 		}
 		echo "
 						</li>
@@ -255,20 +255,20 @@ if(isset($this->do) && $this->do == 'edit'){
 	switch($this->do){
 		case 'addDateN':
 			echo "
-				<ul class='list-unstyled row' style='text-align:center;font-weight:bold;padding:3px 0 3px 0;'>
-					<li class='col-md-6'>".$this->dateAjoutee."</li>
-					<li class='col-md-2'><input type='text' size='8' class='time' id='D_".$this->dateAjouteeInput."' name='D_".$this->dateAjouteeInput."' value='09:00'/></li>
-					<li class='col-md-2'><input type='text' size='8' class='time' id='F_".$this->dateAjouteeInput."' name='F_".$this->dateAjouteeInput."' value='18:00'/></li>
-					<li class='col-md-2'>
-						<button class='suppression btn btn-default' ><span class='glyphicon glyphicon-trash' aria-hidden='true'></span>&nbsp;</button>
+				<ul class='unstyled row-fluid' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
+					<li class='span6'>".$this->dateAjoutee."</li>
+					<li class='span2'><input type='text' size='8' class='time' id='D_".$this->dateAjouteeInput."' name='D_".$this->dateAjouteeInput."' value='09:00'/></li>
+					<li class='span2'><input type='text' size='8' class='time' id='F_".$this->dateAjouteeInput."' name='F_".$this->dateAjouteeInput."' value='18:00'/></li>
+					<li class='span2'>
+						<button class='suppression btn' ><i class='icon-trash'></i>&nbsp;</button>
 					</li>
 			";
 		    break;
 		case 'libelleCom':
 			echo "
 				Saisissez le libellé de la commission <input type='text' name='value_libelleCom' id='value_libelleCom' value='".htmlentities($this->libelleDateComm, ENT_QUOTES)."' />
-				<button class='validation btn btn-default' id='valid_libelleCom'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span>&nbsp;</button>
-				<button class='annulation btn btn-default' id='annule_libelleCom'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span>&nbsp;</button>
+				<button class='validation btn' id='valid_libelleCom'><i class='icon-ok'></i>&nbsp;</button>
+				<button class='annulation btn' id='annule_libelleCom'><i class='icon-remove'></i>&nbsp;</button>
 			";
 		    break;
 		case 'valid_libelleCom':
@@ -312,7 +312,7 @@ function afficheLibelleDateComm($libelle){
 	//affiche le libelle  de la commission en mode lectude d'infos
 	return "
 		Libelle de la commission : ".$libelle."
-		<button id='edit_libelleCom' class='edition btn btn-default'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>&nbsp;</button>
+		<button id='edit_libelleCom' class='edition btn'><i class='icon-pencil'></i>&nbsp;</button>
 	";
 }
 
@@ -321,7 +321,7 @@ function afficheTypeDateComm($libelleCom){
 	return "
 		Le type de commission est :
 	".$libelleCom."
-		<button id='edit_typeCom' class='edition btn btn-default'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>&nbsp;</button>
+		<button id='edit_typeCom' class='edition btn'><i class='icon-pencil'></i>&nbsp;</button>
 	";
 }
 
@@ -341,8 +341,8 @@ function modifTypeComm($listeCommType, $idSelect){
 	}
 	return $affiche .= "
 		</select>
-		<button class='validation btn btn-default' id='valid_typeCom'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span>&nbsp;</button>
-		<button class='annulation btn btn-default' id='annule_typeCom'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span>&nbsp;</button>
+		<button class='validation btn' id='valid_typeCom'><i class='icon-ok'></i>&nbsp;</button>
+		<button class='annulation btn' id='annule_typeCom'><i class='icon-remove'></i>&nbsp;</button>
 	";
 }
 
@@ -350,12 +350,12 @@ function afficheTabListeDates($listeDates){
 	//Affiche la liste des dates pour une édition
 	$affiche = "
 				<div class='container-fluid' id='listeDates'>
-					<ul class='list-unstyled row' style='text-align:center;font-weight:bold;border-bottom:1px solid black;padding:3px 0 3px 0;'>
-						<li class='col-md-6'>Date</li>
-						<li class='col-md-2'>Heure début</li>
-						<li class='col-md-2'>Heure fin</li>
-						<li class='col-md-2'>
-							<button class='addDate btn btn-default'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>&nbsp;</button>
+					<ul class='unstyled row-fluid' style='text-align:center;font-weight:bold;border-bottom:1px solid black;float:left;padding:3px 0 3px 0;'>
+						<li class='span6'>Date</li>
+						<li class='span2'>Heure début</li>
+						<li class='span2'>Heure fin</li>
+						<li class='span2'>
+							<button class='addDate btn'><i class='icon-plus'></i>&nbsp;</button>
 						</li>
 					</ul>
 	";
@@ -366,18 +366,18 @@ function afficheTabListeDates($listeDates){
 		$date = new Zend_Date($dates['DATE_COMMISSION'],'yyyy.MM.dd','fr');
 		$dateLibelle = $date->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr');
 		$affiche .= "
-					<ul class='list-unstyled row' id='ligne_".$dates['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;padding:3px 0 3px 0;'>
-						<li class='col-md-6'>".$dateLibelle."</li>
-						<li class='col-md-2'> ".$heureDebut." </li>
-						<li class='col-md-2'> ".$heureFin." </li>
-						<li class='col-md-2'>
+					<ul class='unstyled row-fluid' id='ligne_".$dates['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
+						<li class='span6'>".$dateLibelle."</li>
+						<li class='span2'> ".$heureDebut." </li>
+						<li class='span2'> ".$heureFin." </li>
+						<li class='span2'>
 		";
 		$affiche .= "
-						<button class='edition btn btn-default' name='edition' id='edit_dateComm_".$dates['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>&nbsp;</button>
+						<button class='edition btn' name='edition' id='edit_dateComm_".$dates['ID_DATECOMMISSION']."'><i class='icon-pencil'></i>&nbsp;</button>
 		";
 		if($dates['DATECOMMISSION_LIEES']){
-			$affiche .= "<button class='suppression btn btn-default' id='supp_dateComm_".$dates['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span>&nbsp;</button>";
-			$affiche .= "<button style='float:right;' class='dateDefaut btn btn-default' id='defaut_dateComm_".$dates['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-check' aria-hidden='true'></span>&nbsp;</button>";
+			$affiche .= "<button class='suppression btn' id='supp_dateComm_".$dates['ID_DATECOMMISSION']."'><i class='icon-trash'></i>&nbsp;</button>";
+			$affiche .= "<button style='float:right;' class='dateDefaut btn' id='defaut_dateComm_".$dates['ID_DATECOMMISSION']."'><i class='icon-check'></i>&nbsp;</button>";
 		}
 		$affiche .= "
 						</li>
@@ -397,18 +397,18 @@ function afficheDateEdit($dateInfos,$first=null){
 	$date = new Zend_Date($dateInfos['DATE_COMMISSION'],'yyyy.MM.dd','fr');
 	$date = $date->get(Zend_Date::DAY."/".Zend_Date::MONTH."/".Zend_Date::YEAR);
 	return "
-		<li class='col-md-6'>
+		<li class='span6'>
 			<input type='text' class='date' value='".$date."' id='date_".$dateInfos['ID_DATECOMMISSION']."' />
 		</li>
-		<li class='col-md-2'>
+		<li class='span2'>
 			<input type='text' size='8' class='time' id='D_".$dateInfos['ID_DATECOMMISSION']."' name='D_".$dateInfos['ID_DATECOMMISSION']."' value='".$heureDebut."' />
 		</li>
-		<li class='col-md-2'>
+		<li class='span2'>
 			<input type='text' size='8' class='time' id='F_".$dateInfos['ID_DATECOMMISSION']."' name='F_".$dateInfos['ID_DATECOMMISSION']."' value='".$heureFin."' />
 		</li>
-		<li class='col-md-2'>
-			<button class='validation btn btn-default' name='validation' id='annule_dateCom_".$dateInfos['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span>&nbsp;</button>
-			<button class='annulation btn btn-default' name='annulation' id='annule_dateCom_".$dateInfos['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span>&nbsp;</button>
+		<li class='span2'>
+			<button class='validation btn' name='validation' id='annule_dateCom_".$dateInfos['ID_DATECOMMISSION']."'><i class='icon-ok'></i>&nbsp;</button>
+			<button class='annulation btn' name='annulation' id='annule_dateCom_".$dateInfos['ID_DATECOMMISSION']."'><i class='icon-remove'></i>&nbsp;</button>
 			<input type='hidden' name='first' id='first' value='".$first."' />
 		</li>
 	";
@@ -422,16 +422,16 @@ function afficheDateValid($date,$first=null){
 	$dateLibelle = $dateE->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr');
 	$buttonEdition = $date['ID_DATECOMMISSION'];
 	$affiche = "
-			<ul class='list-unstyled row' id='ligne_".$date['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;padding:3px 0 3px 0;'>
-				<li class='col-md-6'>".$dateLibelle."</li>
-				<li class='col-md-2'>".$heureDebut." </li>
-				<li class='col-md-2'>".$heureFin." </li>
-				<li class='col-md-2'>
-					<button class='edition btn btn-default' id='edit_dateComm_".$buttonEdition."'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>&nbsp;</button>
+			<ul class='unstyled row-fluid' id='ligne_".$date['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
+				<li class='span6'>".$dateLibelle."</li>
+				<li class='span2'>".$heureDebut." </li>
+				<li class='span2'>".$heureFin." </li>
+				<li class='span2'>
+					<button class='edition btn' id='edit_dateComm_".$buttonEdition."'><i class='icon-pencil'></i>&nbsp;</button>
 	";
 	if($date['DATECOMMISSION_LIEES']){
-		$affiche.= "<button class='suppression btn btn-default' id='supp_dateComm_".$buttonEdition."'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span>&nbsp;</button>";
-		$affiche .= "<button style='float:right;' class='dateDefaut btn btn-default' id='defaut_dateComm_".$date['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-check' aria-hidden='true'></span>&nbsp;</button>";
+		$affiche.= "<button class='suppression btn' id='supp_dateComm_".$buttonEdition."'><i class='icon-trash'></i>&nbsp;</button>";
+		$affiche .= "<button style='float:right;' class='dateDefaut btn' id='defaut_dateComm_".$date['ID_DATECOMMISSION']."'><i class='icon-check'></i>&nbsp;</button>";
 	}
 	return $affiche .= "
 				</li>
@@ -444,14 +444,14 @@ function ajoutDateLiee($tabDate,$date){
 	$heureDebut =substr($tabDate['HEUREDEB_COMMISSION'],0,5);
 	$heureFin =substr($tabDate['HEUREFIN_COMMISSION'],0,5);
 	return "
-		<ul class='list-unstyled row' id='ligne_".$tabDate['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;padding:3px 0 3px 0;'>
-			<li class='col-md-6'>".$date."</li>
-			<li class='col-md-2'>".$heureDebut."</li>
-			<li class='col-md-2'>".$heureFin."</li>
-			<li class='col-md-2'>
-				<button class='edition btn btn-default' id='edit_dateComm_".$tabDate['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>&nbsp;</button>
-				<button class='suppression btn btn-default' id='supp_dateComm_".$tabDate['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span>&nbsp;</button>
-				<button style='float:right;' class='dateDefaut btn btn-default' id='defaut_dateComm_".$tabDate['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-check' aria-hidden='true'></span>&nbsp;</button>
+		<ul class='unstyled row-fluid' id='ligne_".$tabDate['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
+			<li class='span6'>".$date."</li>
+			<li class='span2'>".$heureDebut."</li>
+			<li class='span2'>".$heureFin."</li>
+			<li class='span2'>
+				<button class='edition btn' id='edit_dateComm_".$tabDate['ID_DATECOMMISSION']."'><i class='icon-pencil'></i>&nbsp;</button>
+				<button class='suppression btn' id='supp_dateComm_".$tabDate['ID_DATECOMMISSION']."'><i class='icon-trash'></i>&nbsp;</button>
+				<button style='float:right;' class='dateDefaut btn' id='defaut_dateComm_".$tabDate['ID_DATECOMMISSION']."'><i class='icon-check'></i>&nbsp;</button>
 			</li>
 		</ul>
 	";
@@ -489,7 +489,7 @@ function afficheDivPeriodicite($countLigne,$doVal){
 	";
 	
 	if($doVal == 'edit') {
-		$affiche .= "<button class='validPeriodicite btn btn-default'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>&nbsp;</button>";
+		$affiche .= "<button class='validPeriodicite btn'><i class='icon-plus'></i>&nbsp;</button>";
 	}
 		
 	return $affiche .= "
@@ -502,13 +502,13 @@ function divAddDate(){
 	return "
 		<div id='divAddDate'  style='display:none;'>
 			&nbsp;&nbsp;
-			<ul class='list-unstyled row' style='text-align:center;font-weight:bold;padding:3px 0 3px 0;'>
-				<li class='col-md-6'>
+			<ul class='unstyled row-fluid' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
+				<li class='span6'>
 					Selectionnez la date <input type='text' class='date' id='addDate' />
 				</li>
-				<li class='col-md-4'>
-					<button class='validAddDate btn btn-default'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>&nbsp;</button>
-					<button class='cancelAddDate btn btn-default'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span>&nbsp;</button>
+				<li class='span4'>
+					<button class='validAddDate btn'><i class='icon-plus'></i>&nbsp;</button>
+					<button class='cancelAddDate btn'><i class='icon-remove'></i>&nbsp;</button>
 				</li>
 			</ul>
 		</div>

@@ -2,7 +2,7 @@
     <tr <?php if ($this->hidden): ?>class='hidden'<?php endif ?>>
         <?php if ($this->canWrite): ?>
             <td class='tdMove'>
-                <span class="glyphicon glyphicon-move" aria-hidden="true"></span>
+                <i class="icon-move"></i>
             </td>
         <?php endif ?>
         <?php foreach ($colonneChamp as $valeur): ?>
@@ -19,7 +19,7 @@
         <?php endforeach ?>
         <?php if ($this->canWrite): ?>
             <td>
-                <button type='button' class='deleteRow btn btn-danger'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button>
+                <button type='button' class='deleteRow btn btn-danger'><i class='icon-trash'></i></button>
             </td>
         <?php endif ?>
     </tr>

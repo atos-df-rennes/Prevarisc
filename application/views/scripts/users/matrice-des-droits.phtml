@@ -10,16 +10,19 @@
 </ul>
 
 <form method='post' action='/users/matrice-des-droits'>
-    <div class="panel-group" id="accordion">
+
+    <div class="accordion" id="accordion">
+
         <?php foreach($this->rowset_groupes as $groupe) : ?>
-            <div class="panel panel-default">
-                <div class="panel-heading">
+
+            <div class="accordion-group">
+                <div class="accordion-heading">
                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $groupe->ID_GROUPE ?>">
                         <?php echo $groupe->LIBELLE_GROUPE ?>
                     </a>
                 </div>
-                <div id="collapse<?php echo $groupe->ID_GROUPE ?>" class="panel-collapse collapse">
-                    <div class="panel-body">
+                <div id="collapse<?php echo $groupe->ID_GROUPE ?>" class="accordion-body collapse">
+                    <div class="accordion-inner">
                         <table class="table table-condensed table-hover" >
                             <thead>
                                 <tr>
@@ -46,8 +49,11 @@
                     </div>
                 </div>
             </div>
+
         <?php endforeach ?>
+
     </div>
         
     <input type='submit' value='Sauvegarder' class='btn btn-success' />
+        
 </form>

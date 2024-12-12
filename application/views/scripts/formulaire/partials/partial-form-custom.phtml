@@ -10,11 +10,11 @@
             ?>
         <?php else : ?>
             <?php foreach ($rubrique['CHAMPS'] as $champ) : ?>
-                <div class='form-group'>
-                    <label for='champ-<?= htmlspecialchars($champ["ID_CHAMP"]) ?>' class='col-md-2 control-label'>
+                <div class='control-group'>
+                    <label for='champ-<?= htmlspecialchars($champ["ID_CHAMP"]) ?>' class='control-label'>
                         <strong><?= htmlspecialchars($champ['NOM']) ?></strong>
                     </label>
-                    <div class='col-md-10'>
+                    <div class='controls'>
                         <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
                             'champ' => $champ,
                             'champsvaleurliste' => $this->champsvaleurliste,

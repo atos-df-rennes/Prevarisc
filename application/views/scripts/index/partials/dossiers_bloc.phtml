@@ -1,7 +1,7 @@
 <div id="<?php echo $this->id ?>" class="panel panel-default <?php echo $this->width != 'small' ? 'w2' : '' ?> empty folded">
   <div class="panel-heading">
-    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-    <?= $this->title ?> <span class="badge"><?= $this->count ?? 0 ?></span>
+    <i class="icon icon-chevron-right"></i>
+    <?= $this->title.' ('.($this->count ?? 0).')' ?>
   </div>
   <div class="panel-body" style="display:none">
       <img src="/images/load.gif" />

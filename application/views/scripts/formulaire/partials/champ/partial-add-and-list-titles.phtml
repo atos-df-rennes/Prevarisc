@@ -1,0 +1,11 @@
+<div class="row-fluid titles">
+    <div class="span4">
+        <h3><?= $this->titleInfo ?? 'Informations sur le champ' ?></h3>
+    </div>
+
+    <?php if ($this->count !== 0): ?>
+        <div class="span6 offset2">
+            <h3><?= $this->titleList ?? 'Liste des champs' ?></h3>
+        </div>
+    <?php endif ?>
+</div>

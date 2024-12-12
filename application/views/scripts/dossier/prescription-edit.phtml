@@ -4,12 +4,12 @@
     <input type='hidden' name='action' id='action' value='<?= $this->action ?>' />
 
     <div class='row'>
-        <div class='col-md-9' <?= $this->action == 'presc-add' ?  "style='display:none;'" : "" ?>>
+        <div class='span9' <?= $this->action == 'presc-add' ?  "style='display:none;'" : "" ?>>
             <a class='btn btn-warning' id='del-prescription'>Supprimer la prescription</a>
             <a class='btn btn-danger' id='del-confirm' style='display:none;'>Confirmer la suppression</a>
-            <a class='btn btn-default' id='del-cancel' style='display:none;'>Annuler</a>
+            <a class='btn' id='del-cancel' style='display:none;'>Annuler</a>
         </div>
-        <div class='col-md-3' style='float:right;'>
+        <div class='span3' style='float:right;'>
             <a class='btn btn-default' href='/dossier/prescription/id/<?= $this->id_dossier ?>'>Annuler la modification</a>
             <input type='submit' class='btn btn-success' value='Sauvegarder'>
         </div>
@@ -17,18 +17,16 @@
 
     <div class='row' id='alert' style='display:none;'>
         <ul class='unstyled'>
-            <li class='alert alert-danger' >
+            <li class='alert alert-error' >
                 Veuillez spécifier au minimum un texte ou un article et un contenu avant la sauvegarde
             </li>
         </ul>
     </div>
 
     <div class='row'>
-        <div class='col-md-4'>
+        <div class='span'>
             Sélectionnez l'endroit dans lequel vous souhaitez ajouter cette prescription
-        </div>
-        <div class='col-md-3'>
-            <select class="form-control" name='TYPE_PRESCRIPTION_DOSSIER'>
+            <select name='TYPE_PRESCRIPTION_DOSSIER' style='width:300px;'>
                 <option value='0' <?= $this->infosPrescription['TYPE_PRESCRIPTION_DOSSIER'] == 0 ? "selected" : "" ?>>Rappels réglementaires</option>
                 <option value='1' <?=  $this->infosPrescription['TYPE_PRESCRIPTION_DOSSIER'] == 1 ? "selected" : "" ?>>Prescriptions liées à l'exploitation</option>
                 <option value='2' <?= $this->infosPrescription['TYPE_PRESCRIPTION_DOSSIER'] == 2 ? "selected" : "" ?>>Prescriptions liées à l'amélioration</option>
@@ -37,7 +35,7 @@
     </div>
 
     <div class='row'>
-        <div class='col-md-4'>
+        <div class='span4'>
             Texte
             <select style='width:80%;' id='LIBELLE_TEXTE' class='chosen'>
             <?php foreach ($this->listeTextes as $val): ?>
@@ -46,7 +44,7 @@
             </select>
         </div>
 
-        <div class='col-md-4'>
+        <div class='span4'>
             Article
             <select style='width:80%;' class='chosen' id='LIBELLE_ARTICLE'>
             <?php foreach ($this->listeArticles as $val): ?>
@@ -55,13 +53,13 @@
             </select>
         </div>
 
-        <div class='col-md-4'>
+        <div class='span4'>
             <a class='btn btn-default' id='addAssoc' href=''>Ajouter l'association</a>
         </div>
     </div>
 
     <div class='row'>
-        <div class='col-md-12'>
+        <div class='span12'>
             <table class='table table-condensed champs_icpe champs rubrique' id='association'>
                 <thead>
                     <tr>
@@ -86,27 +84,25 @@
     </div>
 
     <div class='row'>
-        <div class='col-md-12'>
+        <div class='span12'>
             Contenu :
-            <textarea class="form-control" name='PRESCRIPTION_LIBELLE' id='PRESCRIPTION_LIBELLE' rows='10'><?= $this->infosPrescription['LIBELLE_PRESCRIPTION_DOSSIER'] ?></textarea>
+            <textarea name='PRESCRIPTION_LIBELLE' id='PRESCRIPTION_LIBELLE' rows='10'><?= $this->infosPrescription['LIBELLE_PRESCRIPTION_DOSSIER'] ?></textarea>
         </div>
     </div>
 
     <div class='row'>
-        <div class='col-md-3'>
+        <div class='span3'>
             <label for="DATE_LEVEE">Date de levée</label>
-            <div class="input-group">
-                <input class='date form-control' type='text' name='DATE_LEVEE' id='DATE_LEVEE' value="<?= $this->infosPrescription['DATE_LEVEE'] ?>" />
-                <span class="input-group-btn">
-                    <button class='today btn btn-default' type="button">
-                        <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
-                    </button>
-                </span>
-            </div>
+            <input class='date' type='text' name='DATE_LEVEE' id='DATE_LEVEE' value="<?= $this->infosPrescription['DATE_LEVEE'] ?>" />
+            &nbsp;
+            <button type='button' class='today btn'>
+                <i class='icon-calendar'></i>
+                &nbsp;Aujourd'hui
+            </button>
         </div>
-        <div class='col-md-9'>
+        <div class='span9'>
             <label for="JUSTIFICATIF_LEVEE">Justification :</label>
-            <textarea class="form-control" name='JUSTIFICATIF_LEVEE' id='JUSTIFICATIF_LEVEE' rows='10'><?= $this->infosPrescription['JUSTIFICATIF_LEVEE'] ?></textarea>
+            <textarea name='JUSTIFICATIF_LEVEE' id='JUSTIFICATIF_LEVEE' rows='10'><?= $this->infosPrescription['JUSTIFICATIF_LEVEE'] ?></textarea>
         </div>
     </div>
 </form>

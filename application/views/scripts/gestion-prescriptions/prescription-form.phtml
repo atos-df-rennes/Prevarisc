@@ -6,9 +6,9 @@ echo "
 	<input type='hidden' name='typeAction' id='typeAction' value='".$this->typeAction."' />
 	<input type='hidden' name='idPrescription' id='idPrescription' value='".$this->idPrescription."' />
 	<div class='row'>
-				<div class='col-md-12' >
-					<a href='/gestion-prescriptions'>Gestion des prescriptions types</a> <span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span> <a href='/gestion-prescriptions/gestion-rappel-reg'>Gestion rappels réglementaires</a>
-					<span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span>
+				<div class='span12' >
+					<a href='/gestion-prescriptions'>Gestion des prescriptions types</a> <i class='icon-chevron-right'></i> <a href='/gestion-prescriptions/gestion-rappel-reg'>Gestion rappels réglementaires</a>
+					<i class='icon-chevron-right'></i>
 	";
 	if($this->action == 'add'){
 		echo "Ajout d'un nouveau rappel réglementaire";
@@ -28,43 +28,44 @@ echo "
 	echo "
 			</h3>
 	<div class='row'>
-		<div class='col-md-12' style='text-align:right;'>
+		<div class='span12' style='text-align:right;'>
 			<a class='btn btn-default' href='/gestion-prescriptions/gestion-rappel-reg'>Annuler la modification</a>
 			<input type='submit' class='btn btn-success' value='Sauvegarder'>
 		</div>
 	</div>
 	<div class='row' id='alert' style='display:none;'>
-		<ul class='list-unstyled'>
-			<li class='alert alert-danger' >
+		<ul class='unstyled'>
+			<li class='alert alert-error' >
 				Veuillez spécifier au minimum un texte ou un article et un contenu avant la sauvegarde
 			</li>
 		</ul>
 	</div>
 	<br/>
-	<div class='row form-group' ".( ($this->typeAction == 'rappel-reg')? "" : "style='display:none;'" ).">
-		<div class='col-md-4'>
+	<div class='row' ".( ($this->typeAction == 'rappel-reg')? "" : "style='display:none;'" ).">
+		<div class='span4'>
 			Ajouter cette prescription pour les &nbsp;
 		</div>
-		<div class='col-md-8'>
-			<select class='form-control' id='PRESCRIPTIONREGL_TYPE' name='PRESCRIPTIONREGL_TYPE'>
+		<div class='span8'>
+			<select id='PRESCRIPTIONREGL_TYPE' name='PRESCRIPTIONREGL_TYPE'>
 				<option value='1' ".( ($this->infosPrescription[0]['PRESCRIPTIONREGL_TYPE'] == 1)? "selected" : "" ).">Etudes</option>
 				<option value='2' ".( ($this->infosPrescription[0]['PRESCRIPTIONREGL_TYPE'] == 2)? "selected" : "" ).">Visites</option>
 			</select>
 		</div>
 	</div>
-	<div class='row form-group'>
-		<div class='col-md-4'>
+	<div class='row'>
+		<div class='span4'>
 			Ajouter par défaut à la création d'un nouveau dossier &nbsp;
 		</div>
-		<div class='col-md-8'>
-			<select class='form-control' id='PRESCRIPTIONREGL_VISIBLE' name='PRESCRIPTIONREGL_VISIBLE'>
+		<div class='span8'>
+			<select id='PRESCRIPTIONREGL_VISIBLE' name='PRESCRIPTIONREGL_VISIBLE'>
 				<option value='1' ".( ($this->infosPrescription[0]['PRESCRIPTIONREGL_VISIBLE'] == 1)? "selected" : "" ).">Oui</option>
 				<option value='0' ".( ($this->infosPrescription[0]['PRESCRIPTIONREGL_VISIBLE'] == 0)? "selected" : "" ).">Non</option>
 			</select>
 		</div>
 	</div>
-	<div class='row form-group'>
-		<div class='col-md-4'>
+	<br/>
+	<div class='row'>
+		<div class='span4'>
 			Texte&nbsp;
 			<select style='width:80%;' id='LIBELLE_TEXTE' class='chosen'>
 ";
@@ -74,7 +75,7 @@ echo "
 echo "
 			</select>
 		</div>
-		<div class='col-md-4'>
+		<div class='span4'>
 			Article&nbsp;
 			<select style='width:80%;' id='LIBELLE_ARTICLE' class='chosen'>
 ";
@@ -85,22 +86,22 @@ echo "
 			</select>
 
 		</div>
-		<div class='col-md-4'>
+		<div class='span4'>
 			<a class='btn btn-default' id='addAssoc' href=''>Ajouter l'association</a>
 		</div>
 	</div>
 	<div class='row'>
-		<div class='col-md-4' class='liste-textes'>
+		<div class='span4' class='liste-textes'>
 		</div>
-		<div class='col-md-4' class='liste-articles'>
+		<div class='span4' class='liste-articles'>
 		</div>
-		<div class='col-md-4'>
+		<div class='span4'>
 		</div>
 	</div>
 ";
 echo "
 	<div class='row'>
-		<div class='col-md-12'>
+		<div class='span12'>
 			<table class='table table-condensed champs_icpe champs rubrique' id='association' >
 				<thead>
 					<tr>
@@ -131,9 +132,9 @@ echo "
 
 echo "
 	<div class='row'>
-		<div class='col-md-12'>
+		<div class='span12'>
 			Contenu :
-			<textarea class='form-control' name='PRESCRIPTION_LIBELLE' id='PRESCRIPTION_LIBELLE' rows='10'>";
+			<textarea name='PRESCRIPTION_LIBELLE' id='PRESCRIPTION_LIBELLE' rows='10'>";
 echo $this->libelle;
 echo "</textarea>
 		</div>
@@ -146,7 +147,7 @@ echo "</textarea>
 $(document).ready(function(){
 
 	$(".chosen").chosen({allow_single_deselect: true});
-
+	
 	$("#formPrescription").submit(function(){
 		if( $("#association tbody tr").length <= 0 || $("#PRESCRIPTION_LIBELLE").val() == '' ){
 			$("#alert").show();

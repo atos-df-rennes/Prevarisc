@@ -98,10 +98,15 @@
             <a href='<?= $this->url(array("controller" => "dossier", "action" => "piece-jointe", "id" => $this->idDossier), false, true) ?>'>
                 <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
                 Pièces jointes
+
+                <?php if($this->nombreNouvellesPiecesJointes > 0): ?>
+                    <div class="label label-danger pull-right">
+                        <?= $this->nombreNouvellesPiecesJointes ?>
+                    </div>
+                <?php endif ?>
             </a>
         </li>
 
-        <!-- @fixme: Voir comment modifier ce markup pour faire quelque chose de bien -->
         <li class="nav-header">Actions</li>
 
         <?php

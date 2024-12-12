@@ -76,59 +76,63 @@ $(document).ready(function() {
         });
     });
 
-    // Texte de l'auto complete utilisateurs
     // Auto-complétion des préventionnistes
-    // @fixme: Faire fonctionner
-    // $("#preventionnistes-autocomplete").typeahead({
-    //     minLength: 3,
-    //     source: function(query, process) {
-    //         return $.ajax({
-    //             url: "/api/1.0/search/users",
-    //             type: 'post',
-    //             data: {
-    //                 name: query,
-    //                 fonctions: 13,
-    //                 limit: 100
-    //             },
-    //             success: function(result) {
-    //                 var preventionnistes = [];
-    //                 $.each(result.response.results, function(i, preventionniste) {
-    //                     preventionnistes.push("<span data-id='" +
-    //                         preventionniste.uid + "'>" + preventionniste
-    //                         .NOM_UTILISATEURINFORMATIONS + " " +
-    //                         preventionniste.PRENOM_UTILISATEURINFORMATIONS +
-    //                         "</span>");
-    //                 });
+    const preventionnistes = <?= json_encode($this->preventionnistes) ?> ?? []
+    new TomSelect("#preventionnistes-autocomplete", {
+        plugins: {
+            remove_button: {
+                title: 'Supprimer cet élément'
+            }
+        },
+        valueField: 'ID_UTILISATEUR',
+        labelField: 'NOM_UTILISATEURINFORMATIONS',
+        searchField: 'NOM_UTILISATEURINFORMATIONS',
+        items: preventionnistes.map((preventionniste) => preventionniste.ID_UTILISATEUR),
+        load: function(query, process) {
+            $.ajax({
+                url: "/api/1.0/search/users",
+                type: 'get',
+                data: {
+                    name: query,
+                    fonctions: 13,
+                    limit: 100
+                },
+                success: function (result) {
+                    process(result.response.results);
+                }
+            });
+        },
+        shouldLoad(query) {
+            return query.length >= 3
+        },
+        render: {
+            option: function(data, escape) {
+                let res = "<div><span>" + escape(data.NOM_UTILISATEURINFORMATIONS) + " " + escape(data.PRENOM_UTILISATEURINFORMATIONS) + "</span>"
 
-    //                 process(preventionnistes);
-    //             }
-    //         });
-    //     },
-    //     highlighter: function(item) {
-    //         var libelle = $($.parseHTML(item)).last().text();
-    //         libelle = libelle.replace(new RegExp('(' + this.query + ')', 'gi'),
-    //             "<strong>$1</strong>");
-    //         var html = $.parseHTML(item);
-    //         $(html).last().text(libelle);
-    //         html = $(html).text();
-    //         return item.replace(item, html);
-    //     },
-    //     updater: function(item) {
-    //         var prevAdd =
-    //             "<span class='ui-state-highlight' style='float: left; padding: 2px; margin: 0pt 2px 1em 0pt; display: block;' >";
-    //         prevAdd += "<input type='hidden' name='preventionniste[]' value='" + $($.parseHTML(
-    //             item)).last().data('id') + "' />";
-    //         prevAdd += "<span>";
-    //         prevAdd += $($.parseHTML(item)).last().text();
-    //         prevAdd += "</span>";
-    //         prevAdd +=
-    //             "<a onclick='$(this).parent().remove(); return false;' style='text-decoration: none;' href=''>×</a>";
-    //         prevAdd += "</span>";
-    //         $("#liste_prev").append(prevAdd);
-    //         return;
-    //     }
-    // });
-    //FIN gestion de l'autocomplession pour les préventionniste attachés au dossier
+                if ('' !== data.GRADE_UTILISATEURINFORMATIONS) {
+                    res += "<br /><span class='text-muted'>" + escape(data.GRADE_UTILISATEURINFORMATIONS) + "</span>"
+                }
+
+                res += "</div>"
+
+                return res
+            },
+            item: function(data, escape) {
+                let res = "<div>" + escape(data.NOM_UTILISATEURINFORMATIONS)
+
+                if (data.PRENOM_UTILISATEURINFORMATIONS) {
+                    res += " " + escape(data.PRENOM_UTILISATEURINFORMATIONS)
+                }
+
+                res += "</div>"
+
+                return res
+            },
+            no_results: function(data, escape) {
+                return '<div class="no-results">Aucun résultat trouvé pour "'+escape(data.input)+'"</div>';
+            }
+        }
+    })
 
     // Auto complétion de la ville pour le service instructeur
     $("#servInstVille").autocomplete("/api/1.0/adresse/get_communes", {
@@ -2588,26 +2592,13 @@ $(".delaipresc").live('click', function() {
                     <?php echo $this->partialLoop('users/embedded/user.phtml', $this->preventionnistes) ?>
                 </div>
                 <div class='form col-md-3' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <ul class='list-unstyled'>
-                        <li style='list-style-type:none' id='liste_prev'>
-                            <?php if (count($this->preventionnistes) > 0) :
-								foreach ($this->preventionnistes as $prev) : ?>
-								<span class='ui-state-highlight'
-									style='float: left; padding: 2px; margin: 0pt 2px 1em 0pt; display: block;'>
-									<input type='hidden' name='preventionniste[]' value='<?php echo $prev["uid"] ?>' />
-									<span>
-										<?php echo $prev["NOM_UTILISATEURINFORMATIONS"]." ".$prev["PRENOM_UTILISATEURINFORMATIONS"] ?>
-									</span>
-									<a onclick='$(this).parent().remove(); return false;' style='text-decoration: none;'
-										href=''>×</a>
-								</span>
-								<?php endforeach;
-							endif ?>
-                        </li>
-                    </ul>
-                    <div style='display: block;'>
-                        <input class="form-control" type='text' value='' id='preventionnistes-autocomplete'>
-                    </div>
+                    <select id="preventionnistes-autocomplete" placeholder="Ajouter un préventionniste ..." name="preventionniste[]" multiple>
+                        <?php foreach ($this->preventionnistes as $preventionniste): ?>
+                            <option value="<?= $preventionniste["ID_UTILISATEUR"] ?>">
+                                <?= $preventionniste["NOM_UTILISATEURINFORMATIONS"] . " " . $preventionniste["PRENOM_UTILISATEURINFORMATIONS"] ?>
+                            </option>
+                        <?php endforeach ?>
+                    </select>
                 </div>
             </li>
         </ul>

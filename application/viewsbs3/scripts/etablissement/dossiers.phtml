@@ -1,0 +1,135 @@
+<input name = "idEtablissement" type="hidden" value=<?php echo($this->etablissement['general']['ID_ETABLISSEMENT'])?> />
+
+<h3 class='pull-left'>Liste des dossiers</h3>
+<div class='pull-right'>
+    <a class='btn btn-default' href="<?php echo $this->url(array('controller' => 'dossier', 'action' => 'add', 'id_etablissement' => $this->etablissement['general']['ID_ETABLISSEMENT']), null, true) ?>">Ajouter un dossier</a>
+</div>
+<div class="clearfix"></div>
+
+<?php if (count($this->visites) == 0 && count($this->etudes) == 0 && count($this->autres) == 0) : ?>
+    <div class='well well-large text-center'>
+        <p class='lead'>Il n'y a pas de dossier.</p>
+        <p><a href='<?php echo $this->url(array('controller' => 'dossier', 'action' => 'add', 'id_etablissement' => $this->etablissement['general']['ID_ETABLISSEMENT']), null, true) ?>' class='btn btn-default btn-lg'>Ajouter un dossier</a></p>
+    </div>
+<?php else : ?>
+    <?php if (count($this->visites) > 0) : ?>
+        <div class="text-center" id="content_visites_ets">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Visites</h4>
+                </div>
+                <div class="panel-body">
+                    <ul class='recherche_liste'>
+                        <?= $this->partialLoop('search/results/dossier.phtml', $this->visites) ?>
+                        <div class="voir-plus" id="divcompleteListeVisite"></div>
+                    </ul>
+
+                    <?php if (($this->nbVisites) > $this->nbElemMax) : ?>
+                        <button class="btn btn-default buttonOpenClose" id="completeListeVisite">Voir plus</button>
+                    <?php endif ?>
+                </div>
+            </div>
+        </div>
+    <?php endif ?>
+
+    <?php if (count($this->etudes) > 0) : ?>
+        <div class="text-center" id="content_etudes_ets">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Études</h4>
+                </div>
+                <div class="panel-body">
+                    <ul class='recherche_liste'>
+                        <?= $this->partialLoop('search/results/dossier.phtml', $this->etudes)  ?>
+                        <div class="voir-plus" id='divcompleteListeEtude'></div>
+                    </ul>
+
+                    <?php if (($this->nbEtudes) > $this->nbElemMax) : ?>
+                        <button class="btn btn-default buttonOpenClose" id="completeListeEtude">Voir plus</button>
+                    <?php endif ?>
+                </div>
+            </div>
+        </div>
+    <?php endif ?>
+
+    <?php if (count($this->autres) > 0) : ?>
+        <div class="text-center" id="content_autres_ets">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Autres</h4>
+                </div>
+                <div class="panel-body">
+                    <ul class='recherche_liste'>
+                        <?= $this->partialLoop('search/results/dossier.phtml', $this->autres) ?>
+                        <div class='voir-plus' id='divcompleteListeAutres'></div>
+                    </ul>
+
+                    <?php if (($this->nbAutres) > $this->nbElemMax) : ?>
+                        <button class="btn btn-default buttonOpenClose" id="completeListeAutres">Voir plus</button>
+                    <?php endif ?>
+                </div>
+            </div>
+        </div>
+    <?php endif ?>
+<?php endif ?>
+
+<script>
+    $(document).ready(function() {
+        let tableDisplay = new Map()
+        tableDisplay.set("divcompleteListeEtude", {isDeployed : false, isLoaded : false, typeDossier: "etudes"})
+        tableDisplay.set("divcompleteListeVisite", {isDeployed : false, isLoaded : false, typeDossier: "visites"})
+        tableDisplay.set("divcompleteListeAutres", {isDeployed : false, isLoaded : false, typeDossier: "autres"})
+
+        const loadData = (idelement) => {
+            if(!tableDisplay.get(idelement).isLoaded){
+                let newObjValue = tableDisplay.get(idelement)
+                newObjValue.isLoaded = !newObjValue.isLoaded
+                tableDisplay.set(idelement, newObjValue)
+
+                $.ajax({
+                    url: "/etablissement/get-dossiers-after-n",
+                    type: 'post',
+                    data: {
+                        id: document.getElementsByName("idEtablissement")[0].value,
+                        typeDossier: tableDisplay.get(idelement).typeDossier
+                    },
+                    success: function (html) {
+                        $('#'+idelement).append(html)
+                    }
+                });
+            }
+        }
+
+        Array.from(document.getElementsByClassName('buttonOpenClose')).forEach(function(element) {
+            tableDisplay.get("div"+element.id).isDeployed ? $("#div"+element.id).show() : $("#div"+element.id).hide()
+
+            element.addEventListener(
+                'click',
+                () => {
+                    loadData("div"+element.id)
+                    let newObjValue = tableDisplay.get("div"+element.id)
+                    newObjValue.isDeployed = !newObjValue.isDeployed
+                    tableDisplay.set("div"+element.id, newObjValue)
+                    tableDisplay.get("div"+element.id).isDeployed ? $("#div"+element.id).show() : $("#div"+element.id).hide()
+                    tableDisplay.get("div"+element.id).isDeployed ? $("#"+element.id)[0].innerText = "Voir moins" : $("#"+element.id)[0].innerText = "Voir plus"
+                }
+            );
+        });
+
+        // Affichage des dossiers enfants
+        $("ul.recherche_liste li.slide").live("click", function() {
+            var container = this;
+            if( $(this).hasClass("active") ) {
+                $(this).next().slideUp(400, function() {$(container).next().remove()});
+                $(this).toggleClass("active");
+            }
+            else {
+                $(container).find(".load").show();
+                $.post("/search/display-ajax-search-dossier", {parent: $(this).attr("id")}, function(html) {
+                    $(container).toggleClass("active").find(".load").hide();
+                    $(container).after("<li class='ui-helper-hidden' style='overflow: auto; height: auto;' >" + html + "</li>").next().slideDown();
+                });
+            }
+        });
+    });
+</script>

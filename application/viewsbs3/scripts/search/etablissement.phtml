@@ -1,0 +1,352 @@
+<!-- Onglets permettant de selectionner les entités à rechercher -->
+<h2 class="page-header">Etablissements</h2>
+<form method='get'>
+	<div class='navbar-form well well-sm'>
+        <div class="input-group">
+            <input type="text" name='label' class="form-control" placeholder="Libellé de l'établissement ou son #ID ..." value="<?php if(isset($_GET["label"])) echo htmlentities($_GET["label"]) ?>" onkeypress="masquerBoutonExportCalc()"/>
+            <span class="input-group-btn">
+                <input type='submit' class="btn btn-default" name='Rechercher' value="Rechercher" onsubmit="afficherBoutonExportCalc()"/>
+            </span>
+        </div>
+        <input type='hidden' name='page' value="1" />
+
+        <small>
+            <a href="/search/etablissement?label=&page=1">
+                Réinitialiser
+            </a>
+        </small>
+
+	    <p class='navbar-right' style='margin: 9px 0 0 5px'>
+            <small>
+                Zone de recherche :
+                <a href='#' id="zone_de_recherche_edit">
+                    <strong class='zone_de_recherche_text'>
+                        <?php echo array_key_exists('zone_de_recherche_text', $_GET) && $_GET['zone_de_recherche_text'] != '' ? $_GET['zone_de_recherche_text'] : 'Département' ?>
+                    </strong>
+                </a>
+                <a href='#' id="zone_de_recherche_reset"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+                <input type='hidden' name='zone_de_recherche_text' value="<?php if(array_key_exists('zone_de_recherche_text', $_GET)) echo $_GET['zone_de_recherche_text'] ?>" />
+                <input type='hidden' name='city' value="<?php if(array_key_exists('city', $_GET)) echo $_GET['city'] ?>" />
+                <input type='hidden' name='street' value="<?php if(array_key_exists('street', $_GET)) echo $_GET['street'] ?>" />
+                <input type='hidden' name='number' value="<?php if(array_key_exists('number', $_GET)) echo $_GET['number'] ?>" />
+	        </small>
+	    </p>
+	</div>
+
+    <div id="filterContainer" class="well">
+        <div class="row">
+            <div>
+                <select name='statuts[]' multiple onchange="masquerBoutonExportCalc()">
+                    <?php foreach( $this->DB_statut as $statut ) : ?>
+                        <option value='<?php echo $statut["ID_STATUT"] ?>' <?php if(isset($_GET["statuts"]) && in_array($statut["ID_STATUT"], (array) $_GET["statuts"])) echo 'selected' ?>><?php echo $statut["LIBELLE_STATUT"] ?></option>
+                    <?php endforeach ?>
+                </select>
+                <select name='presences_local_sommeil[]' multiple onchange="masquerBoutonExportCalc()">
+                    <option value='true' <?php if(isset($_GET["presences_local_sommeil"]) && in_array('true', (array) $_GET["presences_local_sommeil"])) echo 'selected' ?>>Avec</option>
+                    <option value='false' <?php if(isset($_GET["presences_local_sommeil"]) && in_array('false', (array) $_GET["presences_local_sommeil"])) echo 'selected' ?>>Sans</option>
+                </select>
+                <select name='avis[]' multiple onchange="masquerBoutonExportCalc()">
+                    <option value='true' <?php if(isset($_GET["avis"]) && in_array('true', (array) $_GET["avis"])) echo 'selected' ?>>Favorable</option>
+                    <option value='false' <?php if(isset($_GET["avis"]) && in_array('false', (array) $_GET["avis"])) echo 'selected' ?>>Défavorable</option>
+                </select>
+                <select name='commissions[]' multiple onchange="masquerBoutonExportCalc()">
+                    <?php foreach( $this->DB_commission as $commission ) : ?>
+                        <option value='<?php echo $commission["ID_COMMISSION"] ?>' <?php if(isset($_GET["commissions"]) && in_array($commission["ID_COMMISSION"], (array) $_GET["commissions"])) echo 'selected' ?>><?php echo $commission["LIBELLE_COMMISSION"] ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <div id='criteres_plus' style='margin-top: 4px;'>
+                <select name='genres[]' multiple onchange="masquerBoutonExportCalc()">
+                <?php foreach( $this->DB_genre as $genre ) : ?>
+                    <option value='<?php echo $genre["ID_GENRE"] ?>' <?php if(array_key_exists('genres', $_GET) && in_array($genre["ID_GENRE"], (array) $_GET["genres"])) echo 'selected' ?>><?php echo $genre["LIBELLE_GENRE"] ?></option>
+                <?php endforeach ?>
+                </select>
+                <span id='categorie_span'>
+                    <select name='categories[]' multiple onchange="masquerBoutonExportCalc()">
+                        <?php foreach( $this->DB_categorie as $categorie ) : ?>
+                            <option value='<?php echo $categorie["ID_CATEGORIE"] ?>' <?php if(array_key_exists('categories', $_GET) && in_array($categorie["ID_CATEGORIE"], (array) $_GET["categories"])) echo 'selected' ?>><?php echo $categorie["LIBELLE_CATEGORIE"] ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </span>
+                <span id='type_span'>
+                    <select name='types_activites[]' multiple onchange="masquerBoutonExportCalc()">
+                        <?php foreach( $this->DB_typeactivite as $type ) : ?>
+                            <optgroup label="<?php echo $type["LIBELLE_TYPE"] ?>">
+                                <option value='<?php echo $type["ID_TYPEACTIVITE"] ?>' <?php if(array_key_exists('types_activites', $_GET) && in_array($type["ID_TYPEACTIVITE"], (array) $_GET["types_activites"])) echo 'selected' ?>><?php echo $type["LIBELLE_TYPE"] . ' - ' . $type["LIBELLE_ACTIVITE"] ?></option>
+                            </optgroup>
+                        <?php endforeach ?>
+                    </select>
+                </span>
+                <span id='classe_span'>
+                    <select name='classes[]' multiple onchange="masquerBoutonExportCalc()">
+                        <?php foreach( $this->DB_classe as $classe ) : ?>
+                            <option value='<?php echo $classe["ID_CLASSE"] ?>' <?php if(array_key_exists('classes', $_GET) && in_array($classe["ID_CLASSE"], (array) $_GET["classes"])) echo 'selected' ?>><?php echo $classe["LIBELLE_CLASSE"] ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </span>
+                <span id='famille_span'>
+                    <select name='familles[]' multiple onchange="masquerBoutonExportCalc()">
+                        <?php foreach( $this->DB_famille as $famille ) : ?>
+                            <option value='<?php echo $famille["ID_FAMILLE"] ?>' <?php if(array_key_exists('familles', $_GET) && in_array($famille["ID_FAMILLE"], (array) $_GET["familles"])) echo 'selected' ?>><?php echo $famille["LIBELLE_FAMILLE"] ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </span>
+            </div>
+
+            <div style='margin-top: 4px;'>
+                <select name='groupements_territoriaux[]' multiple onchange="masquerBoutonExportCalc()">
+                    <?php foreach( $this->DB_groupementterritorial as $groupement ) : ?>
+                        <?php $selected = false; ?>
+                        <?php if ($this->user['groupements'] != null): ?>
+                            <?php foreach($this->user['groupements'] as $user_groupement): ?>
+                                <?php if ($groupement['ID_GROUPEMENT'] == $user_groupement['ID_GROUPEMENT']): ?>
+                                    <?php $selected = true; ?>
+                                    <?php break; ?>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                        <option value='<?php echo $groupement["ID_GROUPEMENT"] ?>' <?php if((isset($_GET["groupements_territoriaux"]) && in_array($groupement["ID_GROUPEMENT"], (array) $_GET["groupements_territoriaux"])) || $selected) echo 'selected' ?>>
+                            <?php echo $groupement["LIBELLE_GROUPEMENT"] ?>
+                        </option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+
+            <div style='margin-top: 24px;'>
+                <select name="preventionniste" class='chosen' data-placeholder='Sélectionnez un préventionniste' onchange="masquerBoutonExportCalc()">
+                    <option value=''></option>
+                    <?php foreach($this->liste_prev as $prev) : ?>
+                        <option value='<?php echo $prev["ID_PREVENTIONNISTE"] ?>' <?php if(isset($_GET["preventionniste"]) && $prev["ID_PREVENTIONNISTE"] == $_GET["preventionniste"]) echo 'selected' ?>><?php echo $prev["NOM_UTILISATEURINFORMATIONS"]." ".$prev["PRENOM_UTILISATEURINFORMATIONS"] ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+
+<?php if( count($this->results) > 0 ) : ?>
+    <div style='display:inline-block;width: 100%;' >
+        <div class='pull-left'>
+            <p class='text-muted'><small>Nombre total d'éléments : <?php echo $this->results->getTotalItemCount() ?></small></p>
+        </div>
+        <?php if( $this->results->getTotalItemCount() <= 10000 ) : ?>
+            <div class='pull-right'>
+                <input type='submit' class='btn btn-success' id='exporter' name='Exporter' value='Export Calc' <?php echo (($this->is_allowed_export_calc) ? '' : 'style="visibility: hidden;"') ?>>
+            </div>
+        <?php else : ?>
+            <div class='pull-right' <?php echo (($this->is_allowed_export_calc) ? '' : 'style="visibility: hidden;"') ?>>
+                <small class='text-danger'><b>La fonctionnalité d'export Calc est limitée à 10 000 éléments</b></small>
+            </div>
+        <?php endif ?>
+    </div>
+    <ul class='recherche_liste list-unstyled'>
+    <?php echo $this->partialLoop('search/results/etablissement.phtml', $this->results ) ?>
+    </ul>
+    <?php echo $this->results ?>
+<?php else : ?>
+	<p class='text-muted'><small>Aucun résultat disponible.</small></p>
+    <h2 style='color: silver; text-align: center;' ></h2>
+<?php endif ?>
+
+</form>
+
+<!-- Boite modale de la zone de recherche -->
+<form id='zone_de_recherche_modal' class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title">Définir la zone de recherche</h3>
+            </div>
+
+            <div class="modal-body">
+                <dl class='dl-horizontal'>
+                    <div>
+                        <dt>Ville</dt>
+                        <dd>
+                            <input class="form-control" name='commune_ac' type='text' placeholder='Nom de la commune ou code postal ...' />
+                            <input name='code_insee' type='hidden' />
+                        </dd>
+                    </div>
+
+                    <div style='margin-top: 10px;'>
+                        <dt>Voie</dt>
+                        <dd>
+                            <input class="form-control" type='text' name='voie_ac' placeholder='Nom de la voie ...' disabled />
+                            <input type='hidden' name='voie' />
+                        </dd>
+                    </div>
+
+                    <div style='margin-top: 10px;'>
+                        <dt>Numéro</dt>
+                        <dd>
+                            <input class="form-control" name='numero_ac' type='text' placeholder='Numéro de la voie ...' disabled />
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <button type="button" class='submit btn btn-success' onclick="masquerBoutonExportCalc()" >Définir la zone de recherche</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function() {
+    	// Si le champ de recherche est vide, on empêche l'envoi d'une recherche
+    	$("input[name='label']").focus();
+    	$('input[type="submit"]').attr('disabled', false);
+
+    	// Gestion des multiselects
+    	$("select[name='statuts[]']").multiselect({header: false, noneSelectedText: "Tous les statuts"});
+		$("select[name='genres[]']").multiselect({header: false, noneSelectedText: "Tous les genres"});
+		$("select[name='categories[]']").multiselect({header: false, noneSelectedText: "Toutes les catégories"});
+		$("select[name='classes[]']").multiselect({header: false, noneSelectedText: "Toutes les classes"});
+		$("select[name='familles[]']").multiselect({header: false, noneSelectedText: "Toutes les familles"});
+		$("select[name='types_activites[]']").multiselect({header: false, noneSelectedText: "Tous les types d'activités"});
+		$("select[name='avis[]']").multiselect({header: false, noneSelectedText: "Tous les avis"});
+        $("select[name='presences_local_sommeil[]']").multiselect({header: false, noneSelectedText: "Qu'importe la présence de local à sommeil", minWidth: 300});
+        $("select[name='commissions[]']").multiselect({header: false, noneSelectedText: "Toutes les commissions"});
+        $("select[name='groupements_territoriaux[]']").multiselect({header: false, noneSelectedText: "Tous les groupements territoriaux", minWidth: 300});
+
+		// Fonction d'affichage des critères en fonction du genre
+		function display_criteres_by_genres() {
+			$("#categorie_span, #classe_span, #famille_span, #type_span").hide();
+			var array = $("select[name='genres[]']").multiselect("getChecked").each(function() {
+				switch(this.value) {
+					case '2' : $("#type_span, #categorie_span").show(); break;
+					case '3' : $("#type_span, #categorie_span").show(); break;
+					case '4' : $("#famille_span").show(); break;
+					case '5' : $("#classe_span").show(); break;
+				}
+			});
+		}
+
+		// Affichage des critères en fonction du genre
+		$("select[name='genres[]']").bind("multiselectclick", function() {display_criteres_by_genres()});
+		display_criteres_by_genres();
+
+		// Slide des établissements enfants contenant d'autres établissements
+		$("ul.recherche_liste li.slide").live("click", function() {
+			if($(this).is('a')) {
+				return;
+			}
+			var container = this;
+			if( $(this).hasClass("active") ) {
+				$(this).next().slideUp(400, function() {$(container).next().remove()});
+				$(this).toggleClass("active");
+			}
+			else {
+				$(container).find(".load").show();
+				$.post("/search/display-ajax-search-etablissement", {parent: $(this).attr("id")}, function(html) {
+					$(container).toggleClass("active").find(".load").hide();
+					$(container).after("<li class='ui-helper-hidden' style='overflow: auto; height: auto;' >" + html + "</li>").next().slideDown();
+				});
+			}
+		});
+        $('#zone_de_recherche_edit').click(function(e){
+            e.preventDefault();
+            $('#zone_de_recherche_modal').modal();
+        });
+
+         $('#zone_de_recherche_reset').click(function(e){
+            e.preventDefault();
+            $("input[name='zone_de_recherche_text']").val("Département");
+            $(".zone_de_recherche_text").text("Département");
+
+            $("input[name='city']").val("");
+            $("input[name='street']").val("");
+            $("input[name='number']").val("");
+        });
+
+
+		// Auto complétion de la ville
+        $("form#zone_de_recherche_modal input[name='commune_ac']").autocomplete("/api/1.0/adresse/get_communes", {
+            minChars: 2,
+            cacheLength: 0,
+            parse: function(data) {
+                return $.map(data["response"], function(row) {return {data: row,value: row.LIBELLE_COMMUNE,result: row.LIBELLE_COMMUNE}});
+            },
+            formatItem: function(item) {
+                return item.LIBELLE_COMMUNE + " (" + item.NUMINSEE_COMMUNE + ")";
+            }
+        }).result(function(e, item) {
+            $("input[name='code_insee']").val( item.NUMINSEE_COMMUNE );
+            $("input[name='voie_ac']").removeAttr('disabled');
+            $("input[name='numero_ac']").removeAttr('disabled');
+        }).click(function() {
+            $(this).val("");
+            $("input[name='voie_ac']").val("").attr("disabled", true).blur();
+            $("input[name='voie']").val("").blur();
+            $("input[name='numero_ac']").val("").attr("disabled", true).blur();
+            $("input[name='numero_voie']").val("").blur();
+        });
+
+        // Auto complétion de la rue
+        $("form#zone_de_recherche_modal input[name='voie_ac']").autocomplete('/api/1.0/adresse/get_voies', {
+            minChars: 2,
+            cacheLength: 0,
+            extraParams: { code_insee: function(){ return $("input[name='code_insee']").val() } },
+            parse: function(data) {
+                return $.map(data["response"], function(row) { return {data: row,value: row.LIBELLE_RUE,result: row.LIBELLE_RUE} });
+            },
+            formatItem: function(item) {
+                return item.LIBELLE_RUE;
+            }
+        }).result(function(e, item) {
+            $("input[name='voie']").val( item.ID_RUE );
+            $("input[name='numero_ac']").removeAttr('disabled');
+        }).click(function() {
+            $(this).val("");
+            $("input[name='numero_ac']").val("").attr("disabled", true).blur();
+            $("input[name='numero_voie']").val("").blur();
+        });
+
+        // Validation de la zone de recherche
+        $('form#zone_de_recherche_modal .submit').click(function() {
+            var text = 'Département';
+
+            if($("input[name='code_insee']").val() != '') {
+                var text = $("input[name='commune_ac']").val();
+                if($("input[name='voie_ac']").val() != '') {
+                    var text = $("input[name='commune_ac']").val() + ', ' + $("input[name='voie_ac']").val();
+                    if($("input[name='numero_ac']").val() != '') {
+                        var text = $("input[name='commune_ac']").val() + ', ' + $("input[name='voie_ac']").val() + ', ' + $("input[name='numero_ac']").val();
+                    }
+                }
+            }
+
+            $("input[name='zone_de_recherche_text']").val(text);
+            $(".zone_de_recherche_text").text(text);
+
+            $("input[name='city']").val($("input[name='code_insee']").val());
+            $("input[name='street']").val($("input[name='voie']").val());
+            $("input[name='number']").val($("input[name='numero_ac']").val());
+            $('form#zone_de_recherche_modal').modal('hide');
+        });
+	});
+
+    // Gestion des select et multiselect
+    $(".chosen").chosen({
+        allow_single_deselect: true
+    });
+
+    function masquerBoutonExportCalc ()
+    {
+        <?php if(count($this->results) > 0 && $this->results->getTotalItemCount() <= 10000 && $this->is_allowed_export_calc) :?>
+            document.getElementById('exporter').style.display = "none"
+        <?php endif ?>
+    }
+    function afficherBoutonExportCalc ()
+    {
+        <?php if(count($this->results) > 0 && $this->results->getTotalItemCount() <= 10000 && $this->is_allowed_export_calc) :?>
+            document.getElementById('exporter').style.display = "inline"
+        <?php endif ?>
+    }
+</script>

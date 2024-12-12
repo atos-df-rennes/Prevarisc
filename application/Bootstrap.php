@@ -115,6 +115,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             ->appendName('description', 'Logiciel de gestion du service Prévention')
             ->appendName('author', 'SDIS62 - Service Recherche et Développement');
 
+        if (getenv('PREVARISC_BOOTSTRAP_3')) {
+            $view->setBasePath(APPLICATION_PATH.'/viewsbs3');
+        }
+
         return $view;
     }
 

@@ -1,0 +1,703 @@
+<div id='etablissement'>
+    <h3 class='pull-left'>Fiche d'informations générales</h3>
+    <div class='pull-right'>
+        <a class='btn btn-default' href="<?php echo $this->url(array('action' => 'edit')) ?>">Modifier la fiche</a>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class='row'>
+        <!-- Informations générales de l'établissement -->
+        <div class='col-md-6'>
+            <!-- Classement de l'établissement -->
+            <h4 class='h4_subtitle'>Classement</h4>
+            <dl class='dl-horizontal'>
+                <dt>Genre</dt>
+                <dd>
+                    <p>
+                        <strong><?php echo $this->etablissement['informations']['LIBELLE_GENRE'] ?></strong>
+                        <?php if ($this->etablissement['informations']["ICPE_ETABLISSEMENTINFORMATIONS"]) {
+                            echo "<span class='label label-primary'>ICPE</span>";
+                        } ?>
+                    </p>
+                </dd>
+
+                <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2, 3))) : ?>
+                <dt>Catégorie</dt>
+                <dd>
+                    <p><?php echo $this->etablissement['informations']['LIBELLE_CATEGORIE'] ?></p>
+                </dd>
+                <?php endif ?>
+
+                <?php if ($this->etablissement['informations']['ID_GENRE'] == 4) : ?>
+                <dt>Famille</dt>
+                <dd>
+                    <p><?php echo $this->etablissement['informations']['LIBELLE_FAMILLE'] ?></p>
+                </dd>
+                <?php endif ?>
+
+                <?php if ($this->etablissement['informations']['ID_GENRE'] == 5) : ?>
+                <dt>Classe</dt>
+                <dd>
+                    <p><?php echo $this->etablissement['informations']['LIBELLE_CLASSE'] ?></p>
+                </dd>
+                <?php endif ?>
+
+                <?php if ($this->etablissement['informations']['ID_GENRE'] == 10) : ?>
+                <dt>Classement</dt>
+                <dd>
+                    <p><?php echo $this->etablissement['informations']['LIBELLE_CLASSEMENT'] ?></p>
+                </dd>
+                <?php endif ?>
+
+                <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(1, 2, 3, 5)) && $this->etablissement['informations']['PERIODICITE_ETABLISSEMENTINFORMATIONS'] !== null) : ?>
+                <dt>Périodicité</dt>
+                <dd>
+                    <p>
+                        <?php if ($this->etablissement['informations']['ID_GENRE'] == 1): ?>
+                            <span class="glyphicon glyphicon-info-sign" aria-hidden="true" title="Périodicité la plus contraignante des fils ERP"></span>
+                        <?php endif ?>
+                        <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2, 5)) && $this->etablissement['informations']['PERIODICITE_ETABLISSEMENTINFORMATIONS'] <> $this->default_periodicite): ?>
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" title="Periodicite non standard"></span>
+                        <?php endif ?>
+                        <?= $this->periodicity ?>
+                    </p>
+
+                </dd>
+                <?php endif ?>
+            </dl>
+
+            <!-- Activités de l'établissement -->
+            <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2, 3))) : ?>
+            <h4 class='h4_subtitle'>Activités <?php if ($this->etablissement['informations']["LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS"] && $this->etablissement['informations']['ID_GENRE'] == 2) {
+                echo "<span class='label label-primary pull-right'>Présence de locaux à sommeil</span>";
+            } ?></h4>
+            <dl class='dl-horizontal'>
+                <!-- Type et activités -->
+                <dt>Types & activités</dt>
+                <dd>
+                    <ul class='list-unstyled'>
+                        <li>
+                            <strong>
+                                <?php
+                                    echo file_exists(APPLICATION_PATH . DS . '..' . DS . 'public' . DS . 'images' . DS . 'types' . DS . 'b' . DS . 'icone-type-' . $this->etablissement['informations']['LIBELLE_TYPE_PRINCIPAL'] . '.png') ? "<img src='/images/types/b/icone-type-" . $this->etablissement['informations']['LIBELLE_TYPE_PRINCIPAL'] . ".png' title='" . $this->etablissement['informations']['LIBELLE_TYPE_PRINCIPAL'] . "' />&nbsp;-&nbsp;" : $this->etablissement['informations']['LIBELLE_TYPE_PRINCIPAL'] . "&nbsp;-&nbsp;";
+                                ?>
+                                <?php echo $this->etablissement['informations']['LIBELLE_TYPEACTIVITE_PRINCIPAL'] ?>
+                            </strong>
+                        </li>
+                        <?php foreach ($this->etablissement['types_activites_secondaires'] as $type_activite) : ?>
+                            <li>
+                                <?php echo file_exists(APPLICATION_PATH . DS . '..' . DS . 'public' . DS . 'images' . DS . 'types' . DS . 'b' . DS . 'icone-type-' . $type_activite['LIBELLE_TYPE'] . '.png') ? "<img src='/images/types/b/icone-type-" . $type_activite['LIBELLE_TYPE'] . ".png' title='" . $type_activite['LIBELLE_TYPE'] . "' />&nbsp;-&nbsp;" : $type_activite['LIBELLE_TYPE'] . "&nbsp;-&nbsp;"; ?>
+                                <?php echo $type_activite['LIBELLE_ACTIVITE'] ?>
+                            </li>
+                       <?php endforeach ?>
+                    </ul>
+                    <?php if ($this->etablissement['informations']['R14320_ETABLISSEMENTINFORMATIONS']) : ?>
+                        <p>Le <strong>R143-20</strong> est appliqué sur cet établissement.</p>
+                    <?php endif ?>
+                    <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2))) : ?>
+                        <?php if ($this->etablissement['informations']['DROITPUBLIC_ETABLISSEMENTINFORMATIONS']) : ?>
+                            <p>Le <strong>R143-16</strong> est appliqué sur cet établissement (droit public).</p>
+                        <?php endif ?>
+                    <?php endif ?>
+                </dd>
+            </dl>
+            <?php endif ?>
+
+            <!-- Rubriques -->
+            <?php if ($this->etablissement['informations']["ICPE_ETABLISSEMENTINFORMATIONS"]) : ?>
+                <h4 class='h4_subtitle'>Rubriques ICPE</h4>
+                <?php if (count($this->etablissement['rubriques']) == 0) : ?>
+                    <p class='text-muted text-center'>Pas de rubriques disponible</p>
+                <?php else : ?>
+                    <table class='table table-condensed'>
+                        <thead>
+                            <tr>
+                                <th>Rubrique</th>
+                                <th>Numéro</th>
+                                <th>Nom</th>
+                                <th>Valeur</th>
+                                <th>Classement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($this->etablissement['rubriques'] as $rubrique) : ?>
+                                <tr>
+                                    <td><?php echo $rubrique["ID_RUBRIQUE"] == 1 ? 'Substance' : ($rubrique["ID_RUBRIQUE"] == 2 ? 'Activité' : ($rubrique["ID_RUBRIQUE"] == 3 ? 'IED' : 'Produits dangereux')) ?></td>
+                                    <td><?php echo $rubrique["NUMERO_ETABLISSEMENTINFORMATIONSRUBRIQUE"] ?></td>
+                                    <td><?php echo $rubrique["NOM_ETABLISSEMENTINFORMATIONSRUBRIQUE"] ?></td>
+                                    <td><?php echo $rubrique["VALEUR_ETABLISSEMENTINFORMATIONSRUBRIQUE"] ?></td>
+                                    <td><?php echo $rubrique["CLASSEMENT_ETABLISSEMENTINFORMATIONSRUBRIQUE"] ?></td>
+                                </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
+                <?php endif ?>
+            <?php endif ?>
+
+            <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(7))) : ?>
+                <h4 class='h4_subtitle'>Nombre d'emplacements</h4>
+                <dl class='dl-horizontal champ_effectif_camping index_camping'>
+                    <dt>Mobil-homes ou habitations</dt>
+                    <dd>
+                        <p><?php echo $this->etablissement['informations']['EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS'] ?></p>
+                    </dd>
+
+                    <dt>Autocaravanes</dt>
+                    <dd>
+                        <p><?php echo $this->etablissement['informations']['EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS'] ?></p>
+                    </dd>
+
+                    <dt>Emplacements nus</dt>
+                    <dd>
+                        <p><?php echo $this->etablissement['informations']['EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS'] ?></p>
+                    </dd>
+
+                    <dt>Autres emplacements</dt>
+                    <dd>
+                        <p><?php echo $this->etablissement['informations']['EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS'] ?></p>
+                    </dd>
+
+                    <dt>&nbsp;</dt><dd><hr></dd>
+
+                    <dt>Total</dt>
+                    <dd>
+                        <p><?php echo (int) $this->etablissement['informations']['EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS'] + (int) $this->etablissement['informations']['EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS']
+                            + (int) $this->etablissement['informations']['EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS'] + (int) $this->etablissement['informations']['EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS'] ?></p>
+                    </dd>
+                </dl>
+            <?php endif ?>
+
+            <!-- Les effectifs -->
+            <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2, 3, 5, 6))) : ?>
+            <h4 class='h4_subtitle'>Les effectifs</h4>
+            <dl class='dl-horizontal'>
+                <!-- Effectif public -->
+                <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2, 3, 5))) : ?>
+                <dt>Public</dt>
+                <dd>
+                    <p><?php echo $this->etablissement['informations']['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] ?></p>
+                </dd>
+                <?php endif ?>
+
+                <!-- Effectif personnel -->
+                <dt>Personnel</dt>
+                <dd>
+                    <p><?php echo $this->etablissement['informations']['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'] ?></p>
+                </dd>
+
+                <!-- Effectif hebergé -->
+                <?php if ($this->etablissement['informations']['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'] && $this->etablissement['informations']['ID_GENRE'] == 2) : ?>
+                <dt>Dont hebergé</dt>
+                <dd>
+                    <p><?php echo $this->etablissement['informations']['EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS'] ?></p>
+                </dd>
+                <?php endif ?>
+
+                <dt>&nbsp;</dt><dd><hr></dd>
+
+                <!-- Effectif total -->
+                <dt>Total</dt>
+                <dd>
+                    <p><?php echo (int) $this->etablissement['informations']['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] + (int) $this->etablissement['informations']['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'] ?></p>
+                </dd>
+
+                <!-- Effectif justifant le classement (que pour les 5ème catégorie) -->
+                <?php if ($this->etablissement['informations']['ID_CATEGORIE'] == 5) : ?>
+                <dt>Justifiant le classement</dt>
+                <dd>
+                    <p><?php echo $this->etablissement['informations']['EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS'] ?></p>
+                </dd>
+                <?php endif ?>
+            </dl>
+            <?php endif ?>
+
+            <!-- Plan -->
+            <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2, 3, 5, 6))) : ?>
+                <h4 class='h4_subtitle'>Plans d'intervention</h4>
+                <?php if (count($this->etablissement['plans']) == 0) : ?>
+                    <p class='text-muted text-center'>Pas de plans disponible</p>
+                <?php else : ?>
+                    <table class='table table-condensed'>
+                        <thead>
+                            <tr>
+                                <th>Type de plan</th>
+                                <th>Numéro du plan</th>
+                                <th>Date</th>
+                                <th>A mettre à jour</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($this->etablissement['plans'] as $plan) : ?>
+                                <tr>
+                                    <td><?php echo $plan["LIBELLE_TYPEPLAN"] ?></td>
+                                    <td><?php echo $plan["NUMERO_ETABLISSEMENTPLAN"] ?></td>
+                                    <td><?php echo date_format(new DateTime($plan["DATE_ETABLISSEMENTPLAN"]), 'd/m/Y') ?></td>
+                                    <td><?php echo $plan["MISEAJOUR_ETABLISSEMENTPLAN"] ? 'A jour' : 'Pas à jour' ?></td>
+                                </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
+                <?php endif ?>
+            <?php endif ?>
+
+            <!-- Etablissement lié -->
+            <?php if (count($this->etablissement['etablissement_lies']) > 0) : ?>
+            <h4 class='h4_subtitle'>Établissements liés <span class="badge"><?= count($this->etablissement['etablissement_lies']) ?></span>
+                <input type="text" class="pull-right" id="filterLinkedEts" placeholder="Filtrer les établissements" />
+                <script>
+                    $(document).ready(function(){
+                        $('#filterLinkedEts').keyup(function() {
+                            var searchString = $(this).val().toLowerCase();
+                            $(this).parent().next().find('li').each(function(i, elem) {
+                                if ($(elem).text().toLowerCase().indexOf(searchString) !== -1) {
+                                    $(elem).show();
+                                } else {
+                                    $(elem).hide();
+                                }
+                            });
+                        });
+                    });
+                </script>
+            </h4>
+            <ul class='recherche_liste list-unstyled no_slide' style='max-height: 500px; overflow-y: scroll;'>
+                <?php echo $this->partialLoop('search/results/etablissement.phtml', $this->etablissement['etablissement_lies']); ?>
+            </ul>
+            <?php endif ?>
+        </div>
+
+        <!-- Carte de l'emplacement de l'établissement / informations  -->
+        <div class='col-md-6'>
+            <!-- Cartes et diaporama -->
+            <ul id='menu_nav' class="nav nav-tabs" style="margin: 0; padding: 0; border-bottom: none;">
+                <?php if (count($this->etablissement['diapo_plans']) > 0) : ?>
+                    <li class='tabs-right' ><a href='#plans-tab-pane' data-toggle="tab">Plans</a></li>
+                <?php endif ?>
+                <?php if (count($this->etablissement['diapo']) > 0) : ?>
+                    <li class='tabs-right' ><a href='#diaporama-tab-pane' data-toggle="tab">Diaporama</a></li>
+                <?php endif ?>
+                <?php if (count($this->etablissement['adresses']) > 0 && $this->key_ign != null && $this->etablissement['adresses'][0]['LAT_ETABLISSEMENTADRESSE'] != null && $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] != null) : ?>
+                    <li class='tabs-right' ><a href='#geoportail' data-toggle="tab">Carte IGN</a></li>
+                <?php endif ?>
+                <?php if (count($this->etablissement['adresses']) > 0 && $this->key_googlemap != null && $this->etablissement['adresses'][0]['LAT_ETABLISSEMENTADRESSE'] != null && $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] != null) : ?>
+                    <li class='tabs-right' ><a href='#googlemap' data-toggle="tab">Carte Google</a></li>
+                <?php endif ?>
+                 <?php if (count($this->etablissement['adresses']) > 0 && $this->geoconcept_url != null && $this->etablissement['adresses'][0]['LAT_ETABLISSEMENTADRESSE'] != null && $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] != null) : ?>
+                    <li class='tabs-right' ><a href='#geoconcept' data-toggle="tab">Carte GeoConcept</a></li>
+                <?php endif ?>
+            </ul>
+            <div id="reponse-modal" class="modal fade"></div>
+            <div class="tab-content">
+                <!-- Carte IGN -->
+                <?php if (count($this->etablissement['adresses']) > 0 && $this->key_ign != null && $this->etablissement['adresses'][0]['LAT_ETABLISSEMENTADRESSE'] != null && $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] != null) : ?>
+                    <div id="geoportail" class="tab-pane active" style="height: 350px; max-height: 350px;">
+                        <div id="geoportail-container" style="height: 100%; max-height: 100%;"></div>
+
+                        <script type="text/javascript">
+                            <?php
+                                $public_dir = $_SERVER['DOCUMENT_ROOT'];
+                                $autoconf_path = getenv('PREVARISC_IGN_AUTOCONF');
+                                $autoconf_path = file_exists($public_dir.$autoconf_path) ? $autoconf_path : "";
+                            ?>
+
+                            viewer = initViewer('geoportail-container',
+                                                '<?php echo $this->key_ign ?>',
+                                                [<?php echo $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] ?>,
+                                                <?php echo $this->etablissement['adresses'][0]['LAT_ETABLISSEMENTADRESSE'] ?>],
+                                                "<b><?php echo htmlspecialchars($this->etablissement['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS'], ENT_QUOTES) ?></b><br/>"+
+                                                    "<?php echo $this->etablissement['adresses'][0]['NUMERO_ADRESSE'] ?>, "
+                                                    +"<?php echo htmlspecialchars($this->etablissement['adresses'][0]['LIBELLE_RUE'], ENT_QUOTES) ?><br/>"+
+                                                    "<?php echo $this->etablissement['adresses'][0]['CODEPOSTAL_COMMUNE'] ?> "+
+                                                    "<?php echo $this->etablissement['adresses'][0]['LIBELLE_COMMUNE'] ?>",
+                                                    '<?php echo $autoconf_path ?>');
+
+                            viewer.listen('mapLoaded', afterInitMap);
+
+                            function afterInitMap () {
+                                // Ajout du bouton FullScreen sur la carte
+                                var fsControl = new ol.control.FullScreen({});
+                                viewer.getLibMap().addControl(fsControl);
+
+                                viewer = addUserLayers(viewer,
+                                                    <?php echo json_encode($this->couches_cartographiques) ?>);
+                            };
+                        </script>
+                    </div>
+                <?php endif ?>
+
+                <?php if (count($this->etablissement['adresses']) > 0 && $this->geoconcept_url != null && $this->etablissement['adresses'][0]['LAT_ETABLISSEMENTADRESSE'] != null && $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] != null) : ?>
+                <div id='geoconcept' class="tab-pane in" style="height: 350px; max-height: 350px;width: 100%">
+                    <div id='geoconcept-container'  style="height: 100%; max-height: 100%;width: 100%"></div>
+                    <script type="text/javascript" src="/js/geoconcept/OpenLayers.js"></script>
+                    <script type="text/javascript" src="/js/geoconcept/proj4js.js"></script>
+                    <script type="text/javascript" src="/js/geoconcept/htc-lite.js"></script>
+                    <?php if ($projection = getenv('PREVARISC_PLUGIN_GEOCONCEPT_PROJECTION')): ?>
+                    <script type="text/javascript" src="/js/geoconcept/defs/<?php echo $projection ?>.js"></script>
+                    <?php endif ?>
+                    <script type="text/javascript" src="/js/geoconcept/geoconcept.js"></script>
+                    <link rel="stylesheet" href="/css/geoconcept/htc.css"/>
+                    <script>
+                        $(document).ready(function() {
+                            <?php if ($token = getenv('PREVARISC_PLUGIN_GEOCONCEPT_TOKEN') && $app_id = getenv('PREVARISC_PLUGIN_GEOCONCEPT_APP_ID')): ?>
+                                initGeoConceptKey('<?php echo $app_id ?>', '<?php echo $token ?>');
+                            <?php endif ?>
+
+                            var points = [];
+                            <?php foreach ($this->etablissement['adresses'] as $adresse): ?>
+                                <?php if ($adresse['LAT_ETABLISSEMENTADRESSE'] && $adresse['LON_ETABLISSEMENTADRESSE']): ?>
+                                    points.push({
+                                        lat: <?php echo $adresse['LAT_ETABLISSEMENTADRESSE'] ?>,
+                                        lon: <?php echo $adresse['LON_ETABLISSEMENTADRESSE'] ?>,
+                                        description: "<?php echo htmlentities(strtolower($adresse["NUMERO_ADRESSE"]." ".$adresse["LIBELLE_RUE"]." ".$adresse["CODEPOSTAL_COMMUNE"]). " " .$adresse["LIBELLE_COMMUNE"])." <br />" ?>"
+                                                    + "long=<?php echo $adresse['LON_ETABLISSEMENTADRESSE'] ?>, lat=<?php echo $adresse['LAT_ETABLISSEMENTADRESSE'] ?>"
+                                    });
+                                <?php endif ?>
+                            <?php endforeach ?>
+                            map = initGeoConceptViewer('geoconcept-container',
+                                "<?php echo $this->geoconcept_url ?>",
+                                "<?php echo getenv('PREVARISC_PLUGIN_GEOCONCEPT_LAYER') ?>",
+                                points,
+                                <?php echo json_encode($this->couches_cartographiques) ?>
+                            );
+                        });
+                    </script>
+                </div>
+                <?php endif ?>
+
+                <?php if (count($this->etablissement['adresses']) > 0 && $this->key_googlemap != null && $this->etablissement['adresses'][0]['LAT_ETABLISSEMENTADRESSE'] != null && $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] != null) : ?>
+                <div id='googlemap' class="tab-pane in" style="height: 350px; max-height: 350px;">
+                    <div id='googlemap-container'  style="height: 100%; max-height: 100%;"></div>
+                    <script type="text/javascript"
+                        src="https://maps.googleapis.com/maps/api/js?key=<?php echo $this->key_googlemap ?>&sensor=false">
+                      </script>
+                      <script type="text/javascript">
+                        function initialize() {
+                          var point = new google.maps.LatLng(<?php echo $this->etablissement['adresses'][0]['LAT_ETABLISSEMENTADRESSE'] ?>, <?php echo $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] ?>);
+                          var map = new google.maps.Map(document.getElementById("googlemap-container"), {
+                            center: point,
+                            zoom: 12
+                          });
+                          var marker = new google.maps.Marker({
+                                position: point,
+                                map: map,
+                                title: "<?php echo $this->etablissement['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>"
+                            });
+
+                           var infowindow = new google.maps.InfoWindow({
+                                content:
+                                "<?php echo $this->etablissement['adresses'][0]['NUMERO_ADRESSE'] ?>, "+
+                                "<?php echo $this->etablissement['adresses'][0]['LIBELLE_RUE'] ?> <br />"+
+                                "<?php echo $this->etablissement['adresses'][0]['CODEPOSTAL_COMMUNE'] ?> "+
+                                "<?php echo $this->etablissement['adresses'][0]['LIBELLE_COMMUNE'] ?> "
+                            });
+                            infowindow.open(map,marker);
+                          };
+
+                          google.maps.event.addDomListener(window, 'load', initialize);
+                      </script>
+                </div>
+                <?php endif ?>
+
+                <?php if (count($this->etablissement['diapo']) > 0) : ?>
+                <div id='diaporama-tab-pane' class='tab-pane'>
+                    <div id='diaporama' class="carousel slide">
+                        <ol class="carousel-indicators">
+                            <?php foreach ($this->etablissement['diapo'] as $key => $item) : ?>
+                            <li class="<?php if ($key == 0) {
+                                echo 'active';
+                            } ?>" data-target="#<?php echo $item['ID_PIECEJOINTE'] ?>" data-slide-to="<?php echo $key ?>"></li>
+                            <?php endforeach ?>
+                        </ol>
+                        <!-- Carousel items -->
+                        <div class="carousel-inner" style="background-color: #333">
+                            <?php foreach ($this->etablissement['diapo'] as $key => $item) : ?>
+                                <div class="item <?php if ($key == 0) {
+                                    echo 'active';
+                                } ?>"  >
+                                <?php $item['EXTENSION_PIECEJOINTE'] = '.jpg'; ?>
+                                <img style="margin: 0 auto; width: auto; height: 350px; max-height: 350px;"
+                                     src="<?php echo $this->store->getURLPath($item, 'etablissement_miniature', $this->etablissement['general']['ID_ETABLISSEMENT']) ?>"
+                                     alt="<?php echo htmlentities($item['NOM_PIECEJOINTE']) ?>"
+                                     />
+                                <div class="carousel-caption">
+                                  <h4><?php echo $item['NOM_PIECEJOINTE'] ?></h4>
+                                  <p><?php echo $item['DESCRIPTION_PIECEJOINTE'] ?></p>
+                                </div>
+                            </div>
+                            <?php endforeach ?>
+                        </div>
+                        <!-- Carousel nav -->
+                        <a class="carousel-control left" href="#diaporama" data-slide="prev" style="box-sizing: content-box;">&lsaquo;</a>
+                        <a class="carousel-control right" href="#diaporama" data-slide="next" style="box-sizing: content-box;">&rsaquo;</a>
+                    </div>
+                </div>
+                <?php endif ?>
+
+                <?php if (count($this->etablissement['diapo_plans']) > 0) : ?>
+                <div id='plans-tab-pane' class='tab-pane'>
+                    <div id='plans' class="carousel slide">
+                        <ol class="carousel-indicators">
+                            <?php foreach ($this->etablissement['diapo_plans'] as $key => $item) : ?>
+                            <li class="<?php if ($key == 0) {
+                                echo 'active';
+                            } ?>" data-target="#<?php echo $item['ID_PIECEJOINTE'] ?>" data-slide-to="<?php echo $key ?>"></li>
+                            <?php endforeach ?>
+                        </ol>
+                        <!-- Carousel items -->
+                        <div class="carousel-inner" style="background-color: #333">
+                            <?php foreach ($this->etablissement['diapo_plans'] as $key => $item) : ?>
+                                <div class="item <?php if ($key == 0) {
+                                    echo 'active';
+                                } ?>" >
+                                <?php $item['EXTENSION_PIECEJOINTE'] = '.jpg'; ?>
+                                <img style="margin: 0 auto; width: auto; height: 350px; max-height: 350px;"
+                                     src="<?php echo $this->store->getURLPath($item, 'etablissement_miniature', $this->etablissement['general']['ID_ETABLISSEMENT']) ?>"
+                                     alt="<?php echo htmlentities($item['NOM_PIECEJOINTE']) ?>"
+                                     />
+                                <div class="carousel-caption">
+                                  <h4><?php echo $item['NOM_PIECEJOINTE'] ?></h4>
+                                  <p><?php echo $item['DESCRIPTION_PIECEJOINTE'] ?></p>
+                                </div>
+                            </div>
+                            <?php endforeach ?>
+                        </div>
+                        <!-- Carousel nav -->
+                        <a class="carousel-control left" href="#plans" data-slide="prev" style="box-sizing: content-box;">&lsaquo;</a>
+                        <a class="carousel-control right" href="#plans" data-slide="next" style="box-sizing: content-box;">&rsaquo;</a>
+                    </div>
+                </div>
+                <?php endif ?>
+            </div>
+
+            <?php if (count($this->etablissement['adresses']) > 0) : ?>
+            <h4 class='h4_subtitle'>Adresse</h4>
+            <dl class='dl-horizontal'>
+                <dt>Adresses</dt>
+                <dd>
+                    <table class='table table-condensed champ_adresse champs'>
+                        <thead>
+                            <tr>
+                                <th>Localisation</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($this->etablissement['adresses'] as $adresse) : ?>
+                                <tr>
+                                    <td><?php echo strtolower($adresse["NUMERO_ADRESSE"]." ".$adresse["LIBELLE_RUE"]." ".$adresse["COMPLEMENT_ADRESSE"]." ".$adresse["CODEPOSTAL_COMMUNE"])." ".$adresse["LIBELLE_COMMUNE"] ?></td>
+                                    <td>Adresse postale</td>
+                                </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
+                </dd>
+
+                <?php if (count($this->groupements_de_communes) > 0) : ?>
+                <dt>Groupements</dt>
+                <dd>
+                    <ul class='list-unstyled'>
+                        <?php foreach ($this->groupements_de_communes as $groupement) : ?>
+                        <li>
+                            <a href="/groupement/view?id=<?php echo $groupement["ID_GROUPEMENT"] ?>"><?php echo $groupement["LIBELLE_GROUPEMENT"] ?> (<?php echo $groupement["LIBELLE_GROUPEMENTTYPE"] ?>)</a>
+                        </li>
+                        <?php endforeach ?>
+                    </ul>
+                </dd>
+                <?php endif ?>
+            </dl>
+            <?php endif ?>
+
+            <?php if (!empty($this->etablissement['general']['TELEPHONE_ETABLISSEMENT']) || !empty($this->etablissement['general']['FAX_ETABLISSEMENT']) || !empty($this->etablissement['general']['COURRIEL_ETABLISSEMENT'])) : ?>
+            <h4 class='h4_subtitle'>Coordonnées</h4>
+            <dl class='dl-horizontal'>
+                <!-- Téléphone -->
+                <?php if (!empty($this->etablissement['general']['TELEPHONE_ETABLISSEMENT'])) : ?>
+                <dt>Téléphone</dt>
+                <dd>
+                    <p><?php echo $this->etablissement['general']['TELEPHONE_ETABLISSEMENT'] ?></p>
+                </dd>
+                <?php endif ?>
+
+                <!-- Fax -->
+                <?php if (!empty($this->etablissement['general']['FAX_ETABLISSEMENT'])) : ?>
+                <dt>Fax</dt>
+                <dd>
+                    <p><?php echo $this->etablissement['general']['FAX_ETABLISSEMENT'] ?></p>
+                </dd>
+                <?php endif ?>
+
+                <!-- Courriel -->
+                <?php if (!empty($this->etablissement['general']['COURRIEL_ETABLISSEMENT'])) : ?>
+                <dt>Courriel</dt>
+                <dd>
+                    <p>
+                        <a href='mailto:<?php echo $this->etablissement['general']['COURRIEL_ETABLISSEMENT'] ?>'><?php echo $this->etablissement['general']['COURRIEL_ETABLISSEMENT'] ?></a>
+                    </p>
+                </dd>
+                <?php endif ?>
+            </dl>
+            <?php endif ?>
+
+            <h4 class='h4_subtitle'>Données prévention</h4>
+            <dl class='dl-horizontal'>
+                <!-- Commission compétente -->
+                <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2, 5))) : ?>
+                <dt>Commission</dt>
+                <dd>
+                    <p><?php echo $this->etablissement['informations']['LIBELLE_COMMISSION'] ?> (<?php echo $this->etablissement['informations']['LIBELLE_COMMISSION_TYPE'] ?>)</p>
+                </dd>
+                <?php endif ?>
+
+                <!-- Préventionnistes -->
+                <dt>Préventionnistes</dt>
+                <dd>
+                    <?php if (count($this->etablissement['preventionnistes']) == 0) : ?>
+                        <p class='text-muted'>Aucun préventionniste lié.</p>
+                    <?php else : ?>
+                        <?php echo $this->partialLoop('users/embedded/user.phtml', $this->etablissement['preventionnistes']) ?>
+                        <div style='clear: both; margin-bottom: 10px;'></div>
+                    <?php endif ?>
+                </dd>
+
+                <!-- Date de dernière visite -->
+                <?php if (!empty($this->etablissement['last_visite'])) : ?>
+                <dt>Dernière VP</dt>
+                <dd><p><?php echo $this->etablissement['last_visite'] ?></p></dd>
+                <?php endif ?>
+
+                <!-- Date de prochaine visite-->
+                <?php if (!empty($this->etablissement['next_visite'])) : ?>
+                <dt>Prochaine VP</dt>
+                <dd><p><?php echo $this->etablissement['next_visite'] ?></p></dd>
+                <?php endif ?>
+
+                <!-- Date de PC initial -->
+                <?php if (!empty($this->etablissement['pc_initial'])) : ?>
+                <dt>Date PC Initial</dt>
+                <dd><p><?php echo $this->etablissement['pc_initial'] ?></p></dd>
+                <?php endif ?>
+
+                <!-- Présence DUS -->
+                <dt>Présence d'un DUS</dt>
+                <dd><p><?php echo $this->etablissement['presence_dus'] ? 'Oui' : 'Non' ?></p></dd>
+
+                <!-- Données pratiques -->
+                <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(1, 2, 3, 5))) : ?>
+                <dt>Données pratiques</dt>
+                <dd>
+                    <p>
+                        <?php if ($this->etablissement['informations']['ID_GENRE'] != 1) : ?>
+                        Nb. de préventionnistes/visite : <?php echo $this->etablissement['donnees_pratiques']['NBPREV_ETABLISSEMENT'] ?><br/>
+                        <?php endif ?>
+                        <?php if (isset($this->etablissement['donnees_pratiques']['DUREEVISITE_ETABLISSEMENT'])) : ?>
+                        Durée d'une visite : <?php echo date_format(new DateTime($this->etablissement['donnees_pratiques']['DUREEVISITE_ETABLISSEMENT']), 'H:i') ?>
+                        <?php else: ?>
+                        Durée d'une visite : -
+                        <?php endif ?>
+                    </p>
+                </dd>
+                <?php endif ?>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<!-- Boite de confirmation de la suppression (cachée par défaut) -->
+<div id="confirm-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title">Confirmation de la suppression</h3>
+            </div>
+
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer l'établissement ?</p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <a href="<?php echo $this->url(array($this->idEtablissement, 'action' => 'delete')); ?>" class='btn btn-danger'>Confirmer</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Par défaut, on montre le premier onglet disponible (carte, diapo, ou plans) sinon rien
+        $('#menu_nav a:last').tab('show');
+
+        $(".alerte-link").click(function() {
+            var idEts = "<?php echo $this->etablissement['general']['ID_ETABLISSEMENT'] ?>";
+            var changement = $(this).attr("data-value");
+            var dialogAlerte = $('<div style="display:none;"></div>').appendTo('body');
+
+            dialogAlerte.dialog({
+                title: "Alerte",
+                modal: true,
+                autoOpen: false,
+                width: 600,
+                height: 'auto',
+                buttons: [{
+                    text: "Envoyer",
+                    "id": "mail-button-envoi",
+                    click: function() {
+                        tinymce.triggerSave();
+                        if ($("#mail-button-envoi").text() === "Envoyer") {
+                            $.ajax({
+                                type: "POST",
+                                url: "/changement/sendmailalerte",
+                                data: $("#formAlerte").serialize()
+                            });
+                        }
+
+                        tinymce.remove();
+                        dialogAlerte.html("");
+                        dialogAlerte.dialog("close");
+                        dialogAlerte.remove();
+                    }
+                }],
+                close: function(event, ui){
+                    tinymce.remove();
+                    dialogAlerte.html("");
+                    dialogAlerte.dialog("close");
+                    dialogAlerte.remove();
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/changement/alerteform",
+                data: { "id_etablissement": idEts, "changement": changement },
+                success: function(msg) {
+                    dialogAlerte.html(msg);
+                    tinymce.init({
+                        selector: '.tinyarea',
+                        language: 'fr_FR',
+                        height: 220,
+                        menubar: false,
+                        statusbar: false,
+                        toolbar: false,
+                        plugins: [
+                            'advlist autolink lists link image charmap print preview anchor',
+                            'searchreplace visualblocks code fullscreen',
+                            'insertdatetime media table contextmenu paste code'
+                        ],
+                        content_css: [
+                            '//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
+                            '//www.tinymce.com/css/codepen.min.css'
+                        ]
+                    });
+                    dialogAlerte.dialog("open");
+                },
+            });
+
+            return false;
+        });
+
+        // fenetre de confirmation de la suppression
+        $("#suppressionEtablissement").click(function(){
+            $('#confirm-modal').modal({show:true});
+        });
+    });
+</script>

@@ -1,0 +1,11 @@
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#contact-content").load("/contact?item=dossier&id=<?php echo $this->idDossier; ?>&verrou=<?php echo $this->infosDossier['VERROU_DOSSIER']; ?>");
+});
+</script>
+<div>
+	<h4>Liste des contacts</h4>
+</div>
+<div id='contact-content'>
+</div>
+<br/>

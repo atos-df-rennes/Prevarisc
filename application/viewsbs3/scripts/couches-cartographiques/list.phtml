@@ -1,0 +1,159 @@
+<?php if ($this->key_ign != null) : ?>
+    <div id='geoportail-container' style="height: 350px; max-height: 350px;"></div>
+    <div id="info"></div>
+
+    <script type="text/javascript">
+        <?php
+            $public_dir = $_SERVER['DOCUMENT_ROOT'];
+            $autoconf_path = getenv('PREVARISC_IGN_AUTOCONF');
+            $autoconf_path = file_exists($public_dir.$autoconf_path) ? $autoconf_path : "";
+        ?>
+
+        viewer = initViewer(
+            'geoportail-container',
+            '<?php echo $this->key_ign ?>',
+            [<?php echo $this->default_lon ?>, <?php echo $this->default_lat ?>],
+            "<b>Centre par défaut</b>",
+            '<?php echo $autoconf_path ?>'
+        );
+
+        viewer.listen('mapLoaded', afterInitMap);
+
+        function afterInitMap () {
+            // Ajout du bouton FullScreen
+            var fsControl = new ol.control.FullScreen({});
+            viewer.getLibMap().addControl(fsControl);
+
+            viewer = addUserLayers(
+                viewer,
+                <?php echo json_encode($this->couches_cartographiques) ?>
+            );
+        };
+
+        // Affichage de la version du SDK et de sa date de création
+        var infoDiv = document.getElementById("info");
+        infoDiv.innerHTML = "<h6><p><b><i> SDK version " + Gp.sdkVersion + " (" + Gp.sdkDate + ")</b></i></p></h6>";
+    </script>
+<?php elseif ($this->geoconcept_url != null) : ?>
+    <div id='geoconcept-container'  style="height: 350px; max-height: 350px;width: 100%"></div>
+
+    <script type="text/javascript" src="/js/geoconcept/OpenLayers.js"></script>
+    <script type="text/javascript" src="/js/geoconcept/proj4js.js"></script>
+    <script type="text/javascript" src="/js/geoconcept/htc-lite.js"></script>
+
+    <?php if ($projection = getenv('PREVARISC_PLUGIN_GEOCONCEPT_PROJECTION')): ?>
+        <script type="text/javascript" src="/js/geoconcept/defs/<?php echo $projection ?>.js"></script>
+    <?php endif ?>
+
+    <script type="text/javascript" src="/js/geoconcept/geoconcept.js"></script>
+    <link rel="stylesheet" href="/css/geoconcept/htc.css"/>
+
+    <script>
+        $(document).ready(function() {
+            <?php if ($token = getenv('PREVARISC_PLUGIN_GEOCONCEPT_TOKEN') && $app_id = getenv('PREVARISC_PLUGIN_GEOCONCEPT_APP_ID')): ?>
+                initGeoConceptKey('<?php echo $app_id ?>', '<?php echo $token ?>');
+            <?php endif ?>
+            var points = [];
+            points.push({
+                lat: <?php echo $this->default_lat ?>,
+                lon: <?php echo $this->default_lon ?>,
+                description: "Centre par défaut"
+            });
+
+            map = initGeoConceptViewer(
+                'geoconcept-container',
+                "<?php echo $this->geoconcept_url ?>",
+                "<?php echo getenv('PREVARISC_PLUGIN_GEOCONCEPT_LAYER') ?>",
+                points,
+                <?php echo json_encode($this->couches_cartographiques) ?>
+            );
+        });
+    </script>
+<?php elseif ($this->key_googlemap != null) : ?>
+    <div id='googlemap-container' style="height: 350px; max-height: 350px;"></div>
+
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=<?php echo $this->key_googlemap ?>&sensor=false">
+    </script>
+
+    <script type="text/javascript">
+        function initialize() {
+            var point = new google.maps.LatLng(<?php echo $this->default_lat ?>, <?php echo $this->default_lon ?>);
+            var map = new google.maps.Map(document.getElementById("googlemap-container"), {
+                center: point,
+                zoom: 12
+            });
+
+            var marker = new google.maps.Marker({
+                position: point,
+                map: map,
+                title: "<?php echo $this->etablissement['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>"
+            });
+
+            google.maps.event.addDomListener(window, 'load', initialize);
+        }
+     </script>
+<?php else: ?>
+    <div class='well well-large text-center'>
+        <p class='lead'>Aucun player cartographique configuré.</p>
+        <p>Vous devez configurer comme ceci : </p>
+        <pre>SetEnv PREVARISC_PLUGIN_IGNKEY XXXXXXXXXXXX</pre>
+        <pre>SetEnv PREVARISC_PLUGIN_GOOGLEMAPKEY XXXXXXXXXXXX</pre>
+        <pre>SetEnv PREVARISC_PLUGIN_GEOCONCEPT_URL XXXXXXXXXXXX</pre>
+    </div>
+<?php endif ?>
+
+<?php if (count($this->couches_cartographiques) == 0) : ?>
+    <div class='well well-large text-center'>
+        <p class='lead'>Il n'y a pas de couche cartographique.</p>
+        <p><a href='<?php echo $this->url(array('action' => 'add')) ?>' class='btn btn-default btn-lg'>Ajouter une couche personnalisée</a></p>
+        <p>
+            <a href='<?php echo $this->url(array('action' => 'add-couche-ign')) ?>' class='btn btn-default btn-lg'>
+                Ajouter une couche IGN
+            </a>
+            <div class="alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Attention !</strong> Le chargement de la page d'ajout d'une couche IGN peut prendre du temps si vous avez renseigné plusieurs clés.
+            </div>
+        </p>
+    </div>
+<?php else : ?>
+    <p class='text-right'>
+        <a class='btn btn-primary' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add-couche-ign'), null, true) ?>'>Ajouter une couche IGN</a>
+    </p>
+    <p class='text-right'>
+        <a class='btn btn-info' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add'), null, true) ?>'>Ajouter une couche personnalisée</a>
+    </p>
+    <p class='text-right'>
+        <a class='btn btn-default' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'change-order'), null, true) ?>'>Changer l'ordre des couches</a>
+    </p>
+
+    <div class="alert alert-warning pull-right col-md-4">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Attention !</strong> Le chargement de la page d'ajout d'une couche IGN peut prendre du temps si vous avez renseigné plusieurs clés.
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Nom de la couche</th>
+                <th>Ordre de la couche</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->couches_cartographiques as $couche_cartographique) : ?>
+            <tr>
+                <td><?php echo $couche_cartographique['TYPE_COUCHECARTO'] ?></td>
+                <td><?php echo $couche_cartographique['NOM_COUCHECARTO'].(($couche_cartographique['ISBASELAYER_COUCHECARTO']) ? " (couche de base)" : "") ?></td>
+                <td><?= $couche_cartographique['ORDRE_COUCHECARTO'] ?? 'Ordre non renseigné' ?></td>
+                <td>
+                    <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $couche_cartographique['ID_COUCHECARTO'])) ?>">Modifier la couche</a><br/>
+                    <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $couche_cartographique['ID_COUCHECARTO'])) ?>">Supprimer</a>
+                </td>
+            </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+<?php endif ?>

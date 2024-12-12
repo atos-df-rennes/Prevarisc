@@ -1,0 +1,113 @@
+<?php
+
+echo "
+	<form name='formPrescription' id='formPrescription' action='' method='POST'>
+	<input type='hidden' name='ID_PRESCRIPTIONTYPE' id='ID_PRESCRIPTIONTYPE' value='".( ($this->do == 'edit')?$this->idPrescType:"")."' />
+	<input type='hidden' name='PRESCRIPTIONTYPE_CATEGORIE' id='PRESCRIPTIONTYPE_CATEGORIE' value='".( ($this->do == 'edit' && $this->assoc[0]['PRESCRIPTIONTYPE_CATEGORIE'] != 0)?$this->assoc[0]['PRESCRIPTIONTYPE_CATEGORIE']:$this->categorie )."' />
+	<input type='hidden' name='PRESCRIPTIONTYPE_TEXTE' id='PRESCRIPTIONTYPE_TEXTE' value='".( ($this->do == 'edit' && $this->assoc[0]['PRESCRIPTIONTYPE_TEXTE'] != 0)?$this->assoc[0]['PRESCRIPTIONTYPE_TEXTE']:$this->texte)."' />
+	<input type='hidden' name='PRESCRIPTIONTYPE_ARTICLE' id='PRESCRIPTIONTYPE_ARTICLE' value='".( ($this->do == 'edit' && $this->assoc[0]['PRESCRIPTIONTYPE_ARTICLE'] != 0)?$this->assoc[0]['PRESCRIPTIONTYPE_ARTICLE']:$this->article)."' />
+	<div id='selectEmplacement' ></div>
+	<br/><br/>
+	<div class='row' id='alert' style='display:none;'>
+		<ul class='list-unstyled'>
+			<li class='alert alert-danger' >
+				Veuillez spécifier au minimum un texte ou un article et un contenu avant la sauvegarde
+			</li>
+		</ul>
+	</div>
+";
+echo "
+	<div>
+		<div class='col-md-4'>
+			Texte&nbsp;
+			<select style='width:80%;' id='LIBELLE_TEXTE' class='chosen'>
+";
+        foreach ($this->listeTextes as $val) {
+            echo "<option value='".$val["ID_TEXTE"]."'>".$val['LIBELLE_TEXTE']."</option>";
+        }
+echo "
+			</select>
+		</div>
+		<div class='col-md-4'>
+			Article&nbsp;
+			<select style='width:80%;' id='LIBELLE_ARTICLE' class='chosen'>
+";
+        foreach ($this->listeArticles as $val) {
+            echo "<option value='".$val["ID_ARTICLE"]."'>".$val['LIBELLE_ARTICLE']."</option>";
+        }
+echo "
+			</select>
+		</div>
+		<div class='col-md-4'>
+			<a class='btn btn-default' id='addAssoc' href=''>Ajouter l'association</a>
+		</div>
+	</div>
+";
+
+echo "
+	<br/><br/>
+	<div>
+		<table id='association' style='width:500px;'>
+			<tr>
+				<th>Texte</th>
+				<th>Article</th>
+				<th></th>
+			</tr>
+";
+if($this->do == 'edit')
+{
+	foreach($this->assoc as $val => $ue)
+	{
+		echo '
+			<tr>
+				<td><input type="hidden" name="texte[]" value="'.$ue['ID_TEXTE'].'" />'.$ue['LIBELLE_TEXTE'].'</td>
+				<td><input type="hidden" name="article[]" value="'.$ue['ID_ARTICLE'].'" />'.$ue['LIBELLE_ARTICLE'].'</td>
+				<td><a href="" class="suppAssoc">&times;</a></td>
+			</tr>
+		';
+	}
+}
+echo "
+		</table>
+	</div>
+	<br/>
+	Contenu :
+	<textarea class='form-control' name='PRESCRIPTIONTYPE_LIBELLE' id='LIBELLE_PRESCRIPTIONTYPE' cols='150' rows='10'>".( ($this->do == 'edit')?$this->assoc[0]['PRESCRIPTIONTYPE_LIBELLE']:"")."</textarea>
+	</div>
+	</form>
+";
+
+?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".chosen").chosen({allow_single_deselect: true});
+
+	$("#addAssoc").click(function(){
+		var texte = $("#LIBELLE_TEXTE").val();
+		var article = $("#LIBELLE_ARTICLE").val();
+		if( ( texte != 1 && texte != null ) || ( article != 1 && article != null) ){
+			if(texte == null){
+				texte = 1;
+			}
+			if(article == null){
+				article = 1;
+			}
+			var assocAdd;
+			assocAdd += "<tr>";
+			assocAdd += "<td>"+$("#LIBELLE_TEXTE option:selected").text()+ "<input type='hidden' name='texte[]' value='"+texte+"' /></td>";
+			assocAdd += "<td>"+$("#LIBELLE_ARTICLE option:selected").text()+ "<input type='hidden' name='article[]' value='"+article+"' /></td>";
+			assocAdd += "<td><a onclick='$(this).parent().parent().remove(); return false;' href='#'>Retirer</a></td>";
+			assocAdd += "</tr>";
+
+			$("#association").append(assocAdd);
+
+			$("#LIBELLE_TEXTE").val('').trigger('chosen:updated');
+			$("#LIBELLE_ARTICLE").val('').trigger('chosen:updated');
+			$("#alert").hide();
+		}else{
+			$("#alert").show();
+		}
+		return false;
+	});
+
+});

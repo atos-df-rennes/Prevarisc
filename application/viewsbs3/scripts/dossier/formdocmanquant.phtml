@@ -1,0 +1,16 @@
+<div id='infosIncomplet_<?php echo $this->numDocManquant ?>' >
+Dossier incomplet le <input class='date' type='text' name='dateDocManquant[]' id='dateDocManquant_<?php echo $this->numDocManquant ?>' value='<?php echo $this->dateDay ?>'/>&nbsp;<button class='today btn btn-default'><span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui</button>
+&nbsp;&nbsp;&nbsp;<button class='btn cancelIncomplet' id='cancelIncomplet_<?php echo $this->numDocManquant ?>'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span>&nbsp;Annuler</button>
+
+<textarea  name='docManquant[]' class='docManquant' id='docManquant_<?php echo $this->numDocManquant ?>' rows='5' cols='100'>
+<?php
+foreach($this->listeDoc as $val => $ue)
+{
+	echo $ue['LIBELLE_DOCMANQUANT']."\n";
+}
+?>
+</textarea>
+
+Date de réception des pièces <input class='date' type='text' name='dateReceptionDocManquant[]' id='dateReceptionDocManquant_<?php echo $this->numDocManquant ?>' />&nbsp;<button class='today btn btn-default'><span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui</button>
+&nbsp;&nbsp;&nbsp;<button class='btn validDocManquant'><span class='glyphicon glyphicon-lock' aria-hidden='true'></span>&nbsp;Valider la reception de document</button>
+</div>

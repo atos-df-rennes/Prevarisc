@@ -1,0 +1,97 @@
+<div class="text-muted">
+    <small>Nombre total d'éléments : <?= count($this->data) ?></small>
+</div>
+
+<?php if (count($this->data) > 0): ?>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="whitespace-nowrap">Supprimé par</th>
+                <th>Nom du dossier</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($this->data as $deletedElement) : ?>
+                <tr>
+                    <td class="whitespace-nowrap">
+                        <div class="deleted-element__deleted-by">
+                            <div class="deleted-element__deleted-by_informations">
+                                <?php if (null !== $deletedElement['DELETED_BY']): ?>
+                                    <?= $deletedElement['USERNAME_UTILISATEUR'] ?>
+                                    <?php $this->avatar($deletedElement['DELETED_BY'], 'small', ['style' => 'border-radius: 50%;']) ?>
+                                <?php else: ?>
+                                    Inconnu
+                                    <?php $this->avatar('default', 'small', ['style' => 'border-radius: 50%;']) ?>
+                                <?php endif ?>
+                            </div>
+
+                            <small class='text-muted'>
+                                <?php
+                                    $dateSuppression = new Zend_Date($deletedElement['DATESUPPRESSION_DOSSIER'], 'yyyy-MM-dd');
+                                    $dateSuppression = $dateSuppression
+                                        ->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR, 'fr');;
+                                ?>
+                                Le <?= $dateSuppression ?>
+                            </small>
+                        </div>
+                    </td>
+
+                    <td>
+                        <?php
+                            $deletedElementObject = '';
+
+                            if (
+                                '' !== $deletedElement['OBJET_DOSSIER']
+                                && strlen($deletedElement['OBJET_DOSSIER']) > 70
+                            ):
+                                $deletedElementObject = $deletedElement['OBJET_DOSSIER'];
+                                $deletedElement['OBJET_DOSSIER'] = substr($deletedElement['OBJET_DOSSIER'], 0, 70).' (...)';
+                            endif;
+
+                            $linkTitleVariables = array_values(
+                                array_filter(
+                                    array(
+                                        $deletedElement['LIBELLE_DOSSIERTYPE'],
+                                        $deletedElement['LIBELLE_DOSSIERNATURE'],
+                                        $deletedElement['OBJET_DOSSIER']
+                                    )
+                                )
+                            );
+
+                            $fulltext = '';
+                            for ($i = 0; $i < count($linkTitleVariables); $i++):
+                                $fulltext .= $linkTitleVariables[$i];
+
+                                if ($i !== (count($linkTitleVariables) - 1)):
+                                    $fulltext .= ' - ';
+                                endif;
+                            endfor;
+                        ?>
+
+                        <div class="deleted-element__name">
+                            <a
+                                href='/dossier/index/id/<?= $deletedElement['ID_DOSSIER'] ?>'
+                                <?php if ('' !== $deletedElementObject): ?>
+                                    title='<?= htmlspecialchars($deletedElementObject, ENT_QUOTES) ?>'
+                                <?php endif ?>
+                            >
+                                <?php if (null !== $deletedElement['LIBELLE_ETABLISSEMENTINFORMATIONS']): ?>
+                                    [<?= $deletedElement['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>]
+                                <?php endif;
+                                echo $fulltext;
+                                ?>
+                            </a>
+                            <a
+                                class='btn btn-sm btn-default deleted-element__restore-button'
+                                href=<?= '/dossier/retablir-dossier/idDossier/'.$deletedElement['ID_DOSSIER'] ?>
+                            >
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                Rétablir le dossier
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+<?php endif ?>

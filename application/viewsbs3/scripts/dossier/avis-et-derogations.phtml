@@ -1,0 +1,148 @@
+<form class="form-horizontal col-md-offset-2 col-md-8" method="post">
+    <input type='hidden' name='ID_DOSSIER' value='<?= $this->idDossier ?>' />
+    <input class="btn btn-success pull-right" type='submit' value='Ajouter l&apos;avis'/>
+    <div class="clearfix"></div>
+
+    <div class="form-group">
+        <label for="inputType">Type</label>
+        <select class="form-control" id="inputType" name="TYPE" required>
+            <option value='Avis'>
+                Avis
+            </option>
+            <option value='Dérogation'>
+                Dérogation
+            </option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="inputTitre">Titre</label> <small class='text-muted'>Obligatoire</small>
+        <input class="form-control" name="TITRE" type="text" id="inputTitre" required>
+    </div>
+
+    <div class="form-group">
+        <label for="inputObjet">Objet</label>
+        <textarea class="form-control" id="inputObjet" name="OBJET"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="inputJustification">Justification</label>
+        <textarea class="form-control" id="inputJustification" name="JUSTIFICATION"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="inputArticlesConcernes">Article(s) concerné(s)</label>
+        <textarea class="form-control" id="inputArticlesConcernes" name="ARTICLES_CONCERNES"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="inputMesuresCompensatoiresProposees">Mesure(s) compensatoire(s) proposée(s)</label>
+        <textarea class="form-control" id="inputMesuresCompensatoiresProposees" name="MESURES_COMPENSATOIRES_PROPOSEES"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="inputAnalyseDeRisque">Analyse de risque</label>
+        <textarea class="form-control" id="inputAnalyseDeRisque" name="ANALYSE_DE_RISQUE"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="inputAvis">Avis</label>
+        <select class="form-control" id="inputAvis" name="AVIS">
+            <?php foreach ($this->listeAvis as $avis): ?>
+                <option value='<?= $avis["ID_AVIS"] ?>'><?= $avis['LIBELLE_AVIS'] ?></option>
+            <?php endforeach ?>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <div class="row row-no-gutters">
+            <div class="col-md-12">
+                <label>Avis/Dérogation levé(e):</label>
+                <button
+                    id="deselect"
+                    type="button"
+                    class="btn btn-info <?php if (null === $this->ID_DOSSIER_LIE) echo 'hidden' ?>"
+                >
+                    Désélectionner
+                </button>
+            </div>
+        </div>
+        <?=
+            $this->partial(
+                'dossier/results/avisderogation/liste-dossier.phtml',
+                [
+                    'listeDossierParType' => $this->listDossierEtab,
+                    'listeDossierParTypeN' => $this->listDossierEtabN
+                ]
+            );
+        ?>
+    </div>
+
+    <div class="form-group">
+        <div class="checkbox">
+            <label>
+                <input type='hidden' name='DISPLAY_HISTORIQUE' value='0'>
+                <input
+                    type="checkbox"
+                    id="DISPLAY_HISTORIQUE"
+                    name="DISPLAY_HISTORIQUE"
+                    value='1'
+                >
+                Afficher dans l'onglet de l'établissement
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input class="btn btn-success pull-right" type='submit' value='Ajouter l&apos;avis'/>
+    </div>
+</form>
+
+<div class="col-md-12">
+    <?= $this->partialLoop("dossier/results/avis-et-derogations.phtml", $this->arrayAvisDerogations); ?>
+</div>
+
+<div class="modal fade" id="modal-delete-avis-derogation" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title">Supprimer un avis ou une dérogation</h3>
+            </div>
+            <div class="modal-body">
+                Vous êtes sur le point de supprimer l'avis ou la dérogation <strong><span id="name-avis-derogation"></span></strong>.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <button id="delete-avis-derogation" type="button" class="btn btn-danger">Supprimer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.delete-avis-derogation').on('click', function(e) {
+        e.preventDefault()
+
+        const card_avis_derogations = $(this).closest('.cardAvisDerogations')
+        const id = card_avis_derogations.attr('data-id')
+        const title = card_avis_derogations.find('h3 span')[0].innerText
+
+        $('#name-avis-derogation').html(title)
+        $('#delete-avis-derogation').click(function() {
+            $.ajax({
+                url: "/dossier/avis-et-derogations-delete/id/" + id,
+                type: "delete",
+                success: function() {
+                    card_avis_derogations.remove()
+                    $("#modal-delete-avis-derogation").modal('hide')
+                },
+                error: function() {
+                    return false
+                }
+            })
+        })
+    })
+</script>

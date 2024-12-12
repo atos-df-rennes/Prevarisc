@@ -1,0 +1,67 @@
+<br/><br/>
+<form id='FormPrescriptiontypeArticle_<?= $this->idArticle ?>'>
+    <input type='hidden' name='type' value='prescriptionType' />
+    <ul class='list-unstyled classement prescriptiontypeArticle_<?= $this->idArticle ?>'>
+<?php
+
+$nbPrescType = count($this->prescriptionType);
+for($i=0; $i < $nbPrescType; $i++):
+	if(isset($this->prescriptionType[$i][0]['ID_PRESCRIPTIONTYPE'])):
+		echo "
+			<li id='prescriptiontype_".$this->prescriptionType[$i][0]['ID_PRESCRIPTIONTYPE']."'  style='border-bottom:1px solid grey;'>
+				<table  class='row'>
+		";
+
+		$nbAssoc = count($this->prescriptionType[$i]);
+		$cpt = true;
+		for($j=0; $j < $nbAssoc; $j++):
+			$article = $this->prescriptionType[$i][$j]['LIBELLE_ARTICLE'];
+			$texte = $this->prescriptionType[$i][$j]['LIBELLE_TEXTE'];
+			echo "
+				<tr>
+					<td class='col-md-3' style='vertical-align:top;'>".$texte."</td>
+					<td class='col-md-3' style='vertical-align:top;'>".$article."</td>
+			";
+			if($cpt):
+				echo "
+					<td rowspan='".$nbAssoc."' class='col-md-5'>
+						<input type='hidden' name='prescType[]' value='".$this->prescriptionType[$i][0]['ID_PRESCRIPTIONTYPE']."' />
+						".nl2br($this->prescriptionType[$i][0]['PRESCRIPTIONTYPE_LIBELLE'])."
+					</td>";
+				echo "<td rowspan='".$nbAssoc."' class='col-md-1' style='vertical-align:top;'><a href='#myModal' role='button' class='editPrescriptionType btn btn-default' data-toggle='modal'>Modifier</a></td>";
+				$cpt = false;
+            endif;
+			echo "
+				</tr>
+			";
+		endfor;
+		echo "
+				</table>
+			</li>
+		";
+	endif;
+endfor ?>
+    </ul>
+</form>
+<br/>
+<button type="button" class='prescription btn btn-default' id='addPrescriptionArticle_<?= $this->idArticle ?>' data-toggle='modal' data-target="#myModal">Ajouter une prescription</button>
+
+<script type="text/javascript">
+	$(".classement").sortable({
+		update: function(event, ui) {
+			var formId = $(this).parent();
+			var data = formId.serialize();
+			$.ajax({
+				type: "POST",
+				url: "/gestion-prescriptions/move",
+				data: data,
+				beforeSend: function(){
+					$(this).disableSelection();
+				},
+				success: function(msg){
+					$(this).enableSelection();
+				}
+			});
+		}
+	});
+</script>

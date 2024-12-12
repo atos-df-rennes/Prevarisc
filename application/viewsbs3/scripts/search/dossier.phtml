@@ -1,0 +1,346 @@
+<!-- Traitement pour l'affichage des dates -->
+<?php
+    $dateCreationStart = "";
+    if(isset($_GET["date-creation-start"]) && $_GET["date-creation-start"]){
+        $dateCreationStart = $_GET["date-creation-start"];
+    }
+
+    $dateCreationEnd = "";
+    if(isset($_GET["date-creation-end"]) && $_GET["date-creation-end"]){
+        $dateCreationEnd = $_GET["date-creation-end"];
+    }
+
+    $dateReceptionStart = "";
+    if(isset($_GET["date-reception-start"]) && $_GET["date-reception-start"]){
+        $dateReceptionStart = $_GET["date-reception-start"];
+    }
+
+    $dateReceptionEnd = "";
+    if(isset($_GET["date-reception-end"]) && $_GET["date-reception-end"]){
+        $dateReceptionEnd = $_GET["date-reception-end"];
+    }
+
+    $dateReponseStart = "";
+    if(isset($_GET["date-reponse-start"]) && $_GET["date-reponse-start"]){
+        $dateReponseStart = $_GET["date-reponse-start"];
+    }
+
+    $dateReponseEnd = "";
+    if(isset($_GET["date-reponse-end"]) && $_GET["date-reponse-end"]){
+        $dateReponseEnd = $_GET["date-reponse-end"];
+    }
+?>
+
+<!-- Onglets permettant de selectionner les entités à rechercher -->
+<h2 class="page-header">Dossiers</h2>
+<form method='get'>
+    <div class='navbar-form well well-sm'>
+        <div class="input-group">
+            <input type="text" name='objet' class="form-control" placeholder="Objet du dossier ..." value="<?php if(isset($_GET["objet"])) echo htmlentities($_GET["objet"]) ?>" onkeypress="masquerBoutonExportCalc()"/>
+            <span class="input-group-btn">
+                <input type='submit' class="btn btn-default" name='Rechercher' value="Rechercher" onsubmit="afficherBoutonExportCalc()"/>
+            </span>
+        </div>
+        <input type='hidden' name='page' value="1" />
+
+        <small>
+            <a href="/search/dossier?label=&page=1">
+                Réinitialiser
+            </a>
+        </small>
+    </div>
+
+    <div id='filterContainer' class='well col-md-12' style="margin-left: 0;">
+        <div class='row'>
+            <div>
+                <select name='types[]' class="col-md-3 chosen" data-placeholder='Types' multiple onchange="masquerBoutonExportCalc()">
+                    <?php foreach ($this->DB_type as $type): ?>
+                        <option value='<?php echo $type["ID_DOSSIERTYPE"] ?>' <?php if(isset($_GET["types"]) && in_array($type["ID_DOSSIERTYPE"], (array) $_GET["types"])) echo 'selected' ?>><?php echo $type["LIBELLE_DOSSIERTYPE"] ?></option>
+                    <?php endforeach ?>
+                </select>
+                <select name='commissions[]' class="col-md-3 chosen" data-placeholder='Commissions' multiple onchange="masquerBoutonExportCalc()">
+                    <?php
+                        foreach($this->array_commissions as $array_commission){
+                            echo "<optgroup label='".htmlspecialchars($array_commission["LIBELLE"], ENT_QUOTES)."' >";
+                            foreach($array_commission["ARRAY"] as $item){
+                                echo "<option value='".$item["ID_COMMISSION"]."'";
+                                if(isset($_GET["commissions"]) && in_array($item["ID_COMMISSION"], (array) $_GET["commissions"])) echo 'selected';
+                                echo " >".htmlspecialchars($item["LIBELLE_COMMISSION"], ENT_QUOTES)."</option>";
+                            }
+                            echo "</optgroup>";
+                        }
+
+                    ?>
+                </select>
+                <select name='groupements_territoriaux[]' class="col-md-3 chosen" data-placeholder='Groupements territoriaux' multiple onchange="masquerBoutonExportCalc()">
+                    <?php foreach ($this->DB_groupementterritorial as $groupement): ?>
+                        <?php $selected = false; ?>
+                        <?php if ($this->user['groupements'] != null): ?>
+                            <?php foreach($this->user['groupements'] as $user_groupement): ?>
+                                <?php if ($groupement['ID_GROUPEMENT'] == $user_groupement['ID_GROUPEMENT']): ?>
+                                    <?php $selected = true; ?>
+                                    <?php break; ?>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                        <option value='<?php echo $groupement["ID_GROUPEMENT"] ?>' <?php if((isset($_GET["groupements_territoriaux"]) && in_array($groupement["ID_GROUPEMENT"], (array) $_GET["groupements_territoriaux"])) || $selected) echo 'selected' ?>>
+                            <?php echo $groupement["LIBELLE_GROUPEMENT"] ?>
+                        </option>
+                    <?php endforeach ?>
+                </select>
+                <select name='avisCommission[]' class="col-md-3 chosen" data-placeholder='Avis de la commission' multiple onchange="masquerBoutonExportCalc()">
+                    <option value='1' <?php if(isset($_GET["avisCommission"]) && in_array(1, (array) $_GET["avisCommission"])) echo 'selected' ?>>Favorable</option>
+                    <option value='2' <?php if(isset($_GET["avisCommission"]) && in_array(2, (array) $_GET["avisCommission"])) echo 'selected' ?>>Défavorable</option>
+                </select>
+            </div>
+
+            <!-- On met une div pour ne pas coller les select de la 1ère ligne avec ceux de la seconde ligne -->
+            <div style="margin-top: 4px;">
+                <select name='avisRapporteur[]' class="col-md-3 chosen" data-placeholder='Avis du rapporteur' multiple onchange="masquerBoutonExportCalc()">
+                    <option value='1' <?php if(isset($_GET["avisRapporteur"]) && in_array(1, (array) $_GET["avisRapporteur"])) echo 'selected' ?>>Favorable</option>
+                    <option value='2' <?php if(isset($_GET["avisRapporteur"]) && in_array(2, (array) $_GET["avisRapporteur"])) echo 'selected' ?>>Défavorable</option>
+                </select>
+                <?php if (!filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN)): ?>
+                    <select name='provenance' class="col-md-3 chosen" data-placeholder='Provenance' multiple onchange="masquerBoutonExportCalc()">
+                        <option value='1' <?= isset($_GET["provenance"]) && in_array(1, (array) $_GET["provenance"]) ? 'selected': '' ?> >Provenant de PLATAU</option>
+                        <option value='2' <?= isset($_GET["provenance"]) && in_array(2, (array) $_GET["provenance"]) ? 'selected': '' ?> >Ne provenant pas de PLATAU</option>
+                    </select>
+                <?php endif ?>
+            </div>
+        </div>
+        <div class='row mt-5'>
+            <div class='col-md-7'>
+                <div class='row'>
+                    <div class='col-md-6'>
+                        <select name='commune' class="col-md-12 chosen" data-placeholder='Sélectionner une commune' onchange="masquerBoutonExportCalc()">
+                            <option value=''></option>
+                        <?php foreach ($this->array_communes as $commune): ?>
+                            <option value='<?php echo $commune["NUMINSEE_COMMUNE"] ?>' <?php if(isset($_GET["commune"]) && $commune["NUMINSEE_COMMUNE"] == $_GET["commune"]) echo 'selected' ?>><?php echo $commune["LIBELLE_COMMUNE"] ?></option>
+                        <?php endforeach ?>
+                        </select>
+                    </div>
+
+                    <div class='col-md-6'>
+                        <select name='voie' class="col-md-12 chosen" data-placeholder='Sélectionner une voie' onchange="masquerBoutonExportCalc()">
+                            <option value=''></option>
+                            <?php foreach ($this->array_voies as $voie): ?>
+                                <option value='<?php echo $voie["ID_RUE"] ?>' <?php if(isset($_GET["voie"]) && $voie["ID_RUE"] == $_GET["voie"]) echo 'selected' ?>><?php echo $voie["LIBELLE_RUE"] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class='row mt-2'>
+                    <div class='col-md-6'>
+                        <select name='numero' class="col-md-12 chosen" data-placeholder='Sélectionner un numéro' onchange="masquerBoutonExportCalc()">
+                            <option value=''></option>
+                            <?php foreach ($this->array_numeros as $numero): ?>
+                                <option value='<?= $numero["NUMERO_ADRESSE"] ?>' <?php if (isset($_GET["numero"]) && $numero["NUMERO_ADRESSE"] === $_GET["numero"]) echo 'selected' ?>><?= $numero["NUMERO_ADRESSE"] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class='row mt-3'>
+                    <div class="col-md-6">
+                        <select name="preventionniste" class='col-md-12 chosen' data-placeholder='Sélectionner un préventionniste' onchange="masquerBoutonExportCalc()">
+                            <option value=''></option>
+                            <?php foreach ($this->liste_prev as $prev): ?>
+                                <option value='<?php echo $prev["ID_PREVENTIONNISTE"] ?>' <?php if(isset($_GET["preventionniste"]) && $prev["ID_PREVENTIONNISTE"] == $_GET["preventionniste"]) echo 'selected' ?>><?php echo $prev["NOM_UTILISATEURINFORMATIONS"]." ".$prev["PRENOM_UTILISATEURINFORMATIONS"] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class='row mt-4'>
+                    <div class='col-md-6'>
+                        <input class="form-control" type="text" name='permis' class='col-md-12' value="<?php echo isset($_GET["permis"])?htmlentities($_GET["permis"]):'' ?>" placeholder="Numéro de permis" onkeypress="masquerBoutonExportCalc()" />
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-5'>
+                <div class='row'>
+                    <div class='col-md-2'>Création</div>
+                    <div class='col-md-1'>du</div>
+                    <div class='col-md-3'>
+                        <input type='text' name='date-creation-start' value='<?php echo $dateCreationStart ?>' class='form-control datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()">
+                    </div>
+                    <div class='col-md-1'>au</div>
+                    <div class="col-md-3">
+                        <input type='text' name='date-creation-end' value='<?php echo $dateCreationEnd ?>' class='form-control datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()">
+                    </div>
+                </div>
+                <div class='row mt-2'>
+                    <div class='col-md-2'>Réception</div>
+                    <div class='col-md-1'>du</div>
+                    <div class="col-md-3">
+                        <input type='text' name='date-reception-start' value='<?php echo $dateReceptionStart ?>' class='form-control datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()"/>
+                    </div>
+                    <div class='col-md-1'>au</div>
+                    <div class="col-md-3">
+                        <input type='text' name='date-reception-end' value='<?php echo $dateReceptionEnd ?>' class='form-control datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()"/>
+                    </div>
+                </div>
+                <div class='row mt-2'>
+                    <div class='col-md-2'>Réponse</div>
+                    <div class='col-md-1'>du</div>
+                    <div class="col-md-3">
+                        <input type='text' name='date-reponse-start' value='<?php echo $dateReponseStart ?>' class='form-control datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()"/>
+                    </div>
+                    <div class='col-md-1'>au</div>
+                    <div class="col-md-3">
+                        <input type='text' name='date-reponse-end' value='<?php echo $dateReponseEnd ?>' class='form-control datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<?php if( count($this->results) > 0): ?>
+    <div style='display:inline-block;width: 100%;' >
+        <div class='pull-left'>
+            <p class='text-muted'><small>Nombre total d'éléments : <?php echo $this->results->getTotalItemCount() ?></small></p>
+        </div>
+        <?php if( $this->results->getTotalItemCount() <= 10000): ?>
+            <div class='pull-right'>
+                <input type='submit' class='btn btn-success' id='exporter' name='Exporter' value='Export Calc' <?php echo (($this->is_allowed_export_calc) ? '' : 'style="visibility: hidden;"') ?>>
+            </div>
+        <?php else : ?>
+            <div class='pull-right' <?php echo (($this->is_allowed_export_calc) ? '' : 'style="visibility: hidden;"') ?>>
+                <small class='text-danger'><b>La fonctionnalité d'export Calc est limitée à 10 000 éléments</b></small>
+            </div>
+        <?php endif ?>
+    </div>
+
+    <table class='table table-condensed'>
+        <tr>
+            <th>Etablissement</th>
+            <th>Objet</th>
+            <th>Date</th>
+            <th>Préventionnistes</th>
+            <th>Pièces jointes</th>
+        </tr>
+        <?php echo $this->partialLoop('search/results/dossierTab.phtml', $this->results ) ?>
+    </table>
+    <?php echo $this->results ?>
+<?php else : ?>
+	<p class='text-muted'><small>Aucun résultat disponible.</small></p>
+    <h2 style='color: silver; text-align: center;' ></h2>
+<?php endif ?>
+</form>
+
+<script>
+    $(document).ready(function() {
+        // Si le champ de recherche est vide, on empêche l'envoi d'une recherche
+    	$("input[name='num_doc_urba']").focus().keyup(function() {$('input[type="submit"]').attr('disabled', $(this).val() == '')}).keyup();
+
+	    // Gestion des select et multiselect
+        $(".chosen").chosen({
+            allow_single_deselect: true
+        });
+
+        // Affichage des dossiers enfants
+        $("ul.recherche_liste li.slide").live("click", function() {
+            var container = this;
+            if( $(this).hasClass("active") ) {
+                $(this).next().slideUp(400, function() {$(container).next().remove()});
+                $(this).toggleClass("active");
+            }
+            else {
+                $(container).find(".load").show();
+                $.post("/search/display-ajax-search-dossier", {parent: $(this).attr("id")}, function(html) {
+                    $(container).toggleClass("active").find(".load").hide();
+                    $(container).after("<li class='ui-helper-hidden' style='overflow: auto; height: auto;' >" + html + "</li>").next().slideDown();
+                });
+            }
+        });
+
+        $('select[name=commune]').change(function(){
+            var selectedValue = $(this).val()
+            if (selectedValue != ""){
+                $.ajax({
+                    url: "/api/1.0/adresse/get_voies",
+                    type: 'post',
+                    data: {
+                        code_insee: selectedValue
+                    },
+                    success: function (result) {
+                        voies = [];
+                        var selectVoie = $('select[name=voie]');
+                        selectVoie.empty();
+                        selectVoie.append("<option value=''></option>");
+                        $.each(result.response, function (i, voie) {
+                            selectVoie.append($("<option></option>")
+                                .attr("value",voie.ID_RUE).text(voie.LIBELLE_RUE));
+                        });
+                        $('.chosen').trigger("chosen:updated");
+                    }
+                });
+            }
+        });
+
+        $('select[name=voie]').change(function(){
+            var selectedValue = $(this).val()
+            if (selectedValue != ""){
+                $.ajax({
+                    url: "/api/1.0/adresse/get_numeros",
+                    type: 'post',
+                    data: {
+                        id_rue: selectedValue
+                    },
+                    success: function (result) {
+                        const selectNumero = $('select[name=numero]');
+                        selectNumero.empty();
+                        selectNumero.append("<option value=''></option>");
+                        $.each(result.response, function (i, numero) {
+                            selectNumero.append($("<option></option>")
+                                .attr("value",numero.NUMERO_ADRESSE).text(numero.NUMERO_ADRESSE));
+                        });
+                        $('.chosen').trigger("chosen:updated");
+                    }
+                });
+            }
+        });
+
+
+        $(".datepicker").datepicker({
+            dateFormat:"dd/mm/yy",
+            monthNames: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+            dayNamesMin: ["Di","Lu","Ma","Me","Je","Ve","Sa"],
+            firstDay: 1,
+            changeMonth: true,
+            onClose: function(selectedDate) {
+                var name = $(this).attr("name");
+                var lastPart = name.split("-").pop();
+                var startName = name.slice(0, -lastPart.length);
+                var minMaxDate = "minDate";
+                var nameSuffix = "end";
+                if (lastPart === "end") {
+                    minMaxDate = "maxDate"
+                    nameSuffix = "start";
+                }
+                var finalName = ".datepicker[name='" + startName + nameSuffix + "']";
+
+                $(finalName).datepicker("option", minMaxDate, selectedDate);
+            }
+        });
+
+
+        $("a.pj").click(function(e){
+            e.preventDefault();
+            var rowvalue = $(this).find('span').attr('id').substring(6);
+            $('#rowpj'+rowvalue).toggle();
+        });
+    });
+
+    function masquerBoutonExportCalc ()
+    {
+        <?php if(count($this->results) > 0 && $this->results->getTotalItemCount() <= 10000 && $this->is_allowed_export_calc) :?>
+            document.getElementById('exporter').style.display = "none"
+        <?php endif ?>
+    }
+
+    function afficherBoutonExportCalc ()
+    {
+        <?php if(count($this->results) > 0 && $this->results->getTotalItemCount() <= 10000 && $this->is_allowed_export_calc) :?>
+            document.getElementById('exporter').style.display = "inline"
+        <?php endif ?>
+    }
+</script>

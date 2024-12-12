@@ -2,7 +2,7 @@
 
 class View_Helper_ListeGroupement extends Zend_View_Helper_HtmlElement
 {
-    public function listeGroupement($selected, $attribs = null, $id_type_groupement = null)
+    public function listeGroupement($selected, $attribs = null, $id_type_groupement = null): void
     {
         // Mod�les
         $model_groupements = new Model_DbTable_Groupement();
@@ -31,7 +31,7 @@ class View_Helper_ListeGroupement extends Zend_View_Helper_HtmlElement
         $attribs = $attribs ? $this->_htmlAttribs($attribs) : '';
 
         // Affichage
-        echo "<select {$attribs}>";
+        echo sprintf('<select %s>', $attribs);
 
         foreach ($array_groupements as $key => $groupements) {
             if (null == $id_type_groupement || ($id_type_groupement > 0 && $key == $id_type_groupement)) {
@@ -39,9 +39,11 @@ class View_Helper_ListeGroupement extends Zend_View_Helper_HtmlElement
                 foreach ($groupements[1] as $groupement) {
                     echo '<option value="'.$groupement['ID_GROUPEMENT'].'" '.(($groupement['ID_GROUPEMENT'] == $selected) ? 'selected' : '').'>'.$groupement['LIBELLE_GROUPEMENT'].'</option>';
                 }
+
                 echo '</optgroup>';
             }
         }
+
         echo '</select>';
     }
 }

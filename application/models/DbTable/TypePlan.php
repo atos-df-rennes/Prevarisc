@@ -9,8 +9,11 @@
 
 class Model_DbTable_TypePlan extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'typeplan'; // Nom de la base
-    protected $_primary = 'ID_TYPEPLAN'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'typeplan';
+
+    // Clé primaire
+    protected $_primary = 'ID_TYPEPLAN';
 
     public function fetchAllPK(): array
     {

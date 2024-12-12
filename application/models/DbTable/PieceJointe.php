@@ -2,8 +2,11 @@
 
 class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'piecejointe'; // Nom de la base
-    protected $_primary = 'ID_PIECEJOINTE'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'piecejointe';
+
+    // Clé primaire
+    protected $_primary = 'ID_PIECEJOINTE';
 
     /**
      * @param array|float|int|string|Zend_Db_Expr $table
@@ -17,7 +20,7 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['piecejointe'])
-            ->join($table, "piecejointe.ID_PIECEJOINTE = {$table}.ID_PIECEJOINTE")
+            ->join($table, sprintf('piecejointe.ID_PIECEJOINTE = %s.ID_PIECEJOINTE', $table))
             ->joinLeft(['pjs' => 'piecejointestatut'], 'piecejointe.ID_PIECEJOINTESTATUT = pjs.ID_PIECEJOINTESTATUT')
             ->where($champ.' = '.$identifiant)
             ->order('piecejointe.ID_PIECEJOINTE DESC')
@@ -45,7 +48,7 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
                 ->where('NOM_STATUT = ?', $status)
         )['ID_PIECEJOINTESTATUT'];
 
-        $this->update(['ID_PIECEJOINTESTATUT' => $idStatus], "ID_PIECEJOINTE = {$id}");
+        $this->update(['ID_PIECEJOINTESTATUT' => $idStatus], 'ID_PIECEJOINTE = '.$id);
     }
 
     public function getWithStatus(int $idDossier, string $status): Zend_Db_Table_Rowset_Abstract

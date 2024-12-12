@@ -9,8 +9,11 @@
 
 class Model_DbTable_Statut extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'statut'; // Nom de la base
-    protected $_primary = 'ID_STATUT'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'statut';
+
+    // Clé primaire
+    protected $_primary = 'ID_STATUT';
 
     // Donne la liste des catégories
 
@@ -27,7 +30,7 @@ class Model_DbTable_Statut extends Zend_Db_Table_Abstract
         ;
 
         if (null != $id) {
-            $select->where("ID_STATUT = {$id}");
+            $select->where('ID_STATUT = '.$id);
 
             return $this->fetchRow($select)->toArray();
         }

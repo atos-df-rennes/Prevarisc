@@ -50,6 +50,6 @@ class Service_Utils
         $trimmedName = trim($name);
         $loweredName = strtolower($trimmedName);
 
-        return preg_replace(['/\s+/', '/\'+/', '/\"+/'], '_', $loweredName);
+        return preg_replace(['/\s+/', "/'+/", '/\"+/'], '_', $loweredName);
     }
 }

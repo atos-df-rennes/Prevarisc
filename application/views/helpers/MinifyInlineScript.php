@@ -85,6 +85,7 @@ class View_Helper_MinifyInlineScript extends Zend_View_Helper_InlineScript
                     $items[] = $this->_generateMinifyItem($scripts);
                     $scripts = [];
                 }
+
                 $scripts[] = $item->attributes['src'];
                 if (!empty($item->attributes['minify_split_after']) || !empty($item->attributes['minify_split'])) {
                     $items[] = $this->_generateMinifyItem($scripts);
@@ -95,9 +96,11 @@ class View_Helper_MinifyInlineScript extends Zend_View_Helper_InlineScript
                     $items[] = $this->_generateMinifyItem($scripts);
                     $scripts = [];
                 }
+
                 $items[] = $this->itemToString($item, $indent, $escapeStart, $escapeEnd);
             }
         }
+
         if ([] !== $scripts) {
             $items[] = $this->_generateMinifyItem($scripts);
         }
@@ -140,6 +143,7 @@ class View_Helper_MinifyInlineScript extends Zend_View_Helper_InlineScript
         if ('/' === substr($baseUrl, 0, 1)) {
             $baseUrl = substr($baseUrl, 1);
         }
+
         $minScript = new stdClass();
         $minScript->type = 'text/javascript';
         if (is_null($baseUrl) || '' == $baseUrl) {

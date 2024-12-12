@@ -2,8 +2,11 @@
 
 class Model_DbTable_ListeTypeChampRubrique extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'listetypechamprubrique'; // Nom de la base
-    protected $_primary = 'ID_TYPECHAMP'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'listetypechamprubrique';
+
+    // Clé primaire
+    protected $_primary = 'ID_TYPECHAMP';
 
     public function getIdTypeChampByName(string $name): array
     {

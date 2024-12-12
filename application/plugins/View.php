@@ -4,7 +4,7 @@ use SebastianBergmann\Git\Git;
 
 class Plugin_View extends Zend_Controller_Plugin_Abstract
 {
-    public function preDispatch(Zend_Controller_Request_Abstract $request)
+    public function preDispatch(Zend_Controller_Request_Abstract $request): void
     {
         if ('default' == $request->getModuleName()) {
             // On récupère la vue

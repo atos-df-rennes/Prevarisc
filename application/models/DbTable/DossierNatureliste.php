@@ -2,8 +2,11 @@
 
 class Model_DbTable_DossierNatureliste extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'dossiernatureliste'; // Nom de la base
-    protected $_primary = 'ID_DOSSIERNATURE'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'dossiernatureliste';
+
+    // Clé primaire
+    protected $_primary = 'ID_DOSSIERNATURE';
 
     /**
      * @param mixed $type

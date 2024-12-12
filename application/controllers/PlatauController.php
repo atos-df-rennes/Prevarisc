@@ -17,7 +17,7 @@ class PlatauController extends Zend_Controller_Action
      */
     private $viewRenderer;
 
-    public function init()
+    public function init(): void
     {
         /** @var Zend_Controller_Action_Helper_ContextSwitch $ajaxContext */
         $ajaxContext = $this->_helper->getHelper('AjaxContext');

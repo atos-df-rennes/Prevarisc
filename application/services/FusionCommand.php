@@ -26,25 +26,26 @@ class Service_FusionCommand
         $modelAdresseCommune = new Model_DbTable_AdresseCommune();
 
         $numinseeQuery = $modelAdresseCommune->select()
-            ->where("NUMINSEE_COMMUNE = '{$nouvelleFusion->NUMINSEE}'")
+            ->where(sprintf("NUMINSEE_COMMUNE = '%s'", $nouvelleFusion->NUMINSEE))
         ;
         $numinseeResult = $modelAdresseCommune->fetchAll($numinseeQuery)->toArray();
         $numinseeCount = count($numinseeResult);
 
         if (0 === $numinseeCount) {
-            error_log("Le numero INSEE {$nouvelleFusion->NUMINSEE} n'existe pas dans la base de donnees, veuillez l'ajouter");
+            error_log(sprintf("Le numero INSEE %s n'existe pas dans la base de donnees, veuillez l'ajouter", $nouvelleFusion->NUMINSEE));
 
             return true;
         }
+
         if ($numinseeCount > 1) {
-            error_log("Il existe plusieurs lignes avec le numero INSEE {$nouvelleFusion->NUMINSEE}, veuillez en supprimer");
+            error_log(sprintf('Il existe plusieurs lignes avec le numero INSEE %s, veuillez en supprimer', $nouvelleFusion->NUMINSEE));
 
             return true;
         }
 
         $libelleCommune = $numinseeResult['0']['LIBELLE_COMMUNE'];
         if (0 !== strcmp($nouvelleFusion->nomCommune, $libelleCommune)) {
-            error_log("Le numero INSEE {$nouvelleFusion->NUMINSEE} n'a pas pour libelle {$nouvelleFusion->nomCommune}, veuillez faire la mise a jour");
+            error_log(sprintf("Le numero INSEE %s n'a pas pour libelle %s, veuillez faire la mise a jour", $nouvelleFusion->NUMINSEE, $nouvelleFusion->nomCommune));
 
             return true;
         }
@@ -59,7 +60,7 @@ class Service_FusionCommand
         foreach ($arrayOldCommune as $oldCommune) {
             $select = $modelEtablissementAdresse->select()
                 ->from('etablissementadresse')
-                ->where("etablissementadresse.NUMINSEE_COMMUNE = '{$oldCommune->NUMINSEE}'")
+                ->where(sprintf("etablissementadresse.NUMINSEE_COMMUNE = '%s'", $oldCommune->NUMINSEE))
             ;
 
             $oldCommunes = $modelEtablissementAdresse->fetchAll($select);
@@ -78,7 +79,7 @@ class Service_FusionCommand
         foreach ($arrayOldCommune as $oldCommune) {
             $select = $modelAdresseRue->select()
                 ->from('adresserue')
-                ->where("adresserue.NUMINSEE_COMMUNE = '{$oldCommune->NUMINSEE}'")
+                ->where(sprintf("adresserue.NUMINSEE_COMMUNE = '%s'", $oldCommune->NUMINSEE))
             ;
 
             $oldCommunes = $modelAdresseRue->fetchAll($select);

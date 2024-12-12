@@ -2,8 +2,11 @@
 
 class Model_DbTable_AdresseCommune extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'adressecommune'; // Nom de la base
-    protected $_primary = 'NUMINSEE_COMMUNE'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'adressecommune';
+
+    // Clé primaire
+    protected $_primary = 'NUMINSEE_COMMUNE';
 
     /**
      * @param int|string $q

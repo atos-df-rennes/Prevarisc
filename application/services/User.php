@@ -60,7 +60,7 @@ class Service_User
      * @param int    $id_user
      * @param string $last_action_date Par défaut date("Y:m-d H:i:s")
      */
-    public function updateLastActionDate($id_user, $last_action_date = '')
+    public function updateLastActionDate($id_user, $last_action_date = ''): void
     {
         $model_user = new Model_DbTable_Utilisateur();
         $user = $model_user->find($id_user)->current();
@@ -118,6 +118,7 @@ class Service_User
             if ($DB_user->isRegistered($id_user, $data['USERNAME_UTILISATEUR'])) {
                 throw new Exception("Nom d'utilisateur déjà enregistré. Veuillez en choisir un autre.");
             }
+
             $user = null == $id_user ? $DB_user->createRow() : $DB_user->find($id_user)->current();
             $informations = null == $id_user ? $DB_informations->createRow() : $DB_informations->find($user->ID_UTILISATEURINFORMATIONS)->current();
 
@@ -151,6 +152,7 @@ class Service_User
                     throw new Exception('Votre mot de passe doit contenir au moins 8 caractères '
                         .'dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial.');
                 }
+
                 $user->PASSWD_UTILISATEUR = '' == $data['PASSWD_INPUT'] ? null : md5($user->USERNAME_UTILISATEUR.getenv('PREVARISC_SECURITY_SALT').$data['PASSWD_INPUT']);
             }
 
@@ -196,10 +198,10 @@ class Service_User
                 GD_Resize::run($avatar['tmp_name'], $path.'medium'.DS.$user->ID_UTILISATEUR.'.jpg', 150);
                 GD_Resize::run($avatar['tmp_name'], $path.'large'.DS.$user->ID_UTILISATEUR.'.jpg', 224);
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $db->rollBack();
 
-            throw $e;
+            throw $exception;
         }
 
         return $user->ID_UTILISATEUR;
@@ -259,12 +261,11 @@ class Service_User
     /**
      * Sauvegarde d'un groupe.
      *
-     * @param array $data
-     * @param int   $id_group Optionnel
+     * @param int $id_group Optionnel
      *
      * @return int
      */
-    public function saveGroup($data, $id_group = null)
+    public function saveGroup(array $data, $id_group = null)
     {
         $model_groupe = new Model_DbTable_Groupe();
 
@@ -277,10 +278,10 @@ class Service_User
             $group->DESC_GROUPE = $data['DESC_GROUPE'];
             $group->save();
             $db->commit();
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $db->rollBack();
 
-            throw $e;
+            throw $exception;
         }
 
         // if group exists, remove the cache
@@ -291,6 +292,7 @@ class Service_User
             foreach ($users as $user) {
                 $cache->remove('user_id_'.$user->ID_UTILISATEUR);
             }
+
             $cache->remove('acl');
         }
 
@@ -302,7 +304,7 @@ class Service_User
      *
      * @param int $id_group
      */
-    public function deleteGroup($id_group)
+    public function deleteGroup($id_group): void
     {
         $DB_user = new Model_DbTable_Utilisateur();
         $DB_groupe = new Model_DbTable_Groupe();
@@ -341,11 +343,9 @@ class Service_User
     /**
      * Récupération des ressources / privilèges associés à un utilisateur.
      *
-     * @param array $user
-     *
      * @return array
      */
-    public function getGroupPrivileges($user)
+    public function getGroupPrivileges(array $user)
     {
         $model_user = new Model_DbTable_Utilisateur();
 
@@ -360,7 +360,7 @@ class Service_User
      *
      * @return array La liste des utilisateurs
      */
-    public function getUtilisateursForAlterte($idChangement, $etablissement)
+    public function getUtilisateursForAlterte($idChangement, array $etablissement)
     {
         $dbUtilisateur = new Model_DbTable_Utilisateur();
 
@@ -379,17 +379,21 @@ class Service_User
         if ([] === $user) {
             return null;
         }
+
         if (!isset($user['ID_UTILISATEUR'])) {
             return null;
         }
+
         if (!isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])) {
             return null;
         }
+
         $dbUtilisateur = new Model_DbTable_Utilisateur();
         $dbUser = $dbUtilisateur->find($user['ID_UTILISATEUR']);
         if (!$dbUser instanceof Zend_Db_Table_Rowset_Abstract) {
             return null;
         }
+
         $dbUser = $dbUser->current();
         ++$dbUser->FAILED_LOGIN_ATTEMPTS_UTILISATEUR;
         $dbUser->save();
@@ -405,17 +409,21 @@ class Service_User
         if (!$user) {
             return null;
         }
+
         if (!isset($user['ID_UTILISATEUR'])) {
             return null;
         }
+
         if (!isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])) {
             return null;
         }
+
         $dbUtilisateur = new Model_DbTable_Utilisateur();
         $dbUser = $dbUtilisateur->find($user['ID_UTILISATEUR']);
         if (!$dbUser instanceof Zend_Db_Table_Rowset_Abstract) {
             return null;
         }
+
         $dbUser = $dbUser->current();
         $dbUser->FAILED_LOGIN_ATTEMPTS_UTILISATEUR = 0;
         $dbUser->IP_UTILISATEUR = filter_input(INPUT_SERVER, 'REMOTE_ADDR');

@@ -12,7 +12,7 @@ final class Service_AlerteTest extends TestCase
     /** @var Service_Alerte */
     private $alerte;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->alerte = new Service_Alerte();
     }

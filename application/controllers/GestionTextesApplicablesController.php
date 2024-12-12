@@ -2,7 +2,7 @@
 
 class GestionTextesApplicablesController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -11,46 +11,46 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
         $this->view->assign('listeTextesAppl', $dbTextesAppl->recupTextesAppl());
     }
 
-    public function formtexteapplAction()
+    public function formtexteapplAction(): void
     {
         // Cas d'une création d'un texte
         $dbTypeTextesAppl = new Model_DbTable_TypeTextesAppl();
         $this->view->assign('listeType', $dbTypeTextesAppl->getType());
-        if ($this->_getParam('id')) {
-            $this->view->assign('idTexteAppl', $this->_getParam('id'));
+        if ($this->getRequest()->getParam('id')) {
+            $this->view->assign('idTexteAppl', $this->getRequest()->getParam('id'));
             $dbTextesAppl = new Model_DbTable_TextesAppl();
-            $this->view->assign('texteEdit', $dbTextesAppl->find($this->_getParam('id')));
+            $this->view->assign('texteEdit', $dbTextesAppl->find($this->getRequest()->getParam('id')));
         }
     }
 
-    public function saveAction()
+    public function saveAction(): void
     {
         try {
             // sauvegarde d'un nouveau texte ou mise à jour d'un texte existant
             $dbTextesAppl = new Model_DbTable_TextesAppl();
-            if ($this->_getParam('idTexteAppl')) {
+            if ($this->getRequest()->getParam('idTexteAppl')) {
                 // cas d'une édition
-                $rowEdit = $dbTextesAppl->find($this->_getParam('idTexteAppl'))->current();
-                $rowEdit['LIBELLE_TEXTESAPPL'] = $this->_getParam('libelle');
-                $rowEdit['VISIBLE_TEXTESAPPL'] = $this->_getParam('visible');
-                $rowEdit['ID_TYPETEXTEAPPL'] = $this->_getParam('type');
+                $rowEdit = $dbTextesAppl->find($this->getRequest()->getParam('idTexteAppl'))->current();
+                $rowEdit['LIBELLE_TEXTESAPPL'] = $this->getRequest()->getParam('libelle');
+                $rowEdit['VISIBLE_TEXTESAPPL'] = $this->getRequest()->getParam('visible');
+                $rowEdit['ID_TYPETEXTEAPPL'] = $this->getRequest()->getParam('type');
                 $rowEdit['NUM_TEXTESAPPL'] = '99999';
                 $rowEdit->save();
             } else {
                 // cas d'une création
                 $newRow = $dbTextesAppl->createRow();
-                $newRow['LIBELLE_TEXTESAPPL'] = $this->_getParam('libelle');
-                $newRow['VISIBLE_TEXTESAPPL'] = $this->_getParam('visible');
-                $newRow['ID_TYPETEXTEAPPL'] = $this->_getParam('type');
+                $newRow['LIBELLE_TEXTESAPPL'] = $this->getRequest()->getParam('libelle');
+                $newRow['VISIBLE_TEXTESAPPL'] = $this->getRequest()->getParam('visible');
+                $newRow['ID_TYPETEXTEAPPL'] = $this->getRequest()->getParam('type');
                 $newRow['NUM_TEXTESAPPL'] = '99999';
                 $newRow->save();
             }
 
-            if ('yes' == $this->_getParam('defPrescription')) {
+            if ('yes' == $this->getRequest()->getParam('defPrescription')) {
                 // on enregistre le texte dans la table prescriptiontexteliste
                 $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
                 $newTexte = $dbPrescTextes->createRow();
-                $newTexte->LIBELLE_TEXTE = $this->_getParam('libelle');
+                $newTexte->LIBELLE_TEXTE = $this->getRequest()->getParam('libelle');
                 $newTexte->save();
             }
 
@@ -59,11 +59,11 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
                 'title' => 'Le texte a bien été sauvegardé',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde du texte',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
 
@@ -71,10 +71,10 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
         $this->_helper->redirector('index');
     }
 
-    public function updateorderAction()
+    public function updateorderAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
-        $tabId = explode(',', $this->_getParam('tableUpdate'));
+        $tabId = explode(',', $this->getRequest()->getParam('tableUpdate'));
         $dbTexteAppl = new Model_DbTable_TextesAppl();
         $num = 0;
         foreach ($tabId as $id) {

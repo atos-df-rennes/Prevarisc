@@ -2,7 +2,7 @@
 
 class Api_Bootstrap extends Zend_Application_Module_Bootstrap
 {
-    public function run()
+    public function run(): void
     {
         // Chargement et activation des plugins
         // Contrôle du referer pour les requêtes aux api

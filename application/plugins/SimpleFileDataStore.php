@@ -154,8 +154,10 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
 
                             break;
                         }
+
                         $default_numeroid[] = $numero_id;
                     }
+
                     if (!$tokens['%NUMEROID_ETABLISSEMENT%']) {
                         $tokens['%NUMEROID_ETABLISSEMENT%'] = implode('_', $default_numeroid);
                     }

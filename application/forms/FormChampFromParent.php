@@ -3,19 +3,20 @@
 class Form_FormChampFromParent extends Zend_Form
 {
     protected $champParentID;
+
     protected $rubriqueID;
 
-    public function setChampParentID($myParameters)
+    public function setChampParentID($myParameters): void
     {
         $this->champParentID = $myParameters;
     }
 
-    public function setRubriqueID($myParameters)
+    public function setRubriqueID($myParameters): void
     {
         $this->rubriqueID = $myParameters;
     }
 
-    public function init()
+    public function init(): void
     {
         $dbType = new Model_DbTable_ListeTypeChampRubrique();
         $this->setMethod('post');

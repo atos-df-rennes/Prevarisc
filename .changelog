@@ -1,0 +1,11 @@
+<?php
+
+return [
+    'headerDescription' => '',
+    'preset' => [
+        'feat' => ['label' => 'Évolutions'],
+        'perf' => ['label' => 'Performance'],
+        'fix' => ['label' => 'Corrections'],
+    ],
+    'dateFormat' => 'd-m-Y',
+];

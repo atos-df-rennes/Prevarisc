@@ -2,8 +2,11 @@
 
 class Model_DbTable_PrescriptionTexteListe extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'prescriptiontexteliste'; // Nom de la base
-    protected $_primary = 'ID_TEXTE'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'prescriptiontexteliste';
+
+    // Clé primaire
+    protected $_primary = 'ID_TEXTE';
 
     /**
      * @param null|mixed $visible
@@ -40,7 +43,7 @@ class Model_DbTable_PrescriptionTexteListe extends Zend_Db_Table_Abstract
      * @param int|string $idOldTexte
      * @param mixed      $idNewTexte
      */
-    public function replace($idOldTexte, $idNewTexte)
+    public function replace($idOldTexte, $idNewTexte): void
     {
         $where = [];
         $data = ['ID_TEXTE' => $idNewTexte];

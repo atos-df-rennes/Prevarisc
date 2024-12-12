@@ -2,7 +2,7 @@
 
 class GroupementController extends Zend_Controller_Action
 {
-    public function init()
+    public function init(): void
     {
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('add', 'json')
@@ -12,7 +12,7 @@ class GroupementController extends Zend_Controller_Action
         ;
     }
 
-    public function indexAction()
+    public function indexAction(): void
     {
         // Titre
         $this->view->assign('title', 'Groupements de communes');
@@ -32,7 +32,7 @@ class GroupementController extends Zend_Controller_Action
         $this->view->assign('villes_tests', $commune->fetchAll()->toArray());
     }
 
-    public function displayAction()
+    public function displayAction(): void
     {
         // Liste des villes pour le select
         $commune = new Model_DbTable_AdresseCommune();
@@ -65,14 +65,14 @@ class GroupementController extends Zend_Controller_Action
         }
     }
 
-    public function viewAction()
+    public function viewAction(): void
     {
         $model_groupement = new Model_DbTable_Groupement();
         $this->view->assign('row', $model_groupement->get($this->_request->id));
         $this->view->assign('prev', $model_groupement->getPreventionnistes($this->_request->id));
     }
 
-    public function addAction()
+    public function addAction(): void
     {
         try {
             // Modele groupement et groupement communes et groupement prev.
@@ -99,6 +99,7 @@ class GroupementController extends Zend_Controller_Action
                     if ('null' == $_POST['ID_UTILISATEURCIVILITE']) {
                         unset($_POST['ID_UTILISATEURCIVILITE']);
                     }
+
                     unset($_POST['ID_FONCTION']);
                     $id = $DB_informations->insert(array_intersect_key($_POST, $DB_informations->info('metadata')));
                     $new_groupement->ID_UTILISATEURINFORMATIONS = $id;
@@ -106,6 +107,7 @@ class GroupementController extends Zend_Controller_Action
                     if ('null' == $_POST['ID_UTILISATEURCIVILITE']) {
                         unset($_POST['ID_UTILISATEURCIVILITE']);
                     }
+
                     unset($_POST['ID_FONCTION']);
                     $info->setFromArray(array_intersect_key($_POST, $DB_informations->info('metadata')))->save();
                 }
@@ -150,16 +152,16 @@ class GroupementController extends Zend_Controller_Action
                 'title' => 'Ajout réussi !',
                 'message' => 'Le groupement '.$new_groupement->LIBELLE_GROUPEMENT.' a été ajouté.',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Aie',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function deleteAction()
+    public function deleteAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender(); // On desactive la vue
@@ -180,11 +182,11 @@ class GroupementController extends Zend_Controller_Action
                 'title' => 'Suppression réussie !',
                 'message' => 'Le groupement a été supprimé.',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Aie',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
 
@@ -192,7 +194,7 @@ class GroupementController extends Zend_Controller_Action
         $this->_helper->redirector('index');
     }
 
-    public function addTypeAction()
+    public function addTypeAction(): void
     {
         try {
             // Modèle
@@ -210,18 +212,19 @@ class GroupementController extends Zend_Controller_Action
                 'title' => 'Ajout réussi !',
                 'message' => 'Le traitement est ok.',
             ]);
-        } catch (Exception $ex) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Aie',
-                'message' => $ex->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
+
         // Redirection
         $this->_helper->redirector('index');
     }
 
-    public function deleteTypeAction()
+    public function deleteTypeAction(): void
     {
         // On desactive la vue
         $this->_helper->viewRenderer->setNoRender();

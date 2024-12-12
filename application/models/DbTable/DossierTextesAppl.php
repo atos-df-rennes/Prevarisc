@@ -2,8 +2,11 @@
 
 class Model_DbTable_DossierTextesAppl extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'dossiertextesappl'; // Nom de la base
-    protected $_primary = ['ID_TEXTESAPPL', 'ID_DOSSIER']; // Clé primaire
+    // Nom de la base
+    protected $_name = 'dossiertextesappl';
+
+    // Clé primaire
+    protected $_primary = ['ID_TEXTESAPPL', 'ID_DOSSIER'];
 
     /**
      * @param mixed $idDossier

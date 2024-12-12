@@ -64,14 +64,20 @@
 	<!-- Partie des préventionnistes -->
 	<div id="tabs-2">
 		<!-- Ajouter un préventionniste -->
-		<input type='text' size='60' id='preventionnistes-autocomplete' value='' class='form-control' placeholder="Saisissez le nom d'un préventionniste ..."  />
+		 <select id="preventionnistes-autocomplete" placeholder="Saisissez le nom d'un préventionniste ..." name="prev[]" multiple>
+		 	<?php foreach ($this->preventionnistes as $preventionniste): ?>
+				<option value="<?= $preventionniste["ID_UTILISATEUR"] ?>">
+					<?= $preventionniste["NOM_UTILISATEURINFORMATIONS"] . " " . $preventionniste["PRENOM_UTILISATEURINFORMATIONS"] ?>
+				</option>
+			<?php endforeach ?>
+		 </select>
 
         <?php if (count($this->preventionnistes) > 0): ?>
             <button
                 id='preventionniste'
                 class='btn btn-info'
                 type='button'
-                style='margin-bottom: 10px;'
+                style='margin-top: 10px;'
                 data-loading-text="Affectation <img src='/images/load.gif' />"
             >
                 Affecter aux établissements
@@ -80,17 +86,6 @@
 				Les préventionnistes ont été affectés.
 			</span>
         <?php endif ?>
-
-		<!-- Afficher la liste des prev. -->
-		<ul class='liste_informations' id='liste_prev'>
-			<?php foreach($this->preventionnistes as $preventionniste) : ?>
-				<li id='prev_<?php echo $preventionniste["ID_UTILISATEUR"] ?>'>
-					<span ><a href='/user/profile/uid/<?php echo $preventionniste["ID_UTILISATEUR"]; ?>'><?php echo $preventionniste["GRADE_UTILISATEURINFORMATIONS"]." ".$preventionniste["NOM_UTILISATEURINFORMATIONS"]." ".$preventionniste["PRENOM_UTILISATEURINFORMATIONS"] ?></a></span>
-					<span class='action' style='float: right' ><a style='text-decoration: none;' href='javascript:void(0)' onclick=" $(this).parent().parent().remove() ">&times;</a></span>
-					<input type='hidden' name='prev[]' value='<?php echo $preventionniste["ID_UTILISATEUR"]; ?>' />
-				</li>
-			<?php endforeach ?>
-		</ul>
 	</div>
 
 	<!-- Coordonnées -->
@@ -156,49 +151,63 @@
 
 	// Partie prev ----------------------------------------------------------------------------------------------------------------
 
-    // @fixme: Voir comment modifier pour utiliser typeahead => Utiliser JQuery Autocomplete plutôt ?
+	const preventionnistes = <?= json_encode($this->preventionnistes) ?> ?? []
 	// Auto-complétion des préventionnistes
-	// $("#preventionnistes-autocomplete").typeahead({
-	// 	minLength: 3,
-    //     highligth: true,
-	// 	source: function(query, process) {
-	// 		return $.ajax({
-	// 			url: "/api/1.0/search/users",
-	// 			type: 'post',
-	// 			data: {
-	// 				name: query,
-	// 				fonctions: 13,
-	// 				limit: 100,
-	// 			},
-	// 			success: function (result) {
-	// 				preventionnistes = [];
-	// 				$.each(result.response.results, function (i, preventionniste) {
-	// 					preventionnistes.push("<span data-id='" + preventionniste.uid + "'>" + preventionniste.NOM_UTILISATEURINFORMATIONS + " " + preventionniste.PRENOM_UTILISATEURINFORMATIONS + "</span>");
-	// 				});
+	new TomSelect("#preventionnistes-autocomplete", {
+		plugins: {
+			remove_button: {
+				title: 'Supprimer cet élément'
+			}
+		},
+		valueField: 'ID_UTILISATEUR',
+		labelField: 'NOM_UTILISATEURINFORMATIONS',
+		searchField: 'NOM_UTILISATEURINFORMATIONS',
+		items: preventionnistes.map((preventionniste) => preventionniste.ID_UTILISATEUR),
+		load: function(query, process) {
+			$.ajax({
+				url: "/api/1.0/search/users",
+				type: 'get',
+				data: {
+					name: query,
+					fonctions: 13,
+					limit: 100
+				},
+				success: function (result) {
+					process(result.response.results);
+				}
+			});
+		},
+		shouldLoad(query) {
+			return query.length >= 3
+		},
+		render: {
+			option: function(data, escape) {
+				let res = "<div><span>" + escape(data.NOM_UTILISATEURINFORMATIONS) + " " + escape(data.PRENOM_UTILISATEURINFORMATIONS) + "</span>"
 
-	// 				process(preventionnistes);
-	// 			}
-	// 		});
-	// 	},
-	// 	highlight: function (item) {
-	// 		libelle = $($.parseHTML(item)).last().text();
-	// 		libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
-	// 		html = $.parseHTML(item);
-	// 		$(html).last().text(libelle);
-	// 		html = $(html).text();
-	// 		return item.replace( item, html );
-	// 	},
-	// 	updater: function (item) {
-	// 		var nom = $($.parseHTML(item)).last().text();
-	// 		var id = $($.parseHTML(item)).last().data('id');
+				if ('' !== data.GRADE_UTILISATEURINFORMATIONS) {
+					res += "<br /><span class='text-muted'>" + escape(data.GRADE_UTILISATEURINFORMATIONS) + "</span>"
+				}
 
-	// 		$("#liste_prev").append("<li><span class='action' style='float: right'><a style='text-decoration: none;' href='' onclick='$(this).parent().parent().remove(); return false;'>&times;</a></span>"
-	// 			+"<span class='valeur'><a href='/user/profile/uid/"  + id + "'>" + nom + "</a></span>"
-	// 			+"<input type='hidden' name='prev[]' value='" + id + "' /></li>");
+				res += "</div>"
 
-	// 		return;
-	// 	}
-	// });
+				return res
+			},
+			item: function(data, escape) {
+				let res = "<div>" + escape(data.NOM_UTILISATEURINFORMATIONS)
+
+				if (data.PRENOM_UTILISATEURINFORMATIONS) {
+					res += " " + escape(data.PRENOM_UTILISATEURINFORMATIONS)
+				}
+
+				res += "</div>"
+
+				return res
+			},
+			no_results: function(data, escape) {
+				return '<div class="no-results">Aucun résultat trouvé pour "'+escape(data.input)+'"</div>';
+			}
+		}
+	})
 
 	// Partie Contact ----------------------------------------------------------------------------------------------------------------
 	$("#tabs-4").load("/contact?item=groupement&id=<?php echo $_GET["id"] ?>");

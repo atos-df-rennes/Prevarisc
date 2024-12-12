@@ -80,7 +80,6 @@ class EtablissementController extends Zend_Controller_Action
 
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/tom-select.default.min.css', 'all');
 
         $service_carto = new Service_Carto();
 
@@ -160,7 +159,6 @@ class EtablissementController extends Zend_Controller_Action
 
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/tom-select.default.min.css', 'all');
 
         $service_genre = new Service_Genre();
         $service_statut = new Service_Statut();

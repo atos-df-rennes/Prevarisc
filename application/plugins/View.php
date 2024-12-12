@@ -78,7 +78,7 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
             $view->headLink()->appendStylesheet('/css/dropzone/basic.css', 'all');
             $view->headLink()->appendStylesheet('/css/dropzone/basic.css', 'all');
             $view->headLink()->appendStylesheet('/css/dropzone/dropzone.css', 'all');
-            $view->headLink()->appendStylesheet('/css/tom-select.defualt.min.css', 'all');
+            $view->headLink()->appendStylesheet('/css/tom-select.default.min.css', 'all');
 
             // Définition du partial de vue à utiliser pour le rendu d'une recherche
             Zend_View_Helper_PaginationControl::setDefaultViewPartial('search'.DIRECTORY_SEPARATOR.'pagination_control.phtml');

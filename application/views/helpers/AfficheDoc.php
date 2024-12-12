@@ -2,7 +2,7 @@
 
 class View_Helper_AfficheDoc
 {
-    public function afficheDoc($verrou, $natureId, $id, $libelle, $ref = null, $date = null, $type = null): string
+    public function afficheDoc($verrou, string $natureId, string $id, $libelle, $ref = null, $date = null, $type = null): string
     {
         if (!$date) {
             // document n'ayant PAS d'enregistrement dans la BD
@@ -28,41 +28,41 @@ class View_Helper_AfficheDoc
         }
 
         $return = "
-            <li class='divDoc col-md-12' name='divDoc' id='".$natureId.'_'.$id.$type."'>
-                <div class='col-md-5'>
-                    <div class='checkbox'>
-                        <label>
-                            <input type='checkbox' ".$styleChecked.' '.$etatCheck." name='check_".$natureId.'_'.$id.$type."' id='check_".$natureId.'_'.$id.$type."' ".((1 == $verrou) ? "disabled='disabled'" : '')." />
+            <li class='divDoc row-fluid span12' name='divDoc' id='".$natureId.'_'.$id.$type."' style='display: block; margin: 0 15px 15px 15px;'>
+                <div style='float:left;' class='span1'>
+                    <input type='checkbox' ".$styleChecked.' '.$etatCheck." name='check_".$natureId.'_'.$id.$type."' id='check_".$natureId.'_'.$id.$type."' ".((1 == $verrou) ? "disabled='disabled'" : '')." />
+                </div>
+                <div class='span4 libelle' >
         ";
         if ($type) {
-            $return .= "<textarea class='form-control' name='libelle_".$natureId.'_'.$id.$type."' id='libelle_".$natureId.'_'.$id.$type."' rows='3' style='display:none;'>".nl2br($libelle).'</textarea>';
+            $return .= "<textarea name='libelle_".$natureId.'_'.$id.$type."' id='libelle_".$natureId.'_'.$id.$type."' rows='3' style='display:none;width:100%;'>".nl2br($libelle).'</textarea>';
         }
 
         return $return.('
-                            <strong '.(($type) ? "id='libelleView_".$natureId.'_'.$id.$type."'" : '').'>'.nl2br($libelle)."</strong>
-                        </label>
-                    </div>
+                    <strong '.(($type) ? "id='libelleView_".$natureId.'_'.$id.$type."'" : '').'>'.nl2br($libelle)."</strong>
                 </div>
-                <div id='div_input_".$natureId.'_'.$id.$type."' class='col-md-7' style='".$styleInput."'>
-                    <div class='col-md-4'>
-                        <input class='form-control' type='text' readonly='true' name='ref_".$natureId.'_'.$id.$type."' id='ref_".$natureId.'_'.$id.$type."' value=\"".$ref."\" style='width: 100%;' />
+                <div id='div_input_".$natureId.'_'.$id.$type."' class='span7' style='".$styleInput."'>
+                    <div class='span4'>
+                        <input type='text' readonly='true' name='ref_".$natureId.'_'.$id.$type."' id='ref_".$natureId.'_'.$id.$type."' value=\"".$ref."\" style='width: 100%;' />
                     </div>
-                    <div class='col-md-3'>
-                        <input type='text' readonly='true' ".$styleDate."  class='form-control date' name='date_".$natureId.'_'.$id.$type."' id='date_".$natureId.'_'.$id.$type."' value='".$date."' />
+                    <div class='span2'>
+                        <input type='text' readonly='true' ".$styleDate."  class='date' name='date_".$natureId.'_'.$id.$type."' id='date_".$natureId.'_'.$id.$type."' value='".$date."' />
                     </div>
-                    <div class='col-md-3'>
+                    <div class='span3'>
                         <span class='modif' id='modif_".$natureId.'_'.$id.$type."' style='".((1 == $verrou) ? 'display:none;' : '')."' >
-                                <button class='editDoc btn btn-default' id='".'edit_'.$natureId.'_'.$id.$type."'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>&nbsp;</button>
-                                <button class='deleteDoc btn btn-default' name='".$natureId.'_'.$id.$type."'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span>&nbsp;</button>
+                                <button class='editDoc btn' id='".'edit_'.$natureId.'_'.$id.$type."'><i class='icon-pencil'></i>&nbsp;</button>
+                                <button class='deleteDoc btn' name='".$natureId.'_'.$id.$type."'><i class='icon-trash'></i>&nbsp;</button>
                         </span>
                         <span id='valid_".$natureId.'_'.$id.$type."' style='".$styleValid."'>
-                                <button class='validDoc btn btn-default'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span>&nbsp;</button>
-                                <button class='cancelDoc btn btn-default'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span>&nbsp;</button>
+                                <button class='validDoc btn'><i class='icon-ok'></i>&nbsp;</button>
+                                <button class='cancelDoc btn'><i class='icon-remove'></i>&nbsp;</button>
                             </a>
                         </span>
                     </div>
                 </div>
+                <br class='clear'/>
             </li>
+            <br class='clear'/>
         ");
     }
 }

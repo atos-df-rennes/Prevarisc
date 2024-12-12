@@ -8,7 +8,11 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
     {
         if ('default' == $request->getModuleName()) {
             // On récupère la vue
+            /** @var Zend_View $view */
             $view = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('view');
+
+            // var_dump($view->getHelperPaths());
+            // exit;
 
             // Chargement de la navigation par défaut
             $view->navigation(new Zend_Navigation(new Zend_Config_Xml(APPLICATION_PATH.DS.'navigation.xml', 'nav')));
@@ -34,10 +38,15 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
             $view->registerHelper(new View_Helper_MinifyHeadLink($view->version_prevarisc), 'headLink');
             $view->registerHelper(new View_Helper_MinifyInlineScript($view->version_prevarisc), 'inlineScript');
             $view->registerHelper(new SDIS62_View_Helper_FlashMessenger(), 'flashMessenger');
-            $view->registerHelper(new View_Helper_AfficheDoc(), 'afficheDoc');
             $view->registerHelper(new View_Helper_Dates(), 'formatDateDiff');
             $view->registerHelper(new View_Helper_Avatar(), 'avatar');
             $view->registerHelper(new View_Helper_ListeGroupement(), 'listeGroupement');
+
+            if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+                $view->registerHelper(new View_Helper_AfficheDoc(), 'afficheDoc');
+            } else {
+                $view->registerHelper(new View_Helper_AfficheDocBs3(), 'afficheDoc');
+            }
 
             // JS
             $view->inlineScript()->appendFile('/js/jquery-1.10.2.min.js');
@@ -53,18 +62,29 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
             $view->inlineScript()->appendFile('/js/jquery.tablesorter.pager.js');
             $view->inlineScript()->appendFile('/js/jquery.tipsy.js');
             $view->inlineScript()->appendFile('/js/jquery.fancybox-1.3.4.js');
-            $view->inlineScript()->appendFile('/js/bootstrap.min.js');
+            if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+                $view->inlineScript()->appendFile('/js/bootstrap.min.js');
+            } else {
+                $view->inlineScript()->appendFile('/js/bootstrap-3.min.js');
+            }
             $view->inlineScript()->appendFile('/js/dropzone.min.js');
             $view->inlineScript()->appendFile('/js/chosen.jquery.min.js');
             $view->inlineScript()->appendFile('/js/jquery.dateentry.js');
             $view->inlineScript()->appendFile('/js/jquery-ui.datepicker.fr.js');
             $view->inlineScript()->appendFile('/js/jquery.marquee.min.js');
             $view->inlineScript()->appendFile('/js/jquery.hoverintent.js');
-            $view->inlineScript()->appendFile('/js/tom-select.complete.min.js');
+            if (getenv('PREVARISC_BOOTSTRAP_3')) {
+                $view->inlineScript()->appendFile('/js/tom-select.complete.min.js');
+            }
             $view->inlineScript()->appendFile('/js/main.js');
 
             // CSS
-            $view->headLink()->appendStylesheet('/css/bootstrap.min.css', 'all');
+            if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+                $view->headLink()->appendStylesheet('/css/bootstrap.min.css', 'all');
+                $view->headLink()->appendStylesheet('/css/bootstrap-responsive.min.css', 'all');
+            } else {
+                $view->headLink()->appendStylesheet('/css/bootstrap-3.min.css', 'all');
+            }
             $view->headLink()->appendStylesheet('/css/main.css', 'all');
             $view->headLink()->appendStylesheet('/css/login.css', 'all');
             $view->headLink()->appendStylesheet('/css/utilities.css', 'all');
@@ -76,9 +96,10 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
             $view->headLink()->appendStylesheet('/css/jquery/jquery.fancybox-1.3.4.css', 'all');
             $view->headLink()->appendStylesheet('/css/jquery/jquery.tipsy.css', 'all');
             $view->headLink()->appendStylesheet('/css/dropzone/basic.css', 'all');
-            $view->headLink()->appendStylesheet('/css/dropzone/basic.css', 'all');
             $view->headLink()->appendStylesheet('/css/dropzone/dropzone.css', 'all');
-            $view->headLink()->appendStylesheet('/css/tom-select.default.min.css', 'all');
+            if (getenv('PREVARISC_BOOTSTRAP_3')) {
+                $view->headLink()->appendStylesheet('/css/tom-select.default.min.css', 'all');
+            }
 
             // Définition du partial de vue à utiliser pour le rendu d'une recherche
             Zend_View_Helper_PaginationControl::setDefaultViewPartial('search'.DIRECTORY_SEPARATOR.'pagination_control.phtml');

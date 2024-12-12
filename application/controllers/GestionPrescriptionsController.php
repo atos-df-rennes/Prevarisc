@@ -389,7 +389,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression effectuée.', 'message' => 'Le texte a bien été supprimé']);
                 }
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur lors de l\'enregistrement.', 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Erreur lors de l\'enregistrement.', 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
             }
         }
 

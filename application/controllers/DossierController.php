@@ -1514,7 +1514,7 @@ class DossierController extends Zend_Controller_Action
                     }
                 }
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur lors de l\'enregistrement.', 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Erreur lors de l\'enregistrement.', 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
             }
         }
 
@@ -2715,7 +2715,7 @@ class DossierController extends Zend_Controller_Action
                 $service_dossier->saveTextesApplicables($id, $post['textes_applicables']);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les textes applicables ont bien été mis à jour.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Mise à jour annulée', 'message' => 'Les textes applicables n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les textes applicables n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('textes-applicables', null, null, ['id' => $id]);
@@ -2797,7 +2797,7 @@ class DossierController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression effectué.', 'message' => 'La prescription a bien été supprimée']);
                 }
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur lors de l\'enregistrement.', 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Erreur lors de l\'enregistrement.', 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
             }
         }
 
@@ -3235,7 +3235,7 @@ class DossierController extends Zend_Controller_Action
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les effectifs et dégagements ont bien été mis à jour.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Mise à jour annulée', 'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('effectifs-degagements-dossier', null, null, ['id' => $request->getParam('id')]);
@@ -3297,7 +3297,7 @@ class DossierController extends Zend_Controller_Action
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les vérifications techniques ont bien été mises à jour.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Mise à jour annulée', 'message' => 'Les vérifications techniques n\'ont pas été mises à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les vérifications techniques n\'ont pas été mises à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('verifications-techniques', null, null, ['id' => $request->getParam('id')]);

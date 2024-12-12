@@ -38,7 +38,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'La couche cartographique a été ajoutée.']);
                 $this->_helper->redirector('list');
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'danger', 'title' => '', 'message' => 'La couche cartographique n\'a pas été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => '', 'message' => 'La couche cartographique n\'a pas été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
     }
@@ -64,7 +64,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'La couche cartographique a été ajoutée.']);
                 $this->_helper->redirector('list');
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'danger', 'title' => '', 'message' => 'La couche cartographique n\'a pas été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => '', 'message' => 'La couche cartographique n\'a pas été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
 
@@ -80,7 +80,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
             $this->serviceCarto->delete($this->getRequest()->getParam('id'));
             $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'La couche cartographique a été supprimée.']);
         } catch (Exception $exception) {
-            $this->_helper->flashMessenger(['context' => 'danger', 'title' => '', 'message' => 'La couche cartographique n\'a pas été supprimée. Veuillez rééssayez. ('.$exception->getMessage().')']);
+            $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => '', 'message' => 'La couche cartographique n\'a pas été supprimée. Veuillez rééssayez. ('.$exception->getMessage().')']);
         }
 
         $this->_helper->redirector('list');

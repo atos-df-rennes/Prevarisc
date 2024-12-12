@@ -1,13 +1,8 @@
 <script type="text/javascript">
-$(document).ready(function(){
-	$("#contact-content").load("/contact?item=etablissement&id=<?php echo $this->etablissement['general']['ID_ETABLISSEMENT'] ?>&verrou=0");
-});
+	$(document).ready(function(){
+		$("#contact-content").load("/contact?item=etablissement&id=<?php echo $this->etablissement['general']['ID_ETABLISSEMENT'] ?>&verrou=0");
+	});
 </script>
-<?php
-/*
-TRUNCATE TABLE  `dossiercontact`;
-*/
-?>
 <div>
 	<h4>Liste des contacts</h4>
 </div>

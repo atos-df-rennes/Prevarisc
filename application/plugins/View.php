@@ -82,6 +82,7 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
                 $view->headLink()->appendStylesheet('/css/bootstrap.min.css', 'all');
                 $view->headLink()->appendStylesheet('/css/bootstrap-responsive.min.css', 'all');
                 $view->headLink()->appendStylesheet('/css/main.css', 'all');
+                $view->headLink()->appendStylesheet('/css/components/panel.css', 'all');
             } else {
                 $view->headLink()->appendStylesheet('/css/bootstrap-3.min.css', 'all');
                 $view->headLink()->appendStylesheet('/css/main-bs3.css', 'all');

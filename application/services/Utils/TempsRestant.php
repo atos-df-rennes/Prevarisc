@@ -56,7 +56,7 @@ class Service_Utils_TempsRestant
         $diff = $now->diff($limitDate);
 
         if (1 === $diff->invert) {
-            return 'default';
+            return getenv('PREVARISC_BOOTSTRAP_3') ? 'default' : 'inverse';
         }
 
         if ($diff->y > 0 || $diff->m > self::SEUIL_OK) {
@@ -67,6 +67,6 @@ class Service_Utils_TempsRestant
             return 'warning';
         }
 
-        return 'danger';
+        return getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'important';
     }
 }

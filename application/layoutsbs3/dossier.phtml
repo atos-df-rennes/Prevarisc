@@ -42,7 +42,7 @@
             <li class="<?= strpos($this->action, 'verifications-techniques') !== false ? 'active' : '' ?>">
                 <a href= <?= $this->url(array("controller" => "dossier", "action" => "verifications-techniques", "id" => $this->idDossier), false, true) ?>>
                     <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                    Vérifications techniques
+                    <?= $this->nomOngletVerificationsTechniques ?>
                 </a>
             </li>
         <?php endif ?>
@@ -51,7 +51,7 @@
             <li class="<?= strpos($this->action, 'effectifs-degagements-dossier') !== false ? 'active' : '' ?>">
                 <a class='sep' href='<?= $this->url(array('action' => 'effectifs-degagements-dossier')) ?>' >
                     <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                    Effectifs et dégagements
+                    <?=  $this->nomOngletEffectifsDegagements ?>
                 </a>
             </li>
         <?php endif ?>

@@ -20,7 +20,7 @@
         <li class="<?= strpos($action_name, 'descriptif') !== false ? 'active' : '' ?>">
             <a href='<?= $this->url(array("action"=>"descriptif")) ?>'>
                 <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
-                Descriptif
+                <?= $this->nomOngletDescriptif ?>
             </a>
         </li>
     <?php endif ?>
@@ -29,7 +29,7 @@
         <li class="<?= strpos($action_name, 'effectifs-degagements-etablissement') !== false ? 'active' : '' ?>">
             <a class='sep' href='<?= $this->url(array("action"=>"effectifs-degagements-etablissement")) ?>'>
                 <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                Effectifs et dégagements
+                <?= $this->nomOngletEffectifsDegagements ?>
             </a>
         </li>
     <?php endif ?>

@@ -420,7 +420,7 @@ $(document).ready(function(){
                 text: 'Reprendre les prescriptions',
                 class: 'btn btn-success',
                 click: function() {
-                    if ($('input[type=radio][name=dossierSelect]:checked').length == 1) {
+                    if ($('input[type=checkbox][name^=dossierSelect-]:checked').length > 0) {
                         $.ajax({
                             type: "POST",
                             url: "/dossier/recupprescription",

@@ -88,6 +88,7 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
                 $view->headLink()->appendStylesheet('/css/main-bs3.css', 'all');
                 $view->headLink()->appendStylesheet('/css/tom-select.default.min.css', 'all');
             }
+
             $view->headLink()->appendStylesheet('/css/login.css', 'all');
             $view->headLink()->appendStylesheet('/css/utilities.css', 'all');
             $view->headLink()->appendStylesheet('/css/chosen.min.css', 'all');

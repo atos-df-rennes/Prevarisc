@@ -66,6 +66,7 @@ class FormulaireController extends Zend_Controller_Action
         } else {
             $viewInlineScript->inlineScript()->appendFile('/js/formulaire/capsule-rubrique-bs3.js', 'text/javascript');
         }
+
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
 
@@ -118,6 +119,7 @@ class FormulaireController extends Zend_Controller_Action
         } else {
             $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique-bs3.js', 'text/javascript');
         }
+
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
 
@@ -235,6 +237,7 @@ class FormulaireController extends Zend_Controller_Action
         } else {
             $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique-bs3.js', 'text/javascript');
         }
+
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/champ.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');

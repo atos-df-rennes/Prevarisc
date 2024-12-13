@@ -2,7 +2,7 @@
 
 class View_Helper_AfficheDocBs3
 {
-    public function afficheDoc($verrou, $natureId, $id, $libelle, $ref = null, $date = null, $type = null): string
+    public function afficheDoc($verrou, string $natureId, string $id, $libelle, $ref = null, $date = null, $type = null): string
     {
         if (!$date) {
             // document n'ayant PAS d'enregistrement dans la BD
@@ -32,8 +32,8 @@ class View_Helper_AfficheDocBs3
                 <div class='col-md-5'>
                     <div class='checkbox'>
                         <label>
-                            <input type='checkbox' ".$styleChecked.' '.$etatCheck." name='check_".$natureId.'_'.$id.$type."' id='check_".$natureId.'_'.$id.$type."' ".((1 == $verrou) ? "disabled='disabled'" : '')." />
-        ";
+                            <input type='checkbox' ".$styleChecked.' '.$etatCheck." name='check_".$natureId.'_'.$id.$type."' id='check_".$natureId.'_'.$id.$type."' ".((1 == $verrou) ? "disabled='disabled'" : '').' />
+        ';
         if ($type) {
             $return .= "<textarea class='form-control' name='libelle_".$natureId.'_'.$id.$type."' id='libelle_".$natureId.'_'.$id.$type."' rows='3' style='display:none;'>".nl2br($libelle).'</textarea>';
         }

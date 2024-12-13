@@ -1,0 +1,68 @@
+<div class="row rubriques">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Informations sur la rubrique</h3>
+            </div>
+
+            <div class="panel-body">
+                <form action class="form-inline" method="post">
+                    <div>
+                        <?= $this->form->nom_rubrique->setAttrib('id', sprintf('%s-nom_rubrique', $formulaire['NOM_INTERNE'])) ?>
+                    </div>
+                    <div>
+                        <?= $this->form->afficher_rubrique->setAttrib('id', sprintf('%s-afficher_rubrique', $formulaire['NOM_INTERNE'])) ?>
+                    </div>
+
+                    <?= $this->form->save ?>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <?php if(count($formulaire['RUBRIQUES']) > 0): ?>
+        <div class="col-md-6 col-md-offset-2 saved-rubriques">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Liste des rubriques</h3>
+                </div>
+
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Nom de la rubrique</th>
+                            <th>Afficher la rubrique par défaut</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="capsule-rubrique-<?= $formulaire['ID_CAPSULERUBRIQUE']?>" class="grp">
+                        <?php foreach($formulaire['RUBRIQUES'] as $rubrique): ?>
+                            <tr id=<?=$rubrique['ID_RUBRIQUE']?>>
+                                <td class='tdMove'><span class="glyphicon glyphicon-move" aria-hidden="true"></span></td>
+                                <td><?= $rubrique['NOM'] ?></td>
+                                <td id='default-display'>
+                                    <?php if($rubrique['DISPLAY']): ?>
+                                        <div class="text-center">
+                                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                        </div>
+                                    <?php endif ?>
+                                </td>
+                                <td id='actions'>
+                                    <div class='text-center'>
+                                        <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-rubrique', 'rubrique' => $rubrique['ID_RUBRIQUE']], null, true) ?>">
+                                            <span title='Modifier' class='glyphicon glyphicon-pencil'></span>
+                                        </a>
+                                        <button data-id="<?= $rubrique['ID_RUBRIQUE'] ?>" data-nom="<?= $rubrique['NOM'] ?>" class="btn btn-link delete-rubrique" data-toggle="modal" data-target="#modal-delete-rubrique">
+                                            <span title='Supprimer' class='glyphicon glyphicon-trash'></span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <?php endif ?>
+</div>

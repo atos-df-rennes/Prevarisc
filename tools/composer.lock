@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3cd4d8ec4e363cf8a63915d291ec8416",
+    "content-hash": "84e38f9d4b381ea414acd6eff55663cc",
     "packages": [],
     "packages-dev": [
         {
@@ -3055,16 +3055,16 @@
         },
         {
             "name": "tomasvotruba/class-leak",
-            "version": "0.2.16",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/TomasVotruba/class-leak.git",
-                "reference": "dcca509f632cbe4f19bd81b91fa198d4e18733d7"
+                "reference": "c3fd35b3de6b92c4b9c5b54a12574c57f1359d4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/TomasVotruba/class-leak/zipball/dcca509f632cbe4f19bd81b91fa198d4e18733d7",
-                "reference": "dcca509f632cbe4f19bd81b91fa198d4e18733d7",
+                "url": "https://api.github.com/repos/TomasVotruba/class-leak/zipball/c3fd35b3de6b92c4b9c5b54a12574c57f1359d4a",
+                "reference": "c3fd35b3de6b92c4b9c5b54a12574c57f1359d4a",
                 "shasum": ""
             },
             "require": {
@@ -3087,7 +3087,7 @@
             "description": "Detect leaking classes",
             "support": {
                 "issues": "https://github.com/TomasVotruba/class-leak/issues",
-                "source": "https://github.com/TomasVotruba/class-leak/tree/0.2.16"
+                "source": "https://github.com/TomasVotruba/class-leak/tree/2.0.0"
             },
             "funding": [
                 {
@@ -3099,7 +3099,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-24T10:28:27+00:00"
+            "time": "2024-12-12T11:53:51+00:00"
         }
     ],
     "aliases": [],

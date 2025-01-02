@@ -43,8 +43,9 @@ class Service_Search
         if (($results = unserialize($cache->load($search_id))) === false) {
             // Création de l'objet recherche
             $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
-
+            $environnement = getenv('PREVARISC_API_ADRESSE_MODAL');
             // Requête principale
+            if(!$environnement){
             $select->from(['e' => 'etablissement'], ['NUMEROID_ETABLISSEMENT', 'DUREEVISITE_ETABLISSEMENT', 'NBPREV_ETABLISSEMENT'])
                 ->columns([
                     'NB_ENFANTS' => new Zend_Db_Expr('( SELECT COUNT(etablissementlie.ID_FILS_ETABLISSEMENT)
@@ -83,6 +84,46 @@ class Service_Search
                 // problème de duplicité d'établissements dans les résultats de recherche (#1300)
                 ->group('e.ID_ETABLISSEMENT')
             ;
+            }else{
+                $select->from(['e' => 'etablissement'], ['NUMEROID_ETABLISSEMENT', 'DUREEVISITE_ETABLISSEMENT', 'NBPREV_ETABLISSEMENT'])
+                ->columns([
+                    'NB_ENFANTS' => new Zend_Db_Expr('( SELECT COUNT(etablissementlie.ID_FILS_ETABLISSEMENT)
+                        FROM etablissement
+                        INNER JOIN etablissementlie ON etablissement.ID_ETABLISSEMENT = etablissementlie.ID_ETABLISSEMENT
+                        WHERE etablissement.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT
+                        AND etablissement.DATESUPPRESSION_ETABLISSEMENT IS NULL)'),
+                    'PRESENCE_ECHEANCIER_TRAVAUX' => new Zend_Db_Expr('(SELECT COUNT(dossierlie.ID_DOSSIER1)
+                        FROM dossier
+                        INNER JOIN etablissementdossier ON dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER
+                        INNER JOIN dossierlie ON dossier.ID_DOSSIER = dossierlie.ID_DOSSIER2
+                        INNER JOIN dossiernature ON dossierlie.ID_DOSSIER1 = dossiernature.ID_DOSSIER
+                        WHERE dossiernature.ID_NATURE = 46 AND etablissementdossier.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT
+                        AND dossier.DATESUPPRESSION_DOSSIER IS NULL)'), ])
+                ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
+                ->joinLeft('dossier', 'e.ID_DOSSIER_DONNANT_AVIS = dossier.ID_DOSSIER', ['DATEVISITE_DOSSIER', 'DATECOMM_DOSSIER', 'DATEINSERT_DOSSIER', 'DIFFEREAVIS_DOSSIER'])
+                ->joinLeft('avis', 'dossier.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
+                ->joinLeft('type', 'etablissementinformations.ID_TYPE = type.ID_TYPE', 'LIBELLE_TYPE')
+                ->joinLeft('typeactivite', 'etablissementinformations.ID_TYPEACTIVITE = typeactivite.ID_TYPEACTIVITE', 'LIBELLE_ACTIVITE')
+                ->join('genre', 'etablissementinformations.ID_GENRE = genre.ID_GENRE', 'LIBELLE_GENRE')
+                ->joinLeft('etablissementlie', 'e.ID_ETABLISSEMENT = etablissementlie.ID_FILS_ETABLISSEMENT', ['pere' => 'ID_ETABLISSEMENT', 'ID_FILS_ETABLISSEMENT'])
+                ->joinLeft('etablissementadresseapi', 'e.ID_ETABLISSEMENT = etablissementadresseapi.ID_ETABLISSEMENT', ['NUMINSEE_COMMUNE', 'LON_ETABLISSEMENTADRESSE', 'LAT_ETABLISSEMENTADRESSE', 'ID_ADRESSE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_DEFAULT'])
+                ->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = etablissementadresseapi.NUMINSEE_COMMUNE')
+                ->joinLeft('groupement', 'groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT AND groupement.ID_GROUPEMENTTYPE = 5', 'LIBELLE_GROUPEMENT')   
+                ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS = etablissementinformations.ID_ETABLISSEMENTINFORMATIONS')
+                ->joinLeft(['etablissementadressesite' => 'etablissementadresseapi'], 'etablissementadressesite.ID_ETABLISSEMENT = (SELECT ID_FILS_ETABLISSEMENT FROM etablissementlie WHERE ID_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', [])
+                ->columns([
+                    'LIBELLE_COMMUNE_ADRESSE_SITE' => 'etablissementadressesite.LIBELLE_COMMUNE'
+                ])
+                ->joinLeft(['etablissementadressecell' => 'etablissementadresseapi'], 'etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', [])
+                ->columns([
+                'LIBELLE_COMMUNE_ADRESSE_CELLULE' => 'etablissementadressecell.LIBELLE_COMMUNE'])
+                ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
+                // Vincent MICHEL le 12/11/2014 : retrait de cette clause qui tue les performances
+                // sur la recherche. Je n'ai pas vu d'impact sur le retrait du group by.
+                // Cyprien DEMAEGDT le 03/08/2015 : rétablissement de la clause pour résoudre le
+                // problème de duplicité d'établissements dans les résultats de recherche (#1300)
+                ->group('e.ID_ETABLISSEMENT');
+            }
 
             // Critères : nom de l'établissement
             if (null !== $label) {
@@ -146,7 +187,7 @@ class Service_Search
             if (null !== $local_sommeil) {
                 $this->setCriteria($select, 'LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS', $local_sommeil);
             }
-
+        if(!$environnement){
             // Critères : numéro de rue
             if (null !== $number) {
                 $clauses = [];
@@ -182,7 +223,19 @@ class Service_Search
                 }
                 $select->where('('.implode(' OR ', $clauses).')');
             }
+        }else{
 
+                $clauses = [];
+                $clauses[] = 'etablissementadresseapi.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($city);
+                if (null == $genres || in_array('1', $genres)) {
+                    $clauses[] = 'etablissementadressesite.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($city);
+                }
+                if (null == $genres || in_array('3', $genres)) {
+                    $clauses[] = 'etablissementadressecell.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($city);
+                }
+                $select->where('('.implode(' OR ', $clauses).')');
+            
+        }
             // Critère : commission
             if (null !== $commissions) {
                 $this->setCriteria($select, 'ID_COMMISSION', $commissions);
@@ -213,7 +266,7 @@ class Service_Search
             // there is at least one where part
             if (count($select->getPart(Zend_Db_Select::WHERE)) > 1) {
                 $select->order('etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS ASC');
-            }
+            }   
 
             // Gestion des pages et du count
             $select->limitPage($page, $count > self::MAX_LIMIT_PAGES_ETABLISSEMENTS ? self::MAX_LIMIT_PAGES_ETABLISSEMENTS : $count);
@@ -264,6 +317,7 @@ class Service_Search
     {
         // Récupération de la ressource cache à partir du bootstrap
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
+        $environnement = getenv('PREVARISC_API_ADRESSE_MODAL');
 
         // Identifiant de la recherche
         $search_id = 'extract_etablissements_'.md5(serialize(func_get_args()));
@@ -273,6 +327,7 @@ class Service_Search
             $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
 
             // Requête principale
+            if(getenv(getenv('PREVARISC_API_ADRESSE_MODAL')===0)){
             $select->from(['e' => 'etablissement'], ['NUMEROID_ETABLISSEMENT'])
                 ->columns([
                     'DATE_PREMIER_AVIS_FAVORABLE' => new Zend_Db_Expr('(SELECT MIN(dossier.DATEVISITE_DOSSIER)
@@ -312,6 +367,8 @@ class Service_Search
                 ->joinLeft('commission', 'etablissementinformations.ID_COMMISSION = commission.ID_COMMISSION', 'LIBELLE_COMMISSION')
                 ->joinLeft('statut', 'etablissementinformations.ID_STATUT = statut.ID_STATUT', 'LIBELLE_STATUT')
                 ->join('genre', 'etablissementinformations.ID_GENRE = genre.ID_GENRE', 'LIBELLE_GENRE')
+                
+                
                 ->joinLeft('etablissementadresse', 'e.ID_ETABLISSEMENT = etablissementadresse.ID_ETABLISSEMENT', ['NUMINSEE_COMMUNE', 'ID_ADRESSE', 'ID_RUE', 'NUMERO_ADRESSE', 'COMPLEMENT_ADRESSE'])
                 ->joinLeft('adresserue', 'adresserue.ID_RUE = etablissementadresse.ID_RUE', 'LIBELLE_RUE')
                 ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', ['CODEPOSTAL_COMMUNE', 'LIBELLE_COMMUNE'])
@@ -334,7 +391,69 @@ class Service_Search
                 ->order('etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS ASC')
                 ->group('e.ID_ETABLISSEMENT')
             ;
+                }else{
+                    $select->from(['e' => 'etablissement'], ['NUMEROID_ETABLISSEMENT'])
+                    ->columns([
+                        'DATE_PREMIER_AVIS_FAVORABLE' => new Zend_Db_Expr('(SELECT MIN(dossier.DATEVISITE_DOSSIER)
+                                    FROM dossier
+                                    INNER JOIN dossiernature ON dossier.ID_DOSSIER = dossiernature.ID_DOSSIER
+                                    INNER JOIN etablissementdossier ON dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER
+                                    WHERE dossiernature.ID_NATURE IN (19, 21, 23, 24, 26, 28, 29, 47, 48) AND dossier.AVIS_DOSSIER_COMMISSION = 1 AND etablissementdossier.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)'),
+                        'DATE_DERNIERE_VISITE' => new Zend_Db_Expr('(SELECT MAX(dossier.DATEVISITE_DOSSIER)
+                                    FROM dossier
+                        INNER JOIN dossiernature ON dossier.ID_DOSSIER = dossiernature.ID_DOSSIER
+                                    INNER JOIN etablissementdossier ON dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER
+                                    WHERE dossiernature.ID_NATURE IN (21, 26, 47, 48) AND dossier.DATEVISITE_DOSSIER < CURDATE() AND dossier.DATESUPPRESSION_DOSSIER IS NULL AND etablissementdossier.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)'),
+                        'DATE_VISITE_PREVUE' => new Zend_Db_Expr('(SELECT MAX(dossier.DATEVISITE_DOSSIER)
+                            FROM dossier
+                            INNER JOIN dossiernature ON dossier.ID_DOSSIER = dossiernature.ID_DOSSIER
+                            INNER JOIN etablissementdossier ON dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER
+                            WHERE dossiernature.ID_NATURE IN (21, 26, 47, 48) AND dossier.DATEVISITE_DOSSIER >= CURDATE() AND dossier.DATESUPPRESSION_DOSSIER IS NULL AND etablissementdossier.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)'),
+                        'DATE_DERNIER_AVIS' => new Zend_Db_Expr('(SELECT CASE
+                        WHEN d.DATEVISITE_DOSSIER IS NOT NULL THEN (SELECT dossier.DATEVISITE_DOSSIER FROM dossier where dossier.ID_DOSSIER = d.ID_DOSSIER)
+                            WHEN d.DATECOMM_DOSSIER IS NOT NULL THEN (SELECT dossier.DATECOMM_DOSSIER FROM dossier where dossier.ID_DOSSIER = d.ID_DOSSIER)
+                            WHEN d.DATEINSERT_DOSSIER IS NOT NULL THEN (SELECT dossier.DATEINSERT_DOSSIER FROM dossier where dossier.ID_DOSSIER = d.ID_DOSSIER)
+                        END
+                                    FROM dossier d
+                                    WHERE d.ID_DOSSIER = e.ID_DOSSIER_DONNANT_AVIS)'),
+                        'DATE_PREMIER_AVIS_DEFAVORABLE_CONSECUTIF' => new Zend_Db_Expr('(SELECT DISTINCT d1.DATEVISITE_DOSSIER FROM dossier d1 LEFT JOIN etablissementdossier ed ON d1.ID_DOSSIER = ed.ID_DOSSIER
+                        WHERE d1.DATEVISITE_DOSSIER = (select min(DATEVISITE_DOSSIER) AS date_visite_defavorable_mini from dossier d2 INNER JOIN etablissementdossier on etablissementdossier.ID_DOSSIER = d2.ID_DOSSIER
+                            WHERE d2.AVIS_DOSSIER_COMMISSION = 2 and d2.TYPE_DOSSIER = 2 and etablissementdossier.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT
+                            and not exists (SELECT * FROM dossier INNER JOIN etablissementdossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
+                                    WHERE dossier.AVIS_DOSSIER_COMMISSION = 1 and dossier.TYPE_DOSSIER = 2 and dossier.DATEVISITE_DOSSIER >= d2.DATEVISITE_DOSSIER and etablissementdossier.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT))
+                        AND ed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)'), ])
+                    ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
+                    ->joinLeft('dossier', 'e.ID_DOSSIER_DONNANT_AVIS = dossier.ID_DOSSIER', ['DATEVISITE_DOSSIER', 'DATECOMM_DOSSIER', 'DATEINSERT_DOSSIER', 'DIFFEREAVIS_DOSSIER'])
+                    ->joinLeft('avis', 'dossier.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
+                    ->joinLeft('categorie', 'etablissementinformations.ID_CATEGORIE = categorie.ID_CATEGORIE', 'LIBELLE_CATEGORIE')
+                    ->joinLeft('type', 'etablissementinformations.ID_TYPE = type.ID_TYPE', 'LIBELLE_TYPE')
+                    ->joinLeft('typeactivite', 'etablissementinformations.ID_TYPEACTIVITE = typeactivite.ID_TYPEACTIVITE', 'LIBELLE_ACTIVITE')
+                    ->joinLeft('commission', 'etablissementinformations.ID_COMMISSION = commission.ID_COMMISSION', 'LIBELLE_COMMISSION')
+                    ->joinLeft('statut', 'etablissementinformations.ID_STATUT = statut.ID_STATUT', 'LIBELLE_STATUT')
+                    ->join('genre', 'etablissementinformations.ID_GENRE = genre.ID_GENRE', 'LIBELLE_GENRE')
+                    ->joinLeft('etablissementadresseapi', 'e.ID_ETABLISSEMENT = etablissementadresseapi.ID_ETABLISSEMENT', ['NUMINSEE_COMMUNE', 'LON_ETABLISSEMENTADRESSE', 'LAT_ETABLISSEMENTADRESSE', 'ID_ADRESSE', 'LIBELLE_COMMUNE'])
+                    ->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = etablissementadresseapi.NUMINSEE_COMMUNE')
+                    ->joinLeft('groupement', 'groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT AND groupement.ID_GROUPEMENTTYPE = 5', 'LIBELLE_GROUPEMENT')   
+                    ->joinLeft(['etablissementadressesite' => 'etablissementadresseapi'], 'etablissementadressesite.ID_ETABLISSEMENT = (SELECT ID_FILS_ETABLISSEMENT FROM etablissementlie WHERE ID_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', [])
+                        ->columns(['LIBELLE_COMMUNE_ADRESSE_SITE' => 'etablissementadressesite.LIBELLE_COMMUNE'])
+                    ->joinLeft(['etablissementadressecell' => 'etablissementadresseapi'], 'etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', [])
+                        ->columns(['LIBELLE_COMMUNE_ADRESSE_CELLULE' => 'etablissementadressecell.LIBELLE_COMMUNE'])
+                        ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
+                    ->joinLeft('etablissementlie', 'e.ID_ETABLISSEMENT = etablissementlie.ID_FILS_ETABLISSEMENT')
+                    ->joinLeft(['etablissementinformationspere' => 'etablissementinformations'], 'etablissementinformationspere.ID_ETABLISSEMENT = etablissementlie.ID_ETABLISSEMENT', ['LIBELLE_ETABLISSEMENT_PERE' => 'LIBELLE_ETABLISSEMENTINFORMATIONS'])
+                    ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformations.ID_ETABLISSEMENTINFORMATIONS = etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS')
+                    ->joinLeft('utilisateur', 'etablissementinformationspreventionniste.ID_UTILISATEUR = utilisateur.ID_UTILISATEUR')
+                    ->joinLeft('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS', ['NOM_UTILISATEURINFORMATIONS', 'PRENOM_UTILISATEURINFORMATIONS'])
+                    ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
+                    ->order('adressecommune.LIBELLE_COMMUNE ASC')
+                    ->order('categorie.LIBELLE_CATEGORIE ASC')
+                    ->order('type.LIBELLE_TYPE ASC')
+                    ->order('statut.LIBELLE_STATUT ASC')
+                    ->order('etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS ASC')
+                    ->group('e.ID_ETABLISSEMENT')
+                ;
 
+                }
             // Critères : nom de l'établissement
             if (null !== $label) {
                 $cleanLabel = trim($label);
@@ -397,6 +516,7 @@ class Service_Search
             if (null !== $local_sommeil) {
                 $this->setCriteria($select, 'etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS', $local_sommeil);
             }
+            if(!$environnement){
 
             // Critères : numéro de rue
             if (null !== $number) {
@@ -433,6 +553,19 @@ class Service_Search
                 }
                 $select->where('('.implode(' OR ', $clauses).')');
             }
+        }else{
+
+            $clauses = [];
+            $clauses[] = 'etablissementadresseapi.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($city);
+            if (null == $genres || in_array('1', $genres)) {
+                $clauses[] = 'etablissementadressesite.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($city);
+            }
+            if (null == $genres || in_array('3', $genres)) {
+                $clauses[] = 'etablissementadressecell.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($city);
+            }
+            $select->where('('.implode(' OR ', $clauses).')');
+        
+    }
 
             // Critère : commission
             if (null !== $commissions) {

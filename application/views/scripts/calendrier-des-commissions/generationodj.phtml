@@ -188,7 +188,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
     $commune = "";
     if (count($dossierInfos["infosEtab"]["adresses"]) > 0) {
         $commune = $dossierInfos["infosEtab"]["adresses"][0]["LIBELLE_COMMUNE"];
-    }
+    } 
     addChamp($segment->infosDoss, 'communeConcerne', $commune);
     $adresse = "";
     if ($dossierInfos['infosEtab']["adresses"]){

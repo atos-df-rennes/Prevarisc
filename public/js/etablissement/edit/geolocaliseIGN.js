@@ -83,7 +83,7 @@ function geocodeAndShowMap(idModal, options) {
     let adresse = "";
 
     // Vérifie quel onglet est actif (BDD ou API) pour obtenir l'adresse
-    if ($(idModal + ' .tab-pane.active').attr('id') === 'apiedit' || $(idModal + ' .tab-pane.active').attr('id') === 'api') {
+    if ($(idModal).find('#api').is(':visible') || $(idModal).find('#apiedit').is(':visible')) {
         adresse = $(idModal + " input[name='adresse_complete']").val().trim();
         if (!adresse) {
             $("span.result").text("Adresse complète manquante");

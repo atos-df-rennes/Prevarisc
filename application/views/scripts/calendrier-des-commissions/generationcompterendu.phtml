@@ -54,12 +54,13 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 					addChamp($dossInfos,'dateVisite', "");
 				}
 
+
 				//DEBUT Adresse
 				if(isset($dossierInfos['infosEtab']['adresses'][0]["LIBELLE_RUE"])) {
 					addChamp($dossInfos,'libelleRue', $dossierInfos['infosEtab']['adresses'][0]["LIBELLE_RUE"]);
 				} else {
 					addChamp($dossInfos,'libelleRue', '');
-				}
+				} 
 
 				if(isset($dossierInfos['infosEtab']['adresses'][0]["CODEPOSTAL_COMMUNE"])) {
 					addChamp($dossInfos,'codePostal', $dossierInfos['infosEtab']['adresses'][0]["CODEPOSTAL_COMMUNE"]);
@@ -80,6 +81,7 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 				}
 				//FIN Adresse
 
+                
 				//DEBUT Effectif total
 				$effectifTotal = $dossierInfos['infosEtab']['informations']["EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"] + $dossierInfos['infosEtab']['informations']["EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"];
 

@@ -92,6 +92,9 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract implemen
     }
     
     }
+    /*public function delete($id) {
+        return parent::delete(['id' => $id]);
+    }*/
 
     public function getAllAdresses()
     {

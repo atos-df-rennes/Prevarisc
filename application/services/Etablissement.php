@@ -1,4 +1,7 @@
 <?php
+
+use Sabre\Xml\Service;
+
 require_once 'EtablissementManager.php';
 class Service_Etablissement implements Service_Interface_Etablissement
 {
@@ -35,7 +38,6 @@ class Service_Etablissement implements Service_Interface_Etablissement
             $search = new Model_DbTable_Search();
 
             $DB_rubriques = new Model_DbTable_EtablissementInformationsRubrique();
-            $DB_adresse = new Model_DbTable_EtablissementAdresse();
             $DB_genre = new Model_DbTable_Genre();
             $DB_categorie = new Model_DbTable_Categorie();
             $DB_famille = new Model_DbTable_Famille();
@@ -47,6 +49,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
             $DB_commission_type = new Model_DbTable_CommissionType();
             $DB_statut = new Model_DbTable_Statut();
             $DB_dossier = new Model_DbTable_Dossier();
+            $etablissementManager = new Service_EtablissementManager();
+
 
             // Récupération de l'établissement
             $general = $model_etablissement->find($id_etablissement)->current();
@@ -241,7 +245,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             } elseif (self::ID_GENRE_CELLULE == $informations->ID_GENRE && $etablissement_parents) {
                 $informations['PERIODICITE_ETABLISSEMENTINFORMATIONS'] = end($etablissement_parents)['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
             }
-
+            $adresseAffichée = $etablissementManager->getEtablissementAdresse()->get($id_etablissement);
             $commission = @$DB_commission->find($informations->ID_COMMISSION)->current();
             $etablissement = [
                 'general' => $general->toArray(),
@@ -273,7 +277,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 'rubriques' => $DB_rubriques->fetchAll('ID_ETABLISSEMENTINFORMATIONS = '.$informations->ID_ETABLISSEMENTINFORMATIONS, 'ID_ETABLISSEMENTINFORMATIONSRUBRIQUE')->toArray(),
                 'etablissement_lies' => $etablissement_lies,
                 'preventionnistes' => $search->setItem('utilisateur')->setCriteria('etablissementinformations.ID_ETABLISSEMENT', $id_etablissement)->run()->getAdapter()->getItems(0, 50)->toArray(),
-                'adresses' => $DB_adresse->get($id_etablissement),             
+                'adresses' =>$adresseAffichée,
+
                 'presence_dus' => [] !== $contacts_dus,
             ];
 
@@ -888,6 +893,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $DB_etablissements_lies = new Model_DbTable_EtablissementLie();
         $DB_preventionniste = new Model_DbTable_EtablissementInformationsPreventionniste();
         $DB_adresse = new Model_DbTable_EtablissementAdresse();
+        $DB_adresse_api = new Model_DbTable_EtablissementAdresseApi();
+        $etablissementManager = new Service_EtablissementManager();
 
         // On commence la transaction
         $db = Zend_Db_Table::getDefaultAdapter();
@@ -906,7 +913,17 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $information_a_la_date_donnee = $DB_informations->fetchRow("ID_ETABLISSEMENT = '".$id_etablissement."' AND DATE_ETABLISSEMENTINFORMATIONS = '".$date."'");
 
                 $DB_etablissements_lies->delete('ID_ETABLISSEMENT = '.$etablissement->ID_ETABLISSEMENT);
-                $DB_adresse->delete('ID_ETABLISSEMENT = '.$etablissement->ID_ETABLISSEMENT);
+
+
+                if( getenv('PREVARISC_API_ADRESSE_MODAL')){
+                    $DB_adresse_api->delete('ID_ETABLISSEMENT = '.$etablissement->ID_ETABLISSEMENT);
+                }
+                else {
+                    $DB_adresse->delete(('ID_ETABLISSEMENT = '.$etablissement->ID_ETABLISSEMENT));
+                }
+
+
+
 
                 if (null != $information_a_la_date_donnee) {
                     $informations = $information_a_la_date_donnee;
@@ -1091,10 +1108,10 @@ class Service_Etablissement implements Service_Interface_Etablissement
             // Sauvegarde des adresses en fonction du genre
             if (in_array($id_genre, [2, 4, 5, 6, 7, 8, 9, 10]) && array_key_exists('ADRESSES', $data) && count($data['ADRESSES']) > 0) {
                 foreach ($data['ADRESSES'] as $key => $adresse) {
-                    $etablissementManager = new EtablissementManager();
                     $etablissementManager->getEtablissementAdresse()->save($adresse, $etablissement->ID_ETABLISSEMENT);
                 }
             }
+            
 
             // Sauvegarde des établissements liés
             if (array_key_exists('ID_FILS_ETABLISSEMENT', $data) && count($data['ID_FILS_ETABLISSEMENT']) > 0) {
@@ -1164,6 +1181,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             $cache->remove('etablissement_id_'.$id_etablissement);
             $db->commit();
         } catch (Exception $e) {
+            var_dump("testttttttttttttttt;");
             $db->rollBack();
 
             throw $e;

@@ -1,4 +1,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" crossorigin=""/>
+<?php
+var_dump((1 === (int) getenv('PREVARISC_API_ADRESSE_MODAL')));
+?>
 <form id='etablissement' class="<?php echo $this->add ? 'add' : 'edit' ?>" action='<?php echo $this->url(array('action' => $this->add ? 'add' : 'edit')) ?>' method='post' >
 
     <?php if ($this->add) : ?>
@@ -385,7 +388,7 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody id="address-table-body">
+                <tbody>
                     <?php echo $this->partial('etablissement/partials/partial-adresse.phtml') ?>
                     <?php if ($this->etablissement['adresses']) : ?>
                         <?php foreach ($this->etablissement['adresses'] as $adresse) : ?>
@@ -513,16 +516,11 @@
         <h3>Ajouter une adresse</h3>
     </div>
 
-    <!-- Onglets -->
-    <ul class="nav nav-tabs" id="myTab">
-        <li class="active"><a data-toggle="tab" href="#bdd">Ajouter une adresse depuis BDD</a></li>
-        <li ><a data-toggle="tab" href="#api">Ajouter une adresse depuis Api adresse</a></li>
-    </ul>
-
     <div class="modal-body">
-        <div class="tab-content">
+        <?php var_dump(!$this->useApiAdresse);if (!$this->useApiAdresse): ?>
             <!-- Contenu de l'onglet Adresse -->
-            <div id="bdd" class="tab-pane active">
+            <div id="bdd" class="content">
+                <h4>Ajouter une adresse depuis BDD</h4>
                 <dl class='dl-horizontal'>
                     <dt>Ville</dt>
                     <dd>
@@ -557,9 +555,19 @@
 
                     <dt>Géolocalisation</dt>
                     <dd>
-                        <?php if ($this->key_ign != null) : ?><button type="button" id="geolocme" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
-                        <?php if ($this->geoconcept_url != null) : ?><button type="button" id="geolocme-geoconcept" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoconcept)</button><?php endif ?>
-                        <button id="geolocme_nominatim" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Nominatim)</button>
+                        <?php if ($this->key_ign != null) : ?>
+                            <button type="button" id="geolocme" class='btn btn-small'>
+                                <i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)
+                            </button>
+                        <?php endif ?>
+                        <?php if ($this->geoconcept_url != null) : ?>
+                            <button type="button" id="geolocme-geoconcept" class='btn btn-small'>
+                                <i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoconcept)
+                            </button>
+                        <?php endif ?>
+                        <button id="geolocme_nominatim" class='btn btn-small'>
+                            <i class="icon-map-marker"></i> Géolocaliser cette adresse (Nominatim)
+                        </button>
                         <br/>
                         <small>Résultat : <span class='result'>Inconnu</span></small>
                     </dd>
@@ -591,41 +599,55 @@
                     <link rel="stylesheet" href="/css/geoconcept/htc.css"/>
                 <?php endif ?>
             </div>
-            <!-- Contenu de l'onglet api -->
-            <div id="api" class="tab-pane">
-            <input type="hidden" name="isApi" value="1">
+        <?php else: ?>
+            <!-- Contenu de l'onglet API -->
+            <div id="api" class="content">
+                <h4>Ajouter une adresse depuis API adresse</h4>
+                <input type="hidden" name="isApi" value="1">
+                <input type="hidden" id="codePostal-api" name="code-postal" />
+                <input type="hidden" id="inseeCode-api" name="insee-code" />
+                <input type="hidden" id="city-api" name="city" />
+
                 <dl class='dl-horizontal'>
-                <dt>Adresse complète</dt>
+                    <dt>Adresse complète</dt>
                     <dd>
                         <input id="adresse-complete-ajout" name='adresse_complete' type='text' placeholder='Tapez l’adresse complète ...' required autocomplete="off"/>
                         <ul id="suggestions-list-ajout" style=" list-style-type: none; padding-left: 0;"></ul>
                     </dd>
+                    <dt>Type de l'adresse</dt>
+                    <dd>
+                        <select name="address_type"> 
+                            <option value="housenumber">House number</option>
+                            <option value="street">Street</option>
+                        </select>
+                    </dd>
 
-                <dt>Longitude</dt>
+                    <dt>Longitude</dt>
                     <dd>
                         <input id="addressLongitude-api" type='text' name='lon' maxlength="11" readonly required />
                     </dd>
 
-                <dt>Latitude</dt>
+                    <dt>Latitude</dt>
                     <dd>
                         <input id="addressLatitude-api" type='text' name='lat' maxlength="10" readonly required />
                     </dd>
-                <dt>Géolocalisation</dt>
+                    <dt>Géolocalisation</dt>
                     <dd>
-                        <?php if ($this->key_ign != null) : ?><button type="button" id="geolocme" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
+                        <?php if ($this->key_ign != null) : ?>
+                            <button type="button" id="geolocme" class='btn btn-small'>
+                                <i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)
+                            </button>
+                        <?php endif ?>
                         <br/>
                         <small>Résultat : <span class='result'>Inconnu</span></small>
                     </dd>
+                </dl>
                 <?php if ($this->key_ign != null): ?>
-                <div id="geoportail-container-api" style="height: 400px;"></div>
+                    <div id="geoportail-container-api" style="height: 400px;"></div>
                 <?php endif ?>
-
             </div>
-           
-
-        </div>
+        <?php endif ?>
     </div>
-
 
     <div class="modal-footer">
         <a href="#" data-dismiss="modal" class="btn">Annuler</a>
@@ -731,8 +753,8 @@
             $("form#etablissement").submit();
         });
 
-        // Ajout d'une adresse
-        $("form#adresse-modal-ajout a#submit-adresse").live('click', function() {
+       // Ajout d'une adresse
+        $("form#adresse-modal-ajout a#submit-adresse").on('click', function() {
             time = Date.now();
             node = $('#prototype_adresse').clone()
             .prependTo($('table.champ_adresse'))
@@ -741,9 +763,10 @@
             attr('id', '');
 
             // Vérifiez quel onglet est actif (BDD ou API)
-            var activeTab = $('#myTab .active a').attr('href');
 
-            if (activeTab === '#bdd') {
+            const hasBddContainer = $('form#adresse-modal-ajout').find('#bdd').length > 0;
+
+            if (hasBddContainer) {
             // Remplissage des champs pour une adresse provenant de la BDD
                 node.find('input[name="ADRESSES[-1][LON_ETABLISSEMENTADRESSE]"]').val($('form#adresse-modal-ajout').find('input[name="lon"]').val());
                 node.find('input[name="ADRESSES[-1][LAT_ETABLISSEMENTADRESSE]"]').val($('form#adresse-modal-ajout').find('input[name="lat"]').val());
@@ -751,7 +774,7 @@
                 node.find('input[name="ADRESSES[-1][ID_RUE]"]').val($('form#adresse-modal-ajout').find('input[name="voie"]').val());
                 node.find('input[name="ADRESSES[-1][NUMINSEE_COMMUNE]"]').val($('form#adresse-modal-ajout').find('input[name="code_insee"]').val());
                 node.find('input[name="ADRESSES[-1][COMPLEMENT_ADRESSE]"]').val($('form#adresse-modal-ajout').find('input[name="complement"]').val());
-        
+
                 // Construction de l'affichage de l'adresse
                 node.find('span').text(
                 $('form#adresse-modal-ajout').find('input[name="numero"]').val() + " " +
@@ -760,11 +783,16 @@
                 $('form#adresse-modal-ajout').find('input[name="commune_ac"]').val()
                 );
 
-            } else if (activeTab === '#api') {
+            } else {
                 // Remplissage des champs pour une adresse provenant de l'API
+                console.log("ASMAA888888888888888888888");
+                
+                node.find('input[name="ADRESSES[-1][ADRESSE]"]').val($('form#adresse-modal-ajout').find('input[name="adresse_complete"]').val());
                 node.find('input[name="ADRESSES[-1][LON_ETABLISSEMENTADRESSE]"]').val($('form#adresse-modal-ajout').find('input[name="lon"]').val());
                 node.find('input[name="ADRESSES[-1][LAT_ETABLISSEMENTADRESSE]"]').val($('form#adresse-modal-ajout').find('input[name="lat"]').val());
-        
+                node.find('input[name="ADRESSES[-1][CODEPOSTAL_COMMUNE]"]').val($('form#adresse-modal-ajout').find('input[name="code-postal"]').val());
+                node.find('input[name="ADRESSES[-1][NUMINSEE_COMMUNE]"]').val($('form#adresse-modal-ajout').find('input[name="insee-code"]').val());
+                node.find('input[name="ADRESSES[-1][LIBELLE_COMMUNE]"]').val($('form#adresse-modal-ajout').find('input[name="city"]').val());
                 // Affichage de l'adresse complète
                 var adresseComplete = $('form#adresse-modal-ajout').find('input[name="adresse_complete"]').val();
                 node.find('span').text(adresseComplete);
@@ -786,9 +814,10 @@
     
             // Appeler la fonction pour activer la modification d'adresse
             setTriggerEventModalAdresseEdit();
-    
+            
             return false; // Empêche le comportement par défaut du lien
         });
+
 
         // Gestion des boites modales
         $("a[data-toggle='modal']").click(function() {
@@ -1131,43 +1160,50 @@
             }
         <?php endif ?>
 
+
     $('#adresse-modal-ajout').on('shown.bs.modal', function () {
-        const activeTab = $(this).find('.tab-pane.active').attr('id');
-        if (activeTab === 'api') {
-            optionsGeo.geo_container_id = 'geoportail-container-api';
-        } else if (activeTab === 'bdd') {
-            optionsGeo.geo_container_id = 'geoportail-container';
-        }
+    const hasBddContainer = $(this).find('#bdd').length > 0;
+    
+    if (hasBddContainer) {
+        optionsGeo.geo_container_id = 'geoportail-container';
+    } else {
+        optionsGeo.geo_container_id = 'geoportail-container-api';
+    }
 
-        geolocaliseIGN("#adresse-modal-ajout", optionsGeo);
-    });
-
+    geolocaliseIGN("#adresse-modal-ajout", optionsGeo); 
+});
 
 
    $('#adresse-modal-edit').on('shown.bs.modal', function () {
-        const activeTab = $(this).find('.tab-pane.active').attr('id');
-        /*$('#adresse-modal-edit .nav-link').removeClass('active');
-        $('#adresse-modal-edit .tab-pane').removeClass('active show');
+    console.log("test");
 
-        $('#bddedit-tab').addClass('active');
-        $('#bddedit').addClass('active show');*/
-        if (activeTab === 'apiedit') {
+    const hasBddContainer = $(this).find('#bddedit').length > 0;
+        if (!hasBddContainer) {
             optionsGeo.geo_container_id = 'edit-geoportail-container-api';
-          $('#adresse-complete-edit').val('');
-            
-      
-
         } else{
             optionsGeo.geo_container_id = 'edit-geoportail-container'
         }
         geolocaliseIGN("#adresse-modal-edit", optionsGeo)
-        })
+    })
 
+
+$('input[name="adresse_complete"]').on('focus', function () {
+    $(this).val(''); 
+    const formId = $(this).closest('form').attr('id');
+    
+    if (formId === 'adresse-modal-ajout') {
+        $('#addressLongitude-api').val(''); 
+        $('#addressLatitude-api').val('');
+    } else if (formId === 'adresse-modal-edit') {
+        $('#addressLongitude-api-edit').val('');
+        $('#addressLatitude-api-edit').val('');
+    }
+});
 
 $('input[name="adresse_complete"]').on('input', function () {
     let query = $(this).val();
     const formId = $(this).closest('form').attr('id');
-    const type = 'housenumber'; 
+    const type = $('select[name="address_type"]').val(); 
     const limit = 5;
 
     if (query.length > 3) {
@@ -1198,13 +1234,29 @@ $('input[name="adresse_complete"]').on('input', function () {
                             $('input[name="adresse_complete"]').val(feature.ADRESSE); 
                             const longitude = feature.longitude;
                             const latitude = feature.latitude;
+                            const postal_code = feature.postal_code;
+                            const city = feature.city;
+                            const insee_code = feature.insee_code;
 
                             if (formId === 'adresse-modal-ajout') {
                                 $('#addressLongitude-api').val(longitude);
                                 $('#addressLatitude-api').val(latitude);
+                                $('#codePostal-api').val(postal_code); 
+                                $('#inseeCode-api').val(insee_code); 
+                                $('#city-api').val(city); 
                             } else if (formId === 'adresse-modal-edit') {
+                                console.log(longitude);
+                                console.log(latitude);
+                                console.log(city);
+                                console.log(postal_code);
+                                console.log(insee_code);
+
                                 $('#addressLongitude-api-edit').val(longitude);
                                 $('#addressLatitude-api-edit').val(latitude);
+                                $('#codePostal_api_edit').val(postal_code); 
+                                $('#inseeCode_api_edit').val(insee_code); 
+                                $('#city_api_edit').val(city); 
+
                             }
 
                             suggestionsList.empty(); 

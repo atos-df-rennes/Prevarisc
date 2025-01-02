@@ -1,6 +1,6 @@
 <?php 
 
-class Model_DbTable_EtablissementAdresseAPi extends Zend_Db_Table_Abstract implements  Service_Interface_EtablissementAdresse
+class Model_DbTable_EtablissementAdresseApi extends Zend_Db_Table_Abstract implements  Service_Interface_EtablissementAdresse
 {
     protected $_name = 'etablissementadresseapi'; // Nom de la base
     protected $_primary = 'ID_ADRESSE'; // Clé primaire
@@ -12,6 +12,7 @@ class Model_DbTable_EtablissementAdresseAPi extends Zend_Db_Table_Abstract imple
     {
         $model_etablissement = new Model_DbTable_Etablissement();
         $informations = $model_etablissement->getInformations($id_etablissement);
+        
     
         switch ($informations->ID_GENRE) {
             // Adresse d'un site
@@ -76,16 +77,22 @@ class Model_DbTable_EtablissementAdresseAPi extends Zend_Db_Table_Abstract imple
 
     public function save($adresse, $etablissementID)
     {
-        $row = $this->createRow([
+        if($adresse["ADRESSE"] !== ""){
+         $row = $this->createRow([
             'ADRESSE' => $adresse['ADRESSE'],
             'LON_ETABLISSEMENTADRESSE' => empty($adresse['LON_ETABLISSEMENTADRESSE']) ? null : $adresse['LON_ETABLISSEMENTADRESSE'],
             'LAT_ETABLISSEMENTADRESSE' => empty($adresse['LAT_ETABLISSEMENTADRESSE']) ? null : $adresse['LAT_ETABLISSEMENTADRESSE'],
             'ID_ETABLISSEMENT' => $etablissementID,
             'NUMINSEE_COMMUNE' => $adresse['NUMINSEE_COMMUNE'],
-            'CODEPOSTAL_COMMUNE' => $adresse['CODEPOSTALE_COMMUNE'],
+            'CODEPOSTAL_COMMUNE' => $adresse['CODEPOSTAL_COMMUNE'],
             'LIBELLE_COMMUNE' => $adresse['LIBELLE_COMMUNE'],
         ]);
-
+    
         return $row->save();
+        }
     }
+
+    /*public function delete($id) {
+        return parent::delete(['id' => $id]);
+    }*/
 }

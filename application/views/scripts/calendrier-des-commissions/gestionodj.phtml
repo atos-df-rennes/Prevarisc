@@ -273,7 +273,7 @@ $(document).ready(function() {
 		}else{
 			$("#infoGeneration").html("<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Certains dossiers prévus n'ont pas été placés dans le calendrier</span><br/><br/><br/>");
 		}
-	});
+	}); 
 
 	$("#createOdj").click(function(){
 		if($("#external-events").children("div").children("div").length == 0){
@@ -479,7 +479,9 @@ $(document).ready(function() {
 							echo $dossierNonAffect['infosEtab']['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS' ];
 						}
 
-						if(isset($dossierNonAffect['infosEtab']['adresses'])){
+
+						
+						if(isset($dossierNonAffect['infosEtab']['adresses'])){  
 							$nbAdresse = count($dossierNonAffect['infosEtab']['adresses']);
 							if($nbAdresse != 0){
 								echo " (";
@@ -589,6 +591,10 @@ $(document).ready(function() {
 				}else{
 					echo " ( adresse non renseignée )";
 				}
+
+
+
+
 
 				if(isset($dossierNonAffect['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])){
 					echo " - ".$dossierNonAffect['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'];

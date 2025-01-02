@@ -26,7 +26,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
         $this->view->assign('isAllowedEffectifsDegagements', unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_ets'));
         $this->view->assign('isAllowedAvisDerogations', unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations'));
-        $this->view->assign('useApiAdresse', getenv('PREVARISC_API_ADRESSE'));
+        $this->view->assign('useApiAdresse', getenv('PREVARISC_API_ADRESSE_MODAL'));
 
         $this->serviceEtablissement = new Service_Etablissement();
 

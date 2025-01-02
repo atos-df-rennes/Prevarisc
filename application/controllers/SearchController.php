@@ -10,6 +10,8 @@ class SearchController extends Zend_Controller_Action
     public function etablissementAction()
     {
         $this->_helper->layout->setLayout('search');
+        $searchCityOnly = getenv('PREVARISC_API_ADRESSE_MODAL');
+
 
         // Gestion droit export Calc
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
@@ -59,8 +61,8 @@ class SearchController extends Zend_Controller_Action
                     $statuts = $parameters['statuts'] ?? null;
                     $local_sommeil = array_key_exists('presences_local_sommeil', $parameters) && 1 == count($parameters['presences_local_sommeil']) ? 'true' == $parameters['presences_local_sommeil'][0] : null;
                     $city = array_key_exists('city', $parameters) && '' != $parameters['city'] ? $parameters['city'] : null;
-                    $street = array_key_exists('street', $parameters) && '' != $parameters['street'] ? $parameters['street'] : null;
-                    $number = array_key_exists('number', $parameters) && '' != $parameters['number'] ? $parameters['number'] : null;
+                    $street = !$searchCityOnly && array_key_exists('street', $parameters) && '' != $parameters['street'] ? $parameters['street'] : null;
+                    $number = !$searchCityOnly && array_key_exists('number', $parameters) && '' != $parameters['number'] ? $parameters['number'] : null;
                     $commissions = array_key_exists('commissions', $parameters) && '' != $parameters['commissions'] ? $parameters['commissions'] : null;
                     $groupements_territoriaux = array_key_exists('groupements_territoriaux', $parameters) && '' != $parameters['groupements_territoriaux'] ? $parameters['groupements_territoriaux'] : null;
                     $preventionniste = array_key_exists('preventionniste', $parameters) && '' != $parameters['preventionniste'] ? $parameters['preventionniste'] : null;
@@ -244,9 +246,12 @@ class SearchController extends Zend_Controller_Action
                     $avis_favorable = array_key_exists('avis', $parameters) && 1 == count($parameters['avis']) ? 'true' == $parameters['avis'][0] : null;
                     $statuts = $parameters['statuts'] ?? null;
                     $local_sommeil = array_key_exists('presences_local_sommeil', $parameters) && 1 == count($parameters['presences_local_sommeil']) ? 'true' == $parameters['presences_local_sommeil'][0] : null;
+                    //$street =  array_key_exists('street', $parameters) && '' != $parameters['street'] ? $parameters['street'] : null;
+                    //$number =  array_key_exists('number', $parameters) && '' != $parameters['number'] ? $parameters['number'] : null;
+
                     $city = array_key_exists('city', $parameters) && '' != $parameters['city'] ? $parameters['city'] : null;
-                    $street = array_key_exists('street', $parameters) && '' != $parameters['street'] ? $parameters['street'] : null;
-                    $number = array_key_exists('number', $parameters) && '' != $parameters['number'] ? $parameters['number'] : null;
+                    $street = !$searchCityOnly && array_key_exists('street', $parameters) && '' != $parameters['street'] ? $parameters['street'] : null;
+                    $number = !$searchCityOnly && array_key_exists('number', $parameters) && '' != $parameters['number'] ? $parameters['number'] : null;
                     $commissions = array_key_exists('commissions', $parameters) && '' != $parameters['commissions'] ? $parameters['commissions'] : null;
                     $preventionniste = array_key_exists('preventionniste', $parameters) && '' != $parameters['preventionniste'] ? $parameters['preventionniste'] : null;
 
@@ -263,7 +268,7 @@ class SearchController extends Zend_Controller_Action
                         $groupements_territoriaux = null;
                     }
 
-                    $search = $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux, $preventionniste, 50, $page);
+                    $search = $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux, $preventionniste,(int) 50, $page);
 
                     $paginator = new Zend_Paginator(new SDIS62_Paginator_Adapter_Array($search['results'], $search['search_metadata']['count']));
                     $paginator->setItemCountPerPage(50)->setCurrentPageNumber($page)->setDefaultScrollingStyle('Elastic');

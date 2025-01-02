@@ -27,17 +27,6 @@ class Service_AdresseApi
             $data = json_decode($response->getBody(), true);
 
             if (isset($data['features']) && count($data['features']) > 0) {
-                if ($limit === 1) {
-                    $firstFeature = $data['features'][0];
-                    return [
-                        'ADRESSE' => $firstFeature['properties']['label'] ?? '',
-                        'longitude' => $firstFeature['geometry']['coordinates'][0] ?? '',
-                        'latitude' => $firstFeature['geometry']['coordinates'][1] ?? '',
-                        'insee_code' => $firstFeature['properties']['citycode'] ?? '',
-                        'postal_code' => $firstFeature['properties']['postcode'] ?? '',
-                        'city' => $firstFeature['properties']['city'] ?? ''
-                    ];
-                } else {
                     $addresses = [];
                     foreach ($data['features'] as $feature) {
                         $addresses[] = [
@@ -50,8 +39,8 @@ class Service_AdresseApi
                         ];
                     }
                     return $addresses;
-                }
             }
+            
         } else {
             error_log("Erreur dans la réponse de l'API : " . $response->getStatus() . ' ' . $response->getMessage());
         }

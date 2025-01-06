@@ -9,8 +9,11 @@
 
 class Model_DbTable_Genre extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'genre'; // Nom de la base
-    protected $_primary = 'ID_GENRE'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'genre';
+
+    // Clé primaire
+    protected $_primary = 'ID_GENRE';
 
     // Donne la liste des genres
 
@@ -27,7 +30,7 @@ class Model_DbTable_Genre extends Zend_Db_Table_Abstract
         ;
 
         if (null != $id) {
-            $select->where("ID_GENRE = {$id}");
+            $select->where('ID_GENRE = '.$id);
 
             return $this->fetchRow($select)->toArray();
         }

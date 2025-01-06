@@ -2,7 +2,7 @@
 
 class RetablirController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 

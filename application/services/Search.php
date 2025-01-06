@@ -3,6 +3,7 @@
 class Service_Search
 {
     public const MAX_LIMIT_PAGES_ETABLISSEMENTS = 1000;
+
     public const MAX_LIMIT_PAGES_DOSSIERS = 100;
 
     /**
@@ -195,9 +196,11 @@ class Service_Search
                 if (null == $genres || in_array('1', $genres)) {
                     $clauses[] = 'etablissementadressesite.NUMERO_ADRESSE = '.$select->getAdapter()->quote($number);
                 }
+
                 if (null == $genres || in_array('3', $genres)) {
                     $clauses[] = 'etablissementadressecell.NUMERO_ADRESSE = '.$select->getAdapter()->quote($number);
                 }
+
                 $select->where('('.implode(' OR ', $clauses).')');
             }
 
@@ -208,9 +211,11 @@ class Service_Search
                 if (null == $genres || in_array('1', $genres)) {
                     $clauses[] = 'etablissementadressesite.ID_RUE = '.$select->getAdapter()->quote($street_id);
                 }
+
                 if (null == $genres || in_array('3', $genres)) {
                     $clauses[] = 'etablissementadressecell.ID_RUE = '.$select->getAdapter()->quote($street_id);
                 }
+
                 $select->where('('.implode(' OR ', $clauses).')');
             } elseif (null !== $city) {
                 $clauses = [];
@@ -218,9 +223,11 @@ class Service_Search
                 if (null == $genres || in_array('1', $genres)) {
                     $clauses[] = 'etablissementadressesite.NUMINSEE_COMMUNE = '.$select->getAdapter()->quote($city);
                 }
+
                 if (null == $genres || in_array('3', $genres)) {
                     $clauses[] = 'etablissementadressecell.NUMINSEE_COMMUNE = '.$select->getAdapter()->quote($city);
                 }
+
                 $select->where('('.implode(' OR ', $clauses).')');
             }
         }else{
@@ -525,9 +532,11 @@ class Service_Search
                 if (null == $genres || in_array('1', $genres)) {
                     $clauses[] = 'etablissementadressesite.NUMERO_ADRESSE = '.$select->getAdapter()->quote($number);
                 }
+
                 if (null == $genres || in_array('3', $genres)) {
                     $clauses[] = 'etablissementadressecell.NUMERO_ADRESSE = '.$select->getAdapter()->quote($number);
                 }
+
                 $select->where('('.implode(' OR ', $clauses).')');
             }
 
@@ -538,9 +547,11 @@ class Service_Search
                 if (null == $genres || in_array('1', $genres)) {
                     $clauses[] = 'etablissementadressesite.ID_RUE = '.$select->getAdapter()->quote($street_id);
                 }
+
                 if (null == $genres || in_array('3', $genres)) {
                     $clauses[] = 'etablissementadressecell.ID_RUE = '.$select->getAdapter()->quote($street_id);
                 }
+
                 $select->where('('.implode(' OR ', $clauses).')');
             } elseif (null !== $city) {
                 $clauses = [];
@@ -548,9 +559,11 @@ class Service_Search
                 if (null == $genres || in_array('1', $genres)) {
                     $clauses[] = 'etablissementadressesite.NUMINSEE_COMMUNE = '.$select->getAdapter()->quote($city);
                 }
+
                 if (null == $genres || in_array('3', $genres)) {
                     $clauses[] = 'etablissementadressecell.NUMINSEE_COMMUNE = '.$select->getAdapter()->quote($city);
                 }
+
                 $select->where('('.implode(' OR ', $clauses).')');
             }
         }else{
@@ -688,7 +701,7 @@ class Service_Search
 
             // Critères : numéro de doc urba
             if (null !== $num_doc_urba) {
-                $select->having('NB_URBA like ?', "%{$num_doc_urba}%");
+                $select->having('NB_URBA like ?', sprintf('%%%s%%', $num_doc_urba));
             }
 
             // Critères : objet
@@ -767,18 +780,23 @@ class Service_Search
             if (isset($criterias['dateCreationStart']) && null !== $criterias['dateCreationStart']) {
                 $select->where("d.DATEINSERT_DOSSIER >= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateCreationStart']);
             }
+
             if (isset($criterias['dateCreationEnd']) && null !== $criterias['dateCreationEnd']) {
                 $select->where("d.DATEINSERT_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateCreationEnd']);
             }
+
             if (isset($criterias['dateReceptionStart']) && null !== $criterias['dateReceptionStart']) {
                 $select->where("d.DATESDIS_DOSSIER >= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateReceptionStart']);
             }
+
             if (isset($criterias['dateReceptionEnd']) && null !== $criterias['dateReceptionEnd']) {
                 $select->where("d.DATESDIS_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateReceptionEnd']);
             }
+
             if (isset($criterias['dateReponseStart']) && null !== $criterias['dateReponseStart']) {
                 $select->where("d.DATEREP_DOSSIER >= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateReponseStart']);
             }
+
             if (isset($criterias['dateReponseEnd']) && null !== $criterias['dateReponseEnd']) {
                 $select->where("d.DATEREP_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateReponseEnd']);
             }
@@ -815,6 +833,7 @@ class Service_Search
             foreach ($results['results'] as $row) {
                 $newResults[$row['ID_DOSSIER']] = $row;
             }
+
             $results['results'] = $newResults;
 
             $sIDsTable = [];
@@ -839,6 +858,7 @@ class Service_Search
                         if (!isset($results['results'][$prev['ID_DOSSIER']]['PREVENTIONNISTES'])) {
                             $results['results'][$prev['ID_DOSSIER']]['PREVENTIONNISTES'] = [];
                         }
+
                         $results['results'][$prev['ID_DOSSIER']]['PREVENTIONNISTES'][] = $prev;
                     }
                 }
@@ -857,6 +877,7 @@ class Service_Search
                         if (!isset($results['results'][$pj['ID_DOSSIER']]['PIECESJOINTES'])) {
                             $results['results'][$pj['ID_DOSSIER']]['PIECESJOINTES'] = [];
                         }
+
                         $results['results'][$pj['ID_DOSSIER']]['PIECESJOINTES'][] = $pj;
                     }
                 }
@@ -946,7 +967,7 @@ class Service_Search
 
             // Critères : numéro de doc urba
             if (null !== $num_doc_urba) {
-                $select->having('NB_URBA like ?', "%{$num_doc_urba}%");
+                $select->having('NB_URBA like ?', sprintf('%%%s%%', $num_doc_urba));
             }
 
             // Critères : objet
@@ -1058,30 +1079,39 @@ class Service_Search
             if (isset($criterias['dateCreationStart']) && null !== $criterias['dateCreationStart']) {
                 $select->where("d.DATEINSERT_DOSSIER >= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateCreationStart']);
             }
+
             if (isset($criterias['dateCreationEnd']) && null !== $criterias['dateCreationEnd']) {
                 $select->where("d.DATEINSERT_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateCreationEnd']);
             }
+
             if (isset($criterias['dateReceptionStart']) && null !== $criterias['dateReceptionStart']) {
                 $select->where("d.DATESDIS_DOSSIER >= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateReceptionStart']);
             }
+
             if (isset($criterias['dateReceptionEnd']) && null !== $criterias['dateReceptionEnd']) {
                 $select->where("d.DATESDIS_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateReceptionEnd']);
             }
+
             if (isset($criterias['dateReponseStart']) && null !== $criterias['dateReponseStart']) {
                 $select->where("d.DATEREP_DOSSIER >= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateReponseStart']);
             }
+
             if (isset($criterias['dateReponseEnd']) && null !== $criterias['dateReponseEnd']) {
                 $select->where("d.DATEREP_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateReponseEnd']);
             }
+
             if (isset($criterias['dateCommissionStart']) && null !== $criterias['dateCommissionStart']) {
                 $select->where("d.DATECOMM_DOSSIER >= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateCommissionStart']);
             }
+
             if (isset($criterias['dateCommissionEnd']) && null !== $criterias['dateCommissionEnd']) {
                 $select->where("d.DATECOMM_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateCommissionEnd']);
             }
+
             if (isset($criterias['dateVisiteStart']) && null !== $criterias['dateVisiteStart']) {
                 $select->where("d.DATEVISITE_DOSSIER >= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateVisiteStart']);
             }
+
             if (isset($criterias['dateVisiteEnd']) && null !== $criterias['dateVisiteEnd']) {
                 $select->where("d.DATEVISITE_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateVisiteEnd']);
             }
@@ -1177,7 +1207,7 @@ class Service_Search
             }
 
             if (null !== $objet) {
-                $select->where("DEMANDEUR_DOSSIER LIKE '%{$objet}%' OR OBJET_DOSSIER LIKE '%{$objet}%'");
+                $select->where(sprintf("DEMANDEUR_DOSSIER LIKE '%%%s%%' OR OBJET_DOSSIER LIKE '%%%s%%'", $objet, $objet));
             }
 
             // Critères : parent
@@ -1303,14 +1333,9 @@ class Service_Search
     /**
      * Méthode pour aider à placer des conditions sur la requête.
      *
-     * @param string                      $key
      * @param array|bool|float|int|string $value
-     * @param bool                        $exact
-     * @param string                      $clause Par défaut where
-     *
-     * @return Service_Search Interface fluide
      */
-    private function setCriteria(Zend_Db_Select &$select, $key, $value, $exact = true, $clause = 'where')
+    private function setCriteria(Zend_Db_Select &$select, string $key, $value, bool $exact = true, string $clause = 'where'): self
     {
         $string = null;
 

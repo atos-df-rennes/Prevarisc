@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class Service_PassAuthAdapterTest extends TestCase
 {
-    public function testAuthenticationSuccess()
+    public function testAuthenticationSuccess(): void
     {
         $this->assertSame(1, (new Service_PassAuthAdapater('username'))->authenticate()->getCode());
     }

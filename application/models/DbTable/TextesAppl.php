@@ -2,8 +2,11 @@
 
 class Model_DbTable_TextesAppl extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'textesappl'; // Nom de la base
-    protected $_primary = 'ID_TEXTESAPPL'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'textesappl';
+
+    // Clé primaire
+    protected $_primary = 'ID_TEXTESAPPL';
 
     // récupération des textes applicables et de leurs type associé
 

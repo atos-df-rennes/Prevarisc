@@ -42,7 +42,7 @@ class FormulaireController extends Zend_Controller_Action
      */
     public $serviceChamp;
 
-    public function init()
+    public function init(): void
     {
         $this->modelChamp = new Model_DbTable_Champ();
         $this->modelChampValeurListe = new Model_DbTable_ChampValeurListe();
@@ -122,6 +122,7 @@ class FormulaireController extends Zend_Controller_Action
             if ('Liste' === $champ['TYPE']) {
                 $champs[$key]['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
             }
+
             if ('Parent' === $champ['TYPE']) {
                 $champs[$key]['LIST_CHAMP'] = $this->modelChamp->getChampsFromParent($champ['ID_CHAMP']);
             }
@@ -143,6 +144,27 @@ class FormulaireController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Erreur lors de la sauvegarde', 'message' => 'La rubrique n\'a pas été modifiée. Veuillez rééssayez. ('.$e->getMessage().')']);
+            }
+        }
+    }
+
+    public function editCapsuleRubriqueNomAction(): void
+    {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            try {
+                $post = $request->getPost();
+                $idCapsuleRubrique = (int) $post['id'];
+                $newName = $post['newName'];
+                $this->modelCapsuleRubrique->updateCapsuleRubriqueName(
+                    $idCapsuleRubrique,
+                    $newName
+                );
+
+                $this->_helper->json(['status' => 'success']);
+            } catch (Exception $e) {
+                $this->_helper->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
         }
     }
@@ -231,7 +253,7 @@ class FormulaireController extends Zend_Controller_Action
                 }
             }
 
-            if ($this->serviceChamp->isTableau($champ)) {
+            if ($this->serviceChamp->isTableau($champ->toArray())) {
                 $fieldNames = [];
                 $fieldValues = [];
 
@@ -294,7 +316,7 @@ class FormulaireController extends Zend_Controller_Action
 
             if (
                 !$this->serviceChamp->isTableau(
-                    $this->modelChamp->find($infosParent['ID_CHAMP'])->current()
+                    $this->modelChamp->find($infosParent['ID_CHAMP'])->current()->toArray()
                 )
             ) {
                 $champFusionValue = $this->serviceUtils->getFullFusionName(
@@ -325,7 +347,7 @@ class FormulaireController extends Zend_Controller_Action
 
             // Modification de valeur
             // On récupère les valeurs de la liste séparément des autres champs
-            $listFieldValueArray = array_filter($post, function ($key) {
+            $listFieldValueArray = array_filter($post, function ($key): bool {
                 return 0 === strpos($key, 'valeur-champ-');
             }, ARRAY_FILTER_USE_KEY);
 
@@ -340,7 +362,7 @@ class FormulaireController extends Zend_Controller_Action
 
             // Ajout de valeur
             // On récupère les valeurs de la liste séparément des autres champs
-            $listValueArray = array_filter($post, function ($key) {
+            $listValueArray = array_filter($post, function ($key): bool {
                 return 0 === strpos($key, 'valeur-ajout-');
             }, ARRAY_FILTER_USE_KEY);
 

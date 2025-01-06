@@ -91,17 +91,21 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
                     if ('' !== $trimmedBaseUrl && null !== $trimmedBaseUrl) {
                         $minStyles->href .= '&b='.$trimmedBaseUrl;
                     }
+
                     if ($this->_version) {
                         $minStyles->href .= '&v='.$this->_version;
                     }
+
                     $minStyles->media = $media;
                     $minStyles->conditionalStylesheet = false;
                     if (in_array($this->itemToString($minStyles), $seen)) {
                         continue;
                     }
+
                     $items[] = $this->itemToString($minStyles); // add the minified item
                     $seen[] = $this->itemToString($minStyles); // remember we saw it
                 }
+
                 $stylesheets = []; // Empty our stylesheets array
                 $items[] = $this->itemToString($item); // Add the item
             }
@@ -117,11 +121,13 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
             if ('' !== $trimmedBaseUrl && '0' !== $trimmedBaseUrl) {
                 $minStyles->href .= '&b='.$trimmedBaseUrl;
             }
+
             $minStyles->media = $media;
             $minStyles->conditionalStylesheet = false;
             if (in_array($this->itemToString($minStyles), $seen)) {
                 continue;
             }
+
             $items[] = $this->itemToString($minStyles);
             $seen[] = $this->itemToString($minStyles);
         }

@@ -2,8 +2,12 @@
 
 class Model_DbTable_Groupement extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'groupement'; // Nom de la base
-    protected $_primary = 'ID_GROUPEMENT'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'groupement';
+
+    // Clé primaire
+    protected $_primary = 'ID_GROUPEMENT';
+
     protected $_referenceMap = [
         'groupementtype' => [
             'columns' => 'ID_GROUPEMENT',
@@ -36,7 +40,7 @@ class Model_DbTable_Groupement extends Zend_Db_Table_Abstract
             ->from('groupement', 'LIBELLE_GROUPEMENT')
             ->joinInner('groupementtype', 'groupement.ID_GROUPEMENTTYPE = groupementtype.ID_GROUPEMENTTYPE', 'LIBELLE_GROUPEMENTTYPE')
             ->joinLeft('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = groupement.ID_UTILISATEURINFORMATIONS')
-            ->where("groupement.ID_GROUPEMENT = '{$id}'")
+            ->where(sprintf("groupement.ID_GROUPEMENT = '%s'", $id))
         ;
 
         return (null != $this->fetchRow($select)) ? $this->fetchRow($select) : null;
@@ -81,11 +85,11 @@ class Model_DbTable_Groupement extends Zend_Db_Table_Abstract
     /**
      * @param float|int|string $id
      */
-    public function deleteGroupement($id)
+    public function deleteGroupement($id): void
     {
-        $this->getAdapter()->query("DELETE FROM `groupementcommune` WHERE `groupementcommune`.`ID_GROUPEMENT` = {$id};");
-        $this->getAdapter()->query("DELETE FROM `groupementpreventionniste` WHERE `groupementpreventionniste`.`ID_GROUPEMENT` = {$id};");
-        $this->getAdapter()->query("DELETE FROM `groupement` WHERE `groupement`.`ID_GROUPEMENT` = {$id};");
+        $this->getAdapter()->query(sprintf('DELETE FROM `groupementcommune` WHERE `groupementcommune`.`ID_GROUPEMENT` = %s;', $id));
+        $this->getAdapter()->query(sprintf('DELETE FROM `groupementpreventionniste` WHERE `groupementpreventionniste`.`ID_GROUPEMENT` = %s;', $id));
+        $this->getAdapter()->query(sprintf('DELETE FROM `groupement` WHERE `groupement`.`ID_GROUPEMENT` = %s;', $id));
     }
 
     /**
@@ -100,7 +104,7 @@ class Model_DbTable_Groupement extends Zend_Db_Table_Abstract
             ->from('groupementpreventionniste')
             ->join('utilisateur', 'utilisateur.ID_UTILISATEUR = groupementpreventionniste.ID_UTILISATEUR')
             ->join('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS')
-            ->where("groupementpreventionniste.ID_GROUPEMENT = '{$id}'")
+            ->where(sprintf("groupementpreventionniste.ID_GROUPEMENT = '%s'", $id))
             ->order('utilisateurinformations.NOM_UTILISATEURINFORMATIONS ASC')
         ;
 
@@ -152,7 +156,7 @@ class Model_DbTable_Groupement extends Zend_Db_Table_Abstract
             ->from('groupement')
             ->joinInner('groupementcommune', 'groupementcommune.ID_GROUPEMENT = groupement.ID_GROUPEMENT', [])
             ->joinInner('groupementtype', 'groupementtype.ID_GROUPEMENTTYPE = groupement.ID_GROUPEMENTTYPE', 'LIBELLE_GROUPEMENTTYPE')
-            ->where("groupementcommune.NUMINSEE_COMMUNE = '{$code_insee}'")
+            ->where(sprintf("groupementcommune.NUMINSEE_COMMUNE = '%s'", $code_insee))
             ->order('groupementtype.ID_GROUPEMENTTYPE ASC')
             ->order('LIBELLE_GROUPEMENT ASC')
         ;

@@ -4,7 +4,7 @@ use SebastianBergmann\Git\Git;
 
 class AdminController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         $cache_config = $this->getInvokeArg('bootstrap')->getOption('cache');
 

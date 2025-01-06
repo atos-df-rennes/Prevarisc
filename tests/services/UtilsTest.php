@@ -12,7 +12,7 @@ final class Service_UtilsTest extends TestCase
     /** @var Service_Utils */
     private $utils;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->utils = new Service_Utils();
     }

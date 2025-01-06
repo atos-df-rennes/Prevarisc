@@ -4,8 +4,11 @@
 
 class Model_DbTable_Famille extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'famille'; // Nom de la base
-    protected $_primary = 'ID_FAMILLE'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'famille';
+
+    // Clé primaire
+    protected $_primary = 'ID_FAMILLE';
 
     /**
      * @psalm-return array<mixed|int, mixed>

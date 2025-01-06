@@ -4,7 +4,7 @@ class SessionController extends Zend_Controller_Action
 {
     public const MAX_LOGIN_ATTEMPTS = 2;
 
-    public function loginAction()
+    public function loginAction(): void
     {
         $this->_helper->layout->setLayout('login');
 
@@ -27,6 +27,7 @@ class SessionController extends Zend_Controller_Action
                     if (1 == count($cred)) {
                         array_unshift($cred, null);
                     }
+
                     [$domain, $username] = $cred;
                 }
             }
@@ -50,9 +51,9 @@ class SessionController extends Zend_Controller_Action
                 // Si l'utilisateur n'est pas actif, on renvoie false
                 if (
                     null === $user
-                    || (null !== $user && !$user['ACTIF_UTILISATEUR'])
+                    || !$user['ACTIF_UTILISATEUR']
                 ) {
-                    error_log("Auth: utilisateur inexistant ou inactif '{$username}'");
+                    error_log(sprintf("Auth: utilisateur inexistant ou inactif '%s'", $username));
 
                     throw new Zend_Auth_Exception('Authentification invalide.');
                 }
@@ -110,17 +111,17 @@ class SessionController extends Zend_Controller_Action
                     }
                 }
 
-                error_log("Auth: password incorrect pour '{$username}'");
+                error_log(sprintf("Auth: password incorrect pour '%s'", $username));
 
                 throw new Zend_Auth_Exception('Authentification invalide.');
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $service_user->logFailedLogin($user);
-            $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur d\'authentification', 'message' => $e->getMessage()]);
+            $this->_helper->flashMessenger(['context' => 'danger', 'title' => "Erreur d'authentification", 'message' => $exception->getMessage()]);
         }
     }
 
-    public function logoutAction()
+    public function logoutAction(): void
     {
         $auth = Zend_Auth::getInstance();
 

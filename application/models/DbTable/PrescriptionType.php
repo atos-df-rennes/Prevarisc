@@ -2,8 +2,11 @@
 
 class Model_DbTable_PrescriptionType extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'prescriptiontype'; // Nom de la base
-    protected $_primary = 'ID_PRESCRIPTIONTYPE'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'prescriptiontype';
+
+    // Clé primaire
+    protected $_primary = 'ID_PRESCRIPTIONTYPE';
 
     /**
      * @param mixed $categorie
@@ -54,7 +57,7 @@ class Model_DbTable_PrescriptionType extends Zend_Db_Table_Abstract
      * @param int|string $idOldType
      * @param mixed      $idNewType
      */
-    public function replaceId($idOldType, $idNewType)
+    public function replaceId($idOldType, $idNewType): void
     {
         $where = [];
         $data = ['ID_PRESCRIPTION_TYPE' => $idNewType];

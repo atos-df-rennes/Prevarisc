@@ -2,12 +2,12 @@
 
 class SearchController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->_helper->redirector('etablissement');
     }
 
-    public function etablissementAction()
+    public function etablissementAction(): void
     {
         $this->_helper->layout->setLayout('search');
         $searchCityOnly = getenv('PREVARISC_API_ADRESSE_MODAL');
@@ -36,6 +36,7 @@ class SearchController extends Zend_Controller_Action
         $this->view->assign('DB_typeactivite', $service_typeactivite->getAllWithTypes());
         $this->view->assign('DB_famille', $service_famille->getAll());
         $this->view->assign('DB_commission', $service_commission->getAll());
+
         $typeGroupementTerritorial = [5];
         $this->view->assign('DB_groupementterritorial', $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial));
         $this->view->assign('liste_prev', $service_search->listePrevActifs());
@@ -137,6 +138,7 @@ class SearchController extends Zend_Controller_Action
                                 // Formattage du jour, qui peut contenir l'heure -> ne passe pas avec FormattedPHPToExcel
                                 $dateDernierAvis[2] = substr($dateDernierAvis[2], 0, 2);
                             }
+
                             $datetimeDernierAvis = PHPExcel_Shared_Date::FormattedPHPToExcel($dateDernierAvis[0], $dateDernierAvis[1], $dateDernierAvis[2]);
                             $sheet->setCellValueByColumnAndRow(9, (string) $ligne, $datetimeDernierAvis);
                             $sheet->getStyleByColumnAndRow(9, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
@@ -147,6 +149,7 @@ class SearchController extends Zend_Controller_Action
                             if (!is_numeric($datePremierAvisFavorable[2])) {
                                 $datePremierAvisFavorable[2] = substr($datePremierAvisFavorable[2], 0, 2);
                             }
+
                             $datePremierAvisFavorable = PHPExcel_Shared_Date::FormattedPHPToExcel($datePremierAvisFavorable[0], $datePremierAvisFavorable[1], $datePremierAvisFavorable[2]);
                             $sheet->setCellValueByColumnAndRow(10, (string) $ligne, $datePremierAvisFavorable);
                             $sheet->getStyleByColumnAndRow(10, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
@@ -157,6 +160,7 @@ class SearchController extends Zend_Controller_Action
                             if (!is_numeric($datePremierAvisDefavorableConsecutif[2])) {
                                 $datePremierAvisDefavorableConsecutif[2] = substr($datePremierAvisDefavorableConsecutif[2], 0, 2);
                             }
+
                             $datetimePremierAvisDefavorableConsecutif = PHPExcel_Shared_Date::FormattedPHPToExcel($datePremierAvisDefavorableConsecutif[0], $datePremierAvisDefavorableConsecutif[1], $datePremierAvisDefavorableConsecutif[2]);
                             $sheet->setCellValueByColumnAndRow(11, (string) $ligne, $datetimePremierAvisDefavorableConsecutif);
                             $sheet->getStyleByColumnAndRow(11, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
@@ -171,6 +175,7 @@ class SearchController extends Zend_Controller_Action
                             if (!is_numeric($dateDerniereVisite[2])) {
                                 $dateDerniereVisite[2] = substr($dateDerniereVisite[2], 0, 2);
                             }
+
                             $datetimeDerniereVisite = PHPExcel_Shared_Date::FormattedPHPToExcel($dateDerniereVisite[0], $dateDerniereVisite[1], $dateDerniereVisite[2]);
                             $sheet->setCellValueByColumnAndRow(15, (string) $ligne, $datetimeDerniereVisite);
                             $sheet->getStyleByColumnAndRow(15, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
@@ -181,6 +186,7 @@ class SearchController extends Zend_Controller_Action
                                 if (!is_numeric($dateProchaineVisite[2])) {
                                     $dateProchaineVisite[2] = substr($dateProchaineVisite[2], 0, 2);
                                 }
+
                                 $datetimeProchaineVisite = PHPExcel_Shared_Date::FormattedPHPToExcel($dateProchaineVisite[0], $dateProchaineVisite[1], $dateProchaineVisite[2]);
                                 $sheet->setCellValueByColumnAndRow(16, (string) $ligne, $datetimeProchaineVisite);
                                 $sheet->getStyleByColumnAndRow(16, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
@@ -192,6 +198,7 @@ class SearchController extends Zend_Controller_Action
                             if (!is_numeric($dateVisitePrevue[2])) {
                                 $dateVisitePrevue[2] = substr($dateVisitePrevue[2], 0, 2);
                             }
+
                             $datetimeVisitePrevue = PHPExcel_Shared_Date::FormattedPHPToExcel($dateVisitePrevue[0], $dateVisitePrevue[1], $dateVisitePrevue[2]);
                             $sheet->setCellValueByColumnAndRow(17, (string) $ligne, $datetimeVisitePrevue);
                             $sheet->getStyleByColumnAndRow(17, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
@@ -281,7 +288,7 @@ class SearchController extends Zend_Controller_Action
         }
     }
 
-    public function dossierAction()
+    public function dossierAction(): void
     {
         $this->_helper->layout->setLayout('search');
 
@@ -301,6 +308,7 @@ class SearchController extends Zend_Controller_Action
         $this->view->assign('liste_prev', $service_search->listePrevActifs());
         $this->view->assign('array_voies', $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('commune', $this->_request->getQuery()) && '' != $this->_request->getQuery()['commune'] ? $service_adresse->getVoies($this->_request->getQuery()['commune']) : []);
         $this->view->assign('array_numeros', $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('voie', $this->_request->getQuery()) && '' != $this->_request->getQuery()['voie'] ? $service_adresse->getNumeros($this->_request->getQuery()['voie']) : []);
+
         $typeGroupementTerritorial = [5];
         $this->view->assign('DB_groupementterritorial', $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial));
 
@@ -308,6 +316,7 @@ class SearchController extends Zend_Controller_Action
             if (!$date) {
                 return false;
             }
+
             $dateArgs = explode('/', $date);
 
             return checkdate($dateArgs[1], $dateArgs[0], $dateArgs[2]);
@@ -419,10 +428,12 @@ class SearchController extends Zend_Controller_Action
                             if (!is_numeric($dateCreationDossier[2])) {
                                 $dateCreationDossier[2] = substr($dateCreationDossier[2], 0, 2);
                             }
+
                             $datetimeCreationDossier = PHPExcel_Shared_Date::FormattedPHPToExcel($dateCreationDossier[0], $dateCreationDossier[1], $dateCreationDossier[2]);
                             $sheet->setCellValueByColumnAndRow(11, (string) $ligne, $datetimeCreationDossier);
                             $sheet->getStyleByColumnAndRow(11, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                         }
+
                         $sheet->setCellValueByColumnAndRow(12, (string) $ligne, $row['OBJET_DOSSIER']);
                         $sheet->setCellValueByColumnAndRow(13, (string) $ligne, $row['NUM_DOCURBA']);
                         if ('' != $row['DATEVISITE_DOSSIER']) {
@@ -430,19 +441,23 @@ class SearchController extends Zend_Controller_Action
                             if (!is_numeric($dateVisiteDossier[2])) {
                                 $dateVisiteDossier[2] = substr($dateVisiteDossier[2], 0, 2);
                             }
+
                             $datetimeVisiteDossier = PHPExcel_Shared_Date::FormattedPHPToExcel($dateVisiteDossier[0], $dateVisiteDossier[1], $dateVisiteDossier[2]);
                             $sheet->setCellValueByColumnAndRow(14, (string) $ligne, $datetimeVisiteDossier);
                             $sheet->getStyleByColumnAndRow(14, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                         }
+
                         if ('' != $row['DATECOMM_DOSSIER']) {
                             $dateCommissionDossier = preg_split('/-|\//', $row['DATECOMM_DOSSIER']);
                             if (!is_numeric($dateCommissionDossier[2])) {
                                 $dateCommissionDossier[2] = substr($dateCommissionDossier[2], 0, 2);
                             }
+
                             $datetimeCommissionDossier = PHPExcel_Shared_Date::FormattedPHPToExcel($dateCommissionDossier[0], $dateCommissionDossier[1], $dateCommissionDossier[2]);
                             $sheet->setCellValueByColumnAndRow(15, (string) $ligne, $datetimeCommissionDossier);
                             $sheet->getStyleByColumnAndRow(15, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                         }
+
                         $sheet->setCellValueByColumnAndRow(16, (string) $ligne, $row['LIBELLE_COMMISSION']);
                         $sheet->setCellValueByColumnAndRow(17, (string) $ligne, $row['LIBELLE_AVIS_RAPPORTEUR']);
                         $sheet->setCellValueByColumnAndRow(18, (string) $ligne, $row['LIBELLE_AVIS_COMMISSION']);
@@ -544,7 +559,7 @@ class SearchController extends Zend_Controller_Action
         }
     }
 
-    public function utilisateurAction()
+    public function utilisateurAction(): void
     {
         $this->_helper->layout->setLayout('search');
 
@@ -575,7 +590,7 @@ class SearchController extends Zend_Controller_Action
         }
     }
 
-    public function displayAjaxSearchEtablissementAction()
+    public function displayAjaxSearchEtablissementAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
@@ -593,7 +608,7 @@ class SearchController extends Zend_Controller_Action
         echo $html;
     }
 
-    public function displayAjaxSearchDossierAction()
+    public function displayAjaxSearchDossierAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);

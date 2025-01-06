@@ -3,10 +3,15 @@
 class Service_Platau
 {
     private const HEALTHCHECK_ENDPOINT = 'healthcheck';
+
     private $datastore;
+
     private $platauServiceFilePath;
+
     private $platauConfigFilePath;
+
     private $pisteClientId;
+
     private $pisteClientSecret;
 
     public function __construct()
@@ -189,7 +194,7 @@ class Service_Platau
 
         foreach ($fileContent as $line) {
             if (false !== strpos($line, $const)) {
-                return explode('\'', $line)[1];
+                return explode("'", $line)[1];
             }
         }
 

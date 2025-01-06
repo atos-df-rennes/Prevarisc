@@ -1,0 +1,30 @@
+<?php if ($this->nbEtab != 1): ?>
+	Pour pouvoir utiliser cette fonctionnalité, le dossier ne doit concerner qu'un seul établissement
+<?php else: ?>
+	<form name='selectionDossier' id='selectionDossier' >
+		<input type='hidden' name='idDossier' id='idDossier' value='<?= $this->idDossier; ?>' />
+		Sélectionnez le dossier pour lequel vous souhaitez reprendre les effectifs et dégagements
+
+		<?php if (count($this->etudes) === 0) : ?>
+			<div class='well well-large text-center'>
+				<p class='lead'>Il n'y a pas de dossier.</p>
+				<p>
+					<a href='<?= $this->url(array('controller' => 'dossier', 'action' => 'add', 'id_etablissement' => $this->etablissement['general']['ID_ETABLISSEMENT']), null, true) ?>' class='btn btn-large'>Ajouter un dossier</a>
+				</p>
+			</div>
+		<?php else: ?>
+			<div id="content_etudes_ets">
+				<?php if (count($this->etudes) > 0): ?>
+					<h4>Études</h4>
+					<ul class='recherche_liste'>
+						<?= $this->partial('dossier/results/dossier.phtml', [
+							'dossiers' => $this->etudes,
+							'type' => 'single',
+							'idDossierCourant' => $this->idDossier,
+						]) ?>
+					</ul>
+				<?php endif ?>
+			</div>
+		<?php endif ?>
+	</form>
+<?php endif ?>

@@ -20,10 +20,8 @@ class Api_Service_Etablissement
      * Retourne l'historique complet d'un établissement identifié par le paramètre id.
      *
      * @param int $id
-     *
-     * @return array
      */
-    public function getHistorique($id)
+    public function getHistorique($id): array
     {
         $service_etablissement = new Service_Etablissement();
 
@@ -34,10 +32,8 @@ class Api_Service_Etablissement
      * Retourne les descriptifs d'un établissement identifié par le paramètre id.
      *
      * @param int $id
-     *
-     * @return array
      */
-    public function getDescriptifs($id)
+    public function getDescriptifs($id): array
     {
         $service_etablissement = new Service_Etablissement();
 
@@ -46,12 +42,8 @@ class Api_Service_Etablissement
 
     /**
      * Retourne les textes applicables d'un établissement identifié par le paramètre id.
-     *
-     * @param int $id
-     *
-     * @return array
      */
-    public function getTextesApplicables($id)
+    public function getTextesApplicables(int $id): array
     {
         $service_etablissement = new Service_Etablissement();
 
@@ -118,10 +110,8 @@ class Api_Service_Etablissement
      * Retourne les dossiers d'un établissement identifié par le paramètre id.
      *
      * @param int $id
-     *
-     * @return array
      */
-    public function getDossiers($id)
+    public function getDossiers($id): array
     {
         $service_etablissement = new Service_Etablissement();
 
@@ -139,10 +129,8 @@ class Api_Service_Etablissement
      * @param int   $classe
      * @param int   $id_etablissement_pere
      * @param array $ids_etablissements_enfants
-     *
-     * @return array
      */
-    public function getDefaultValues($genre, $numinsee = null, $type = null, $categorie = null, $local_sommeil = null, $classe = null, $id_etablissement_pere = null, $ids_etablissements_enfants = null)
+    public function getDefaultValues($genre, $numinsee = null, $type = null, $categorie = null, $local_sommeil = null, $classe = null, $id_etablissement_pere = null, $ids_etablissements_enfants = null): array
     {
         $service_etablissement = new Service_Etablissement();
 

@@ -3,15 +3,25 @@
 class DossierController extends Zend_Controller_Action
 {
     public const ID_DOSSIERTYPE_VISITE = 2;
+
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
+
     public const ID_NATURE_LEVEE_PRESCRIPTIONS = 7;
+
     public const ID_NATURE_LEVEE_AVIS_DEF = 19;
+
     public const ID_NATURE_PERIODIQUE_VISITE = 21;
+
     public const ID_NATURE_PERIODIQUE_GRPVISITE = 26;
+
     public const ID_AVIS_DEFAVORABLE = 2;
+
     public const ID_GENRE_ETABLISSEMENT = 2;
+
     public const ID_GENRE_CELLULE = 3;
+
     public const ID_ACTIVITE_CENTRE_COMMERCIAL = 29;
+
     public $cache;
 
     /**
@@ -23,7 +33,9 @@ class DossierController extends Zend_Controller_Action
      * @var array<string, mixed>|mixed
      */
     public $infosDossier;
+
     public $listeDossierLies;
+
     private $id_dossier;
 
     // liste des champs à afficher en fonction de la nature
@@ -161,7 +173,7 @@ class DossierController extends Zend_Controller_Action
         '45' => ['DATEINSERT', 'OBJET', 'DATESIGN', 'DATEREP', 'PREVENTIONNISTE', 'OBSERVATION'],
     ];
 
-    public function init()
+    public function init(): void
     {
         $this->_helper->layout->setLayout('dossier');
         $this->view->inlineScript()->appendFile('/js/dossier/dossierGeneral.js', 'text/javascript');
@@ -178,17 +190,17 @@ class DossierController extends Zend_Controller_Action
         $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
 
         if (!(property_exists($this->view, 'action') && null !== $this->view->action)) {
-            $this->view->assign('action', $this->_request->getActionName());
+            $this->view->assign('action', $this->getRequest()->getActionName());
         }
 
         $this->view->assign('idUser', Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR']);
 
-        $this->idDossier = (int) $this->_getParam('id');
+        $this->idDossier = (int) $this->getRequest()->getParam('id');
         // FIXME A déplacer dans le 2ème if ?
         $this->view->assign('idDossier', $this->idDossier);
 
         if (null == $this->idDossier) {
-            $this->idDossier = (int) $this->_getParam('idDossier');
+            $this->idDossier = (int) $this->getRequest()->getParam('idDossier');
         }
 
         if (null != $this->idDossier) {
@@ -243,6 +255,11 @@ class DossierController extends Zend_Controller_Action
             $this->view->assign('dossierSupprime', null !== $dossier['DATESUPPRESSION_DOSSIER']);
             $this->view->assign('nombreNouvellesPiecesJointes', $serviceDossier->getNombreNouvellesPiecesJointes($this->idDossier));
 
+            // Noms des onglets paramétrables
+            $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
+            $this->view->assign('nomOngletVerificationsTechniques', $modelCapsuleRubrique->getCapsuleRubriqueByInternalName('descriptifVerificationsTechniques')['NOM']);
+            $this->view->assign('nomOngletEffectifsDegagements', $modelCapsuleRubrique->getCapsuleRubriqueByInternalName('effectifsDegagementsDossier')['NOM']);
+
             // Définition des autorisations
             $this->view->assign('isAllowedAvisDerogation', unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations'));
             $this->view->assign('isAllowedEffectifsDegagements', unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_doss'));
@@ -250,52 +267,53 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    public function pieceJointeAction()
+    public function pieceJointeAction(): void
     {
         $DBdossier = new Model_DbTable_Dossier();
         $service_dossier = new Service_Dossier();
+        $id = $this->getRequest()->getParam('id');
 
         if ($this->idDossier) {
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
         }
 
-        $this->infosDossier = $DBdossier->find((int) $this->_getParam('id'))->current();
+        $this->infosDossier = $DBdossier->find((int) $id)->current();
 
-        $this->_forward('index', 'piece-jointe', null, [
+        $this->forward('index', 'piece-jointe', null, [
             'type' => 'dossier',
-            'id' => $this->_request->id,
+            'id' => $id,
             'verrou' => $this->infosDossier['VERROU_DOSSIER'],
         ]);
     }
 
-    public function addAction()
+    public function addAction(): void
     {
         $this->view->assign('action', 'add');
-        $this->_forward('index');
+        $this->forward('index');
     }
 
-    public function indexAction()
+    public function indexAction(): void
     {
         $historiqueEtab = [];
         $this->view->headScript()->appendFile('/js/tinymce.min.js');
 
         $this->view->assign('do', 'new');
-        if ($this->_getParam('id')) {
+        if ($this->getRequest()->getParam('id')) {
             $this->view->assign('do', 'edit');
-            $this->view->assign('idDossier', $this->_getParam('id'));
+            $this->view->assign('idDossier', $this->getRequest()->getParam('id'));
         }
 
         $service_dossier = new Service_Dossier();
         if ($this->idDossier) {
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
-        } elseif ($this->_getParam('id_etablissement')) {
-            $this->view->assign('enteteEtab', $service_dossier->getEtabInfos(null, $this->_getParam('id_etablissement')));
+        } elseif ($this->getRequest()->getParam('id_etablissement')) {
+            $this->view->assign('enteteEtab', $service_dossier->getEtabInfos(null, $this->getRequest()->getParam('id_etablissement')));
         }
 
-        $this->view->assign('idEtablissement', $this->_getParam('id_etablissement'));
+        $this->view->assign('idEtablissement', $this->getRequest()->getParam('id_etablissement'));
         if (property_exists($this->view, 'idEtablissement') && null !== $this->view->idEtablissement) {
             $DBetablissement = new Model_DbTable_Etablissement();
-            $this->view->assign('etablissementLibelle', $DBetablissement->getLibelle($this->_getParam('id_etablissement')));
+            $this->view->assign('etablissementLibelle', $DBetablissement->getLibelle($this->getRequest()->getParam('id_etablissement')));
         }
 
         $this->view->assign('idUser', Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR']);
@@ -324,18 +342,18 @@ class DossierController extends Zend_Controller_Action
 
         $service_etablissement = new Service_Etablissement();
 
-        if ($this->_getParam('idEtablissement')) {
-            $this->view->assign('idEtablissement', $this->_getParam('idEtablissement'));
+        if ($this->getRequest()->getParam('idEtablissement')) {
+            $this->view->assign('idEtablissement', $this->getRequest()->getParam('idEtablissement'));
         }
 
         // RECUPERATIONS INFOS ETABLISSEMENT (cellule ou etab pour generation des avis)
-        if ($this->_getParam('id_etablissement')) {
+        if ($this->getRequest()->getParam('id_etablissement')) {
             $DBetab = new Model_DbTable_Etablissement();
-            $etabTab = $DBetab->getInformations($this->_getParam('id_etablissement'));
+            $etabTab = $DBetab->getInformations($this->getRequest()->getParam('id_etablissement'));
             $etablissement = $etabTab->toArray();
             $this->view->assign('genre', $etablissement['ID_GENRE']);
             $commissionEtab = $etablissement['ID_COMMISSION'];
-            $idEtablissement = $this->_getParam('id_etablissement');
+            $idEtablissement = $this->getRequest()->getParam('id_etablissement');
 
             $etablissementInfos = $service_etablissement->get($this->view->idEtablissement);
             $ID_DOSSIER_DONNANT_AVIS = $etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS'];
@@ -345,9 +363,10 @@ class DossierController extends Zend_Controller_Action
                 $avisExploitationEtab = $DBdossier->getAvisDossier($ID_DOSSIER_DONNANT_AVIS);
                 $this->view->assign('avisExploitationEtab', $avisExploitationEtab['AVIS_DOSSIER']);
             }
-            $historiqueEtab = $service_etablissement->getHistorique($this->_getParam('id_etablissement'));
-        } elseif (0 !== (int) $this->_getParam('id')) {
-            $tabEtablissement = $DBdossier->getEtablissementDossier((int) $this->_getParam('id'));
+
+            $historiqueEtab = $service_etablissement->getHistorique($this->getRequest()->getParam('id_etablissement'));
+        } elseif (0 !== (int) $this->getRequest()->getParam('id')) {
+            $tabEtablissement = $DBdossier->getEtablissementDossier((int) $this->getRequest()->getParam('id'));
             $this->view->assign('listeEtablissement', $tabEtablissement);
             if ([] !== $tabEtablissement) {
                 $DBetab = new Model_DbTable_Etablissement();
@@ -364,6 +383,7 @@ class DossierController extends Zend_Controller_Action
                     $avisExploitationEtab = $DBdossier->getAvisDossier($ID_DOSSIER_DONNANT_AVIS);
                     $this->view->assign('avisExploitationEtab', $avisExploitationEtab['AVIS_DOSSIER']);
                 }
+
                 $historiqueEtab = $service_etablissement->getHistorique($idEtablissement);
             }
         }
@@ -403,13 +423,14 @@ class DossierController extends Zend_Controller_Action
                 'ARRAY' => $model_commission->fetchAll('ID_COMMISSIONTYPE = '.$row_typeDeCommission->ID_COMMISSIONTYPE)->toArray(),
             ];
         }
+
         $this->view->assign('array_commissions', $array_commissions);
 
-        if (0 !== (int) $this->_getParam('id')) {
+        if (0 !== (int) $this->getRequest()->getParam('id')) {
             // Cas d'affichage des infos d'un dossier existant
             $this->view->assign('do', 'edit');
             // On récupère l'id du dossier
-            $idDossier = (int) $this->_getParam('id');
+            $idDossier = (int) $this->getRequest()->getParam('id');
             $this->view->assign('idDossier', $idDossier);
             // Récupération de tous les champs de la table dossier
             $this->view->assign('infosDossier', $DBdossier->find($idDossier)->current());
@@ -433,6 +454,7 @@ class DossierController extends Zend_Controller_Action
             ) {
                 $afficheAvis = 0;
             }
+
             $this->view->assign('afficheAvis', $afficheAvis);
 
             // récuperation des informations sur le créateur du dossier
@@ -450,119 +472,73 @@ class DossierController extends Zend_Controller_Action
             }
 
             // Conversion de la date d'insertion du dossier
-            if ('' != $this->view->infosDossier['DATEINSERT_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATEINSERT_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATEINSERT_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEINSERT_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATEINSERT_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEINSERT_DOSSIER']);
+            $this->view->assign('DATEINSERT_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEINSERT_DOSSIER']));
 
             // Conversion de la date de dépot en mairie pour l'afficher
-            if ('' != $this->view->infosDossier['DATEMAIRIE_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATEMAIRIE_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATEMAIRIE_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEMAIRIE_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATEMAIRIE_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEMAIRIE_DOSSIER']);
+            $this->view->assign('DATEMAIRIE_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEMAIRIE_DOSSIER']));
 
             // Conversion de la date de dépot en secrétariat pour l'afficher
-            if ('' != $this->view->infosDossier['DATESECRETARIAT_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATESECRETARIAT_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATESECRETARIAT_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATESECRETARIAT_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATESECRETARIAT_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATESECRETARIAT_DOSSIER']);
+            $this->view->assign('DATESECRETARIAT_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATESECRETARIAT_DOSSIER']));
 
             // Conversion de la date de dépot en secrétariat pour l'afficher
-            if ('' != $this->view->infosDossier['DATEENVTRANSIT_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATEENVTRANSIT_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATEENVTRANSIT_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEENVTRANSIT_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATEENVTRANSIT_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEENVTRANSIT_DOSSIER']);
+            $this->view->assign('DATEENVTRANSIT_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEENVTRANSIT_DOSSIER']));
 
             // Conversion de la date de réception SDIS
-            if ('' != $this->view->infosDossier['DATESDIS_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATESDIS_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATESDIS_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATESDIS_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATESDIS_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATESDIS_DOSSIER']);
+            $this->view->assign('DATESDIS_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATESDIS_DOSSIER']));
 
             // Conversion de la date prefecture
-            if ('' != $this->view->infosDossier['DATEPREF_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATEPREF_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATEPREF_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEPREF_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATEPREF_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEPREF_DOSSIER']);
+            $this->view->assign('DATEPREF_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEPREF_DOSSIER']));
 
             // Conversion de la date de réponse
-            if ('' != $this->view->infosDossier['DATEREP_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATEREP_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATEREP_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEREP_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATEREP_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEREP_DOSSIER']);
+            $this->view->assign('DATEREP_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEREP_DOSSIER']));
 
             // Conversion de la date de réunion
-            if ('' != $this->view->infosDossier['DATEREUN_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATEREUN_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATEREUN_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEREUN_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATEREUN_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEREUN_DOSSIER']);
+            $this->view->assign('DATEREUN_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEREUN_DOSSIER']));
 
             // Conversion de la date et l'heure d'intervention
             if ('' != $this->view->infosDossier['DATEINTERV_DOSSIER']) {
                 $dateHeure = explode(' ', $this->view->infosDossier['DATEINTERV_DOSSIER']);
-                $date = new Zend_Date($dateHeure[0], Zend_Date::DATES);
-                $this->view->infosDossier['DATEINTERV_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEINTERV_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
+                $this->view->infosDossier['DATEINTERV_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEINTERV_DOSSIER']);
+                $this->view->assign('DATEINTERV_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEINTERV_DOSSIER']));
                 $heure = explode(':', $dateHeure[1]);
                 $this->view->assign('HEUREINTERV_INPUT', $heure[0].':'.$heure[1]);
             }
 
             // Conversion de la date signature
-            if ('' != $this->view->infosDossier['DATESIGN_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATESIGN_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATESIGN_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATESIGN_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATESIGN_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATESIGN_DOSSIER']);
+            $this->view->assign('DATESIGN_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATESIGN_DOSSIER']));
 
             // Conversion date echeancier de travaux
-            if ('' != $this->view->infosDossier['ECHEANCIERTRAV_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['ECHEANCIERTRAV_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['ECHEANCIERTRAV_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('ECHEANCIERTRAV', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['ECHEANCIERTRAV_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['ECHEANCIERTRAV_DOSSIER']);
+            $this->view->assign('ECHEANCIERTRAV', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['ECHEANCIERTRAV_DOSSIER']));
 
             // Conversion date incomplet
-            if ('' != $this->view->infosDossier['DATEINCOMPLET_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATEINCOMPLET_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATEINCOMPLET_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATEINCOMPLET', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATEINCOMPLET_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATEINCOMPLET_DOSSIER']);
+            $this->view->assign('DATEINCOMPLET', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATEINCOMPLET_DOSSIER']));
 
             // Conversion de transfert à la commission compétente
-            if ('' != $this->view->infosDossier['DATETRANSFERTCOMM_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATETRANSFERTCOMM_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATETRANSFERTCOMM_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATETRANSFERTCOMM', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATETRANSFERTCOMM_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATETRANSFERTCOMM_DOSSIER']);
+            $this->view->assign('DATETRANSFERTCOMM', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATETRANSFERTCOMM_DOSSIER']));
 
             // Conversion de reception à la commission compétente
-            if ('' != $this->view->infosDossier['DATERECEPTIONCOMM_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATERECEPTIONCOMM_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATERECEPTIONCOMM_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATERECEPTIONCOMM', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATERECEPTIONCOMM_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATERECEPTIONCOMM_DOSSIER']);
+            $this->view->assign('DATERECEPTIONCOMM', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATERECEPTIONCOMM_DOSSIER']));
 
             // Conversion de la date de reception du rvrat
-            if ('' != $this->view->infosDossier['DATERVRAT_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DATERVRAT_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DATERVRAT_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DATERVRAT_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DATERVRAT_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DATERVRAT_DOSSIER']);
+            $this->view->assign('DATERVRAT_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DATERVRAT_DOSSIER']));
 
             // Conversion de la date de levée de prescriptions
-            if ('' != $this->view->infosDossier['DELAIPRESC_DOSSIER']) {
-                $date = new Zend_Date($this->view->infosDossier['DELAIPRESC_DOSSIER'], Zend_Date::DATES);
-                $this->view->infosDossier['DELAIPRESC_DOSSIER'] = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                $this->view->assign('DELAIPRESC_INPUT', $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
-            }
+            $this->view->infosDossier['DELAIPRESC_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($this->view->infosDossier['DELAIPRESC_DOSSIER']);
+            $this->view->assign('DELAIPRESC_INPUT', Service_Utils_Date::convertFromMySQL($this->view->infosDossier['DELAIPRESC_DOSSIER']));
 
             // Conversion de la durée de l'intervention
             if ('' != $this->view->infosDossier['DUREEINTERV_DOSSIER']) {
@@ -627,16 +603,17 @@ class DossierController extends Zend_Controller_Action
                     }
                 }
             }
+
             $this->view->assign('afficherChamps', $afficherChamps);
 
             // On verifie les éléments masquant l'avis et la date de commission/visite pour les afficher ou non
             // GESTION DES DATES DE COMMISSIONS ET DE VISITE / GROUPE DE VISITE
             // On récupere les infos concernant l'affectation à une commission si il y en a eu une
             $dbAffectDossier = new Model_DbTable_DossierAffectation();
-            $affectDossier = $dbAffectDossier->find(null, $this->_getParam('id'))->current();
+            $affectDossier = $dbAffectDossier->find(null, $this->getRequest()->getParam('id'))->current();
             $this->view->assign('affectDossier', $affectDossier);
 
-            $listeDateAffectDossier = $dbAffectDossier->recupDateDossierAffect($this->_getParam('id'));
+            $listeDateAffectDossier = $dbAffectDossier->recupDateDossierAffect($this->getRequest()->getParam('id'));
 
             $dbDateComm = new Model_DbTable_DateCommission();
             $dateComm = $dbDateComm->find($affectDossier['ID_DATECOMMISSION_AFFECT'])->current();
@@ -662,7 +639,7 @@ class DossierController extends Zend_Controller_Action
                         $this->view->assign('idDateCommissionAffect', $ue['ID_DATECOMMISSION']);
                     } else {
                         // VISITE OU GROUPE DE VISITE
-                        $dateVisite = $dbDateComm->getInfosVisite($this->_getParam('id'));
+                        $dateVisite = $dbDateComm->getInfosVisite($this->getRequest()->getParam('id'));
 
                         $dateLiees = $dbDateComm->getDateLieesv2($dateVisite['ID_DATECOMMISSION_AFFECT']);
                         $this->view->assign('dateVisite', $this->view->infosDossier['DATEVISITE_DOSSIER']);
@@ -672,14 +649,14 @@ class DossierController extends Zend_Controller_Action
                         $listeDateValue = '';
                         $listeDateInput = '';
                         foreach ($dateLiees as $ue) {
-                            $date = new Zend_Date($ue['DATE_COMMISSION'], Zend_Date::DATES);
                             $this->view->assign('idDateVisiteAffect', $ue['ID_DATECOMMISSION']);
-                            $listeDateValue .= $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
-                            $listeDateInput .= $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR);
+                            $listeDateValue .= Service_Utils_Date::formatDateWithDayName($ue['DATE_COMMISSION']);
+                            $listeDateInput .= Service_Utils_Date::convertFromMySQL($ue['DATE_COMMISSION']);
                             if ($nbDates > 1) {
                                 $listeDateValue .= ', ';
                                 $listeDateInput .= ', ';
                             }
+
                             --$nbDates;
                         }
 
@@ -692,14 +669,14 @@ class DossierController extends Zend_Controller_Action
 
             // Recuperation des documents manquants dans le cas d'un dossier incomplet
             $dbDossDocManquant = new Model_DbTable_DossierDocManquant();
-            $this->view->assign('listeDocManquant', $dbDossDocManquant->getDocManquantDoss($this->_getParam('id')));
+            $this->view->assign('listeDocManquant', $dbDossDocManquant->getDocManquantDoss($this->getRequest()->getParam('id')));
 
             $DBdossierPrev = new Model_DbTable_DossierPreventionniste();
-            $this->view->assign('preventionnistes', $DBdossierPrev->getPrevDossier($this->_getParam('id')));
+            $this->view->assign('preventionnistes', $DBdossierPrev->getPrevDossier($this->getRequest()->getParam('id')));
         } else {
             $this->view->assign('do', 'new');
             $search = new Model_DbTable_Search();
-            $preventionnistes = ($this->_getParam('id_etablissement')) ? $search->setItem('utilisateur')->setCriteria('etablissementinformations.ID_ETABLISSEMENT', $this->_getParam('id_etablissement'))->run()->getAdapter()->getItems(0, 99999999999)->toArray() : null;
+            $preventionnistes = ($this->getRequest()->getParam('id_etablissement')) ? $search->setItem('utilisateur')->setCriteria('etablissementinformations.ID_ETABLISSEMENT', $this->getRequest()->getParam('id_etablissement'))->run()->getAdapter()->getItems(0, 99999999999)->toArray() : null;
             $preventionnistes[-1] = array_fill_keys(['LIBELLE_GRADE', 'NOM_UTILISATEURINFORMATIONS', 'PRENOM_UTILISATEURINFORMATIONS'], null);
             unset($preventionnistes[-1]);
             $this->view->assign('preventionnistes', $preventionnistes);
@@ -718,19 +695,19 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    public function shownatureAction()
+    public function shownatureAction(): void
     {
-        $idType = (int) $this->_getParam('idType');
+        $idType = (int) $this->getRequest()->getParam('idType');
 
         // Récupération de la liste des natures
         $DBdossiernatureliste = new Model_DbTable_DossierNatureliste();
         $this->view->assign('dossierNatureListe', $DBdossiernatureliste->getDossierNature($idType));
     }
 
-    public function showchampsAction()
+    public function showchampsAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
-        $listeNature = $this->_getParam('listeNature');
+        $listeNature = $this->getRequest()->getParam('listeNature');
 
         // Si une liste de nature est envoyée on peux traiter les différents champs à afficher
         if ('' != $listeNature) {
@@ -757,30 +734,30 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    public function ajoutdocvalidAction()
+    public function ajoutdocvalidAction(): void
     {
         $this->ajoutdocAction($this->id_dossier);
     }
 
-    public function formdocmanquantAction()
+    public function formdocmanquantAction(): void
     {
         $dbDocManquant = new Model_DbTable_DocManquant();
         // Si on passe un id dossier en param alors on cherche le dernier champ doc manquant si il existe
         // On recupere la liste des documents manquant type
         $this->view->assign('listeDoc', $dbDocManquant->getDocManquant());
-        $this->view->assign('numDocManquant', $this->_getParam('numDoc'));
+        $this->view->assign('numDocManquant', $this->getRequest()->getParam('numDoc'));
 
         $date = Zend_Date::now();
         $this->view->assign('dateDay', $date->get(Zend_Date::DAY_SHORT.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
     }
 
-    public function savenewAction()
+    public function savenewAction(): void
     {
-        $this->_forward('save');
+        $this->forward('save');
     }
 
     // Permet de faire les insertions de dossier en base de données et de rediriger vers le dossier/index/id/X => X = id du dossier qui vient d'être crée
-    public function saveAction()
+    public function saveAction(): void
     {
         header('Content-type: application/json');
 
@@ -795,16 +772,16 @@ class DossierController extends Zend_Controller_Action
             $DBdossierNature = new Model_DbTable_DossierNature();
             $nouveauDossier = null;
             $oldNature = null;
-            if ('new' == $this->_getParam('do')) {
+            if ('new' == $this->getRequest()->getParam('do')) {
                 $nouveauDossier = $DBdossier->createRow();
-                $nouveauDossier->CREATEUR_DOSSIER = $this->_getParam('ID_CREATEUR');
-            } elseif ('edit' == $this->_getParam('do')) {
-                $nouveauDossier = $DBdossier->find($this->_getParam('idDossier'))->current();
+                $nouveauDossier->CREATEUR_DOSSIER = $this->getRequest()->getParam('ID_CREATEUR');
+            } elseif ('edit' == $this->getRequest()->getParam('do')) {
+                $nouveauDossier = $DBdossier->find($this->getRequest()->getParam('idDossier'))->current();
 
-                $oldNature = $DBdossier->getNatureDossier($this->_getParam('idDossier'));
+                $oldNature = $DBdossier->getNatureDossier($this->getRequest()->getParam('idDossier'));
                 $oldNature = $oldNature['ID_NATURE'];
 
-                $newNature = $this->_getParam('selectNature');
+                $newNature = $this->getRequest()->getParam('selectNature');
 
                 $arrayT2 = [20, 47, 25, 48];
 
@@ -816,7 +793,7 @@ class DossierController extends Zend_Controller_Action
                     && in_array($newNature, $arrayT2)
                 ) {
                     // On conserve les documents consultés en faisant une copie dans la table docajout
-                    $docRestant = $dbDocConsulte->getDocOtheNature($this->_getParam('idDossier'), $oldNature);
+                    $docRestant = $dbDocConsulte->getDocOtheNature($this->getRequest()->getParam('idDossier'), $oldNature);
                     foreach ($docRestant as $doc) {
                         $newDocAjout = $dbDocAjout->createRow();
                         $newDocAjout->LIBELLE_DOCAJOUT = $doc['LIBELLE_DOC'];
@@ -831,10 +808,10 @@ class DossierController extends Zend_Controller_Action
                     }
                 } elseif ($oldNature != $newNature) {
                     // On supprime les documents consultés
-                    $where = $dbDocAjout->getAdapter()->quoteInto('ID_DOSSIER = ?', $this->_getParam('idDossier'));
+                    $where = $dbDocAjout->getAdapter()->quoteInto('ID_DOSSIER = ?', $this->getRequest()->getParam('idDossier'));
                     $dbDocAjout->delete($where);
 
-                    $where = $dbDocConsulte->getAdapter()->quoteInto('ID_DOSSIER = ?', $this->_getParam('idDossier'));
+                    $where = $dbDocConsulte->getAdapter()->quoteInto('ID_DOSSIER = ?', $this->getRequest()->getParam('idDossier'));
                     $dbDocConsulte->delete($where);
                 }
             }
@@ -900,10 +877,11 @@ class DossierController extends Zend_Controller_Action
                                 $dateTab = explode(', ', $value);
                                 $value = $dateTab[0];
                             }
+
                             $dateTab = explode('/', $value);
                             $value = $dateTab[2].'-'.$dateTab[1].'-'.$dateTab[0];
                             if ('DATEINTERV_DOSSIER' == $libelle) {
-                                $value .= ' '.$this->_getParam('HEUREINTERV_DOSSIER');
+                                $value .= ' '.$this->getRequest()->getParam('HEUREINTERV_DOSSIER');
                             }
                         } else {
                             $value = null;
@@ -921,50 +899,50 @@ class DossierController extends Zend_Controller_Action
                 }
             }
 
-            if ($pjs = $this->_getParam('export-pj-platau')) {
+            if ($pjs = $this->getRequest()->getParam('export-pj-platau')) {
                 $servicePj = new Service_PieceJointe();
 
                 $servicePj->exportPlatau($pjs);
             }
 
             $nouveauDossier->HORSDELAI_DOSSIER = 0;
-            if ($this->_getParam('HORSDELAI_DOSSIER')) {
+            if ($this->getRequest()->getParam('HORSDELAI_DOSSIER')) {
                 $nouveauDossier->HORSDELAI_DOSSIER = 1;
             }
 
             $nouveauDossier->ABSQUORUM_DOSSIER = 0;
-            if ($this->_getParam('ABSQUORUM_DOSSIER')) {
+            if ($this->getRequest()->getParam('ABSQUORUM_DOSSIER')) {
                 $nouveauDossier->ABSQUORUM_DOSSIER = 1;
             }
 
             $nouveauDossier->NPSP_DOSSIER = 0;
-            if ($this->_getParam('NPSP_DOSSIER')) {
+            if ($this->getRequest()->getParam('NPSP_DOSSIER')) {
                 $nouveauDossier->NPSP_DOSSIER = 1;
             }
 
             $nouveauDossier->DIFFEREAVIS_DOSSIER = 0;
-            if ($this->_getParam('DIFFEREAVIS_DOSSIER')) {
+            if ($this->getRequest()->getParam('DIFFEREAVIS_DOSSIER')) {
                 $nouveauDossier->DIFFEREAVIS_DOSSIER = 1;
             }
 
             $nouveauDossier->CNE_DOSSIER = 0;
-            if ($this->_getParam('CNE_DOSSIER')) {
+            if ($this->getRequest()->getParam('CNE_DOSSIER')) {
                 $nouveauDossier->CNE_DOSSIER = 1;
             }
 
-            if (!in_array('OBJET', $this->listeChamps[$this->_getParam('selectNature')])) {
+            if (!in_array('OBJET', $this->listeChamps[$this->getRequest()->getParam('selectNature')])) {
                 $nouveauDossier->OBJET_DOSSIER = null;
             }
 
-            if (null != $this->_getParam('servInst')) {
-                if ('servInstGrp' == $this->_getParam('servInst')) {
+            if (null != $this->getRequest()->getParam('servInst')) {
+                if ('servInstGrp' == $this->getRequest()->getParam('servInst')) {
                     // service instructeur groupement
-                    $nouveauDossier->TYPESERVINSTRUC_DOSSIER = $this->_getParam('servInst');
-                    $nouveauDossier->SERVICEINSTRUC_DOSSIER = $this->_getParam('servInstGrp');
-                } elseif ('servInstCommune' == $this->_getParam('servInst')) {
+                    $nouveauDossier->TYPESERVINSTRUC_DOSSIER = $this->getRequest()->getParam('servInst');
+                    $nouveauDossier->SERVICEINSTRUC_DOSSIER = $this->getRequest()->getParam('servInstGrp');
+                } elseif ('servInstCommune' == $this->getRequest()->getParam('servInst')) {
                     // service instructeur commune
-                    $nouveauDossier->TYPESERVINSTRUC_DOSSIER = $this->_getParam('servInst');
-                    $nouveauDossier->SERVICEINSTRUC_DOSSIER = $this->_getParam('servInstVille');
+                    $nouveauDossier->TYPESERVINSTRUC_DOSSIER = $this->getRequest()->getParam('servInst');
+                    $nouveauDossier->SERVICEINSTRUC_DOSSIER = $this->getRequest()->getParam('servInstVille');
                 }
             }
 
@@ -972,10 +950,10 @@ class DossierController extends Zend_Controller_Action
 
             if (
                 (
-                    (self::ID_NATURE_PERIODIQUE_VISITE == $this->_getParam('selectNature') && self::ID_DOSSIERTYPE_VISITE == $this->_getParam('TYPE_DOSSIER'))
-                    || self::ID_NATURE_PERIODIQUE_GRPVISITE == $this->_getParam('selectNature')
+                    (self::ID_NATURE_PERIODIQUE_VISITE == $this->getRequest()->getParam('selectNature') && self::ID_DOSSIERTYPE_VISITE == $this->getRequest()->getParam('TYPE_DOSSIER'))
+                    || self::ID_NATURE_PERIODIQUE_GRPVISITE == $this->getRequest()->getParam('selectNature')
                 )
-                && $this->_getParam('DATEVISITE_PERIODIQUE')
+                && $this->getRequest()->getParam('DATEVISITE_PERIODIQUE')
             ) {
                 // VISITE PERIODIQUE
                 // Dans le cas d'une visite périodique on renseigne le champ DATEVISITE_DOSSIER pour pouvoir calculer la périodicité suviante
@@ -986,11 +964,11 @@ class DossierController extends Zend_Controller_Action
             }
 
             $idDossier = $nouveauDossier->ID_DOSSIER;
-            $idNature = $this->_getParam('selectNature');
+            $idNature = $this->getRequest()->getParam('selectNature');
 
             // Si le dossier est une levée de prescription ou de reserve on ajoute 5 "documents consultés" de type : Attestation de
             if (
-                'new' == $this->_getParam('do')
+                'new' == $this->getRequest()->getParam('do')
                 && (self::ID_NATURE_LEVEE_PRESCRIPTIONS == $idNature || self::ID_NATURE_LEVEE_AVIS_DEF == $idNature)
             ) {
                 $dbListeDocAjout = new Model_DbTable_ListeDocAjout();
@@ -1007,13 +985,14 @@ class DossierController extends Zend_Controller_Action
             }
 
             $DBetablissementDossier = new Model_DbTable_EtablissementDossier();
-            if ('new' == $this->_getParam('do')) {
+            if ('new' == $this->getRequest()->getParam('do')) {
                 if (isset($_POST['idEtablissement']) && '' != $_POST['idEtablissement']) {
                     $saveEtabDossier = $DBetablissementDossier->createRow();
-                    $saveEtabDossier->ID_ETABLISSEMENT = $this->_getParam('idEtablissement');
+                    $saveEtabDossier->ID_ETABLISSEMENT = $this->getRequest()->getParam('idEtablissement');
                     $saveEtabDossier->ID_DOSSIER = $idDossier;
                     $saveEtabDossier->save();
                 }
+
                 // Sauvegarde des natures du dossier
                 $saveNature = $DBdossierNature->createRow();
                 $saveNature->ID_DOSSIER = $idDossier;
@@ -1022,7 +1001,7 @@ class DossierController extends Zend_Controller_Action
 
                 // Récupération des contacts de l'établissement (Resp. unique de sécu, Proprio, Exploitant, DUS)
                 $dbDossierContact = new Model_DbTable_DossierContact();
-                $contactsEtab = $dbDossierContact->recupContactEtablissement($this->_getParam('idEtablissement'));
+                $contactsEtab = $dbDossierContact->recupContactEtablissement($this->getRequest()->getParam('idEtablissement'));
 
                 $idsFonction = [
                     7,
@@ -1079,13 +1058,13 @@ class DossierController extends Zend_Controller_Action
             // GESTION DE LA RECUPERATION DES PRESCRIPTIONS EN RAPPEL REGLEMETAIRE DANS LE CAS DES ETUDES ET DES VISITES
             $service_prescription = new Service_Prescriptions();
             $service_dossier = new Service_Dossier();
-            if ('new' == $this->_getParam('do')) {
-                if (1 == $this->_getParam('TYPE_DOSSIER')) {
+            if ('new' == $this->getRequest()->getParam('do')) {
+                if (1 == $this->getRequest()->getParam('TYPE_DOSSIER')) {
                     $listePrescRegl = $service_prescription->getPrescriptions('etude', true);
                     $service_dossier->savePrescriptionRegl($idDossier, $listePrescRegl);
                 } elseif (
-                    self::ID_DOSSIERTYPE_VISITE == $this->_getParam('TYPE_DOSSIER')
-                    || self::ID_DOSSIERTYPE_GRPVISITE == $this->_getParam('TYPE_DOSSIER')
+                    self::ID_DOSSIERTYPE_VISITE == $this->getRequest()->getParam('TYPE_DOSSIER')
+                    || self::ID_DOSSIERTYPE_GRPVISITE == $this->getRequest()->getParam('TYPE_DOSSIER')
                 ) {
                     $listePrescRegl = $service_prescription->getPrescriptions('visite', true);
                     $service_dossier->savePrescriptionRegl($idDossier, $listePrescRegl);
@@ -1096,9 +1075,9 @@ class DossierController extends Zend_Controller_Action
             if (
                 (self::ID_NATURE_PERIODIQUE_VISITE == $idNature || self::ID_NATURE_PERIODIQUE_GRPVISITE == $idNature)
                 && '' != $_POST['idEtablissement']
-                && 'new' == $this->_getParam('do')
+                && 'new' == $this->getRequest()->getParam('do')
             ) {
-                $lastVP = $DBdossier->findLastVp($this->_getParam('idEtablissement'));
+                $lastVP = $DBdossier->findLastVp($this->getRequest()->getParam('idEtablissement'));
                 $idDossierLastVP = $lastVP['ID_DOSSIER'];
                 if ('' != $lastVP['ID_DOSSIER']) {
                     $dblistedoc = new Model_DbTable_DossierListeDoc();
@@ -1195,6 +1174,7 @@ class DossierController extends Zend_Controller_Action
                                 $dossDocManquant->DATE_RECEPTION_DOC = $valueRecep;
                             }
                         }
+
                         $dossDocManquant->save();
                     } elseif (!$docEnC) {
                         $dossDocManquant = $dbDossDocManquant->createRow();
@@ -1216,12 +1196,14 @@ class DossierController extends Zend_Controller_Action
                                 $dossDocManquant->DATE_RECEPTION_DOC = $valueRecep;
                             }
                         }
+
                         $dossDocManquant->save();
                     }
 
                     ++$cpt;
                 }
             }
+
             $nouveauDossier->INCOMPLET_DOSSIER = $_POST['INCOMPLET_DOSSIER'];
             $nouveauDossier->save();
 
@@ -1256,8 +1238,8 @@ class DossierController extends Zend_Controller_Action
             $dbDossierAffectation = new Model_DbTable_DossierAffectation();
             $dbDateComm = new Model_DbTable_DateCommission();
             if (
-                '' == $this->_getParam('COMMISSION_DOSSIER')
-                || !in_array('COMMISSION', $this->listeChamps[$this->_getParam('selectNature')])
+                '' == $this->getRequest()->getParam('COMMISSION_DOSSIER')
+                || !in_array('COMMISSION', $this->listeChamps[$this->getRequest()->getParam('selectNature')])
             ) {
                 $dbDossierAffectation->deleteDateDossierAffect($idDossier);
             } else {
@@ -1276,15 +1258,15 @@ class DossierController extends Zend_Controller_Action
 
                 // Partie concernant la date de visite
                 if (
-                    $this->_getParam('ID_AFFECTATION_DOSSIER_VISITE')
-                    && '' != $this->_getParam('ID_AFFECTATION_DOSSIER_VISITE')
+                    $this->getRequest()->getParam('ID_AFFECTATION_DOSSIER_VISITE')
+                    && '' != $this->getRequest()->getParam('ID_AFFECTATION_DOSSIER_VISITE')
                 ) {
                     if (isset($infosDateVisite)) {
                         // la date de visite existe déjà on vérifie si elle a changé
-                        if ($infosDateVisite['ID_DATECOMMISSION_AFFECT'] != $this->_getParam('ID_AFFECTATION_DOSSIER_VISITE')) {
+                        if ($infosDateVisite['ID_DATECOMMISSION_AFFECT'] != $this->getRequest()->getParam('ID_AFFECTATION_DOSSIER_VISITE')) {
                             // Dans le cas ou la date commission est différente de celle passée en paramètre alors on la met à jour
                             $dateEdit = $dbDossierAffectation->find($infosDateVisite['ID_DATECOMMISSION_AFFECT'], $idDossier)->current();
-                            $dateEdit->ID_DATECOMMISSION_AFFECT = $this->_getParam('ID_AFFECTATION_DOSSIER_VISITE');
+                            $dateEdit->ID_DATECOMMISSION_AFFECT = $this->getRequest()->getParam('ID_AFFECTATION_DOSSIER_VISITE');
                             $dateEdit->HEURE_DEB_AFFECT = null;
                             $dateEdit->HEURE_FIN_AFFECT = null;
                             $dateEdit->NUM_DOSSIER = 0;
@@ -1293,11 +1275,12 @@ class DossierController extends Zend_Controller_Action
                     } else {
                         // la date de visite n'existe pas il faut donc la crééer.
                         $affectation = $dbDossierAffectation->createRow();
-                        $affectation->ID_DATECOMMISSION_AFFECT = $this->_getParam('ID_AFFECTATION_DOSSIER_VISITE');
+                        $affectation->ID_DATECOMMISSION_AFFECT = $this->getRequest()->getParam('ID_AFFECTATION_DOSSIER_VISITE');
                         $affectation->ID_DOSSIER_AFFECT = $idDossier;
                         $affectation->save();
                     }
-                    $dateCommDoss = $dbDateComm->find($this->_getParam('ID_AFFECTATION_DOSSIER_VISITE'))->current();
+
+                    $dateCommDoss = $dbDateComm->find($this->getRequest()->getParam('ID_AFFECTATION_DOSSIER_VISITE'))->current();
                     $nouveauDossier->DATEVISITE_DOSSIER = $dateCommDoss->DATE_COMMISSION;
                     $nouveauDossier->save();
                 } else {
@@ -1312,15 +1295,15 @@ class DossierController extends Zend_Controller_Action
 
                 // Partie concernant la date de commission
                 if (
-                    $this->_getParam('ID_AFFECTATION_DOSSIER_COMMISSION')
-                    && '' != $this->_getParam('ID_AFFECTATION_DOSSIER_COMMISSION')
+                    $this->getRequest()->getParam('ID_AFFECTATION_DOSSIER_COMMISSION')
+                    && '' != $this->getRequest()->getParam('ID_AFFECTATION_DOSSIER_COMMISSION')
                 ) {
                     if (isset($infosDateSalle)) {
                         // la date de commission existe déjà on vérifie si elle a changé
-                        if ($infosDateSalle['ID_DATECOMMISSION_AFFECT'] != $this->_getParam('ID_AFFECTATION_DOSSIER_COMMISSION')) {
+                        if ($infosDateSalle['ID_DATECOMMISSION_AFFECT'] != $this->getRequest()->getParam('ID_AFFECTATION_DOSSIER_COMMISSION')) {
                             // Dans le cas ou la date commission est différente de celle passée en paramètre alors on la met à jour
                             $dateEdit = $dbDossierAffectation->find($infosDateSalle['ID_DATECOMMISSION_AFFECT'], $idDossier)->current();
-                            $dateEdit->ID_DATECOMMISSION_AFFECT = $this->_getParam('ID_AFFECTATION_DOSSIER_COMMISSION');
+                            $dateEdit->ID_DATECOMMISSION_AFFECT = $this->getRequest()->getParam('ID_AFFECTATION_DOSSIER_COMMISSION');
                             $dateEdit->HEURE_DEB_AFFECT = null;
                             $dateEdit->HEURE_FIN_AFFECT = null;
                             $dateEdit->NUM_DOSSIER = 0;
@@ -1329,11 +1312,12 @@ class DossierController extends Zend_Controller_Action
                     } else {
                         // la date de commission n'existe pas il faut donc la crééer.
                         $affectation = $dbDossierAffectation->createRow();
-                        $affectation->ID_DATECOMMISSION_AFFECT = $this->_getParam('ID_AFFECTATION_DOSSIER_COMMISSION');
+                        $affectation->ID_DATECOMMISSION_AFFECT = $this->getRequest()->getParam('ID_AFFECTATION_DOSSIER_COMMISSION');
                         $affectation->ID_DOSSIER_AFFECT = $idDossier;
                         $affectation->save();
                     }
-                    $dateCommDoss = $dbDateComm->find($this->_getParam('ID_AFFECTATION_DOSSIER_COMMISSION'))->current();
+
+                    $dateCommDoss = $dbDateComm->find($this->getRequest()->getParam('ID_AFFECTATION_DOSSIER_COMMISSION'))->current();
                     $nouveauDossier->DATECOMM_DOSSIER = $dateCommDoss->DATE_COMMISSION;
                     $nouveauDossier->save();
                 } else {
@@ -1351,16 +1335,16 @@ class DossierController extends Zend_Controller_Action
 
             // On met le champ ID_DOSSIER_DONNANT_AVIS de établissement avec l'ID du dossier que l'on vient d'enregistrer dans les cas suivant
             if (
-                $this->_getParam('AVIS_DOSSIER_COMMISSION')
-                && (1 == $this->_getParam('AVIS_DOSSIER_COMMISSION') || self::ID_AVIS_DEFAVORABLE == $this->_getParam('AVIS_DOSSIER_COMMISSION'))
+                $this->getRequest()->getParam('AVIS_DOSSIER_COMMISSION')
+                && (1 == $this->getRequest()->getParam('AVIS_DOSSIER_COMMISSION') || self::ID_AVIS_DEFAVORABLE == $this->getRequest()->getParam('AVIS_DOSSIER_COMMISSION'))
                 && $service_dossier->isDossierDonnantAvis($nouveauDossier, $idNature)
             ) {
                 if (
-                    'new' == $this->_getParam('do')
-                    && $this->_getParam('idEtablissement')
+                    'new' == $this->getRequest()->getParam('do')
+                    && $this->getRequest()->getParam('idEtablissement')
                 ) {
                     $listeEtab = [[
-                        'ID_ETABLISSEMENT' => $this->_getParam('idEtablissement'),
+                        'ID_ETABLISSEMENT' => $this->getRequest()->getParam('idEtablissement'),
                     ]];
                 } else {
                     $listeEtab = $DBetablissementDossier->getEtablissementListe($idDossier);
@@ -1387,7 +1371,7 @@ class DossierController extends Zend_Controller_Action
 
                 $dbEtab = new Model_DbTable_Etablissement();
 
-                $updatedEtab = $service_dossier->saveDossierDonnantAvis($nouveauDossier, $listeEtab, $cache, $this->_getParam('repercuterAvis'));
+                $updatedEtab = $service_dossier->saveDossierDonnantAvis($nouveauDossier, $listeEtab, $cache, $this->getRequest()->getParam('repercuterAvis'));
                 if (
                     unserialize($cache->load('acl'))->isAllowed($mygroupe, 'alerte_email', 'alerte_avis')
                     && getenv('PREVARISC_MAIL_ENABLED')
@@ -1413,7 +1397,7 @@ class DossierController extends Zend_Controller_Action
                 // AVERTISSEMENT SUR L'OUVERTURE D'UN ETABLISSEMENT A EFFECTUER
                 // Dans le cas d'une visite avant ouverture avec avis de commission positif
                 if (
-                    1 == $this->_getParam('AVIS_DOSSIER_COMMISSION')
+                    1 == $this->getRequest()->getParam('AVIS_DOSSIER_COMMISSION')
                     && in_array($idNature, [47, 48])
                 ) {
                     foreach ($updatedEtab as $ue) {
@@ -1434,10 +1418,10 @@ class DossierController extends Zend_Controller_Action
             }
             // On passe d'un dossier donnant avis à un dossier ne donnant pas avis (edit)
             elseif (
-                $this->_getParam('AVIS_DOSSIER_COMMISSION')
-                && in_array($this->_getParam('AVIS_DOSSIER_COMMISSION'), [1, 2])
+                $this->getRequest()->getParam('AVIS_DOSSIER_COMMISSION')
+                && in_array($this->getRequest()->getParam('AVIS_DOSSIER_COMMISSION'), [1, 2])
                 && !$service_dossier->isDossierDonnantAvis($nouveauDossier, $idNature)
-                && 'edit' == $this->_getParam('do')
+                && 'edit' == $this->getRequest()->getParam('do')
                 && in_array($oldNature, $naturesDonnantAvis)
             ) {
                 $listeEtab = $DBetablissementDossier->getEtablissementListe($idDossier);
@@ -1459,17 +1443,17 @@ class DossierController extends Zend_Controller_Action
             // on envoi l'id à la vue pour qu'elle puisse rediriger vers la bonne page
             $idArray = ['id' => $nouveauDossier->ID_DOSSIER];
             echo json_encode($idArray);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde du dossier',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
     // Autocomplétion pour selection ABREVIATION
-    public function selectionabreviationAction()
+    public function selectionabreviationAction(): void
     {
         if (isset($_GET['q'])) {
             $DBprescPrescType = new Model_DbTable_PrescriptionType();
@@ -1478,7 +1462,7 @@ class DossierController extends Zend_Controller_Action
     }
 
     // Autocomplétion pour selection ETABLISSEMENT
-    public function selectionetabAction()
+    public function selectionetabAction(): void
     {
         // Création de l'objet recherche
         $search = new Model_DbTable_Search();
@@ -1488,11 +1472,11 @@ class DossierController extends Zend_Controller_Action
         $search->limit(5);
 
         if (array_key_exists('ID_GENRE', $_GET)) {
-            $search->setCriteria('genre.ID_GENRE', $this->_request->ID_GENRE + 1);
+            $search->setCriteria('genre.ID_GENRE', $this->getRequest()->getParam('ID_GENRE') + 1);
         }
 
         // On recherche avec le libellé
-        $search->setCriteria('LIBELLE_ETABLISSEMENTINFORMATIONS', $this->_request->q, false);
+        $search->setCriteria('LIBELLE_ETABLISSEMENTINFORMATIONS', $this->getRequest()->getParam('q'), false);
 
         // On balance le résultat sur la vue
         $this->view->assign('selectEtab', $search->run()->getAdapter()->getItems(0, 99999999999)->toArray());
@@ -1509,18 +1493,18 @@ class DossierController extends Zend_Controller_Action
     }
 
     // Action permettant de lister les établissements et les dossiers liés
-    public function lieesAction()
+    public function lieesAction(): void
     {
-        $idDossier = (int) $this->_getParam('id');
+        $idDossier = (int) $this->getRequest()->getParam('id');
         $this->view->assign('id_dossier', $idDossier);
 
         $DBdossier = new Model_DbTable_Dossier();
         $dbDossierLie = new Model_DbTable_DossierLie();
 
         // Enregistrement des dossiers si necessaire
-        if ($this->_request->isPost()) {
+        if ($this->getRequest()->isPost()) {
             try {
-                $post = $this->_request->getPost();
+                $post = $this->getRequest()->getPost();
                 if ('saveDossLink' == $post['do']) {
                     foreach ($post['idDossierLie'] as $idDossLink) {
                         $newLink = $dbDossierLie->createRow();
@@ -1530,12 +1514,12 @@ class DossierController extends Zend_Controller_Action
                     }
                 }
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Erreur lors de l\'enregistrement.', 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => "Erreur lors de l'enregistrement.", 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
             }
         }
 
         $this->view->assign('infosDossier', $DBdossier->find($idDossier)->current());
-        $this->view->assign('listeEtablissement', $DBdossier->getEtablissementDossier((int) $this->_getParam('id')));
+        $this->view->assign('listeEtablissement', $DBdossier->getEtablissementDossier((int) $this->getRequest()->getParam('id')));
 
         $service_dossier = new Service_Dossier();
         if ($this->idDossier) {
@@ -1561,10 +1545,11 @@ class DossierController extends Zend_Controller_Action
             $listeDossierLies[$numrez]['etabInfo'] = $service_dossier->getEtabInfos($dossierToShow);
             $listeDossierLies[$numrez]['dossierInfo'] = $DBdossier->getDossierTypeNature($dossierToShow);
         }
+
         $this->view->assign('listeDossierLies', $listeDossierLies);
     }
 
-    public function lieesDossAction()
+    public function lieesDossAction(): void
     {
         $service_dossier = new Service_Dossier();
         $service_etablissement = new Service_Etablissement();
@@ -1572,7 +1557,7 @@ class DossierController extends Zend_Controller_Action
         $dbEtablissement = new Model_DbTable_Etablissement();
         $dbEtablissementDossier = new Model_DbTable_EtablissementDossier();
 
-        $idDossier = (int) $this->_getParam('id');
+        $idDossier = (int) $this->getRequest()->getParam('id');
         if ($this->idDossier) {
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
         }
@@ -1607,26 +1592,28 @@ class DossierController extends Zend_Controller_Action
             // on parcour chacun dossiers liers pour en récupérer les informations à afficher
             if ($idDossier == $attr['ID_DOSSIER1']) {
                 $dejaLies[] = $attr['ID_DOSSIER2'];
-            } elseif ($this->_getParam('idDossier') == $attr['ID_DOSSIER2']) {
+            } elseif ($this->getRequest()->getParam('idDossier') == $attr['ID_DOSSIER2']) {
                 $dejaLies[] = $attr['ID_DOSSIER1'];
             }
         }
+
         $this->view->assign('dejaLies', $dejaLies);
     }
 
-    public function contactAction()
+    public function contactAction(): void
     {
-        $this->view->assign('idDossier', (int) $this->_getParam('id'));
+        $this->view->assign('idDossier', (int) $this->getRequest()->getParam('id'));
         $service_dossier = new Service_Dossier();
         if ($this->idDossier) {
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
         }
+
         $DBdossier = new Model_DbTable_Dossier();
-        $this->view->assign('infosDossier', $DBdossier->find((int) $this->_getParam('id'))->current());
+        $this->view->assign('infosDossier', $DBdossier->find((int) $this->getRequest()->getParam('id'))->current());
     }
 
     // GESTION DOCUMENTS CONSULTES
-    public function docconsulteAction()
+    public function docconsulteAction(): void
     {
         $this->view->inlineScript()->appendFile('/js/dossier/dossierDocConsulte.js', 'text/javascript');
 
@@ -1637,15 +1624,15 @@ class DossierController extends Zend_Controller_Action
         }
 
         $dbdossier = new Model_DbTable_Dossier();
-        $this->view->assign('infosDossier', $dbdossier->find((int) $this->_getParam('id'))->current());
+        $this->view->assign('infosDossier', $dbdossier->find((int) $this->getRequest()->getParam('id'))->current());
 
-        $dossierType = $dbdossier->getTypeDossier((int) $this->_getParam('id'));
+        $dossierType = $dbdossier->getTypeDossier((int) $this->getRequest()->getParam('id'));
 
-        $this->view->assign('idDossier', (int) $this->_getParam('id'));
+        $this->view->assign('idDossier', (int) $this->getRequest()->getParam('id'));
 
         // récupération de toutes les natures
         $DBdossierNature = new Model_DbTable_DossierNature();
-        $this->view->assign('listeNatures', $DBdossierNature->getDossierNaturesLibelle((int) $this->_getParam('id')));
+        $this->view->assign('listeNatures', $DBdossierNature->getDossierNaturesLibelle((int) $this->getRequest()->getParam('id')));
 
         // suivant le type on récup la liste des docs que l'on met dans un tableau a multi dimension.
         // l'index de chaque liste sera l'id de la nature
@@ -1677,11 +1664,12 @@ class DossierController extends Zend_Controller_Action
             } else {
                 $listeDocConsulte = 0;
             }
+
             // ici on récupère tous les documents qui ont été renseigné dans la base par un utilisateur (avec id du dossier et de la nature)
-            $listeDocRenseigne[$nature['ID_NATURE']] = $dblistedoc->recupDocDossier($this->_getParam('id'));
+            $listeDocRenseigne[$nature['ID_NATURE']] = $dblistedoc->recupDocDossier($this->getRequest()->getParam('id'));
 
             // ici on récupère tous les documents qui ont été ajoutés par l'utilisateur (document non proposé par défaut)
-            $listeDocAjout[$nature['ID_NATURE']] = $dblistedocAjout->getDocAjout((int) $this->_getParam('id'));
+            $listeDocAjout[$nature['ID_NATURE']] = $dblistedocAjout->getDocAjout((int) $this->getRequest()->getParam('id'));
         }
 
         // On envoie à la vue la liste des documents consultés classés par nature (peux y avoir plusieurs fois la même liste)
@@ -1692,19 +1680,19 @@ class DossierController extends Zend_Controller_Action
         $this->view->assign('listeDocsAjout', $listeDocAjout);
     }
 
-    public function ajoutdocAction($idDossier)
+    public function ajoutdocAction($idDossier): void
     {
         try {
             $dblistedocajout = new Model_DbTable_ListeDocAjout();
 
             // insertion dans la base de données du nouveau type de document
             $newDoc = $dblistedocajout->createRow();
-            $newDoc->LIBELLE_DOCAJOUT = $this->_getParam('libelleNewDoc');
-            $newDoc->ID_DOSSIER = $this->_getParam('idDossier');
-            $newDoc->ID_NATURE = $this->_getParam('natureDocAjout');
+            $newDoc->LIBELLE_DOCAJOUT = $this->getRequest()->getParam('libelleNewDoc');
+            $newDoc->ID_DOSSIER = $this->getRequest()->getParam('idDossier');
+            $newDoc->ID_NATURE = $this->getRequest()->getParam('natureDocAjout');
             $newDoc->save();
 
-            $this->view->assign('idNatureNewDoc', $this->_getParam('natureDocAjout'));
+            $this->view->assign('idNatureNewDoc', $this->getRequest()->getParam('natureDocAjout'));
             $this->view->assign('idNewDoc', $newDoc->ID_DOCAJOUT);
             $this->view->assign('libelleNewDoc', $newDoc->LIBELLE_DOCAJOUT);
 
@@ -1715,28 +1703,26 @@ class DossierController extends Zend_Controller_Action
                 'title' => 'Le document a bien été ajouté',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
-                'title' => 'Erreur lors de l\'ajout du document',
-                'message' => $e->getMessage(),
+                'title' => "Erreur lors de l'ajout du document",
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    /**
-     * @return null|false
-     */
-    public function validdocAction()
+    public function validdocAction(): ?bool
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
-            $idDossier = (int) $this->_getParam('id');
-            $idValid = $this->_getParam('idValid');
+            $idDossier = (int) $this->getRequest()->getParam('id');
+            $idValid = $this->getRequest()->getParam('idValid');
             $datePost = $this->_getParam('date_'.$idValid);
             if (0 == $idDossier) {
                 return false;
             }
+
             if ('' == $idValid) {
                 return false;
             }
@@ -1747,6 +1733,7 @@ class DossierController extends Zend_Controller_Action
             } else {
                 $date = '0000-00-00';
             }
+
             $ref = str_replace('"', "''", $_POST['ref_'.$idValid]);
             $libelle = $_POST['libelle_'.$idValid] ?? '';
 
@@ -1772,10 +1759,11 @@ class DossierController extends Zend_Controller_Action
                     $liste->DATE_CONSULTE = $date;
                     $liste->DOC_CONSULTE = 1;
                 }
+
                 $liste->save();
             } else {
                 // On commence par isoler l'id de "_aj"
-                $idDocAjout = explode('_', $this->_getParam('idValid'));
+                $idDocAjout = explode('_', $this->getRequest()->getParam('idValid'));
                 $dblistedocajout = new Model_DbTable_ListeDocAjout();
 
                 $docAjout = $dblistedocajout->find($idDocAjout[1])->current();
@@ -1787,17 +1775,17 @@ class DossierController extends Zend_Controller_Action
 
                 $docAjout->save();
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
         }
 
         return null;
     }
 
-    public function suppdocAction()
+    public function suppdocAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
         // cas de la suppression d'un document qui avait été renseigné
-        $tabInfos = explode('_', $this->_getParam('docInfos'));
+        $tabInfos = explode('_', $this->getRequest()->getParam('docInfos'));
         $numdoc = $tabInfos[1];
 
         $expectedCountIfNotAdded = 2;
@@ -1805,7 +1793,7 @@ class DossierController extends Zend_Controller_Action
         if ($expectedCountIfNotAdded === count($tabInfos)) {
             // cas d'un document existant
             $dbToUse = new Model_DbTable_DossierDocConsulte();
-            $searchResult = $dbToUse->getGeneral($this->_getParam('idDossier'), $numdoc);
+            $searchResult = $dbToUse->getGeneral($this->getRequest()->getParam('idDossier'), $numdoc);
             $docDelete = $dbToUse->find($searchResult['ID_DOSSIERDOCCONSULTE'])->current();
             $docDelete->delete();
         } elseif ($expectedCountIfAdded === count($tabInfos)) {
@@ -1817,13 +1805,13 @@ class DossierController extends Zend_Controller_Action
     }
 
     // GESTION LIAISON ETABLISSMENTS
-    public function addetablissementAction()
+    public function addetablissementAction(): void
     {
         try {
             $DBetablissementDossier = new Model_DbTable_EtablissementDossier();
             $newEtabDossier = $DBetablissementDossier->createRow();
-            $newEtabDossier->ID_ETABLISSEMENT = $this->_getParam('idSelect');
-            $newEtabDossier->ID_DOSSIER = $this->_getParam('idDossier');
+            $newEtabDossier->ID_ETABLISSEMENT = $this->getRequest()->getParam('idSelect');
+            $newEtabDossier->ID_DOSSIER = $this->getRequest()->getParam('idDossier');
             $newEtabDossier->save();
 
             // on répercute l'avis du dossier sur l'établissement
@@ -1833,8 +1821,8 @@ class DossierController extends Zend_Controller_Action
             $DB_dossier = new Model_DbTable_Dossier();
             $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
 
-            $dossier = $DB_dossier->find($this->_getParam('idDossier'))->current();
-            $idNature = $DB_dossier->getNatureDossier($this->_getParam('idDossier'));
+            $dossier = $DB_dossier->find($this->getRequest()->getParam('idDossier'))->current();
+            $idNature = $DB_dossier->getNatureDossier($this->getRequest()->getParam('idDossier'));
             $idNature = $idNature['ID_NATURE'] ?? 0;
 
             if ($service_dossier->isDossierDonnantAvis($dossier, $idNature)) {
@@ -1842,30 +1830,30 @@ class DossierController extends Zend_Controller_Action
                     $dossier,
                     [
                         [
-                            'ID_ETABLISSEMENT' => $this->_getParam('idSelect'),
+                            'ID_ETABLISSEMENT' => $this->getRequest()->getParam('idSelect'),
                         ],
                     ],
                     $cache
                 );
             }
 
-            $this->view->assign('libelleEtab', $this->_getParam('libelleSelect'));
+            $this->view->assign('libelleEtab', $this->getRequest()->getParam('libelleSelect'));
             $this->view->assign('infosEtab', $newEtabDossier);
             $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'L\'établissement a bien été ajouté',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de l\'ajout de l\'établissement',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function deleteetablissementAction()
+    public function deleteetablissementAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -1875,7 +1863,7 @@ class DossierController extends Zend_Controller_Action
             $service_etablissement = new Service_Etablissement();
             $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
 
-            $deleteEtabDossier = $DBetablissementDossier->find($this->_getParam('idEtabDossier'))->current();
+            $deleteEtabDossier = $DBetablissementDossier->find($this->getRequest()->getParam('idEtabDossier'))->current();
             if (!$deleteEtabDossier) {
                 $this->_helper->flashMessenger([
                     'context' => 'warning',
@@ -1918,23 +1906,23 @@ class DossierController extends Zend_Controller_Action
                     'message' => $etablissement->ID_DOSSIER_DONNANT_AVIS ? 'Un nouveau dossier donne à présent avis.' : "L'établissement n'a plus de dossier donnant avis.",
                 ]);
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => "Erreur lors de la suppression du lien à l'établissement.",
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function deleteliendossierAction()
+    public function deleteliendossierAction(): void
     {
         try {
             // action appelée lorsque l'on supprime un lien avec un autre dossier
             $this->_helper->viewRenderer->setNoRender();
 
             $DBetablissementDossier = new Model_DbTable_DossierLie();
-            $deleteEtabDossier = $DBetablissementDossier->find($this->_getParam('idLienDossier'))->current();
+            $deleteEtabDossier = $DBetablissementDossier->find($this->getRequest()->getParam('idLienDossier'))->current();
             $deleteEtabDossier->delete();
 
             $this->_helper->flashMessenger([
@@ -1942,54 +1930,54 @@ class DossierController extends Zend_Controller_Action
                 'title' => 'Le lien avec le dossier a bien été supprimé',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du lien avec ledossier',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
 
-    public function dialogcommshowAction()
+    public function dialogcommshowAction(): void
     {
         $dbDateComm = new Model_DbTable_DateCommission();
-        $infosDateComm = $dbDateComm->find($this->_getParam('idDateComm'))->current();
+        $infosDateComm = $dbDateComm->find($this->getRequest()->getParam('idDateComm'))->current();
         $this->view->assign('infosDateComm', $infosDateComm);
 
         $date = new Zend_Date($infosDateComm['DATE_COMMISSION'], Zend_Date::DATES);
         $this->view->assign('dateSelect', $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR));
     }
 
-    public function affectationodjAction()
+    public function affectationodjAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
     }
 
-    public function descriptifsAction()
+    public function descriptifsAction(): void
     {
-        $idDossier = (int) $this->_getParam('id');
+        $idDossier = (int) $this->getRequest()->getParam('id');
         $DBdossier = new Model_DbTable_Dossier();
 
         $this->view->assign('infosDossier', $DBdossier->find($idDossier)->current());
     }
 
     // GENERATION DOCUMENTS
-    public function rapportAction()
+    public function rapportAction(): void
     {
         $service_commission = new Service_Commission();
         $service_dossier = new Service_Dossier();
 
         // si on génére un document
-        if ($this->_request->isPost()) {
-            $idDossier = $this->_getParam('idDossier');
-            $commission = $this->_getParam('commission');
-            foreach ($this->_getParam('idEtab') as $etablissementId) {
+        if ($this->getRequest()->isPost()) {
+            $idDossier = $this->getRequest()->getParam('idDossier');
+            $commission = $this->getRequest()->getParam('commission');
+            foreach ($this->getRequest()->getParam('idEtab') as $etablissementId) {
                 $this->creationdocAction($idDossier, $etablissementId, $commission);
             }
         }
 
-        $idDossier = (int) $this->_getParam('id');
+        $idDossier = (int) $this->getRequest()->getParam('id');
 
         // informations sur le verrouillage
         $DBdossier = new Model_DbTable_Dossier();
@@ -2021,6 +2009,7 @@ class DossierController extends Zend_Controller_Action
                     }
                 }
             }
+
             closedir($dirVer);
             sort($fichierVer);
 
@@ -2049,6 +2038,7 @@ class DossierController extends Zend_Controller_Action
                         }
                     }
                 }
+
                 closedir($dir);
                 sort($fichier);
 
@@ -2067,14 +2057,14 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    public function generationrapportAction()
+    public function generationrapportAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
 
-        $idDossier = $this->_getParam('idDossier');
-        $idCommission = $this->_getParam('idCommission');
+        $idDossier = $this->getRequest()->getParam('idDossier');
+        $idCommission = $this->getRequest()->getParam('idCommission');
 
-        foreach ($this->_getParam('idEtab') as $etablissementId) {
+        foreach ($this->getRequest()->getParam('idEtab') as $etablissementId) {
             $this->creationdocAction($idDossier, $etablissementId, $idCommission);
         }
     }
@@ -2084,12 +2074,12 @@ class DossierController extends Zend_Controller_Action
      * @param mixed $idDossier
      * @param mixed $commission
      */
-    public function creationdocAction($idDossier, $idEtab, $commission)
+    public function creationdocAction($idDossier, $idEtab, $commission): void
     {
         $this->view->assign('idDossier', $idDossier);
         $this->view->assign('idCommission', $commission);
 
-        $this->view->assign('fichierSelect', $this->_getParam('file'));
+        $this->view->assign('fichierSelect', $this->getRequest()->getParam('file'));
 
         $dateDuJour = new Zend_Date();
         $this->view->assign('dateDuJour', $dateDuJour->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR));
@@ -2200,15 +2190,19 @@ class DossierController extends Zend_Controller_Action
             if (0 != $array_adresses[0]['NUMERO_ADRESSE']) {
                 $adresse = $array_adresses[0]['NUMERO_ADRESSE'].' ';
             }
+
             if ('' != $array_adresses[0]['LIBELLE_RUE']) {
                 $adresse .= $array_adresses[0]['LIBELLE_RUE'].' ';
             }
+
             if ('' != $array_adresses[0]['CODEPOSTAL_COMMUNE']) {
                 $adresse .= $array_adresses[0]['CODEPOSTAL_COMMUNE'].' ';
             }
+
             if ('' != $array_adresses[0]['LIBELLE_COMMUNE']) {
                 $adresse .= strtoupper($array_adresses[0]['LIBELLE_COMMUNE']).' ';
             }
+
             $this->view->assign('maire', $service_adresse->getMaire($array_adresses[0]['NUMINSEE_COMMUNE']));
             $this->view->assign('etablissementAdresse', $adresse);
         }
@@ -2279,6 +2273,7 @@ class DossierController extends Zend_Controller_Action
                 }
             }
         }
+
         $this->view->assign('servInstructeur', $servInstructeur);
         $this->view->assign('servInstructeurPrenomContact', $servInstructeurPrenomContact);
         $this->view->assign('servInstructeurNomContact', $servInstructeurNomContact);
@@ -2375,16 +2370,19 @@ class DossierController extends Zend_Controller_Action
                 // premiere date = date visite donc on renseigne l'input hidden correspondant avec l'id de cette date
                 $this->view->assign('idDateVisiteAffect', $ue['ID_DATECOMMISSION']);
             }
+
             if ($nbDateDecompte > 1) {
                 $listeDateInput .= $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR).', ';
             } elseif (1 == $nbDateDecompte) {
                 $listeDateInput .= $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
             }
+
             $listeHeureInput[] = substr($ue['HEUREDEB_COMMISSION'], 0, 5).' à '.substr($ue['HEUREFIN_COMMISSION'], 0, 5);
 
             $this->view->assign('dateVisiteInput', $listeDateInput);
             --$nbDateDecompte;
         }
+
         $this->view->assign('dateVisite', $this->view->dateVisiteInput);
         $this->view->assign('heureVisite', implode(', ', $listeHeureInput));
 
@@ -2442,7 +2440,7 @@ class DossierController extends Zend_Controller_Action
         if (
             self::ID_ACTIVITE_CENTRE_COMMERCIAL == $this->view->id_typeactivite
             && in_array($dossierNature['ID_NATURE'], $natureCC)
-            && !$this->_getParam('repriseCC')
+            && !$this->getRequest()->getParam('repriseCC')
         ) {
             if (
                 isset($affectDossier['ID_DATECOMMISSION_AFFECT'])
@@ -2462,7 +2460,7 @@ class DossierController extends Zend_Controller_Action
         } elseif (
             self::ID_ACTIVITE_CENTRE_COMMERCIAL == $this->view->id_typeactivite
             && in_array($dossierNature['ID_NATURE'], $natureCCL)
-            && !$this->_getParam('repriseCC')
+            && !$this->getRequest()->getParam('repriseCC')
         ) {
             $dateCommGen = $this->view->infosDossier['DATECOMM_DOSSIER'];
             // On récupère toutes les cellules
@@ -2507,6 +2505,7 @@ class DossierController extends Zend_Controller_Action
                     unset($cellulesListe[$celluleKey]);
                 }
             }
+
             $this->view->assign('celluleDossierLevee', $cellulesListe);
         }
 
@@ -2574,7 +2573,7 @@ class DossierController extends Zend_Controller_Action
         // PARTIE TEXTES APPLICABLES
         // on recupere tout les textes applicables qui ont été cochés dans le dossier
         $dbDossierTextesAppl = new Model_DbTable_DossierTextesAppl();
-        $this->view->assign('listeTextesAppl', $dbDossierTextesAppl->recupTextesDossierGenDoc($this->_getParam('idDossier')));
+        $this->view->assign('listeTextesAppl', $dbDossierTextesAppl->recupTextesDossierGenDoc($this->getRequest()->getParam('idDossier')));
 
         // DATE DE LA DERNIERE VISITE PERIODIQUE
         $dateVisite = $this->view->infosDossier['DATEVISITE_DOSSIER'];
@@ -2641,6 +2640,7 @@ class DossierController extends Zend_Controller_Action
         $this->view->assign('nouvellePJ', $nouvellePJ);
 
         $this->view->assign('store', Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore'));
+
         $url = $this->getHelper('url')->url(['controller' => 'piece-jointe', 'id' => $idDossier, 'action' => 'get', 'idpj' => $nouvellePJ['ID_PIECEJOINTE'], 'type' => 'dossier']);
 
         echo "<a href='".$url."'>Ouvrir le rapport de l'établissement : ".$object_informations['LIBELLE_ETABLISSEMENTINFORMATIONS'].'<a/><br/><br/>';
@@ -2654,13 +2654,14 @@ class DossierController extends Zend_Controller_Action
         $this->render('creationdoc');
     }
 
-    public function descriptifAction()
+    public function descriptifAction(): void
     {
-        if (0 !== (int) $this->_getParam('id')) {
+        $idDossier = (int) $this->getRequest()->getParam('id');
+
+        if (0 !== $idDossier) {
             // Cas d'affichage des infos d'un dossier existant
             $this->view->assign('do', 'edit');
             // On récupère l'id du dossier
-            $idDossier = (int) $this->_getParam('id');
             $this->view->assign('idDossier', $idDossier);
             // Récupération de tous les champs de la table dossier
             $DBdossier = new Model_DbTable_Dossier();
@@ -2676,17 +2677,17 @@ class DossierController extends Zend_Controller_Action
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
         }
 
-        if ($this->_request->DESCRIPTIF_DOSSIER) {
+        if ($this->getRequest()->isPost()) {
             $DBdossier = new Model_DbTable_Dossier();
-            $dossier = $DBdossier->find($this->_request->id)->current();
-            $dossier->DESCRIPTIF_DOSSIER = $this->_request->DESCRIPTIF_DOSSIER;
+            $dossier = $DBdossier->find($idDossier)->current();
+            $dossier->DESCRIPTIF_DOSSIER = $this->getRequest()->getParam('DESCRIPTIF_DOSSIER');
             $dossier->save();
 
-            $this->_helper->_redirector('descriptif', $this->_request->getControllerName(), null, ['id' => $this->_request->id]);
+            $this->_helper->_redirector('descriptif', $this->getRequest()->getControllerName(), null, ['id' => $idDossier]);
         }
     }
 
-    public function textesApplicablesAction()
+    public function textesApplicablesAction(): void
     {
         $this->_helper->layout->setLayout('dossier');
 
@@ -2696,36 +2697,37 @@ class DossierController extends Zend_Controller_Action
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
         }
 
-        $this->view->assign('textes_applicables_dossier', $service_dossier->getAllTextesApplicables($this->_request->id));
+        $this->view->assign('textes_applicables_dossier', $service_dossier->getAllTextesApplicables($this->getRequest()->getParam('id')));
     }
 
-    public function editTextesApplicablesAction()
+    public function editTextesApplicablesAction(): void
     {
         $service_dossier = new Service_Dossier();
         $service_textes_applicables = new Service_TextesApplicables();
+        $id = $this->getRequest()->getParam('id');
 
-        $this->view->assign('textes_applicables_dossier', $service_dossier->getAllTextesApplicables($this->_request->id));
+        $this->view->assign('textes_applicables_dossier', $service_dossier->getAllTextesApplicables($id));
         $this->view->assign('textes_applicables', $service_textes_applicables->getAll());
 
-        if ($this->_request->isPost()) {
+        if ($this->getRequest()->isPost()) {
             try {
-                $post = $this->_request->getPost();
-                $service_dossier->saveTextesApplicables($this->_request->id, $post['textes_applicables']);
+                $post = $this->getRequest()->getPost();
+                $service_dossier->saveTextesApplicables($id, $post['textes_applicables']);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les textes applicables ont bien été mis à jour.']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les textes applicables n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('textes-applicables', null, null, ['id' => $this->_request->id]);
+            $this->_helper->redirector('textes-applicables', null, null, ['id' => $id]);
         }
     }
 
     // GESTION DE LA PARTIE PRESCRIPTION
-    public function emplacementAction()
+    public function emplacementAction(): void
     {
-        $this->view->assign('categorie', $this->_getParam('PRESCRIPTIONTYPE_CATEGORIE'));
-        $this->view->assign('texte', $this->_getParam('PRESCRIPTIONTYPE_TEXTE'));
-        $this->view->assign('article', $this->_getParam('PRESCRIPTIONTYPE_ARTICLE'));
+        $this->view->assign('categorie', $this->getRequest()->getParam('PRESCRIPTIONTYPE_CATEGORIE'));
+        $this->view->assign('texte', $this->getRequest()->getParam('PRESCRIPTIONTYPE_TEXTE'));
+        $this->view->assign('article', $this->getRequest()->getParam('PRESCRIPTIONTYPE_ARTICLE'));
 
         if (
             !$this->view->categorie
@@ -2745,7 +2747,7 @@ class DossierController extends Zend_Controller_Action
             $this->view->assign('categorieLibelle', $categorieLibelle['LIBELLE_PRESCRIPTION_CAT']);
             // on viens de choisir une catégorie il faut afficher les texte de la catégorie
             $dbTexte = new Model_DbTable_PrescriptionTexte();
-            $this->view->assign('texteListe', $dbTexte->recupPrescriptionTexte($this->_getParam('PRESCRIPTIONTYPE_CATEGORIE')));
+            $this->view->assign('texteListe', $dbTexte->recupPrescriptionTexte($this->getRequest()->getParam('PRESCRIPTIONTYPE_CATEGORIE')));
         } elseif (!$this->view->article) {
             $dbPrescriptionCat = new Model_DbTable_PrescriptionCat();
             $categorieLibelle = $dbPrescriptionCat->find($this->view->categorie)->current()->toArray();
@@ -2755,7 +2757,7 @@ class DossierController extends Zend_Controller_Action
             $this->view->assign('texteLibelle', $texteLibelle['LIBELLE_PRESCRIPTIONTEXTE']);
             // on viens de choisir un texte il faut afficher les articles
             $dbArticle = new Model_DbTable_PrescriptionArticle();
-            $this->view->assign('texteArticle', $dbArticle->recupPrescriptionArticle($this->_getParam('PRESCRIPTIONTYPE_TEXTE')));
+            $this->view->assign('texteArticle', $dbArticle->recupPrescriptionArticle($this->getRequest()->getParam('PRESCRIPTIONTYPE_TEXTE')));
         } else {
             $dbPrescriptionCat = new Model_DbTable_PrescriptionCat();
             $categorieLibelle = $dbPrescriptionCat->find($this->view->categorie)->current()->toArray();
@@ -2771,15 +2773,16 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    public function prescriptionAction()
+    public function prescriptionAction(): void
     {
         $service_dossier = new Service_Dossier();
         if ($this->idDossier) {
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
         }
-        if ($this->_request->isPost()) {
+
+        if ($this->getRequest()->isPost()) {
             try {
-                $post = $this->_request->getPost();
+                $post = $this->getRequest()->getPost();
                 if (
                     'edit' == $post['action']
                     || 'edit-type' == $post['action']
@@ -2794,24 +2797,24 @@ class DossierController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression effectué.', 'message' => 'La prescription a bien été supprimée']);
                 }
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Erreur lors de l\'enregistrement.', 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => "Erreur lors de l'enregistrement.", 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
             }
         }
 
-        $this->view->assign('id_dossier', $this->_getParam('id'));
+        $this->view->assign('id_dossier', $this->getRequest()->getParam('id'));
         $DbDossier = new Model_DbTable_Dossier();
         $this->view->assign('infosDossier', $DbDossier->find((int) $this->view->id_dossier)->current());
 
-        $this->view->assign('prescriptionReglDossier', $service_dossier->getPrescriptions((int) $this->_getParam('id'), 0));
-        $this->view->assign('prescriptionExploitation', $service_dossier->getPrescriptions((int) $this->_getParam('id'), 1));
-        $this->view->assign('prescriptionAmelioration', $service_dossier->getPrescriptions((int) $this->_getParam('id'), 2));
+        $this->view->assign('prescriptionReglDossier', $service_dossier->getPrescriptions((int) $this->getRequest()->getParam('id'), 0));
+        $this->view->assign('prescriptionExploitation', $service_dossier->getPrescriptions((int) $this->getRequest()->getParam('id'), 1));
+        $this->view->assign('prescriptionAmelioration', $service_dossier->getPrescriptions((int) $this->getRequest()->getParam('id'), 2));
     }
 
-    public function prescriptionwordsearchAction()
+    public function prescriptionwordsearchAction(): void
     {
         $this->view->assign('tabMotCles', []);
-        if ($this->_getParam('motsCles')) {
-            $this->view->assign('tabMotCles', explode(' ', $this->_getParam('motsCles')));
+        if ($this->getRequest()->getParam('motsCles')) {
+            $this->view->assign('tabMotCles', explode(' ', $this->getRequest()->getParam('motsCles')));
             $dbPrescType = new Model_DbTable_PrescriptionType();
             $listePrescType = $dbPrescType->getPrescriptionTypeByWords($this->view->tabMotCles);
 
@@ -2823,21 +2826,22 @@ class DossierController extends Zend_Controller_Action
                     $prescriptionArray[] = $assoc;
                 }
             }
+
             $this->view->assign('prescriptionType', $prescriptionArray);
         }
     }
 
-    public function prescriptionAddAction()
+    public function prescriptionAddAction(): void
     {
-        $this->_forward('prescription-edit');
+        $this->forward('prescription-edit');
     }
 
-    public function prescriptiontypeformAction()
+    public function prescriptiontypeformAction(): void
     {
         $this->showprescriptionTypeAction(0, 0, 0);
     }
 
-    public function showprescriptionTypeAction($categorie, $texte, $article)
+    public function showprescriptionTypeAction($categorie, $texte, $article): void
     {
         $dbPrescType = new Model_DbTable_PrescriptionType();
         $listePrescType = $dbPrescType->getPrescriptionType($categorie, $texte, $article);
@@ -2853,12 +2857,12 @@ class DossierController extends Zend_Controller_Action
         $this->view->assign('prescriptionType', $prescriptionArray);
     }
 
-    public function prescriptionEditAction()
+    public function prescriptionEditAction(): void
     {
         $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
 
-        $idDossier = $this->_getParam('id');
-        $id_prescription = $this->_getParam('id-prescription');
+        $idDossier = $this->getRequest()->getParam('id');
+        $id_prescription = $this->getRequest()->getParam('id-prescription');
 
         $this->view->assign('id_dossier', $idDossier);
         $this->view->assign('id_prescription', $id_prescription);
@@ -2882,11 +2886,11 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    public function prescriptionshowemplacementAction()
+    public function prescriptionshowemplacementAction(): void
     {
-        $this->view->assign('categorie', $this->_getParam('PRESCRIPTIONTYPE_CATEGORIE'));
-        $this->view->assign('texte', $this->_getParam('PRESCRIPTIONTYPE_TEXTE'));
-        $this->view->assign('article', $this->_getParam('PRESCRIPTIONTYPE_ARTICLE'));
+        $this->view->assign('categorie', $this->getRequest()->getParam('PRESCRIPTIONTYPE_CATEGORIE'));
+        $this->view->assign('texte', $this->getRequest()->getParam('PRESCRIPTIONTYPE_TEXTE'));
+        $this->view->assign('article', $this->getRequest()->getParam('PRESCRIPTIONTYPE_ARTICLE'));
 
         if (
             !$this->view->categorie
@@ -2906,16 +2910,16 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    public function prescriptionaddtypeAction()
+    public function prescriptionaddtypeAction(): void
     {
-        $idPrescType = $this->_getParam('idPrescType');
-        $idDossier = $this->_getParam('idDossier');
-        $this->view->assign('typePrescDossier', $this->_getParam('typePrescriptionDossier'));
+        $idPrescType = $this->getRequest()->getParam('idPrescType');
+        $idDossier = $this->getRequest()->getParam('idDossier');
+        $this->view->assign('typePrescDossier', $this->getRequest()->getParam('typePrescriptionDossier'));
         $this->view->assign('idDossier', $idDossier);
 
         // on recup le num max de prescription du dossier
         $dbPrescDossier = new Model_DbTable_PrescriptionDossier();
-        $numMax = $dbPrescDossier->recupMaxNumPrescDossier($idDossier, $this->_getParam('typePrescriptionDossier'));
+        $numMax = $dbPrescDossier->recupMaxNumPrescDossier($idDossier, $this->getRequest()->getParam('typePrescriptionDossier'));
         $num = $numMax['maxnum'];
 
         if (null == $numMax['maxnum']) {
@@ -2929,7 +2933,7 @@ class DossierController extends Zend_Controller_Action
         $newPrescDossier->ID_DOSSIER = $idDossier;
         $newPrescDossier->NUM_PRESCRIPTION_DOSSIER = $num;
         $newPrescDossier->ID_PRESCRIPTION_TYPE = $idPrescType;
-        $newPrescDossier->TYPE_PRESCRIPTION_DOSSIER = $this->_getParam('typePrescriptionDossier');
+        $newPrescDossier->TYPE_PRESCRIPTION_DOSSIER = $this->getRequest()->getParam('typePrescriptionDossier');
         $newPrescDossier->save();
 
         $this->view->assign('idPrescriptionDossier', $newPrescDossier->ID_PRESCRIPTION_DOSSIER);
@@ -2957,6 +2961,7 @@ class DossierController extends Zend_Controller_Action
             if (!$prescCount) {
                 continue;
             }
+
             $prescCount->NUM_PRESCRIPTION_DOSSIER = $nbPresc;
             $prescCount->save();
             ++$nbPresc;
@@ -2968,20 +2973,21 @@ class DossierController extends Zend_Controller_Action
             if (!$prescCount) {
                 continue;
             }
+
             $prescCount->NUM_PRESCRIPTION_DOSSIER = $nbPresc;
             $prescCount->save();
             ++$nbPresc;
         }
     }
 
-    public function prescriptionchangeposAction()
+    public function prescriptionchangeposAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
 
-        $stringUpdateReg = $this->_getParam('tableUpdateReg');
+        $stringUpdateReg = $this->getRequest()->getParam('tableUpdateReg');
         $tabIdReg = explode(',', $stringUpdateReg);
 
-        $stringUpdate = $this->_getParam('tableUpdate');
+        $stringUpdate = $this->getRequest()->getParam('tableUpdate');
         $tabId = explode(',', $stringUpdate);
 
         $service_dossier = new Service_Dossier();
@@ -2989,14 +2995,16 @@ class DossierController extends Zend_Controller_Action
         $service_dossier->changePosPrescription($tabId);
     }
 
-    public function formrecupprescriptionAction()
+    public function formrecupprescriptionAction(): void
     {
+        $idDossier = (int) $this->getRequest()->getParam('idDossier');
+
         // récupération de l'établissement attaché au dossier
         $dbEtabDossier = new Model_DbTable_EtablissementDossier();
-        $listeEtab = $dbEtabDossier->getEtablissementListe($this->_getParam('idDossier'));
+        $listeEtab = $dbEtabDossier->getEtablissementListe($idDossier);
 
         $this->view->assign('nbEtab', count($listeEtab));
-        $this->view->assign('idDossier', $this->_getParam('idDossier'));
+        $this->view->assign('idDossier', $idDossier);
 
         if (1 == $this->view->nbEtab) {
             // si il n'y a qu'un établissement, on affiche la liste des dossiers qu'il contient
@@ -3008,32 +3016,76 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    public function recupprescriptionAction()
+    public function recupprescriptionAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
-        // On reprend les prescriptions du dossier ayant id : dossierSelect pui on les ajoute au dossier ayant id : idDossier
-
         $service_dossier = new Service_Dossier();
 
-        $prescriptionRappelsReglementaire = $service_dossier->getPrescriptions((int) $this->_getParam('dossierSelect'), 0);
-        $service_dossier->copyPrescriptionDossier($prescriptionRappelsReglementaire, (int) $this->_getParam('idDossier'));
+        $idDossier = (int) $this->getRequest()->getParam('idDossier');
+        $dossiersSelect = [];
+        $post = $this->getRequest()->getPost();
 
-        $prescriptionExploitation = $service_dossier->getPrescriptions((int) $this->_getParam('dossierSelect'), 1);
-        $service_dossier->copyPrescriptionDossier($prescriptionExploitation, (int) $this->_getParam('idDossier'));
+        foreach ($post as $key => $value) {
+            if (0 === strpos($key, 'dossierSelect-')) {
+                $dossiersSelect[] = $value;
+            }
+        }
 
-        $prescriptionAmelioration = $service_dossier->getPrescriptions((int) $this->_getParam('dossierSelect'), 2);
-        $service_dossier->copyPrescriptionDossier($prescriptionAmelioration, (int) $this->_getParam('idDossier'));
+        foreach ($dossiersSelect as $idDossierInitial) {
+            $prescriptionRappelsReglementaire = $service_dossier->getPrescriptions($idDossierInitial, 0);
+            $service_dossier->copyPrescriptionDossier($prescriptionRappelsReglementaire, $idDossier, $idDossierInitial);
+
+            $prescriptionExploitation = $service_dossier->getPrescriptions($idDossierInitial, 1);
+            $service_dossier->copyPrescriptionDossier($prescriptionExploitation, $idDossier, $idDossierInitial);
+
+            $prescriptionAmelioration = $service_dossier->getPrescriptions($idDossierInitial, 2);
+            $service_dossier->copyPrescriptionDossier($prescriptionAmelioration, $idDossier, $idDossierInitial);
+        }
     }
 
-    public function lienmultipleAction()
+    public function formrecupeffectifsdegagementsAction(): void
+    {
+        $idDossier = (int) $this->getRequest()->getParam('idDossier');
+
+        // récupération de l'établissement attaché au dossier
+        $dbEtabDossier = new Model_DbTable_EtablissementDossier();
+        $listeEtab = $dbEtabDossier->getEtablissementListe($idDossier);
+
+        $this->view->assign('nbEtab', count($listeEtab));
+        $this->view->assign('idDossier', $idDossier);
+
+        if (1 == $this->view->nbEtab) {
+            // si il n'y a qu'un établissement, on affiche la liste des dossiers qu'il contient
+            $service_etablissement = new Service_Etablissement();
+            $dossiers = $service_etablissement->getDossiers($listeEtab['0']['ID_ETABLISSEMENT']);
+            $this->view->assign('etudes', $dossiers['etudes']);
+            $this->view->assign('visites', $dossiers['visites']);
+            $this->view->assign('autres', $dossiers['autres']);
+        }
+    }
+
+    public function recupeffectifsdegagementsAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
-        foreach ($this->_getParam('etabId') as $val) {
+
+        $idDossierInitial = (int) $this->getRequest()->getParam('dossierSelect');
+        $idDossier = (int) $this->getRequest()->getParam('idDossier');
+
+        $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
+
+        $rubriques = $serviceDossierEffectifsDegagements->getRubriques($idDossierInitial, 'Dossier');
+        $serviceDossierEffectifsDegagements->copyValeurs($idDossier, $rubriques);
+    }
+
+    public function lienmultipleAction(): void
+    {
+        $this->_helper->viewRenderer->setNoRender();
+        foreach ($this->getRequest()->getParam('etabId') as $val) {
             try {
                 $DBetablissementDossier = new Model_DbTable_EtablissementDossier();
                 $newEtabDossier = $DBetablissementDossier->createRow();
                 $newEtabDossier->ID_ETABLISSEMENT = $val;
-                $newEtabDossier->ID_DOSSIER = $this->_getParam('idDossier');
+                $newEtabDossier->ID_DOSSIER = $this->getRequest()->getParam('idDossier');
                 $newEtabDossier->save();
 
                 $this->_helper->flashMessenger([
@@ -3052,22 +3104,22 @@ class DossierController extends Zend_Controller_Action
     }
 
     // GESTION DU VERROUILLAGE
-    public function verrouAction()
+    public function verrouAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
         $DBdossier = new Model_DbTable_Dossier();
-        $lockDosier = $DBdossier->find($this->_getParam('idDossier'))->current();
+        $lockDosier = $DBdossier->find($this->getRequest()->getParam('idDossier'))->current();
         $lockDosier->VERROU_DOSSIER = 1;
-        $lockDosier->VERROU_USER_DOSSIER = $this->_getParam('ID_CREATEUR');
+        $lockDosier->VERROU_USER_DOSSIER = $this->getRequest()->getParam('ID_CREATEUR');
         $lockDosier->save();
         echo $lockDosier->ID_DOSSIER;
     }
 
-    public function deverrouAction()
+    public function deverrouAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
         $DBdossier = new Model_DbTable_Dossier();
-        $lockDosier = $DBdossier->find($this->_getParam('idDossier'))->current();
+        $lockDosier = $DBdossier->find($this->getRequest()->getParam('idDossier'))->current();
         $lockDosier->VERROU_DOSSIER = 0;
         $lockDosier->VERROU_USER_DOSSIER = null;
         $lockDosier->save();
@@ -3075,15 +3127,15 @@ class DossierController extends Zend_Controller_Action
     }
 
     // GESTION DE LA SUPPRESSION
-    public function deleteAction()
+    public function deleteAction(): void
     {
         try {
             $DBetablissementDossier = new Model_DbTable_EtablissementDossier();
-            $listeEtab = $DBetablissementDossier->getEtablissementListe($this->_getParam('id'));
+            $listeEtab = $DBetablissementDossier->getEtablissementListe($this->getRequest()->getParam('id'));
             $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
 
             $service_dossier = new Service_Dossier();
-            $service_dossier->delete($this->_getParam('id'));
+            $service_dossier->delete($this->getRequest()->getParam('id'));
 
             $dbDossier = new Model_DbTable_Dossier();
             // on récupère les infos du dernier dossier donnant avis de l'établissement courant
@@ -3102,16 +3154,16 @@ class DossierController extends Zend_Controller_Action
                 'message' => 'Le dossier a bien été supprimé.',
             ]);
             $this->redirect('/search/dossier?objet=&page=1');
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => '',
-                'message' => 'L\'établissement n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')',
+                'message' => 'L\'établissement n\'a pas été mis à jour. Veuillez rééssayez. ('.$exception->getMessage().')',
             ]);
         }
     }
 
-    public function effectifsDegagementsDossierAction()
+    public function effectifsDegagementsDossierAction(): void
     {
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
@@ -3119,16 +3171,33 @@ class DossierController extends Zend_Controller_Action
 
         $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
         $service_dossier = new Service_Dossier();
+        $service_champ = new Service_Champ();
 
         if ($this->idDossier) {
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
         }
 
-        $this->view->assign('rubriques', $serviceDossierEffectifsDegagements->getRubriques($this->idDossier, 'Dossier'));
+        $rubriques = $serviceDossierEffectifsDegagements->getRubriques($this->idDossier, 'Dossier');
+        $hasData = false;
+
+        foreach ($rubriques as $rubrique) {
+            $champs = $rubrique['CHAMPS'];
+
+            foreach ($champs as $champ) {
+                if ($service_champ->hasValue($champ)) {
+                    $hasData = true;
+
+                    break;
+                }
+            }
+        }
+
+        $this->view->assign('rubriques', $rubriques);
         $this->view->assign('champsvaleurliste', $serviceDossierEffectifsDegagements->getValeursListe());
+        $this->view->assign('hasData', $hasData);
     }
 
-    public function effectifsDegagementsDossierEditAction()
+    public function effectifsDegagementsDossierEditAction(): void
     {
         $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
@@ -3169,11 +3238,11 @@ class DossierController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('effectifs-degagements-dossier', null, null, ['id' => $this->_request->id]);
+            $this->_helper->redirector('effectifs-degagements-dossier', null, null, ['id' => $request->getParam('id')]);
         }
     }
 
-    public function verificationsTechniquesAction()
+    public function verificationsTechniquesAction(): void
     {
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
@@ -3231,12 +3300,12 @@ class DossierController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les vérifications techniques n\'ont pas été mises à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('verifications-techniques', null, null, ['id' => $this->_request->id]);
+            $this->_helper->redirector('verifications-techniques', null, null, ['id' => $request->getParam('id')]);
         }
     }
 
     // Avis et derogations action donne une vue du/des avis et derogations donne sur ce dossier
-    public function avisEtDerogationsAction()
+    public function avisEtDerogationsAction(): void
     {
         $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
         $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
@@ -3248,8 +3317,8 @@ class DossierController extends Zend_Controller_Action
         $service_dossier = new Service_Dossier();
         if ($this->idDossier) {
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
-        } elseif ($this->_getParam('id_etablissement')) {
-            $this->view->assign('enteteEtab', $service_dossier->getEtabInfos(null, $this->_getParam('id_etablissement')));
+        } elseif ($this->getRequest()->getParam('id_etablissement')) {
+            $this->view->assign('enteteEtab', $service_dossier->getEtabInfos(null, $this->getRequest()->getParam('id_etablissement')));
         }
 
         $idDossier = $this->getParam('id');
@@ -3275,7 +3344,7 @@ class DossierController extends Zend_Controller_Action
      * +
      * retourne vers la page d edition de ces avis + derogations.
      */
-    public function avisEtDerogationsEditAction()
+    public function avisEtDerogationsEditAction(): void
     {
         $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
         $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
@@ -3287,8 +3356,8 @@ class DossierController extends Zend_Controller_Action
         $service_dossier = new Service_Dossier();
         if ($this->idDossier) {
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
-        } elseif ($this->_getParam('id_etablissement')) {
-            $this->view->assign('enteteEtab', $service_dossier->getEtabInfos(null, $this->_getParam('id_etablissement')));
+        } elseif ($this->getRequest()->getParam('id_etablissement')) {
+            $this->view->assign('enteteEtab', $service_dossier->getEtabInfos(null, $this->getRequest()->getParam('id_etablissement')));
         }
 
         $idDossier = $this->getParam('id');
@@ -3321,33 +3390,39 @@ class DossierController extends Zend_Controller_Action
         $this->view->assign('avisDerogations', $avisDerogation);
     }
 
-    public function avisEtDerogationsDeleteAction()
+    public function avisEtDerogationsDeleteAction(): void
     {
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
 
         $dbAvisDerogations->delete('ID_AVIS_DEROGATION = '.$this->getParam('id'));
     }
 
-    public function getZipAllPjAction()
+    public function getZipAllPjAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
         $idDossier = $this->getRequest()->getParam('id');
         $serviceDossier = new Service_Dossier();
-        $zip = new ZipArchive();
 
         $pjs = $serviceDossier->getAllPiecesJointes($idDossier);
 
+        // Création du ZIP
+        $zip = new ZipArchive();
         $zipname = $idDossier.'.zip';
         $zipPath = REAL_DATA_PATH.DS.'uploads'.DS.$zipname;
         $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
+        // Ajout des pièces si lisibles
         foreach ($pjs as $pj) {
             $pjPath = Service_Utils::getPjPath($pj);
 
+            if (!is_readable($pjPath)) {
+                continue;
+            }
+
             if (!$zip->addFile($pjPath, $pj['NOM_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE'])) {
-                error_log("Erreur lors de l'ajout de la pièce jointe \"{$pj['NOM_PIECEJOINTE']}{$pj['EXTENSION_PIECEJOINTE']}\" au fichier ZIP");
+                error_log(sprintf('Erreur lors de l\'ajout de la pièce jointe "%s%s" au fichier ZIP', $pj['NOM_PIECEJOINTE'], $pj['EXTENSION_PIECEJOINTE']));
             }
         }
 
@@ -3358,14 +3433,24 @@ class DossierController extends Zend_Controller_Action
                 'message' => 'Le fichier est vide',
             ]);
 
-            $this->redirect("/dossier/piece-jointe/id/{$idDossier}");
+            $this->redirect('/dossier/piece-jointe/id/'.$idDossier);
         }
 
         header('Content-Type: application/zip');
         header('Content-disposition: attachment; filename='.$zipname);
         header('Content-Length: '.filesize($zipPath));
 
-        readfile($zipPath);
+        // Téléchargement du ZIP via un stream
+        $openedZip = fopen($zipPath, 'rb');
+
+        while (!feof($openedZip)) {
+            echo fread($openedZip, 8192);
+
+            ob_flush();
+            flush();
+        }
+
+        fclose($openedZip);
         unlink($zipPath);
     }
 
@@ -3376,7 +3461,7 @@ class DossierController extends Zend_Controller_Action
         $previousUrl = $_SERVER['HTTP_REFERER'];
         $serviceDossier = new Service_Dossier();
 
-        $serviceDossier->retablirDossier($this->_getParam('idDossier'));
+        $serviceDossier->retablirDossier($this->getRequest()->getParam('idDossier'));
 
         $cacheSearch = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
         $cacheSearch->clean(Zend_Cache::CLEANING_MODE_ALL);

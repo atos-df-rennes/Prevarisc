@@ -2,8 +2,11 @@
 
 class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'datecommission'; // Nom de la base
-    protected $_primary = 'ID_DATECOMMISSION'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'datecommission';
+
+    // Clé primaire
+    protected $_primary = 'ID_DATECOMMISSION';
 
     public function addDateComm($date, $heureD, $heureF, $idComm, $type, $libelle)
     {
@@ -223,7 +226,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    public function updateDependingDossierDates($datecommission)
+    public function updateDependingDossierDates($datecommission): void
     {
         $dbAffectDossier = new Model_DbTable_DossierAffectation();
         $dbDossier = new Model_DbTable_Dossier();
@@ -277,6 +280,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
         } else {
             $select->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER');
         }
+
         $select->join(['dn' => 'dossiernature'], 'd.ID_DOSSIER = dn.ID_DOSSIER')
             ->join(['dnl' => 'dossiernatureliste'], 'dn.ID_NATURE = dnl.ID_DOSSIERNATURE')
             ->join(['dt' => 'dossiertype'], 'd.TYPE_DOSSIER = dt.ID_DOSSIERTYPE')
@@ -286,12 +290,15 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
         if (null !== $idUtilisateur) {
             $select->where('u.ID_UTILISATEUR =  ?', $idUtilisateur);
         }
+
         if (null !== $idCommission) {
             $select->where('dc.COMMISSION_CONCERNE =  ?', $idCommission);
         }
+
         if (null !== $start) {
             $select->where('YEAR(dc.DATE_COMMISSION) >= ?', $start);
         }
+
         if (null !== $end) {
             $select->where('YEAR(dc.DATE_COMMISSION) <= ?', $end);
         }

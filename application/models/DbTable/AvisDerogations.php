@@ -2,8 +2,11 @@
 
 class Model_DbTable_AvisDerogations extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'avisderogations'; // Nom de la base
-    protected $_primary = 'ID_AVIS_DEROGATION'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'avisderogations';
+
+    // Clé primaire
+    protected $_primary = 'ID_AVIS_DEROGATION';
 
     /**
      * Retourne l avis derogation associe a l id passe en param.

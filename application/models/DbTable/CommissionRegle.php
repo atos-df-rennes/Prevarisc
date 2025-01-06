@@ -2,8 +2,11 @@
 
 class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'commissionregle'; // Nom de la base
-    protected $_primary = ['ID_REGLE']; // Clé primaire
+    // Nom de la base
+    protected $_name = 'commissionregle';
+
+    // Clé primaire
+    protected $_primary = ['ID_REGLE'];
 
     /**
      * @param int|string $id_commission
@@ -43,19 +46,14 @@ class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param float|int|string          $first_table
-     * @param array|string|Zend_Db_Expr $second_table
-     * @param float|int|string          $key
-     * @param float|int|string          $id_regle
-     *
-     * @psalm-return array<int, mixed>
+     * @param float|int|string $id_regle
      */
-    private function fullJoinRegle($first_table, $second_table, $key, $id_regle): array
+    private function fullJoinRegle(string $first_table, string $second_table, string $key, $id_regle): array
     {
         // On fait une union entre ce qu'il y a dans la base et les critères enregistrés
         $return = $this->fetchAll($this->select()->union([
-            $this->select()->setIntegrityCheck(false)->from($first_table)->joinLeft($second_table, "{$first_table}.{$key} = {$second_table}.{$key} AND ID_REGLE = {$id_regle}"),
-            $this->select()->setIntegrityCheck(false)->from($first_table)->joinRight($second_table, "{$first_table}.{$key} = {$second_table}.{$key} AND ID_REGLE = {$id_regle}"),
+            $this->select()->setIntegrityCheck(false)->from($first_table)->joinLeft($second_table, sprintf('%s.%s = %s.%s AND ID_REGLE = %s', $first_table, $key, $second_table, $key, $id_regle)),
+            $this->select()->setIntegrityCheck(false)->from($first_table)->joinRight($second_table, sprintf('%s.%s = %s.%s AND ID_REGLE = %s', $first_table, $key, $second_table, $key, $id_regle)),
         ]))->toArray();
 
         // Requete sur la table finale
@@ -76,12 +74,9 @@ class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
     // Formaliser les resultats envoyés
 
     /**
-     * @psalm-return array<int, mixed>
-     *
      * @param mixed $array
-     * @param mixed $key
      */
-    private function mapResult($array, $key): array
+    private function mapResult($array, string $key): array
     {
         $result = [];
 

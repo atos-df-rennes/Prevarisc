@@ -54,7 +54,7 @@ class Service_Carto
      * @param array $data
      * @param int   $id_couche_cartographique Optionnel
      */
-    public function save($data, $id_couche_cartographique = null)
+    public function save($data, $id_couche_cartographique = null): void
     {
         $couche_cartographique = null == $id_couche_cartographique ? $this->repository->createRow() : $this->repository->find($id_couche_cartographique)->current();
         $couche_cartographique->setFromArray(array_intersect_key($data, $this->repository->info('metadata')))->save();
@@ -67,7 +67,7 @@ class Service_Carto
      *
      * @param int $id_couche_cartographique
      */
-    public function delete($id_couche_cartographique)
+    public function delete($id_couche_cartographique): void
     {
         $this->repository->delete('ID_COUCHECARTO = '.$id_couche_cartographique);
 

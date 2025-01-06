@@ -5,8 +5,7 @@ class Service_GroupementCommunes
     /**
      * Récupération de tous les groupements.
      *
-     * @param int numinsee Optionnel
-     * @param null|mixed $num_insee
+     * @param null|mixed $num_insee Optionnel
      *
      * @return array
      */

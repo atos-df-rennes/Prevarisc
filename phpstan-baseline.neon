@@ -1,2191 +1,2563 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method Zend_View_Helper_HeadMeta\\:\\:appendHttpEquiv\\(\\) invoked with 2 parameters, 3 required\\.$#"
+			message: '#^Method Zend_View_Helper_HeadMeta\:\:appendHttpEquiv\(\) invoked with 2 parameters, 3 required\.$#'
+			identifier: arguments.count
 			count: 1
 			path: application/Bootstrap.php
 
 		-
-			message: "#^Method Zend_View_Helper_HeadMeta\\:\\:appendName\\(\\) invoked with 2 parameters, 3 required\\.$#"
+			message: '#^Method Zend_View_Helper_HeadMeta\:\:appendName\(\) invoked with 2 parameters, 3 required\.$#'
+			identifier: arguments.count
 			count: 3
 			path: application/Bootstrap.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/AdminController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$users\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$users\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/AdminController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 14
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$COMMISSION_CONCERNE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$COMMISSION_CONCERNE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATECOMMISSION_LIEES\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DATECOMMISSION_LIEES\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_COMMISSION\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DATE_COMMISSION\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSIONTYPEEVENEMENT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_COMMISSIONTYPEEVENEMENT\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_DATECOMMISSION\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$LIBELLE_DATECOMMISSION\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$do\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$do\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 15
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:layout\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:layout\(\)\.$#'
+			identifier: method.notFound
 			count: 2
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/ChangementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/ChangementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id\\.$#"
-			count: 1
-			path: application/controllers/ChangementController.php
-
-		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 2
 			path: application/controllers/ChangementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:redirector\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/ChangementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:getPost\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/ChangementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:isPost\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/ChangementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:headScript\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:headScript\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/ChangementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 12
 			path: application/controllers/CommissionController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id\\.$#"
-			count: 4
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id_commission\\.$#"
-			count: 8
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id_membre\\.$#"
-			count: 14
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id_regle\\.$#"
-			count: 6
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$type\\.$#"
-			count: 5
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSION\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_COMMISSION\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/CommissionController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_COMMISSIONMEMBRE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$LIBELLE_COMMISSIONMEMBRE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/CommissionController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESENCE_COMMISSIONMEMBRE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$PRESENCE_COMMISSIONMEMBRE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/CommissionController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_membres\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$array_membres\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/CommissionController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:actionStack\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:actionStack\(\)\.$#'
+			identifier: method.notFound
 			count: 3
 			path: application/controllers/CommissionController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 23
 			path: application/controllers/CommissionController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/ContactController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$ajax\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_UTILISATEURINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/ContactController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id\\.$#"
-			count: 12
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id_item\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$item\\.$#"
-			count: 9
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$q\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$verrou\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 6
 			path: application/controllers/ContactController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:addActionContext\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:addActionContext\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/ContactController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/CouchesCartographiquesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/CouchesCartographiquesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 6
 			path: application/controllers/CouchesCartographiquesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:redirector\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
+			identifier: method.notFound
 			count: 3
 			path: application/controllers/CouchesCartographiquesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:getPost\(\)\.$#'
+			identifier: method.notFound
 			count: 3
 			path: application/controllers/CouchesCartographiquesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:isPost\(\)\.$#'
+			identifier: method.notFound
 			count: 3
 			path: application/controllers/CouchesCartographiquesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:headLink\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:headLink\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/CouchesCartographiquesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:headScript\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:headScript\(\)\.$#'
+			identifier: method.notFound
 			count: 2
 			path: application/controllers/CouchesCartographiquesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 4
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
-			count: 15
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
+			count: 16
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$DESCRIPTIF_DOSSIER\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$CREATEUR_DOSSIER\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$ID_GENRE\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id\\.$#"
-			count: 9
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$q\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$CREATEUR_DOSSIER\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_CONSULTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DATE_CONSULTE\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_DOCAJOUT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DATE_DOCAJOUT\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_DOCSMANQUANT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DATE_DOCSMANQUANT\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_PIECEJOINTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DATE_PIECEJOINTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_RECEPTION_DOC\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DATE_RECEPTION_DOC\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DESCRIPTION_PIECEJOINTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DESCRIPTION_PIECEJOINTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DOCMANQUANT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DOCMANQUANT\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DOC_CONSULTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DOC_CONSULTE\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$EXTENSION_PIECEJOINTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$EXTENSION_PIECEJOINTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DATECOMMISSION_AFFECT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_DATECOMMISSION_AFFECT\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOC\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_DOC\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOCAJOUT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_DOCAJOUT\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOSSIER\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_DOSSIER\.$#'
+			identifier: property.notFound
 			count: 17
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOSSIER1\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_DOSSIER1\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOSSIER2\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_DOSSIER2\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOSSIER_AFFECT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_DOSSIER_AFFECT\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ETABLISSEMENT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_ETABLISSEMENT\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_NATURE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_NATURE\.$#'
+			identifier: property.notFound
 			count: 7
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PIECEJOINTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_PIECEJOINTE\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTION_DOSSIER\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_PRESCRIPTION_DOSSIER\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTION_TYPE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_PRESCRIPTION_TYPE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PREVENTIONNISTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_PREVENTIONNISTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_STATUT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_STATUT\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_TEXTESAPPL\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_TEXTESAPPL\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEURINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_UTILISATEURINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_DOCAJOUT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$LIBELLE_DOCAJOUT\.$#'
+			identifier: property.notFound
 			count: 4
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NOM_PIECEJOINTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$NOM_PIECEJOINTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_DOCSMANQUANT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$NUM_DOCSMANQUANT\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_DOCURBA\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$NUM_DOCURBA\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTION_DOSSIER\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$NUM_PRESCRIPTION_DOSSIER\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$REF_CONSULTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$REF_CONSULTE\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$REF_DOCAJOUT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$REF_DOCAJOUT\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$TYPE_PRESCRIPTION_DOSSIER\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$TYPE_PRESCRIPTION_DOSSIER\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$article\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$article\.$#'
+			identifier: property.notFound
 			count: 7
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$categorie\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$categorie\.$#'
+			identifier: property.notFound
 			count: 8
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$commissionInfos\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$commissionInfos\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateVisiteInput\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$dateVisiteInput\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$enteteEtab\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$enteteEtab\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$etablissementInfos\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$etablissementInfos\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$fichierSelect\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$fichierSelect\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idEtablissement\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$idEtablissement\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idPieceJointe\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$idPieceJointe\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$id_dossier\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$id_dossier\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$id_typeactivite\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$id_typeactivite\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infoPere\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$infoPere\.$#'
+			identifier: property.notFound
 			count: 5
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infosDossier\\.$#"
-			count: 108
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$infosDossier\.$#'
+			identifier: property.notFound
+			count: 94
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infosPrescription\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$infosPrescription\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeDocManquant\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$listeDocManquant\.$#'
+			identifier: property.notFound
 			count: 4
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeEtablissement\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$listeEtablissement\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeNatures\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$listeNatures\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$natureConcerne\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$natureConcerne\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$nbEtab\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$rubriques\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$nbEtab\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$selectEtab\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$rubriques\.$#'
+			identifier: property.notFound
+			count: 2
+			path: application/controllers/DossierController.php
+
+		-
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$selectEtab\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$tabMotCles\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$tabMotCles\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$texte\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$texte\.$#'
+			identifier: property.notFound
 			count: 8
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:_redirector\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:_redirector\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 30
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:redirector\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
+			identifier: method.notFound
 			count: 5
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:addActionContext\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:addActionContext\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:url\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:url\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getPost\\(\\)\\.$#"
-			count: 5
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:getPost\(\)\.$#'
+			identifier: method.notFound
+			count: 6
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isPost\\(\\)\\.$#"
-			count: 8
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:isPost\(\)\.$#'
+			identifier: method.notFound
+			count: 9
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:headLink\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:headLink\(\)\.$#'
+			identifier: method.notFound
 			count: 11
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:headScript\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:headScript\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:inlineScript\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:inlineScript\(\)\.$#'
+			identifier: method.notFound
 			count: 18
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Cannot call method toArray\\(\\) on array\\.$#"
+			message: '#^Cannot call method toArray\(\) on array\.$#'
+			identifier: method.nonObject
 			count: 2
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property ArrayObject\\:\\:\\$exception\\.$#"
+			message: '#^Access to an undefined property ArrayObject\:\:\$exception\.$#'
+			identifier: property.notFound
 			count: 4
 			path: application/controllers/ErrorController.php
 
 		-
-			message: "#^Access to an undefined property ArrayObject\\:\\:\\$request\\.$#"
+			message: '#^Access to an undefined property ArrayObject\:\:\$request\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/ErrorController.php
 
 		-
-			message: "#^Access to an undefined property ArrayObject\\:\\:\\$type\\.$#"
+			message: '#^Access to an undefined property ArrayObject\:\:\$type\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/ErrorController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/ErrorController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$message\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$message\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/ErrorController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 21
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 5
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id\\.$#"
-			count: 33
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id_contact\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$id\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id_pj\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$typeDossier\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$etablissement\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$etablissement\.$#'
+			identifier: property.notFound
 			count: 4
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$rubriques\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$rubriques\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 26
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:redirector\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
+			identifier: method.notFound
 			count: 12
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:getPost\(\)\.$#'
+			identifier: method.notFound
 			count: 9
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isGet\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:isGet\(\)\.$#'
+			identifier: method.notFound
 			count: 2
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:isPost\(\)\.$#'
+			identifier: method.notFound
 			count: 9
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:headLink\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:headLink\(\)\.$#'
+			identifier: method.notFound
 			count: 12
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:headScript\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:headScript\(\)\.$#'
+			identifier: method.notFound
 			count: 9
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:inlineScript\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:inlineScript\(\)\.$#'
+			identifier: method.notFound
 			count: 10
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:partialLoop\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:partialLoop\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/controllers/FormulaireController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 4
 			path: application/controllers/FormulaireController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/FormulaireController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:redirector\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:json\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: application/controllers/FormulaireController.php
+
+		-
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
+			identifier: method.notFound
 			count: 5
 			path: application/controllers/FormulaireController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:getPost\(\)\.$#'
+			identifier: method.notFound
+			count: 7
+			path: application/controllers/FormulaireController.php
+
+		-
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:isPost\(\)\.$#'
+			identifier: method.notFound
+			count: 7
+			path: application/controllers/FormulaireController.php
+
+		-
+			message: '#^Call to an undefined method Zend_View_Interface\:\:headLink\(\)\.$#'
+			identifier: method.notFound
 			count: 6
 			path: application/controllers/FormulaireController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isPost\\(\\)\\.$#"
-			count: 6
-			path: application/controllers/FormulaireController.php
-
-		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:headLink\\(\\)\\.$#"
-			count: 6
-			path: application/controllers/FormulaireController.php
-
-		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:inlineScript\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:inlineScript\(\)\.$#'
+			identifier: method.notFound
 			count: 10
 			path: application/controllers/FormulaireController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:url\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:url\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/FormulaireController.php
 
 		-
-			message: "#^Access to an undefined property Form_FusionCommunes\\:\\:\\$fusioncommunes\\.$#"
+			message: '#^Access to an undefined property Form_FusionCommunes\:\:\$fusioncommunes\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/controllers/FusionDesCommunesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/FusionDesCommunesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/GestionDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id_commission\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$id_commission\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id_type_des_commissions\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$id_type_des_commissions\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/GestionDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSIONTYPE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_COMMISSIONTYPE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_COMMISSION\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$LIBELLE_COMMISSION\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$commission\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$commission\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionDesCommissionsController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 4
 			path: application/controllers/GestionDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionDesCommunesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionDesCommunesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$ext\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$ext\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionDesCommunesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$numinsee\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$numinsee\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionDesCommunesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 2
 			path: application/controllers/GestionDesCommunesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:redirector\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/GestionDesCommunesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/controllers/GestionDesDocumentsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/GestionDesDocumentsController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 3
 			path: application/controllers/GestionDesDocumentsController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:addActionContext\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:addActionContext\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/GestionDesDocumentsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 11
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTIONCAT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_PRESCRIPTIONCAT\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTIONTEXTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_PRESCRIPTIONTEXTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTIONARTICLE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$NUM_PRESCRIPTIONARTICLE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTIONTEXTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$NUM_PRESCRIPTIONTEXTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTION_CAT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$NUM_PRESCRIPTION_CAT\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$article\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$article\.$#'
+			identifier: property.notFound
 			count: 4
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$categorie\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$categorie\.$#'
+			identifier: property.notFound
 			count: 4
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$prescriptionType\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$prescriptionType\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$texte\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$texte\.$#'
+			identifier: property.notFound
 			count: 5
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 16
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:addActionContext\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:addActionContext\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:getPost\(\)\.$#'
+			identifier: method.notFound
 			count: 5
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:isPost\(\)\.$#'
+			identifier: method.notFound
 			count: 5
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionTextesApplicablesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionTextesApplicablesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_TEXTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$LIBELLE_TEXTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GestionTextesApplicablesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 2
 			path: application/controllers/GestionTextesApplicablesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:redirector\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/GestionTextesApplicablesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$LIBELLE_GROUPEMENTTYPE\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$LIBELLE_GROUPEMENTTYPE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$id\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATEDEBUT_GROUPEMENTPREVENTIONNISTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DATEDEBUT_GROUPEMENTPREVENTIONNISTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPEMENT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_GROUPEMENT\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPEMENTTYPE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_GROUPEMENTTYPE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEUR\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_UTILISATEUR\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEURINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_UTILISATEURINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_GROUPEMENTTYPE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$LIBELLE_GROUPEMENTTYPE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUMINSEE_COMMUNE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$NUMINSEE_COMMUNE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 6
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:redirector\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
+			identifier: method.notFound
 			count: 2
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:addActionContext\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:addActionContext\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/controllers/IndexController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/IndexController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 4
 			path: application/controllers/IndexController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:redirector\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
+			identifier: method.notFound
 			count: 2
 			path: application/controllers/IndexController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:isPost\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/IndexController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:inlineScript\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:inlineScript\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/IndexController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 5
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$PLACEMENT_ETABLISSEMENTPJ\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$PLACEMENT_ETABLISSEMENTPJ\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$id\.$#'
+			identifier: property.notFound
 			count: 18
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id_pj\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$id_pj\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$idpj\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$idpj\.$#'
+			identifier: property.notFound
 			count: 8
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$pjcomm\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$pjcomm\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$type\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$type\.$#'
+			identifier: property.notFound
 			count: 16
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$verrou\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$verrou\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_PIECEJOINTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DATE_PIECEJOINTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DESCRIPTION_PIECEJOINTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DESCRIPTION_PIECEJOINTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$EXTENSION_PIECEJOINTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$EXTENSION_PIECEJOINTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DATECOMMISSION\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_DATECOMMISSION\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOSSIER\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_DOSSIER\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ETABLISSEMENT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_ETABLISSEMENT\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PIECEJOINTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_PIECEJOINTE\.$#'
+			identifier: property.notFound
 			count: 6
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NOM_PIECEJOINTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$NOM_PIECEJOINTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PLACEMENT_ETABLISSEMENTPJ\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$PLACEMENT_ETABLISSEMENTPJ\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$exists\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$exists\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$type\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$type\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 4
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:layout\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:layout\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:redirector\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:addActionContext\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:addActionContext\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:url\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:url\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:partial\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:partial\(\)\.$#'
+			identifier: method.notFound
 			count: 2
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Property PlatauController\\:\\:\\$viewRenderer \\(Zend_Controller_Action_Helper_ViewRenderer\\) does not accept Zend_Controller_Action_Helper_Abstract\\.$#"
+			message: '#^Property PlatauController\:\:\$viewRenderer \(Zend_Controller_Action_Helper_ViewRenderer\) does not accept Zend_Controller_Action_Helper_Abstract\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: application/controllers/PlatauController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/ProxyController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$url\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$url\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/ProxyController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:layout\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:layout\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/ProxyController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:setNoRender\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:setNoRender\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/ProxyController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Parameter \#3 \$value of function curl_setopt expects int, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: application/controllers/ProxyController.php
+
+		-
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/RetablirController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 5
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$parent\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$parent\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$user\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$user\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$writer\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$writer\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 5
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:layout\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:layout\(\)\.$#'
+			identifier: method.notFound
 			count: 2
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:redirector\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getQuery\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:getQuery\(\)\.$#'
+			identifier: method.notFound
 			count: 16
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isGet\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:isGet\(\)\.$#'
+			identifier: method.notFound
 			count: 5
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:partialLoop\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:partialLoop\(\)\.$#'
+			identifier: method.notFound
 			count: 2
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Parameter \\#1 \\$month of function checkdate expects int, string given\\.$#"
+			message: '#^Parameter \#1 \$month of function checkdate expects int, string given\.$#'
+			identifier: argument.type
 			count: 1
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Parameter \\#1 \\$year of static method PHPExcel_Shared_Date\\:\\:FormattedPHPToExcel\\(\\) expects int, \\(string\\|false\\) given\\.$#"
+			message: '#^Parameter \#1 \$year of static method PHPExcel_Shared_Date\:\:FormattedPHPToExcel\(\) expects int, \(string\|false\) given\.$#'
+			identifier: argument.type
 			count: 9
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Parameter \\#2 \\$day of function checkdate expects int, string given\\.$#"
+			message: '#^Parameter \#2 \$day of function checkdate expects int, string given\.$#'
+			identifier: argument.type
 			count: 1
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Parameter \\#2 \\$month of static method PHPExcel_Shared_Date\\:\\:FormattedPHPToExcel\\(\\) expects int, \\(string\\|false\\) given\\.$#"
+			message: '#^Parameter \#2 \$month of static method PHPExcel_Shared_Date\:\:FormattedPHPToExcel\(\) expects int, \(string\|false\) given\.$#'
+			identifier: argument.type
 			count: 9
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Parameter \\#3 \\$day of static method PHPExcel_Shared_Date\\:\\:FormattedPHPToExcel\\(\\) expects int, \\(string\\|false\\) given\\.$#"
+			message: '#^Parameter \#3 \$day of static method PHPExcel_Shared_Date\:\:FormattedPHPToExcel\(\) expects int, \(string\|false\) given\.$#'
+			identifier: argument.type
 			count: 9
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Parameter \\#3 \\$year of function checkdate expects int, string given\\.$#"
+			message: '#^Parameter \#3 \$year of function checkdate expects int, string given\.$#'
+			identifier: argument.type
 			count: 1
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/SessionController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$redirector\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$redirector\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/SessionController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$prevarisc_login_passwd\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$prevarisc_login_passwd\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/SessionController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$prevarisc_login_username\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$prevarisc_login_username\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/SessionController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/SessionController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:getPost\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/SessionController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:isPost\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/SessionController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:url\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:url\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/SessionController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/StatistiquesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$results\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$results\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/StatistiquesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:contextSwitch\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:contextSwitch\(\)\.$#'
+			identifier: method.notFound
 			count: 2
 			path: application/controllers/StatistiquesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/TableauDesPeriodicitesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 4
 			path: application/controllers/TableauDesPeriodicitesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:redirector\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
+			identifier: method.notFound
 			count: 2
 			path: application/controllers/TableauDesPeriodicitesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:getPost\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/TableauDesPeriodicitesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 10
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$categories\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$categories\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$classements\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$classements\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$classes\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$classes\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$commissions\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$commissions\.$#'
+			identifier: property.notFound
 			count: 4
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$commune\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$commune\.$#'
+			identifier: property.notFound
 			count: 16
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$dossier_natures\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$dossier_natures\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$familles\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$familles\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$genre\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$genre\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$gid\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$gid\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$groupements\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$groupements\.$#'
+			identifier: property.notFound
 			count: 16
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$id\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$text\\.$#"
-			count: 4
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$type_ressource\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$types\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$text\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$uid\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$type_ressource\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPE\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$types\.$#'
+			identifier: property.notFound
+			count: 2
+			path: application/controllers/UsersController.php
+
+		-
+			message: '#^Access to an undefined property Zend_Controller_Request_Abstract\:\:\$uid\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$id_privilege\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_GROUPE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$genres\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$id_privilege\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
+			message: '#^Access to an undefined property Zend_View_Interface\:\:\$genres\.$#'
+			identifier: property.notFound
+			count: 1
+			path: application/controllers/UsersController.php
+
+		-
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
+			identifier: method.notFound
 			count: 16
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:redirector\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
+			identifier: method.notFound
 			count: 8
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:getPost\(\)\.$#'
+			identifier: method.notFound
 			count: 4
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isGet\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:isGet\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isPost\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:isPost\(\)\.$#'
+			identifier: method.notFound
 			count: 6
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Form_Element_Button\\:\\:\\$class\\.$#"
+			message: '#^Access to an undefined property Zend_Form_Element_Button\:\:\$class\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/forms/CustomForm.php
 
 		-
-			message: "#^Access to an undefined property Zend_Form_Element_Button\\:\\:\\$class\\.$#"
+			message: '#^Access to an undefined property Zend_Form_Element_Button\:\:\$class\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/forms/CustomFormField.php
 
 		-
-			message: "#^Access to an undefined property Zend_Form_Element_Button\\:\\:\\$id\\.$#"
+			message: '#^Access to an undefined property Zend_Form_Element_Button\:\:\$id\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/forms/CustomFormField.php
 
 		-
-			message: "#^Access to an undefined property Zend_Form_Element_Button\\:\\:\\$class\\.$#"
+			message: '#^Access to an undefined property Zend_Form_Element_Button\:\:\$class\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/forms/FormChampFromParent.php
 
 		-
-			message: "#^Access to an undefined property Zend_Form_Element_Button\\:\\:\\$id\\.$#"
+			message: '#^Access to an undefined property Zend_Form_Element_Button\:\:\$id\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/forms/FormChampFromParent.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$COMMISSION_CONCERNE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$COMMISSION_CONCERNE\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/models/DbTable/DateCommission.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATECOMMISSION_LIEES\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DATECOMMISSION_LIEES\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/models/DbTable/DateCommission.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_COMMISSION\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DATE_COMMISSION\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/models/DbTable/DateCommission.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$HEUREDEB_COMMISSION\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$HEUREDEB_COMMISSION\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/models/DbTable/DateCommission.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$HEUREFIN_COMMISSION\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$HEUREFIN_COMMISSION\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/models/DbTable/DateCommission.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSIONTYPEEVENEMENT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_COMMISSIONTYPEEVENEMENT\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/models/DbTable/DateCommission.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DATECOMMISSION\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_DATECOMMISSION\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/models/DbTable/DateCommission.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_DATECOMMISSION\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$LIBELLE_DATECOMMISSION\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/models/DbTable/DateCommission.php
 
 		-
-			message: "#^Call to an undefined method Zend_Db_Select\\:\\:joinLeftUsing\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Db_Select\:\:joinLeftUsing\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/models/DbTable/Dossier.php
 
 		-
-			message: "#^Call to an undefined method Zend_Db_Adapter_Abstract\\:\\:exec\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Db_Adapter_Abstract\:\:exec\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/models/DbTable/DossierPreventionniste.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DATE_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/models/DbTable/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_CATEGORIE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_CATEGORIE\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/models/DbTable/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSION\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_COMMISSION\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/models/DbTable/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/models/DbTable/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GENRE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_GENRE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/models/DbTable/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PERIODICITE_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$PERIODICITE_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/models/DbTable/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GENRE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_GENRE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/models/DbTable/EtablissementAdresse.php
 
 		-
-			message: "#^Cannot call method toArray\\(\\) on array\\.$#"
+			message: '#^Cannot call method toArray\(\) on array\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: application/models/DbTable/EtablissementAdresse.php
 
 		-
-			message: "#^Call to an undefined method Zend_Db_Select\\:\\:joinLeftUsing\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Db_Select\:\:joinLeftUsing\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/models/DbTable/EtablissementDossier.php
 
 		-
-			message: "#^Call to an undefined method Zend_Db_Select\\:\\:setIntegrityCheck\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Db_Select\:\:setIntegrityCheck\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/models/DbTable/Groupement.php
 
 		-
-			message: "#^Cannot call method commit\\(\\) on object\\|resource\\.$#"
+			message: '#^Cannot call method commit\(\) on object\|resource\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: application/models/DbTable/Periodicite.php
 
 		-
-			message: "#^Cannot call method query\\(\\) on object\\|resource\\.$#"
+			message: '#^Cannot call method query\(\) on object\|resource\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: application/models/DbTable/Periodicite.php
 
 		-
-			message: "#^Cannot call method delete\\(\\) on array\\.$#"
+			message: '#^Cannot call method delete\(\) on array\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: application/models/DbTable/PrescriptionDossierAssoc.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEUR\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_UTILISATEUR\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/models/DbTable/Utilisateur.php
 
 		-
-			message: "#^Call to an undefined method Model_DbTable_Groupe\\:\\:getDroits\\(\\)\\.$#"
+			message: '#^Call to an undefined method Model_DbTable_Groupe\:\:getDroits\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/models/DbTable/Utilisateur.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Router_Interface\\:\\:addConfig\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Router_Interface\:\:addConfig\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/modules/api/Bootstrap.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/AdresseController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/AdresseController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/CalendarController.php
 
 		-
-			message: "#^Call to an undefined method Zend_View_Interface\\:\\:layout\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_View_Interface\:\:layout\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/modules/api/controllers/CalendarController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/ContactController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/ContactController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/EtablissementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/EtablissementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/LoginController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/LoginController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/SearchController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/SearchController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/TestController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/TestController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/UserController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/controllers/UserController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Plugin_ErrorHandler\\:\\:\\$exception\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Plugin_ErrorHandler\:\:\$exception\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/plugins/RefererCheck.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Plugin_ErrorHandler\\:\\:\\$request\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Plugin_ErrorHandler\:\:\$request\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/plugins/RefererCheck.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Plugin_ErrorHandler\\:\\:\\$type\\.$#"
+			message: '#^Access to an undefined property Zend_Controller_Plugin_ErrorHandler\:\:\$type\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/plugins/RefererCheck.php
 
 		-
-			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VTimeZone\\:\\:\\$TZID\\.$#"
+			message: '#^Access to an undefined property Sabre\\VObject\\Component\\VTimeZone\:\:\$TZID\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/modules/api/services/Calendar.php
 
 		-
-			message: "#^Call to an undefined method Service_Dossier\\:\\:get\\(\\)\\.$#"
+			message: '#^Strict comparison using \!\=\= between array\{\} and non\-empty\-array will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 2
+			path: application/modules/api/services/Calendar.php
+
+		-
+			message: '#^Call to an undefined method Service_Dossier\:\:get\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/modules/api/services/Dossier.php
 
 		-
-			message: "#^Call to an undefined method Service_Dossier\\:\\:getDescriptifs\\(\\)\\.$#"
+			message: '#^Call to an undefined method Service_Dossier\:\:getDescriptifs\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/modules/api/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property ArrayObject\\<\\*NEVER\\*, \\*NEVER\\*\\>\\:\\:\\$exception\\.$#"
+			message: '#^Access to an undefined property ArrayObject\<\*NEVER\*, \*NEVER\*\>\:\:\$exception\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/plugins/ACL.php
 
 		-
-			message: "#^Access to an undefined property ArrayObject\\<\\*NEVER\\*, \\*NEVER\\*\\>\\:\\:\\$request\\.$#"
+			message: '#^Access to an undefined property ArrayObject\<\*NEVER\*, \*NEVER\*\>\:\:\$request\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/plugins/ACL.php
 
 		-
-			message: "#^Access to an undefined property ArrayObject\\<\\*NEVER\\*, \\*NEVER\\*\\>\\:\\:\\$type\\.$#"
+			message: '#^Access to an undefined property ArrayObject\<\*NEVER\*, \*NEVER\*\>\:\:\$type\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/plugins/ACL.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:gotoSimple\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:gotoSimple\(\)\.$#'
+			identifier: method.notFound
 			count: 2
 			path: application/plugins/ACL.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:gotoRouteAndExit\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:gotoRouteAndExit\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/plugins/Security.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:setView\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:setView\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/plugins/View.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isXmlHttpRequest\\(\\)\\.$#"
+			message: '#^Call to an undefined method Zend_Controller_Request_Abstract\:\:isXmlHttpRequest\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: application/plugins/XmlHttpRequest.php
 
 		-
-			message: "#^Call to method fetch\\(\\) on an unknown class PDO_Statement\\.$#"
+			message: '#^Call to method fetch\(\) on an unknown class PDO_Statement\.$#'
+			identifier: class.notFound
 			count: 1
 			path: application/services/Adresse.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$MESSAGE_CHANGEMENT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$MESSAGE_CHANGEMENT\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Changement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_LEVEE\\.$#"
+			message: '#^Strict comparison using \!\=\= between null and string will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: application/services/Descriptif.php
+
+		-
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DATE_LEVEE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ARTICLE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_ARTICLE\.$#'
+			identifier: property.notFound
 			count: 7
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOSSIER\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_DOSSIER\.$#'
+			identifier: property.notFound
 			count: 4
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ETABLISSEMENT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_DOSSIER_REPRISE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTION_DOSSIER\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_ETABLISSEMENT\.$#'
+			identifier: property.notFound
+			count: 1
+			path: application/services/Dossier.php
+
+		-
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_PRESCRIPTION_DOSSIER\.$#'
+			identifier: property.notFound
 			count: 8
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTION_TYPE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_PRESCRIPTION_TYPE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_TEXTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_TEXTE\.$#'
+			identifier: property.notFound
 			count: 7
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_TEXTESAPPL\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_TEXTESAPPL\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$JUSTIFICATIF_LEVEE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$JUSTIFICATIF_LEVEE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_PRESCRIPTION_DOSSIER\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$LIBELLE_PRESCRIPTION_DOSSIER\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTION_DOSSIER\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$NUM_PRESCRIPTION_DOSSIER\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTION_DOSSIERASSOC\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$NUM_PRESCRIPTION_DOSSIERASSOC\.$#'
+			identifier: property.notFound
 			count: 5
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$TYPE_PRESCRIPTION_DOSSIER\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$TYPE_PRESCRIPTION_DOSSIER\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DROITPUBLIC_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DROITPUBLIC_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ICPE_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ICPE_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_CATEGORIE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_CATEGORIE\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_CLASSE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_CLASSE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_CLASSEMENT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_CLASSEMENT\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSION\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_COMMISSION\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ETABLISSEMENT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_ETABLISSEMENT\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 8
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_FAMILLE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_FAMILLE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GENRE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_GENRE\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_STATUT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_STATUT\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_TEXTESAPPL\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_TEXTESAPPL\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_TYPE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_TYPE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_TYPEACTIVITE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_TYPEACTIVITE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$LIBELLE_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PERIODICITE_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$PERIODICITE_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$R14320_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$R14320_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$UTILISATEUR_ETABLISSEMENTINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$UTILISATEUR_ETABLISSEMENTINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Cannot call method toArray\\(\\) on array\\.$#"
+			message: '#^Cannot call method toArray\(\) on array\.$#'
+			identifier: method.nonObject
 			count: 14
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Comparison operation \"\\!\\=\" between 0 and 0\\|0\\.0\\|''\\|'0'\\|array\\{\\}\\|false\\|null results in an error\\.$#"
+			message: '#^Comparison operation "\!\=" between 0 and 0\|0\.0\|''''\|array\{\}\|false\|null results in an error\.$#'
+			identifier: notEqual.invalid
 			count: 2
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Default value of the parameter \\#4 \\$date \\(string\\) of method Service_Etablissement\\:\\:save\\(\\) is incompatible with type int\\.$#"
+			message: '#^Default value of the parameter \#4 \$date \(string\) of method Service_Etablissement\:\:save\(\) is incompatible with type int\.$#'
+			identifier: parameter.defaultValue
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Result of \\|\\| is always true\\.$#"
+			message: '#^Result of \|\| is always true\.$#'
+			identifier: booleanOr.alwaysTrue
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			message: '#^Strict comparison using \!\=\= between null and mixed will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
+			message: '#^Strict comparison using \!\=\= between null and string will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: application/services/Etablissement.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: application/services/Etablissement.php
+
+		-
+			message: '#^Call to method fetchAll\(\) on an unknown class PDO_Statement\.$#'
+			identifier: class.notFound
 			count: 2
 			path: application/services/Feed.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(int numinsee Optionnel\\)\\: Unexpected token \"numinsee\", expected variable at offset 76$#"
-			count: 1
-			path: application/services/GroupementCommunes.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ACTIF_UTILISATEUR\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ACTIF_UTILISATEUR\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Login.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_GROUPE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Login.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEUR\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_UTILISATEUR\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/services/Login.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEURINFORMATIONS\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_UTILISATEURINFORMATIONS\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/services/Login.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PASSWD_UTILISATEUR\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$PASSWD_UTILISATEUR\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Login.php
 
 		-
-			message: "#^Access to an undefined property Zend_Session_Namespace\\:\\:\\$date\\.$#"
+			message: '#^Access to an undefined property Zend_Session_Namespace\:\:\$date\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Notification.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ARTICLE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_ARTICLE\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/services/Prescriptions.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTIONREGL\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_PRESCRIPTIONREGL\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Prescriptions.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTIONTYPE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_PRESCRIPTIONTYPE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Prescriptions.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_TEXTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_TEXTE\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/services/Prescriptions.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_ARTICLE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$LIBELLE_ARTICLE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Prescriptions.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_TEXTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$LIBELLE_TEXTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Prescriptions.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTIONASSOC\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$NUM_PRESCRIPTIONASSOC\.$#'
+			identifier: property.notFound
 			count: 2
 			path: application/services/Prescriptions.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$VISIBLE_ARTICLE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$VISIBLE_ARTICLE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Prescriptions.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$VISIBLE_TEXTE\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$VISIBLE_TEXTE\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/Prescriptions.php
 
 		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 3
+			message: '#^Call to method fetchAll\(\) on an unknown class PDO_Statement\.$#'
+			identifier: class.notFound
+			count: 9
 			path: application/services/Search.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DASHBOARD_BLOCS\\.$#"
+			message: '#^Strict comparison using \!\=\= between null and mixed will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 40
+			path: application/services/Search.php
+
+		-
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$DASHBOARD_BLOCS\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/User.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSION\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_COMMISSION\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/User.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPEMENT\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_GROUPEMENT\.$#'
+			identifier: property.notFound
 			count: 1
 			path: application/services/User.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEUR\\.$#"
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_UTILISATEUR\.$#'
+			identifier: property.notFound
 			count: 4
+			path: application/services/User.php
+
+		-
+			message: '#^Instanceof between Zend_Db_Table_Rowset_Abstract and Zend_Db_Table_Rowset_Abstract will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 2
 			path: application/services/User.php

@@ -2,8 +2,11 @@
 
 class Model_DbTable_DossierDocConsulte extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'dossierdocconsulte'; // Nom de la base
-    protected $_primary = ['ID_DOSSIERDOCCONSULTE']; // Clé primaire
+    // Nom de la base
+    protected $_name = 'dossierdocconsulte';
+
+    // Clé primaire
+    protected $_primary = ['ID_DOSSIERDOCCONSULTE'];
 
     public function getGeneral($idDossier, $idDoc)
     {

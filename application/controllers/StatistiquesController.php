@@ -10,7 +10,7 @@ class StatistiquesController extends Zend_Controller_Action
         'liste-erp-avec-visite-periodique-sur-un-an' => 'Extraction 4 : Liste ERP avec des visites périodiques sur 1 an',
     ];
 
-    public function init()
+    public function init(): void
     {
         ob_end_clean();
         $this->_helper->layout->setLayout('dashboard');
@@ -23,16 +23,16 @@ class StatistiquesController extends Zend_Controller_Action
     }
 
     // Accueil
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->view->assign('title', 'Statistiques');
         $this->view->assign('liste', $this->liste);
     }
 
-    public function extractionProcess($champs_supplementaires, $noms_des_colonnes_a_afficher, Model_DbTable_Statistiques $requete)
+    public function extractionProcess($champs_supplementaires, $noms_des_colonnes_a_afficher, Model_DbTable_Statistiques $requete): void
     {
         // Si on interroge l'action en json, on demande les champs supplémentaires
-        if ('json' == $this->_getParam('format')) {
+        if ('json' == $this->getRequest()->getParam('format')) {
             $this->view->assign('result', $champs_supplementaires);
         } else {
             $this->view->assign('columns', $noms_des_colonnes_a_afficher);
@@ -45,12 +45,12 @@ class StatistiquesController extends Zend_Controller_Action
     }
 
     // Extraction 1 : CCDSA Liste ERP en exploitation connus soumis à contrôle
-    public function ccdsaListeErpEnExploitationConnusSoumisAControleAction()
+    public function ccdsaListeErpEnExploitationConnusSoumisAControleAction(): void
     {
         $model_stat = new Model_DbTable_Statistiques();
 
-        if ('json' != $this->_getParam('format')) {
-            $date = new Zend_Date($this->_getParam('date'), Zend_Date::DATES);
+        if ('json' != $this->getRequest()->getParam('format')) {
+            $date = new Zend_Date($this->getRequest()->getParam('date'), Zend_Date::DATES);
             $this->view->assign('resume', 'Liste ERP en exploitation connus soumis à contrôle à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR));
         }
 
@@ -70,20 +70,20 @@ class StatistiquesController extends Zend_Controller_Action
                 // "Date prochaine visite de contrôle" => "DATEVISITE_DOSSIER",
                 'Commission' => 'LIBELLE_COMMISSION',
             ],
-            $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousmisAControle()
+            $model_stat->listeDesERP($this->getRequest()->getParam('date'))->enExploitation()->sousmisAControle()
         );
-        if ('json' != $this->_getParam('format')) {
+        if ('json' != $this->getRequest()->getParam('format')) {
             $this->render('extraction');
         }
     }
 
     // Extraction 2 : Liste des ERP sous avis défavorable
-    public function listeDesErpSousAvisDefavorableAction()
+    public function listeDesErpSousAvisDefavorableAction(): void
     {
         $model_stat = new Model_DbTable_Statistiques();
 
-        if ('json' != $this->_getParam('format')) {
-            $date = new Zend_Date($this->_getParam('date'), Zend_Date::DATES);
+        if ('json' != $this->getRequest()->getParam('format')) {
+            $date = new Zend_Date($this->getRequest()->getParam('date'), Zend_Date::DATES);
             $this->view->assign('resume', 'Liste ERP en exploitation sous avis défavorable à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR));
         }
 
@@ -118,15 +118,15 @@ class StatistiquesController extends Zend_Controller_Action
                 'Commission' => 'LIBELLE_COMMISSION',
                 'Nombre de jours écoulés sous avis défavorable par rapport à la date renseignée' => 'NBJOURS_DEFAVORABLE',
             ],
-            $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousAvisDefavorable()->trierPar($this->_getParam('tri'))
+            $model_stat->listeDesERP($this->getRequest()->getParam('date'))->enExploitation()->sousAvisDefavorable()->trierPar($this->getRequest()->getParam('tri'))
         );
-        if ('json' != $this->_getParam('format')) {
+        if ('json' != $this->getRequest()->getParam('format')) {
             $this->render('extraction');
         }
     }
 
     // Extraction 3 : Prochaines visites de contrôle périodique à faire sur une commune
-    public function prochainesVisitesDeControlePeriodiqueAFaireSurUneCommuneAction()
+    public function prochainesVisitesDeControlePeriodiqueAFaireSurUneCommuneAction(): void
     {
         $model_stat = new Model_DbTable_Statistiques();
 
@@ -138,9 +138,9 @@ class StatistiquesController extends Zend_Controller_Action
             $communes[$commune['LIBELLE_COMMUNE']] = $commune['NUMINSEE_COMMUNE'];
         }
 
-        if ('json' != $this->_getParam('format')) {
-            $date = new Zend_Date($this->_getParam('date'), Zend_Date::DATES);
-            $this->view->assign('resume', 'Prochaines visites de contrôle périodique à faire sur '.array_search($this->_getParam('commune'), $communes).' à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR));
+        if ('json' != $this->getRequest()->getParam('format')) {
+            $date = new Zend_Date($this->getRequest()->getParam('date'), Zend_Date::DATES);
+            $this->view->assign('resume', 'Prochaines visites de contrôle périodique à faire sur '.array_search($this->getRequest()->getParam('commune'), $communes, true).' à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR));
         }
 
         $this->extractionProcess(
@@ -175,22 +175,22 @@ class StatistiquesController extends Zend_Controller_Action
                 'Avis de la dernière visite' => 'LIBELLE_AVIS',
                 'Commission' => 'LIBELLE_COMMISSION',
             ],
-            $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousmisAControle()->surLaCommune($this->_getParam('commune'))->trierPar($this->_getParam('tri'))
+            $model_stat->listeDesERP($this->getRequest()->getParam('date'))->enExploitation()->sousmisAControle()->surLaCommune($this->getRequest()->getParam('commune'))->trierPar($this->getRequest()->getParam('tri'))
         );
-        if ('json' != $this->_getParam('format')) {
+        if ('json' != $this->getRequest()->getParam('format')) {
             $this->render('extraction');
         }
     }
 
     // Extraction 4 : Liste ERP liées au commission de visite periodique dans une année
-    public function listeErpAvecVisitePeriodiqueSurUnAnAction()
+    public function listeErpAvecVisitePeriodiqueSurUnAnAction(): void
     {
         $model_stat = new Model_DbTable_Statistiques();
         $dateDebut = date('01/01/'.date('Y'), time());
         $dateFin = date('31/12/'.date('Y'), time());
 
-        if ('json' != $this->_getParam('format')) {
-            $date = new Zend_Date($this->_getParam('date'), Zend_Date::DATES);
+        if ('json' != $this->getRequest()->getParam('format')) {
+            $date = new Zend_Date($this->getRequest()->getParam('date'), Zend_Date::DATES);
             $this->view->assign('resume', 'Liste ERP avec des visites periodiques à partir du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR));
         }
 
@@ -228,10 +228,10 @@ class StatistiquesController extends Zend_Controller_Action
                 'Date limite de prochaine visite' => 'PERIODICITE_ETABLISSEMENTINFORMATIONS',
                 'Commission' => 'LIBELLE_COMMISSION',
             ],
-            $model_stat->listeDesERPVisitePeriodique($this->_getParam('date'), $this->_getParam('datefin'))->trierPar($this->_getParam('tri'))
+            $model_stat->listeDesERPVisitePeriodique($this->getRequest()->getParam('date'), $this->getRequest()->getParam('datefin'))->trierPar($this->getRequest()->getParam('tri'))
         );
 
-        if ('json' != $this->_getParam('format')) {
+        if ('json' != $this->getRequest()->getParam('format')) {
             $results = $this->view->results;
             foreach ($results as $key => $row) {
                 if (null == $row['DATEVISITE_DOSSIER']) {
@@ -255,6 +255,7 @@ class StatistiquesController extends Zend_Controller_Action
                     $results[$key]['PERIODICITE_ETABLISSEMENTINFORMATIONS'] = "<a href='/etablissement/edit/id/".$row['ID_ETABLISSEMENT']."'>Modifier la periodicité</a>";
                 }
             }
+
             $this->view->assign('results', $results);
             $this->render('extraction');
         }

@@ -23,7 +23,7 @@
                     <strong class='zone_de_recherche_text'>
                     <?php 
                             echo array_key_exists('zone_de_recherche_text', $_GET) && $_GET['zone_de_recherche_text'] != '' ? $_GET['zone_de_recherche_text'] : 'Département';
-                    ?>                    </strong>
+                    ?></strong>
                 </a>
                 <a href='#' id="zone_de_recherche_reset"><i class="icon-remove"></i></a>
                 <input type='hidden' name='zone_de_recherche_text' value="<?php if(array_key_exists('zone_de_recherche_text', $_GET)) echo $_GET['zone_de_recherche_text'] ?>" />

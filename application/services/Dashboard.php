@@ -228,7 +228,7 @@ class Service_Dashboard
             $this->blocsConfig['nouvellesPjsPlatau'] = [
                 'service' => Service_Dashboard::class,
                 'method' => 'getDossiersPlatauNouvellesPjs',
-                'acl' => '',
+                'acl' => ['dashboard', 'view_doss_platau_nouvelles_pjs'],
                 'title' => "Dossiers Plat'AU avec de nouvelles pièces jointes",
                 'type' => 'dossiers',
                 'height' => 'small',

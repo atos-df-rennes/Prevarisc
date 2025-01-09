@@ -1,4 +1,9 @@
-![](https://github.com/atos-df-rennes/prevarisc/actions/workflows/actions.yml/badge.svg?event=push)
+![GitHub branch check runs](https://img.shields.io/github/check-runs/atos-df-rennes/prevarisc/2.5)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/atos-df-rennes/prevarisc)
+![Static Badge](https://img.shields.io/badge/php-7.1-blue)
+![Static Badge](https://img.shields.io/badge/license-CeCILL--B-yellow)
+![GitHub Repo stars](https://img.shields.io/github/stars/atos-df-rennes/prevarisc)
+
 
 # Prevarisc
 

@@ -11,6 +11,6 @@ class Api_EtablissementController extends Zend_Controller_Action
 
         $server = new SDIS62_Rest_Server();
         $server->setClass('Api_Service_Etablissement');
-        $server->handle($this->_request->getParams());
+        $server->handle($this->getRequest()->getParams());
     }
 }

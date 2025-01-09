@@ -116,6 +116,7 @@ class Service_Descriptif
     {
         [, $idChamp, $idx] = explode('-', $key);
 
+        // @fixme: Il faut sans doute vérifier 'NULL' !== $idx plutôt
         if (null !== $idx) {
             $idx = (int) $idx;
         }

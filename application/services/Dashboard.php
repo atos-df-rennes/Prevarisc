@@ -208,8 +208,29 @@ class Service_Dashboard
                 'service' => 'Service_Dashboard',
                 'method' => 'getDossiersPlatAUSansEtablissement',
                 'acl' => ['dashboard', 'view_doss_platau_sans_etab'],
-                'title' => 'Dossiers Plat\'AU à traiter',
-                'type' => 'dossiers_platau',
+                'title' => "Dossiers Plat'AU à traiter",
+                'type' => 'dossiers',
+                'height' => 'small',
+                'width' => 'small',
+            ];
+
+            $this->blocsConfig['pjPlatauErreur'] = [
+                'service' => Service_Dashboard::class,
+                'method' => 'getDossiersPlatauPjsEnErreur',
+                'acl' => ['dashboard', 'view_doss_platau_pjs_en_erreur'],
+                'title' => "Dossiers Plat'AU avec des pièces jointes non envoyées",
+                'type' => 'dossiers',
+                'height' => 'small',
+                'width' => 'small',
+            ];
+
+            // @fixme: Ajouter les permissions
+            $this->blocsConfig['nouvellesPjsPlatau'] = [
+                'service' => Service_Dashboard::class,
+                'method' => 'getDossiersPlatauNouvellesPjs',
+                'acl' => ['dashboard', 'view_doss_platau_nouvelles_pjs'],
+                'title' => "Dossiers Plat'AU avec de nouvelles pièces jointes",
+                'type' => 'dossiers',
                 'height' => 'small',
                 'width' => 'small',
             ];
@@ -483,14 +504,71 @@ class Service_Dashboard
         }
 
         $search->order('d.DATEINSERT_DOSSIER');
+        $results = $search->run(false, null, false)->toArray();
 
         $serviceDossier = new Service_Dossier();
         $serviceNotification = new Service_Notification();
-        $results = $search->run(false, null, false)->toArray();
-
         foreach ($results as $key => $result) {
             $results[$key]['IS_NEW'] = $serviceNotification->isNew($result, Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE);
-            $results[$key]['HAS_NEW_PJ'] = $serviceDossier->hasNewPj($result);
+            $results[$key]['HAS_NEW_PJ'] = $serviceDossier->hasNewPj($result, Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE);
+        }
+
+        return $results;
+    }
+
+    /**
+     * Retourne la liste des dossiers Plat'AU ayant envoyé un avis
+     * et qui comportent des pièces jointes non envoyées.
+     *
+     * @return array|int
+     */
+    public function getDossiersPlatauPjsEnErreur(array $user, bool $getCount = false)
+    {
+        $search = new Model_DbTable_Search();
+        $search->setItem('dossier', $getCount);
+        $search->join(['platauconsultation', 'platauconsultation.ID_PLATAU = d.ID_PLATAU', 'STATUT_AVIS']);
+        $search->join(['dossierpj', 'dossierpj.ID_DOSSIER = d.ID_DOSSIER', []]);
+        $search->join(['piecejointe', 'piecejointe.ID_PIECEJOINTE = dossierpj.ID_PIECEJOINTE', ['ID_PIECEJOINTESTATUT']]);
+        $search->join(['piecejointestatut', 'piecejointestatut.ID_PIECEJOINTESTATUT = piecejointe.ID_PIECEJOINTESTATUT']);
+        $search->setCriteria('d.ID_PLATAU IS NOT NULL');
+        $search->setCriteria('d.ID_DOSSIER IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)');
+        $search->setCriteria('platauconsultation.STATUT_AVIS', Model_Enum_PlatauStatutAvis::TRAITE);
+        $search->setCriteria('piecejointestatut.NOM_STATUT IN ("to_be_exported", "on_error", "awaiting_status")');
+
+        if ($getCount) {
+            return $search->run(false, null, false, true);
+        }
+
+        $search->order('d.DATEINSERT_DOSSIER');
+
+        return $search->run(false, null, false)->toArray();
+    }
+
+    /**
+     * Retourne la liste des dossiers Plat'AU ayant de nouvelles pièces.
+     *
+     * @return array|int
+     */
+    public function getDossiersPlatauNouvellesPjs(array $user, bool $getCount = false)
+    {
+        $search = new Model_DbTable_Search();
+        $search->setItem('dossier');
+        $search->join(['platauconsultation', 'platauconsultation.ID_PLATAU = d.ID_PLATAU', 'DATE_REPONSE_ATTENDUE']);
+        $search->setCriteria('d.ID_PLATAU IS NOT NULL');
+        $search->setCriteria('d.ID_DOSSIER IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)');
+        $search->order('d.DATEINSERT_DOSSIER');
+
+        $results = $search->run(false, null, false)->toArray();
+
+        $serviceDossier = new Service_Dossier();
+        foreach ($results as $key => $result) {
+            if (!$serviceDossier->hasNewPj($result, Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE)) {
+                unset($results[$key]);
+            }
+        }
+
+        if ($getCount) {
+            return count($results);
         }
 
         return $results;

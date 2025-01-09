@@ -76,18 +76,14 @@ class Service_Changement
     /**
      * Sauvegarde les modifications apportées aux messages d'alerte
      * par défaut.
-     *
-     * @param array $data Les données envoyés en post
      */
-    public function save($data): void
+    public function save(array $data): void
     {
-        if (is_array($data)) {
-            foreach ($data as $key => $message) {
-                $idChangement = filter_var(explode('_', $key)[0], FILTER_VALIDATE_INT);
-                $changement = $this->get($idChangement);
-                $changement->MESSAGE_CHANGEMENT = $message;
-                $changement->save();
-            }
+        foreach ($data as $key => $message) {
+            $idChangement = filter_var(explode('_', $key)[0], FILTER_VALIDATE_INT);
+            $changement = $this->get($idChangement);
+            $changement->MESSAGE_CHANGEMENT = $message;
+            $changement->save();
         }
     }
 

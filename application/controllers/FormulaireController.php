@@ -148,6 +148,27 @@ class FormulaireController extends Zend_Controller_Action
         }
     }
 
+    public function editCapsuleRubriqueNomAction(): void
+    {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            try {
+                $post = $request->getPost();
+                $idCapsuleRubrique = (int) $post['id'];
+                $newName = $post['newName'];
+                $this->modelCapsuleRubrique->updateCapsuleRubriqueName(
+                    $idCapsuleRubrique,
+                    $newName
+                );
+
+                $this->_helper->json(['status' => 'success']);
+            } catch (Exception $e) {
+                $this->_helper->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
+
     public function deleteRubriqueAction(): void
     {
         $idRubrique = (int) $this->getParam('rubrique');

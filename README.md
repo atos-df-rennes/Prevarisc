@@ -66,9 +66,9 @@ Une documentation détaillée est disponible ici : [Documentation d'installation
 
 Pour contribuer à cette version de Prevarisc, consultez la [documentation de contribution](CONTRIBUTING.md).
 
-> En plus de la [procédure d'installation](#installation) standard, il vous faudra installer les dépendances de développement avec une version 8.1 de PHP :
+> En plus de la [procédure d'installation](#installation) standard, il vous faudra installer les dépendances de développement avec une version 8.3 de PHP :
 > ```sh
->     php8.1 /usr/local/bin/composer install --working-dir=tools
+>     php8.3 /usr/local/bin/composer install --working-dir=tools
 > ```
 
 Sinon, Prevarisc est une application fork-friendly et vous pouvez parfaitement maintenir une version personnalisée.

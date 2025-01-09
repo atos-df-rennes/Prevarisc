@@ -27,13 +27,19 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('isAllowedEffectifsDegagements', unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_ets'));
         $this->view->assign('isAllowedAvisDerogations', unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations'));
 
-        $this->serviceEtablissement = new Service_Etablissement();
+        // Noms des onglets paramétrables
+        $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
+        $this->view->assign('nomOngletDescriptif', $modelCapsuleRubrique->getCapsuleRubriqueByInternalName('descriptifEtablissement')['NOM']);
+        $this->view->assign('nomOngletEffectifsDegagements', $modelCapsuleRubrique->getCapsuleRubriqueByInternalName('effectifsDegagementsEtablissement')['NOM']);
 
-        if ($this->getParam('id')) {
-            $this->etablissement = $this->serviceEtablissement->get($this->getParam('id'));
+        $this->serviceEtablissement = new Service_Etablissement();
+        $id = $this->getRequest()->getParam('id');
+
+        if ($id) {
+            $this->etablissement = $this->serviceEtablissement->get($id);
             $this->view->assign('etablissement', $this->etablissement);
             $this->view->assign('avis', $this->serviceEtablissement->getAvisEtablissement($this->etablissement['general']['ID_ETABLISSEMENT'], $this->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
-            $this->view->assign('hasAvisDerogations', array_key_exists('AVIS_DEROGATIONS', $this->serviceEtablissement->getHistorique($this->_request->id)));
+            $this->view->assign('hasAvisDerogations', array_key_exists('AVIS_DEROGATIONS', $this->serviceEtablissement->getHistorique($id)));
         }
     }
 
@@ -225,13 +231,13 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('etablissement');
 
-        $displayOriginal = filter_var($this->_request->getParam('original'), FILTER_VALIDATE_BOOLEAN);
+        $displayOriginal = filter_var($this->getRequest()->getParam('original'), FILTER_VALIDATE_BOOLEAN);
         $this->view->assign('displayOriginal', $displayOriginal);
         if (1 === (int) getenv('PREVARISC_DESCRIPTIF_PERSONNALISE') && false === $displayOriginal) {
-            $this->view->assign('hideButton', $this->_request->getParam('hideButton'));
+            $this->view->assign('hideButton', $this->getRequest()->getParam('hideButton'));
             $this->descriptifPersonnaliseAction();
         } else {
-            $descriptifs = $this->serviceEtablissement->getDescriptifs($this->_request->id);
+            $descriptifs = $this->serviceEtablissement->getDescriptifs($this->getRequest()->getParam('id'));
 
             $this->view->assign('descriptif', $descriptifs['descriptif']);
             $this->view->assign('historique', $descriptifs['historique']);
@@ -249,7 +255,7 @@ class EtablissementController extends Zend_Controller_Action
         $service_etablissement = new Service_Etablissement();
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
 
-        $idEtablissement = $this->getParam('id');
+        $idEtablissement = $this->getRequest()->getParam('id');
 
         $this->view->assign('etablissement', $service_etablissement->get($idEtablissement));
         $this->view->assign('avis', $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
@@ -273,13 +279,13 @@ class EtablissementController extends Zend_Controller_Action
             if ($request->isPost()) {
                 try {
                     $post = $request->getPost();
-                    $this->serviceEtablissement->saveDescriptifs($request->id, $post['historique'], $post['descriptif'], $post['derogations'], $post['descriptifs_techniques']);
+                    $this->serviceEtablissement->saveDescriptifs($request->getParam('id'), $post['historique'], $post['descriptif'], $post['derogations'], $post['descriptifs_techniques']);
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
                 } catch (Exception $e) {
                     $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
                 }
 
-                $this->_helper->redirector('descriptif', null, null, ['id' => $request->id]);
+                $this->_helper->redirector('descriptif', null, null, ['id' => $request->getParam('id')]);
             }
         }
     }
@@ -296,11 +302,11 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
 
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
-        $idEtablissement = $this->getParam('id');
 
         $this->descriptifPersonnaliseAction();
 
         $request = $this->getRequest();
+        $idEtablissement = $request->getParam('id');
         if ($request->isPost()) {
             try {
                 $post = $request->getPost();
@@ -326,7 +332,7 @@ class EtablissementController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('descriptif', null, null, ['id' => $this->_request->id]);
+            $this->_helper->redirector('descriptif', null, null, ['id' => $idEtablissement]);
         }
     }
 
@@ -334,7 +340,7 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('etablissement');
 
-        $this->view->assign('textes_applicables_de_etablissement', $this->serviceEtablissement->getAllTextesApplicables($this->_request->id));
+        $this->view->assign('textes_applicables_de_etablissement', $this->serviceEtablissement->getAllTextesApplicables($this->getRequest()->getParam('id')));
     }
 
     public function editTextesApplicablesAction(): void
@@ -342,20 +348,21 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('etablissement');
 
         $service_textes_applicables = new Service_TextesApplicables();
+        $id = $this->getRequest()->getParam('id');
 
-        $this->view->assign('textes_applicables_de_etablissement', $this->serviceEtablissement->getAllTextesApplicables($this->_request->id));
+        $this->view->assign('textes_applicables_de_etablissement', $this->serviceEtablissement->getAllTextesApplicables($id));
         $this->view->assign('textes_applicables', $service_textes_applicables->getAll());
 
-        if ($this->_request->isPost()) {
+        if ($this->getRequest()->isPost()) {
             try {
-                $post = $this->_request->getPost();
-                $this->serviceEtablissement->saveTextesApplicables($this->_request->id, $post['textes_applicables']);
+                $post = $this->getRequest()->getPost();
+                $this->serviceEtablissement->saveTextesApplicables($id, $post['textes_applicables']);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les textes applicables ont bien été mis à jour.']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les textes applicables n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('textes-applicables', null, null, ['id' => $this->_request->id]);
+            $this->_helper->redirector('textes-applicables', null, null, ['id' => $id]);
         }
     }
 
@@ -364,7 +371,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('etablissement');
 
         $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
-        $allPiecesJointes = $this->serviceEtablissement->getAllPJ($this->_request->id);
+        $allPiecesJointes = $this->serviceEtablissement->getAllPJ($this->getRequest()->getParam('id'));
 
         $piecesJointes = array_filter(
             $allPiecesJointes,
@@ -389,7 +396,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('etablissement');
 
         $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
-        $allPiecesJointes = $this->serviceEtablissement->getAllPJ($this->_request->id);
+        $allPiecesJointes = $this->serviceEtablissement->getAllPJ($this->getRequest()->getParam('id'));
 
         $piecesJointes = array_filter(
             $allPiecesJointes,
@@ -408,19 +415,21 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();
 
-        if ($this->_request->isPost()) {
+        $id = $this->getRequest()->getParam('id');
+
+        if ($this->getRequest()->isPost()) {
             try {
-                $post = $this->_request->getPost();
+                $post = $this->getRequest()->getPost();
                 $name = $post['name'] ?? '';
                 $description = $post['description'] ?? '';
                 $mise_en_avant = $post['mise_en_avant'] ?? 0;
-                $this->serviceEtablissement->addPJ($this->_request->id, $_FILES['file'], $name, $description, $mise_en_avant);
+                $this->serviceEtablissement->addPJ($id, $_FILES['file'], $name, $description, $mise_en_avant);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'La pièce jointe a bien été ajoutée.']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'La pièce jointe n\'a été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('edit-pieces-jointes', null, null, ['id' => $this->_request->id]);
+            $this->_helper->redirector('edit-pieces-jointes', null, null, ['id' => $id]);
         }
     }
 
@@ -429,15 +438,17 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        if ($this->_request->isGet()) {
+        $id = $this->getRequest()->getParam('id');
+
+        if ($this->getRequest()->isGet()) {
             try {
-                $this->serviceEtablissement->deletePJ($this->_request->id, $this->_request->id_pj);
+                $this->serviceEtablissement->deletePJ($id, $this->getRequest()->getParam('id_pj'));
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'La pièce jointe a bien été supprimée.']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Suppression annulée', 'message' => 'La pièce jointe n\'a été supprimée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('edit-pieces-jointes', null, null, ['id' => $this->_request->id]);
+            $this->_helper->redirector('edit-pieces-jointes', null, null, ['id' => $id]);
         }
     }
 
@@ -452,7 +463,7 @@ class EtablissementController extends Zend_Controller_Action
             $contacts_etablissements_parents = array_merge($contacts_etablissements_parents, $this->serviceEtablissement->getAllContacts($this->etablissement_parent['ID_ETABLISSEMENT']));
         }
 
-        $this->view->assign('contacts', $this->serviceEtablissement->getAllContacts($this->_request->id));
+        $this->view->assign('contacts', $this->serviceEtablissement->getAllContacts($this->getRequest()->getParam('id')));
         $this->view->assign('contacts_etablissements_parents', $contacts_etablissements_parents);
     }
 
@@ -460,7 +471,7 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('etablissement');
 
-        $this->view->assign('contacts', $this->serviceEtablissement->getAllContacts($this->_request->id));
+        $this->view->assign('contacts', $this->serviceEtablissement->getAllContacts($this->getRequest()->getParam('id')));
     }
 
     public function addContactAction(): void
@@ -468,19 +479,20 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
 
         $service_contact = new Service_Contact();
+        $id = $this->getRequest()->getParam('id');
 
         $this->view->assign('fonctions', $service_contact->getFonctions());
 
-        if ($this->_request->isPost()) {
+        if ($this->getRequest()->isPost()) {
             try {
-                $post = $this->_request->getPost();
-                $this->serviceEtablissement->addContact($this->_request->id, $post['firstname'], $post['lastname'], $post['id_fonction'], $post['societe'], $post['fixe'], $post['mobile'], $post['fax'], $post['mail'], $post['adresse'], $post['web']);
+                $post = $this->getRequest()->getPost();
+                $this->serviceEtablissement->addContact($id, $post['firstname'], $post['lastname'], $post['id_fonction'], $post['societe'], $post['fixe'], $post['mobile'], $post['fax'], $post['mail'], $post['adresse'], $post['web']);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Le contact a bien été ajouté.']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Le contact n\'a été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('edit-contacts', null, null, ['id' => $this->_request->id]);
+            $this->_helper->redirector('edit-contacts', null, null, ['id' => $id]);
         }
     }
 
@@ -488,15 +500,17 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();
 
-        if ($this->_request->isPost()) {
+        $id = $this->getRequest()->getParam('id');
+
+        if ($this->getRequest()->isPost()) {
             try {
-                $this->serviceEtablissement->addContactExistant($this->_request->id, $this->_request->id_contact);
+                $this->serviceEtablissement->addContactExistant($id, $this->getRequest()->getParam('id_contact'));
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Le contact a bien été ajouté.']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Le contact n\'a été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('edit-contacts', null, null, ['id' => $this->_request->id]);
+            $this->_helper->redirector('edit-contacts', null, null, ['id' => $id]);
         }
     }
 
@@ -505,15 +519,17 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        if ($this->_request->isGet()) {
+        $id = $this->getRequest()->getParam('id');
+
+        if ($this->getRequest()->isGet()) {
             try {
-                $this->serviceEtablissement->deleteContact($this->_request->id, $this->_request->id_contact);
+                $this->serviceEtablissement->deleteContact($id, $this->getRequest()->getParam('id_contact'));
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'Le contact a bien été supprimé de la fiche établissement.']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Suppression annulée', 'message' => 'Le contact n\'a été supprimé. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('edit-contacts', null, null, ['id' => $this->_request->id]);
+            $this->_helper->redirector('edit-contacts', null, null, ['id' => $id]);
         }
     }
 
@@ -521,16 +537,17 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('etablissement');
 
-        $dossiers = $this->serviceEtablissement->getNLastDossiers($this->_request->id);
+        $id = $this->getRequest()->getParam('id');
+        $dossiers = $this->serviceEtablissement->getNLastDossiers($id);
 
         $this->view->assign('etudes', $dossiers['etudes']);
         $this->view->assign('visites', $dossiers['visites']);
         $this->view->assign('autres', $dossiers['autres']);
 
         $this->view->assign('nbElemMax', Service_Utils_DossiersMaxNumber::value());
-        $this->view->assign('nbEtudes', $this->serviceEtablissement->getNbDossierTypeEtablissement($this->_request->id, 'etudes'));
-        $this->view->assign('nbVisites', $this->serviceEtablissement->getNbDossierTypeEtablissement($this->_request->id, 'visites'));
-        $this->view->assign('nbAutres', $this->serviceEtablissement->getNbDossierTypeEtablissement($this->_request->id, 'autres'));
+        $this->view->assign('nbEtudes', $this->serviceEtablissement->getNbDossierTypeEtablissement($id, 'etudes'));
+        $this->view->assign('nbVisites', $this->serviceEtablissement->getNbDossierTypeEtablissement($id, 'visites'));
+        $this->view->assign('nbAutres', $this->serviceEtablissement->getNbDossierTypeEtablissement($id, 'autres'));
     }
 
     public function getDossiersAfterNAction(): void
@@ -538,7 +555,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        $dossiers = $this->serviceEtablissement->getDossiersAfterN($this->_request->id, $this->_request->typeDossier);
+        $dossiers = $this->serviceEtablissement->getDossiersAfterN($this->getRequest()->getParam('id'), $this->getRequest()->getParam('typeDossier'));
 
         $html = "<ul class='recherche_liste'>";
         $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('search/results/dossier.phtml', (array) $dossiers);
@@ -551,13 +568,13 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('etablissement');
 
-        $this->view->assign('historique', $this->serviceEtablissement->getHistorique($this->_request->id));
+        $this->view->assign('historique', $this->serviceEtablissement->getHistorique($this->getRequest()->getParam('id')));
     }
 
     public function deleteAction(): void
     {
         try {
-            $idEtablissement = $this->_getParam('id');
+            $idEtablissement = $this->getRequest()->getParam('id');
 
             // On supprime les dossiers de l'établissement
             $service_dossier = new Service_Dossier();
@@ -597,7 +614,7 @@ class EtablissementController extends Zend_Controller_Action
         $service_etablissement = new Service_Etablissement();
         $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
 
-        $idEtablissement = $this->getParam('id');
+        $idEtablissement = $this->getRequest()->getParam('id');
 
         $this->view->assign('etablissement', $service_etablissement->get($idEtablissement));
         $this->view->assign('avis', $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
@@ -620,7 +637,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
 
         $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
-        $idEtablissement = $this->getParam('id');
+        $idEtablissement = $this->getRequest()->getParam('id');
 
         $this->effectifsDegagementsEtablissementAction();
 
@@ -650,7 +667,7 @@ class EtablissementController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('effectifs-degagements-etablissement', null, null, ['id' => $this->_request->id]);
+            $this->_helper->redirector('effectifs-degagements-etablissement', null, null, ['id' => $idEtablissement]);
         }
     }
 
@@ -668,7 +685,7 @@ class EtablissementController extends Zend_Controller_Action
         $previousUrl = $_SERVER['HTTP_REFERER'];
         $serviceEtablissement = new Service_Etablissement();
 
-        $serviceEtablissement->retablirEtablissement($this->_getParam('idEtablissement'));
+        $serviceEtablissement->retablirEtablissement($this->getRequest()->getParam('idEtablissement'));
 
         $cacheSearch = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
         $cacheSearch->clean(Zend_Cache::CLEANING_MODE_ALL);

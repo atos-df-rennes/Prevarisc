@@ -902,6 +902,7 @@ foreach ($this->formulaires as $formulaire) {
                             foreach ($champ['FILS']['VALEURS'] as $ligne) {
                                 $idxCol = 0;
 
+                                // @TODO: Faire pareil pour les tableaux
                                 foreach ($ligne as $col) {
                                     if ('Case à cocher' === $col['TYPE']) {
                                         if (true === boolval($col['VALEUR'])) {
@@ -934,23 +935,11 @@ foreach ($this->formulaires as $formulaire) {
                     }
                 } else {
                     foreach ($champ['FILS'] as $champFils) {
-                        if ('Case à cocher' === $champFils['TYPE']) {
-                            if (true === boolval($champFils['VALEUR'])) {
-                                $champFils['VALEUR'] = 'Oui';
-                            } else {
-                                $champFils['VALEUR'] = 'Non';
-                            }
-                        } else {
-                            // Définition du libellé pour les dates
-                            if ('Date' === $champFils['TYPE']) {
-                                if ($champFils['VALEUR'] !== null) {
-                                    $zendDate = new Zend_Date($champFils['VALEUR'], 'dd/MM/yyyy');
-                                    $champFils['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
-                                } else {
-                                    $champFils['VALEUR'] = "";
-                                }
-                            }
-                        }
+                        $field = (new Model_Champ_Generation_ChampBuilder())
+                            ->setValue($champFils['VALEUR'])
+                            ->setType($champFils['TYPE'])
+                            ->build()
+                        ;
                         addChamp(
                             $odf,
                             $serviceUtils->getFullFusionName(
@@ -961,29 +950,16 @@ foreach ($this->formulaires as $formulaire) {
                                     $champFils['NOM']
                                 ]
                             ),
-                            $champFils['VALEUR']
+                            $field->getGeneratedValue()
                         );
                     }
                 }
             } else {
-                // Définition du libellé pour les cases à cocher
-                if ('Case à cocher' === $champ['TYPE']) {
-                    if (true === boolval($champ['VALEUR'])) {
-                        $champ['VALEUR'] = 'Oui';
-                    } else {
-                        $champ['VALEUR'] = 'Non';
-                    }
-                } else {
-                    // Définition du libellé pour les dates
-                    if ('Date' === $champ['TYPE']) {
-                        if ($champ['VALEUR'] !== null) {
-                            $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
-                            $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
-                        } else {
-                            $champ['VALEUR'] = "";
-                        }
-                    }
-                }
+                $field = (new Model_Champ_Generation_ChampBuilder())
+                    ->setValue($champFils['VALEUR'])
+                    ->setType($champFils['TYPE'])
+                    ->build()
+                ;
                 addChamp(
                     $odf,
                     $serviceUtils->getFullFusionName(
@@ -993,7 +969,7 @@ foreach ($this->formulaires as $formulaire) {
                             $champ['NOM']
                         ]
                     ),
-                    $champ['VALEUR']
+                    $field->getGeneratedValue()
                 );
             }
 

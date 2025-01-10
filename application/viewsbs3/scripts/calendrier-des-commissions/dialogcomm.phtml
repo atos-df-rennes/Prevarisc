@@ -184,28 +184,29 @@ if(isset($this->do) && $this->do == 'edit'){
 		array_push($periodicite, $i);
 	}
 	echo "
-		<form name='formDateComm' id='formDateComm' methode='POST'>
-			<br/>
-			<p>
-			<div id='div_libelleCom' >
-				Saisissez le libellé de la commission
-				<input type='text' name='libelle_comm' id='libelle_comm' value=\"".$this->libelleCom."\" style='width:400px;'/>
+		<form class='form-horizontal' name='formDateComm' id='formDateComm' methode='POST'>
+			<div id='div_libelleCom' class='form-group'>
+				<label for='libelle_comm' class='col-sm-5 control-label'>
+					Saisissez le libellé de la commission
+				</label>
+				<div class='col-sm-7'>
+					<input type='text' class='form-control' name='libelle_comm' id='libelle_comm' value=\"".$this->libelleCom."\" />
+				</div>
 			</div>
-			</p>
-			<br/>
-			<p>
-				<div id='div_typeCom' >
-					Veuillez selectionner le type de la commission :
-					<select name='typeCom' id='typeCom'>
-	";
-	foreach($this->listeCommType as $value){
-		echo "<option value='".$value['ID_COMMISSIONTYPEEVENEMENT']."' ".( ($this->typeDoss ==  $value['ID_COMMISSIONTYPEEVENEMENT'])? "selected" : "" ).">".$value['LIBELLE_COMMISSIONTYPEEVENEMENT']."</option>";
-	}
-	echo "
+			<div id='div_typeCom' class='form-group'>
+				<label for='typeCom' class='col-sm-5 control-label'>
+					Veuillez sélectionner le type de la commission
+				</label>
+				<div class='col-sm-7'>
+					<select class='form-control' name='typeCom' id='typeCom'>
+		";
+		foreach($this->listeCommType as $value){
+			echo "<option value='".$value['ID_COMMISSIONTYPEEVENEMENT']."' ".( ($this->typeDoss ==  $value['ID_COMMISSIONTYPEEVENEMENT'])? "selected" : "" ).">".$value['LIBELLE_COMMISSIONTYPEEVENEMENT']."</option>";
+		}
+		echo "
 					</select>
 				</div>
-			</p>
-			<br/>
+			</div>
 			<div class='container-fluid' id='listeDates'>
 				<ul class='list-unstyled row' style='text-align:center;font-weight:bold;border-bottom:1px solid black;padding:3px 0 3px 0;'>
 					<li class='col-md-6'>Date</li>
@@ -226,10 +227,10 @@ if(isset($this->do) && $this->do == 'edit'){
 			$HF = $dates['heureF'];
 		}
 		echo "
-					<ul class='list-unstyled row' style='text-align: center; font-weight: bold; float: left; padding: 3px 0pt;'>
+					<ul class='list-unstyled row' style='text-align: center; font-weight: bold; padding: 3px 0pt;'>
 						<li class='col-md-6'>".$dates['date']."</li>
-						<li class='col-md-2'><input type='text' size='8' class='time' id='D_".$dates['inputH']."' name='D_".$dates['inputH']."' value='".$HD."' /></li>
-						<li class='col-md-2'><input type='text' size='8' class='time' id='F_".$dates['inputH']."' name='F_".$dates['inputH']."' value='".$HF."'/></li>
+						<li class='col-md-2'><input type='text' size='8' class='form-control time' id='D_".$dates['inputH']."' name='D_".$dates['inputH']."' value='".$HD."' /></li>
+						<li class='col-md-2'><input type='text' size='8' class='form-control time' id='F_".$dates['inputH']."' name='F_".$dates['inputH']."' value='".$HF."'/></li>
 						<li class='col-md-2'>
 		";
 		if($paspremier != 0) {

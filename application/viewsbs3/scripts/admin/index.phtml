@@ -1,0 +1,114 @@
+<h3 class='page-header'>Panneau d'administration</h3>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Informations générales</div>
+    <div class="panel-body">
+        <dl class='dl-horizontal'>
+            <dt>Version</dt>
+            <dd>
+            <p>
+                <?php echo $this->version_prevarisc ?>
+                <?php if($this->is_uptodate === false) : ?>
+                    <span class='avis' style='background-color: #3a87ad; font-size: .7em;'>Mise à jour disponible sur SDIS62/prevarisc</span>
+                <?php endif ?>
+            </p>
+            </dd>
+
+            <dt>Authentification</dt>
+            <dd>
+            <p><?php echo $this->authentification ?></p>
+            <p>Renforcement de la sécurité : <?php echo $this->enforce_security ? 'activé' : 'Désactivé' ?></p>
+            </dd>
+
+            <dt>Base utilisée</dt>
+            <dd>
+            <p><em><?php echo $this->dbname ?></em> sur <em><?php echo $this->db_url ?></em></p>
+            </dd>
+
+            <dt>Cache</dt>
+            <dd>
+            <?php if ($this->cache_enabled): ?>
+                <p><?php echo $this->cache_adapter ?></p>
+                <p><?php echo $this->cache_url ?></p>
+                <p><?php echo $this->cache_lifetime ?> sec de durée de vie</p>
+            <?php else: ?>
+                <p>Désactivé</p>
+            <?php endif ?>
+            </dd>
+
+            <dt>Clé(s) IGN</dt>
+            <dd>
+                <?php if (!empty($this->key_ign)):
+                    foreach (explode(',', $this->key_ign) as $ignKey): ?>
+                        <p><?= $ignKey ?></p>
+                    <?php endforeach;
+                else: ?>
+                    <p>Aucune clé</p>
+                <?php endif ?>
+            </dd>
+
+            <dt>Clé Google MAP</dt>
+            <dd>
+            <p><?php echo $this->key_googlemap != null ? $this->key_googlemap : 'Aucune clé' ?></p>
+            </dd>
+
+            <dt>Carte Geoconcept</dt>
+            <dd>
+            <?php if ($this->geoconcept_url): ?>
+                <?php foreach($this->geoconcept_infos as $key => $info): ?>
+                    <p><?php echo $key . " : " . $info ?></p>
+                <?php endforeach ?>
+            <?php else: ?>
+                <p>Désactivé</p>
+            <?php endif ?>
+            </dd>
+
+            <dt>HTTP API</dt>
+            <dd>
+            <p><?php echo $this->api_enabled ? 'Activé' : 'Désactivé' ?></p>
+            </dd>
+
+            <dt>Proxy HTTP</dt>
+            <dd>
+            <p><?php echo $this->proxy_enabled != 1 ? 'Désactivé' : 'Activé' ?></p>
+            </dd>
+
+            <dt>Plugins Tiers</dt>
+            <dd>
+            <p><?php echo $this->third_party_plugins ? $this->third_party_plugins : 'Aucuns' ?></p>
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Utilisateurs connectés</div>
+    <div class="panel-body">
+        <?php if($this->users == null) : ?>
+            <p><strong>Aucun résultat.</strong></p>
+        <?php else : ?>
+            <table class='table table-condensed table-striped tablesorter'>
+                <thead>
+                    <tr>
+                        <th>Identifiant</th>
+                        <th>Nom et prénom</th>
+                        <th>Groupe</th>
+                        <th>Fonction</th>
+                        <th>Etat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach( $this->users as $user ) : ?>
+                        <tr>
+                            <td style='font-style: italic' ><?php echo $user["USERNAME_UTILISATEUR"] ?></td>
+                            <td><?php echo $user["NOM_UTILISATEURINFORMATIONS"] . " " . $user["PRENOM_UTILISATEURINFORMATIONS"] ?></td>
+                            <td><?php echo $user["LIBELLE_GROUPE"] ?></td>
+                            <td><?php echo $user["LIBELLE_FONCTION"] ?></td>
+                            <td><span class='label label-success'>En ligne</span></td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        <?php endif ?>
+    </div>
+</div>

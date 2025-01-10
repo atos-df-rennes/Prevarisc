@@ -1,0 +1,45 @@
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <form action='<?php echo $this->url(array('controller' => 'index', 'action' => 'add-message')) ?>' method='post' class="form-horizontal">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">Ajouter un message</h3>
+            </div>
+
+            <div class="modal-body">
+                <textarea id='textarea' class='form-control' name='text' rows='10' placeholder="Entrez ici votre message d'information."></textarea>
+
+                <div class="form-group">
+                    <label for="checkboxes" class="col-sm-2 control-label">Confidentialité</label>
+                    <div id="checkboxes" class=col-sm-8>
+                        <?php foreach($this->groupes as $groupe) : ?>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="conf[]" value="<?php echo $groupe["ID_GROUPE"] ?>" checked="checked" /> <?php echo $groupe["LIBELLE_GROUPE"] ?>
+                                </label>
+                            </div>
+                        <?php endforeach ?>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="type" class="col-sm-2 control-label">Type du message</label>
+                    <div class="col-sm-8">
+                        <select id="type" name="type" class="form-control">
+                            <option>Message de service</option>
+                            <option>Informations</option>
+                            <option>Message personnel</option>
+                            <option>Autre</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <input type='submit' id='submit' value='Ajouter' class='btn btn-success' />
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<?php
+//Page utilisée uniquement pour l'auto complétion- Retourne infos en json
+$q = strtolower($_GET["q"]);
+if(!$q)
+	return;
+
+$items = array();
+foreach($this->selectEtab as $etab)
+{
+	$libelleEtab = $etab['LIBELLE_ETABLISSEMENTINFORMATIONS']." (".$etab['LIBELLE_GENRE'].") ";	
+	
+	if(isset($etab['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])){
+		$libelleEtab .= " | ".$etab['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'];
+	}
+	
+	if($etab['LIBELLE_COMMUNE_ADRESSE_CELLULE'] != ''){
+		$libelleEtab .= " ( ".$etab['LIBELLE_COMMUNE_ADRESSE_CELLULE']." )";
+	}
+	$id = $etab['ID_ETABLISSEMENT'];	
+	array_push($items, array(
+		"id" => $id,
+		"infos" => $libelleEtab
+	));
+}
+
+echo json_encode($items);
+
+?>

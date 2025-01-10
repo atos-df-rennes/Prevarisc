@@ -61,7 +61,7 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la sauvegarde du texte',
                 'message' => $exception->getMessage(),
             ]);

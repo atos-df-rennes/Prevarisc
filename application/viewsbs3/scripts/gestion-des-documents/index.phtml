@@ -1,0 +1,196 @@
+<?php
+	$nbFichier = count($this->fichierVer);
+?>
+
+<!-- Titre -->
+<span style="float: right">
+	<button type="button" id='button-aud' class='btn btn-default' data-toggle="modal" data-target="#dialog-aud">Ajouter un document</button>
+</span>
+
+<div class="modal fade" id="dialog-aud" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">Ajouter un document type</h3>
+            </div>
+
+            <div class="modal-body"></div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <button id="add-doc" type="button" class="btn btn-success">Envoyer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialog-supp" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">Supprimer un document type</h3>
+            </div>
+
+            <div class="modal-body">
+                Vous êtes sur le point de supprimer le fichier <strong><span id="name-doc"></span></strong>.
+                <br/>
+                Une fois ce fichier supprimé il ne pourra plus être utilisé lors de la génération des rapports.
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <button id="supp-doc" type="button" class="btn btn-danger">Supprimer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3 class='page-header'>Gestion des documents</h3>
+<h4>Visibles après verrouillage <span class="badge"><?= $nbFichier > 0 ? $nbFichier : "0" ?></span></h4>
+
+<div class='col-md-12'>
+    <table id='file_0' class='table table-bordered'>
+        <thead>
+            <tr>
+                <th>Nom du fichier</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if($nbFichier > 0):
+                foreach($this->fichierVer as $fichier):
+            ?>
+                <tr>
+                    <td>
+                        <a href='<?= $this->path . DS ."0". DS . htmlspecialchars($fichier, ENT_QUOTES) ?>'><?= $fichier ?></a>
+                    </td>
+                    <td>
+                        <button type="button" class='supp btn btn-link' id='<?= htmlspecialchars($fichier, ENT_QUOTES) ?>' data-toggle="modal" data-target="#dialog-supp">Suppression du document</button>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan='2'>
+                        Aucun fichier
+                    </td>
+                </tr>
+            <?php endif ?>
+        </tbody>
+    </table>
+</div>
+
+<?php foreach($this->liste_commission as $commission):
+    if(!isset($id_type) || isset($id_type) && $id_type != $commission['ID_COMMISSIONTYPE']):
+        $id_type = $commission['ID_COMMISSIONTYPE'];
+?>
+        <h4><?= $commission['LIBELLE_COMMISSIONTYPE'] ?></h4>
+    <?php endif ?>
+
+    <div class='col-md-12'>
+        <?php $nbFichier = count($commission['listeFichier']);
+            if($nbFichier > 0):
+        ?>
+            <button type="button" id='<?= $commission['ID_COMMISSION'] ?>' class='commission btn btn-link'><?= $commission['LIBELLE_COMMISSION'] ?></button><span id='num_<?= $commission['ID_COMMISSION'] ?>' class="badge"><?= $nbFichier ?></span>
+        <?php else: ?>
+            <?= $commission['LIBELLE_COMMISSION'] ?>
+        <?php endif ?>
+    </div>
+    <br/>
+
+    <?php if($nbFichier > 0): ?>
+        <table id='file_<?= $commission['ID_COMMISSION'] ?>' class='table table-bordered' style='display:none;'>
+            <thead>
+                <tr>
+                    <th>Nom du fichier</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach($commission['listeFichier'] as $file): ?>
+                <tr>
+                    <td>
+                        <a href='<?= $this->path . DS . $commission['ID_COMMISSION']. DS . htmlspecialchars($file, ENT_QUOTES) ?>'><?= $file ?></a>
+                    </td>
+                    <td>
+                        <button type="button" class='supp btn btn-link' id='<?= htmlspecialchars($file, ENT_QUOTES) ?>' data-toggle="modal" data-target="#dialog-supp">Suppression du document</button>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+            </tbody>
+        </table>
+    <?php endif;
+endforeach ?>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("body").append("<iframe name='hiddeniframe' id='hiddeniframe' src='about:blank' style='width:0px; height:0px' hidden>");
+
+        // Ajout d'un type
+        $("#button-aud").click(function() {
+            $("#dialog-aud .modal-body").load("/gestion-des-documents/form")
+            $("#add-doc").click(function() {
+                if (!$("#fichier").val()) {
+                    $("#fichier").click();
+                } else {
+                    $("#formDocType").submit()
+                    $("#dialog-aud").modal('hide')
+
+                    // On ouvre la barre de chargement
+                    $("<div id='load' style='text-align: center'><img src='/images/bar.gif' alt='Upload en cours' /></div>").dialog({
+                        resizable: false,
+                        height: 28,
+                        width: 250,
+                        modal: true,
+                        dialogClass: 'noTitleStuff'
+                    });
+                }
+            })
+        });
+
+        $(".supp").click(function() {
+            const elementDoc = $(this)
+            const nomFichier = elementDoc.attr('id')
+
+            $("#dialog-supp #name-doc").html(nomFichier)
+            $("#supp-doc").click(function() {
+                const infoComm = elementDoc.parent().parent().parent().parent().attr('id');
+                const tabIdComm = infoComm.split("_");
+                const idComm = tabIdComm[1];
+
+                $.ajax({
+                    type: "POST",
+                    url: "/gestion-des-documents/suppdoc",
+                    data:{
+                        name: nomFichier,
+                        idCommission: idComm
+                    },
+                    success: function(msg){
+                        if (msg != "") window.location.reload();
+
+                        //suppression de la ligne
+                        elementDoc.parent().parent().remove();
+
+                        const num = $("#num_"+idComm).html();
+                        if(num == 1){
+                            $("#file_"+idComm).hide();
+                            $("#num_"+idComm).html('0');
+                        }else{
+                            num--;
+                            $("#num_"+idComm).html(num);
+                        }
+
+                        $("#dialog-supp").modal('hide')
+                    }
+                });
+            })
+        });
+
+        $(".commission").click(function(){
+            $("#file_"+$(this).attr('id')).toggle();
+            return false;
+        });
+    });
+</script>

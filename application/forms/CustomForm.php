@@ -11,6 +11,7 @@ class Form_CustomForm extends Zend_Form
             'required' => true,
             'filters' => [new Zend_Filter_HtmlEntities(), new Zend_Filter_StripTags()],
             'validators' => [new Zend_Validate_StringLength(1, 255)],
+            'class' => 'form-control',
         ]);
 
         $this->addElement('checkbox', 'afficher_rubrique', [

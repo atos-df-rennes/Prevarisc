@@ -1,0 +1,27 @@
+<?php if($this->pageCount) : ?>
+
+    <nav class="text-center" aria-label="Pagination">
+        <ul class="pagination">
+            <?php if (isset($this->previous)): ?>
+                <li><a href="<?php echo $this->url() . '?' . http_build_query(array_merge($_GET, array("page" => $this->previous))); ?>">&laquo;</a></li>
+            <?php else: ?>
+                <li class="disabled"><span>&laquo;</span></li>
+            <?php endif; ?>
+
+            <?php foreach ($this->pagesInRange as $page): ?>
+                <?php if ($page != $this->current): ?>
+                    <li ><a href="<?php echo $this->url() . '?' . http_build_query(array_merge($_GET, array("page" => $page))); ?>"><?php echo $page; ?></a></li>
+                <?php else: ?>
+                    <li class="active"><span><?php echo $page; ?></span></li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+
+            <?php if (isset($this->next)): ?>
+                <li><a href="<?php echo $this->url() . '?' . http_build_query(array_merge($_GET, array("page" => $this->next))); ?>">&raquo;</a></li>
+            <?php else: ?>
+                <li class="disabled"><span>&raquo;</span></li>
+            <?php endif; ?>
+        </ul>
+    </nav>
+
+<?php endif ?>

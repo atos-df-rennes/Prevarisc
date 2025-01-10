@@ -1,0 +1,53 @@
+<form id="form-gdc">
+	<ul id="ul-gdc" class="list-unstyled">
+		<?php foreach($this->rowset_commissions as $row_commission) : ?>
+		<li class="row mb-4">
+            <div class="col-sm-6">
+                <input type="hidden" name="id_commission[]" value="<?php echo $row_commission["ID_COMMISSION"] ?>" />
+                <input class="form-control" type="text" size="50" name="nom_commission[]" value="<?php echo $row_commission["LIBELLE_COMMISSION"] ?>" />
+            </div>
+            <div class="col-sm-5">
+                <select class="form-control" name="idtype_commission[]">
+                    <?php foreach($this->rowset_typesDesCommissions as $row_typeDesCommissions) : ?>
+                    <option value="<?php echo $row_typeDesCommissions["ID_COMMISSIONTYPE"] ?>" <?php if($row_typeDesCommissions["ID_COMMISSIONTYPE"] == $row_commission["ID_COMMISSIONTYPE"]) echo "selected" ?>><?php echo $row_typeDesCommissions["LIBELLE_COMMISSIONTYPE"] ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <div class="col-sm-1">
+                <a href="/commission/delete?id=<?php echo $row_commission["ID_COMMISSION"] ?>" class="delete-gdc">&times;</a>
+            </div>
+		</li>
+		<?php endforeach ?>
+	</ul>
+</form>
+<p><button type="button" class="btn btn-link" onclick="$('#prototype-gdc').clone().appendTo( $('#ul-gdc') ).removeAttr('id')">+ Ajouter une commission</button></p>
+<p>Note: Les suppressions sont définitives.</p>
+<ul class="ui-helper-hidden">
+	<li class="row mb-4" id="prototype-gdc" >
+        <div class="col-sm-6">
+            <input type="hidden" name="id_commission[]" value="0" />
+            <input class="form-control" type="text" size="50" name="nom_commission[]" />
+        </div>
+        <div class="col-sm-5">
+            <select class="form-control" name="idtype_commission[]">
+                <?php foreach($this->rowset_typesDesCommissions as $row_typeDesCommissions) : ?>
+                <option value="<?php echo $row_typeDesCommissions["ID_COMMISSIONTYPE"] ?>" ><?php echo $row_typeDesCommissions["LIBELLE_COMMISSIONTYPE"] ?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
+	</li>
+<ul>
+
+<script>
+	// Suppression d'une com
+	$("#dialog-gdc a.delete-gdc").click(function() {
+		var a = this;
+		$.ajax({
+			url: a.href,
+			success: function () {
+				$(a).parent().parent().remove();
+			}
+		});
+		return false;
+	});
+</script>

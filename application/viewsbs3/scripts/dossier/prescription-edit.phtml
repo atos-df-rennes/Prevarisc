@@ -1,0 +1,163 @@
+<form name='formPrescriptionEdit' id='formPrescriptionEdit' action='/dossier/prescription/id/<?= $this->id_dossier ?>' method='POST'>
+    <input type='hidden' name='id_dossier' id='id_dossier' value='<?= $this->id_dossier ?>' />
+    <input type='hidden' name='id_prescription' id='id_prescription' value='<?= $this->id_prescription ?>' />
+    <input type='hidden' name='action' id='action' value='<?= $this->action ?>' />
+
+    <div class='row'>
+        <div class='col-md-9' <?= $this->action == 'presc-add' ?  "style='display:none;'" : "" ?>>
+            <a class='btn btn-warning' id='del-prescription'>Supprimer la prescription</a>
+            <a class='btn btn-danger' id='del-confirm' style='display:none;'>Confirmer la suppression</a>
+            <a class='btn btn-default' id='del-cancel' style='display:none;'>Annuler</a>
+        </div>
+        <div class='col-md-3' style='float:right;'>
+            <a class='btn btn-default' href='/dossier/prescription/id/<?= $this->id_dossier ?>'>Annuler la modification</a>
+            <input type='submit' class='btn btn-success' value='Sauvegarder'>
+        </div>
+    </div>
+
+    <div class='row' id='alert' style='display:none;'>
+        <ul class='unstyled'>
+            <li class='alert alert-danger' >
+                Veuillez spécifier au minimum un texte ou un article et un contenu avant la sauvegarde
+            </li>
+        </ul>
+    </div>
+
+    <div class='row'>
+        <div class='col-md-4'>
+            Sélectionnez l'endroit dans lequel vous souhaitez ajouter cette prescription
+        </div>
+        <div class='col-md-3'>
+            <select class="form-control" name='TYPE_PRESCRIPTION_DOSSIER'>
+                <option value='0' <?= $this->infosPrescription['TYPE_PRESCRIPTION_DOSSIER'] == 0 ? "selected" : "" ?>>Rappels réglementaires</option>
+                <option value='1' <?=  $this->infosPrescription['TYPE_PRESCRIPTION_DOSSIER'] == 1 ? "selected" : "" ?>>Prescriptions liées à l'exploitation</option>
+                <option value='2' <?= $this->infosPrescription['TYPE_PRESCRIPTION_DOSSIER'] == 2 ? "selected" : "" ?>>Prescriptions liées à l'amélioration</option>
+            </select>
+        </div>
+    </div>
+
+    <div class='row'>
+        <div class='col-md-4'>
+            Texte
+            <select style='width:80%;' id='LIBELLE_TEXTE' class='chosen'>
+            <?php foreach ($this->listeTextes as $val): ?>
+                <option value='<?= $val["ID_TEXTE"] ?>'><?= $val['LIBELLE_TEXTE'] ?></option>
+            <?php endforeach ?>
+            </select>
+        </div>
+
+        <div class='col-md-4'>
+            Article
+            <select style='width:80%;' class='chosen' id='LIBELLE_ARTICLE'>
+            <?php foreach ($this->listeArticles as $val): ?>
+                <option value='<?= $val["ID_ARTICLE"] ?>'><?= $val['LIBELLE_ARTICLE'] ?></option>
+            <?php endforeach ?>
+            </select>
+        </div>
+
+        <div class='col-md-4'>
+            <a class='btn btn-default' id='addAssoc' href=''>Ajouter l'association</a>
+        </div>
+    </div>
+
+    <div class='row'>
+        <div class='col-md-12'>
+            <table class='table table-condensed champs_icpe champs rubrique' id='association'>
+                <thead>
+                    <tr>
+                        <th>Texte</th>
+                        <th>Article</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($this->action != 'presc-add'): ?>
+                        <?php foreach ($this->infosPrescription['assoc'] as $val => $presc): ?>
+                            <tr>
+                                <td><?= $presc['LIBELLE_TEXTE'] ?><input type='hidden' name='texte[]' value='<?= $presc['ID_TEXTE'] ?>' /></td>
+                                <td><?= $presc['LIBELLE_ARTICLE'] ?><input type='hidden' name='article[]' value='<?= $presc['ID_ARTICLE'] ?>' /></td>
+                                <td><a onclick='$(this).parent().parent().remove(); return false;' href='#'>Retirer</a></td>
+                            </tr>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class='row'>
+        <div class='col-md-12'>
+            Contenu :
+            <textarea class="form-control" name='PRESCRIPTION_LIBELLE' id='PRESCRIPTION_LIBELLE' rows='10'><?= $this->infosPrescription['LIBELLE_PRESCRIPTION_DOSSIER'] ?></textarea>
+        </div>
+    </div>
+
+    <div class='row'>
+        <div class='col-md-3'>
+            <label for="DATE_LEVEE">Date de levée</label>
+            <div class="input-group">
+                <input class='date form-control' type='text' name='DATE_LEVEE' id='DATE_LEVEE' value="<?= $this->infosPrescription['DATE_LEVEE'] ?>" />
+                <span class="input-group-btn">
+                    <button class='today btn btn-default' type="button">
+                        <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class='col-md-9'>
+            <label for="JUSTIFICATIF_LEVEE">Justification :</label>
+            <textarea class="form-control" name='JUSTIFICATIF_LEVEE' id='JUSTIFICATIF_LEVEE' rows='10'><?= $this->infosPrescription['JUSTIFICATIF_LEVEE'] ?></textarea>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".chosen").chosen({allow_single_deselect: true});
+
+	$("#formPrescriptionEdit").submit(function(){
+		if( $("#association tbody tr").length <= 0 || $("#PRESCRIPTION_LIBELLE").val() == '' ){
+			$("#alert").show();
+			return false;
+		}
+	});
+
+	$("#addAssoc").click(function(){
+		var texte = $("#LIBELLE_TEXTE").val();
+		var article = $("#LIBELLE_ARTICLE").val();
+		if( texte != 1 || article != 1){
+			var assocAdd;
+			assocAdd += "<tr>";
+			assocAdd += "<td>"+$("#LIBELLE_TEXTE option:selected").text()+ "<input type='hidden' name='texte[]' value='"+texte+"' /></td>";
+			assocAdd += "<td>"+$("#LIBELLE_ARTICLE option:selected").text()+ "<input type='hidden' name='article[]' value='"+article+"' /></td>";
+			assocAdd += "<td><a onclick='$(this).parent().parent().remove(); return false;' href='#'>Retirer</a></td>";
+			assocAdd += "</tr>";
+			$("#association").append(assocAdd);
+			$("#LIBELLE_TEXTE").val('').trigger('chosen:updated');
+			$("#LIBELLE_ARTICLE").val('').trigger('chosen:updated');
+			$("#alert").hide();
+		}
+		return false;
+	});
+
+	$("#del-prescription").click(function(){
+		$(this).hide();
+		$("#del-confirm").show();
+		$("#del-cancel").show();
+		return false;
+	});
+
+	$("#del-cancel").click(function(){
+		$(this).hide();
+		$("#del-confirm").hide();
+		$("#del-prescription").show();
+		return false;
+	});
+
+	$("#del-confirm").click(function(){
+		$("#action").val('delete');
+		$("#formPrescriptionEdit").submit();
+		return false;
+	});
+});
+</script>

@@ -1,0 +1,25 @@
+<?php if (!is_array($this->champFusionValue)): ?>
+    <div class="col-md-12 alert alert-info">
+        Nom du champ de fusion : {<?= $this->champFusionValue ?>}
+    </div>
+<?php else : ?>
+    <div class="col-md-12 alert alert-info">
+        Champs de fusion :
+        <table class="table table-bordered table-condensed champFusionTable">
+            <tr>
+                <?php foreach ($this->champFusionValue['fieldNames'] as $fieldName): ?>
+                    <td>{<?= $fieldName ?>}</td>
+                <?php endforeach ?>
+            </tr>
+        </table>
+        [!-- BEGIN <?= $this->champFusionValue['loopName'] ?> --]
+        <table class="table table-bordered table-condensed champFusionTable">
+            <tr>
+                <?php foreach ($this->champFusionValue['fieldValues'] as $fieldValue): ?>
+                    <td>{<?= $fieldValue ?>}</td>
+                <?php endforeach ?>
+            </tr>
+        </table>
+        [!-- END <?= $this->champFusionValue['loopName'] ?> --]
+    </div>
+<?php endif ?>

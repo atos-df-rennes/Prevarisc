@@ -1,0 +1,16 @@
+<?php foreach ($this->DOSSIERS_ETAB as $dossier): ?>
+    <li class="radio">
+        <label>
+            <input
+                id="ID_DOSSIER_<?= $dossier['ID_DOSSIER'] ?>"
+                type="radio"
+                name="ID_DOSSIER_LIE"
+                value=<?= $dossier['ID_DOSSIER'] ?>
+                <?= $dossier['ID_DOSSIER'] === $this->ID_DOSSIER_LIE ? 'checked' : '' ?>
+            >
+            <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'index', 'id' => $dossier['ID_DOSSIER']]) ?>">
+                <?= $dossier['OBJET_DOSSIER'] ?? $dossier['ID_DOSSIER'] ?>
+            </a>
+        </label>
+    </li>
+<?php endforeach ?>

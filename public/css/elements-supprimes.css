@@ -1,5 +1,6 @@
 .tab-content {
     height: 700px;
+    overflow: scroll;
 }
 
 .table {

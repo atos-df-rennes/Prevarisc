@@ -1,0 +1,6 @@
+<?php
+	if (intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')) === 1) {
+		echo $this->render('etablissement/descriptif/edit-descriptif-personnalise.phtml');
+	} else {
+		echo $this->render('etablissement/descriptif/edit-descriptif-original.phtml');
+	}

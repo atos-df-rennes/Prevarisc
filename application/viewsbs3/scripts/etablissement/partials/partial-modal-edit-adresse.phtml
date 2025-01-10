@@ -1,0 +1,124 @@
+<form id="adresse-modal-edit" class="modal adresse fade adresse-modal-edit" method='post' tabindex="-1" role="dialog">
+    <input type='hidden' name='idAdresse' value=""/>
+
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Modifier une adresse</h3>
+            </div>
+
+            <div class="modal-body">
+                <dl class='dl-horizontal'>
+                    <div class="form-group">
+                        <dt>Ville</dt>
+                        <dd>
+                            <input class='form-control' name='commune_ac' type='text' placeholder='Nom de la commune ou code postal ...' />
+                            <input name='code_insee' type='hidden' />
+                            <input name='code_postal' type='hidden' />
+                        </dd>
+                    </div>
+
+                    <div class="form-group">
+                        <dt>Voie</dt>
+                        <dd>
+                            <input class='form-control' type='text' name='voie_ac' placeholder='Nom de la voie ...' disabled />
+                            <input type='hidden' name='type_voie' />
+                            <input type='hidden' name='voie' />
+                        </dd>
+                    </div>
+
+                    <div class="form-group">
+                        <dt>Numéro</dt>
+                        <dd>
+                            <input class='form-control' type='text' name='numero' placeholder='Numéro ...' disabled />
+                        </dd>
+                    </div>
+
+                    <div class="form-group">
+                        <dt>Complément d'adresse</dt>
+                        <dd>
+                            <input class='form-control' type='text' name='complement' placeholder="Complément d'adresse" disabled />
+                        </dd>
+                    </div>
+
+                    <div class="form-group">
+                        <dt>Type de l'adresse</dt>
+                        <dd>
+                            <select class='form-control'>
+                                <option>Adresse postale</option>
+                            </select>
+                        </dd>
+                    </div>
+
+                    <div class="form-group">
+                        <dt>Géolocalisation</dt>
+                        <dd>
+                            <?php if ($this->key_ign !== null) : ?>
+                                <button id="geolocme" type='button' class='btn btn-primary btn-sm'>
+                                    <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Géolocaliser cette adresse (Geoportail)
+                                </button>
+                            <?php endif ?>
+                            <br/>
+                            <small>Résultat : <span class='result'>Inconnu</span></small>
+                        </dd>
+                    </div>
+
+                    <div class="form-group">
+                        <dt>Longitude</dt>
+                        <dd>
+                            <input class='form-control' id="addressLongitude" type='text' name='lon' />
+                        </dd>
+                    </div>
+
+                    <dt>Latitude</dt>
+                    <dd>
+                        <input class='form-control' id="addressLatitude" type='text' name='lat' />
+                    </dd>
+                </dl>
+                <?php if ($this->key_ign !== null): ?>
+                    <div id="edit-geoportail-container" style="height: 400px;"></div>
+
+                    <!-- Déplacement du bouton FullScreen (sinon supperposé avec le gestionnaire de couches) -->
+                    <style>
+                        .ol-full-screen {right:9px; top:49px}
+                    </style>
+                <?php endif ?>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <button type="button" id='submit-adresse-edit' class="btn btn-success">Modifier</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $('#submit-adresse-edit').click(function (e) {
+        e.preventDefault()
+        const dataToPush = {}
+
+        $('#adresse-modal-edit :input').each(idx => {
+            dataToPush[$('#adresse-modal-edit :input')[idx].name] = $('#adresse-modal-edit :input')[idx].value
+        })
+
+        const nouveauLibelle =
+            dataToPush.numero + ' ' +
+            dataToPush.voie_ac + ' ' +
+            dataToPush.complement + ' ' +
+            dataToPush.code_postal + ' ' +
+            dataToPush.commune_ac
+
+        $('#adresse' + dataToPush.idAdresse + '>span').text(nouveauLibelle)
+
+        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][NUMINSEE_COMMUNE]"]').val(dataToPush.code_insee)
+        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LON_ETABLISSEMENTADRESSE]"]').val(dataToPush.lon)
+        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LAT_ETABLISSEMENTADRESSE]"]').val(dataToPush.lat)
+        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][NUMERO_ADRESSE]"]').val(dataToPush.numero)
+        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][ID_RUE]"]').val(dataToPush.voie)
+        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][COMPLEMENT_ADRESSE]"]').val(dataToPush.complement)
+
+        $('#adresse-modal-edit .close').click()
+    });
+</script>

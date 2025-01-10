@@ -1,0 +1,22 @@
+<form action='<?= $this->url(array('action' => 'edit-verifications-techniques')) ?>' method='post' class='form-horizontal'>
+    <div class='action-buttons pull-right'>
+        <div class="btn-group">
+            <a class='btn btn-default' href="<?= $this->url(array('action' => 'verifications-techniques')) ?>">Annuler la modification</a>
+            <input type='submit' class="btn btn-success" value='Sauvegarder'>
+        </div>
+    </div>
+
+    <h3>Modification des vérifications techniques</h3>
+    <h4 class='h4_subtitle'>Rubriques</h4>
+
+    <div class='descriptif-personnalise_rubriques-infos descriptif-personnalise_rubriques-infos--edit'>
+        <?php foreach ($this->rubriques as $rubrique):
+            echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);
+        endforeach ?>
+    </div>
+    <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
+        'rubriques' => $this->rubriques,
+        'champsvaleurliste' => $this->champsvaleurliste,
+        'canWrite' => true
+    ]); ?>
+</form>

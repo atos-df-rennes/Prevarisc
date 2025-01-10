@@ -1,0 +1,77 @@
+<h3 class='pull-left'>Gestion des pièces jointes</h3>
+<div class='pull-right' >
+    <a id="addPJQuick" class="btn btn-default"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Ajout rapide</a>
+    <a href='<?php echo $this->url(array('action' => 'add-piece-jointe')) ?>' class="btn btn-default" data-toggle="modal" data-target="#reponse-modal"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Ajouter une pièce jointe</a>
+    <a class='btn btn-default' href="<?php echo $this->url(array('action' => 'pieces-jointes')) ?>">Revenir sur l'affichage des pièces jointes</a>
+</div>
+<div class="clearfix"></div>
+
+<div id="dropzone" class="dropzone" style="display:none"></div>
+
+<?php if(count($this->pieces_jointes) == 0) : ?>
+    <p class='text-muted'>Il n'y a pas de pièce jointe.</p>
+<?php else : ?>
+<table id="table-pieces-jointes" class='table table-bordered table-condensed table-hover'>
+	<thead>
+		<tr>
+			<th>Nom</th>
+			<th>Description</th>
+			<th>Date d'ajout</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach ($this->pieces_jointes as $piecejointe) : ?>
+			<tr>
+				<td>
+                    <a href='<?php echo $this->url(array('controller' => 'etablissement', 'action' => 'get-piece-jointe', 'idpj' => $piecejointe['ID_PIECEJOINTE'], 'type' => 'etablissement')) ?>' target='_blank' >
+						<?php echo $piecejointe['NOM_PIECEJOINTE'] ?>
+					</a>
+				</td>
+				<td>
+					<?php echo empty($piecejointe['DESCRIPTION_PIECEJOINTE']) ? 'Aucune description.' : nl2br(str_replace("<br />", "" ,$piecejointe['DESCRIPTION_PIECEJOINTE'])) ?>
+				</td>
+				<td>
+					<?php echo date_format(new DateTime($piecejointe['DATE_PIECEJOINTE']), 'd/m/Y') ?>
+				</td>
+				<td>
+					<a href='<?php echo $this->url(array('action' => 'delete-piece-jointe', 'id_pj' => $piecejointe['ID_PIECEJOINTE'])) ?>'>Supprimer la pièce jointe</a>
+				</td>
+			</tr>
+		<?php endforeach ?>
+	</tbody>
+</table>
+<?php endif ?>
+
+<div id="reponse-modal" class="modal fade" tabindex="-1" role="dialog"></div>
+
+<script type="text/javascript">
+    Dropzone.autoDiscover = false;
+
+    $(document).ready(function() {
+        // Gestion des boites modales
+        $("a[data-toggle='modal']").click(function() {
+            var target = $(this).attr("data-target");
+            var url = $(this).attr("href");
+            $(target).load(url);
+        });
+
+        /* GESTION DU GLISSEZ DEPOSER */
+        $("#addPJQuick").click(function() {
+            $('#dropzone').toggle();
+        });
+
+        var myDropzone = new Dropzone("#dropzone", {
+            url: "<?php echo $this->url(array('action' => 'add-piece-jointe')) ?>",
+            paramName: "file"
+        });
+        myDropzone.on("success", function(file, responseText) {
+            if (responseText !== undefined) {
+                $('#fiche_etablissement').empty().append(responseText);
+            } else
+            {
+                document.location.reload();
+            }
+        });
+    });
+</script>

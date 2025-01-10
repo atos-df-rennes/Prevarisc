@@ -1,0 +1,61 @@
+<div class='action-buttons pull-right'>
+    <a class='btn btn-default' href="<?php echo $this->url(array('action' => 'edit-descriptif')) ?>">Modifier les descriptifs</a>
+</div>
+
+<h3>Descriptifs</h3>
+
+<?php if(!empty($this->historique) || !empty($this->descriptif) || !empty($this->derogations)) : ?>
+	<?php if(!empty($this->historique)) : ?>
+	<h4 class='h4_subtitle'>Historique</h4>
+	<p><?php echo nl2br($this->historique) ?></p>
+	<?php endif ?>
+
+	<?php if(!empty($this->descriptif)) : ?>
+	<h4 class='h4_subtitle'>Descriptif général</h4>
+	<p><?php echo nl2br($this->descriptif) ?></p>
+	<?php endif ?>
+
+	<?php if(!empty($this->derogations)) : ?>
+	<h4 class='h4_subtitle'>Dérogations accordées</h4>
+	<p><?php echo nl2br($this->derogations) ?></p>
+	<?php endif ?>
+<?php endif ?>
+
+<h4 class='h4_subtitle'>Descriptif technique</h4>
+<div class='row'>
+	<?php
+		$i = 0;
+	    foreach($this->champs_descriptif_technique as $title => $champ_destech) {
+	    	$j = 0;
+	    	echo '<div class="col-md-4">';
+	        echo "<h5 class='lead'>".$title."</h5>";
+	        echo "<dl>";
+
+	        foreach($champ_destech as $key => $value)
+	        {
+	            if(!$value['value'] == null && !$value['value'] == 0)
+	            {
+	            	echo "<dt>".$key."</dt>";
+                        echo "<dd>" . ($value['type'] == 'tinyint' ? ( $value['value'] == 1 ? 'Oui' : 'Non') : $value['value'] ). "</dd>";
+	                $j++;
+	            }
+	        }
+
+	        echo "</dl>";
+
+	        if($j == 0) {
+	        	echo "<p class='text-muted'>Aucune donnée disponible</p>";
+	        }
+        	$j = 0;
+
+        	echo '</div>';
+
+	        $i++;
+
+            if($i == 3) {
+            	echo "</div> <div class='row' >";
+            	$i = 0;
+            }
+	    }
+	?>
+</div>

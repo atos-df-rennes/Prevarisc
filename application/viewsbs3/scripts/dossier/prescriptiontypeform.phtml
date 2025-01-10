@@ -1,0 +1,126 @@
+<?php
+
+$thirdPartyPlugins = explode(';', getenv('PREVARISC_THIRDPARTY_PLUGINS'));
+$isLabelChanged = in_array('Plugin_LibelleDossierPrescriptions', $thirdPartyPlugins, true); ?>
+
+<form class="form-inline" name='formPrescription' id='formPrescription' action='' method='POST'>
+	<input type='hidden' name='ID_PRESCRIPTIONTYPE' id='ID_PRESCRIPTIONTYPE' value='<?= ($this->do == 'edit') ? $this->idPrescType : "" ?>' />
+	<input type='hidden' name='PRESCRIPTIONTYPE_CATEGORIE' id='PRESCRIPTIONTYPE_CATEGORIE' value='<?= ($this->do == 'edit' && $this->assoc[0]['PRESCRIPTIONTYPE_CATEGORIE'] != 0) ? $this->assoc[0]['PRESCRIPTIONTYPE_CATEGORIE'] : "" ?>' />
+	<input type='hidden' name='PRESCRIPTIONTYPE_TEXTE' id='PRESCRIPTIONTYPE_TEXTE' value='<?= ($this->do == 'edit' && $this->assoc[0]['PRESCRIPTIONTYPE_TEXTE'] != 0) ? $this->assoc[0]['PRESCRIPTIONTYPE_TEXTE'] : "" ?>' />
+	<input type='hidden' name='PRESCRIPTIONTYPE_ARTICLE' id='PRESCRIPTIONTYPE_ARTICLE' value='<?= ($this->do == 'edit' && $this->assoc[0]['PRESCRIPTIONTYPE_ARTICLE'] != 0) ? $this->assoc[0]['PRESCRIPTIONTYPE_ARTICLE'] : "" ?>' />
+	
+	<div class="form-group">
+		<button id='emplacement' class='search btn btn-default' style='display:none;'>Rechercher les prescriptions  selon le classement</button>
+		<button id='word' class='search btn btn-default'>Rechercher les prescriptions par mots clés</button>
+	</div>
+	
+	<div class="form-group">
+		Cette prescription est
+		<select class="form-control" name='TYPE_PRESCRIPTION_DOSSIER' id='TYPE_PRESCRIPTION_DOSSIER'>
+			<option value='0'><?php if ($isLabelChanged): ?>Essais réalisés<?php else: ?>Rappels réglementaires<?php endif ?></option>
+			<option value='1'><?php if ($isLabelChanged): ?>Prescriptions<?php else: ?>Liée à l'exploitation<?php endif ?></option>
+			<option value='2'><?php if ($isLabelChanged): ?>Conclusions types<?php else: ?>Liée à l'amélioration<?php endif ?></option>
+		</select>
+	</div>
+	<br/><br/>
+
+	<div id="selectWord" style="display:none;">
+		Saisissez le ou les mots clés (séparés d\'un espace) <input class="form-control" type="texte" name="motscles" id="motscles" value="" style="width:500px;" />
+		<button class="search btn btn-default" id="wordSearch">Rechercher</button>
+	</div>
+	<div id='selectEmplacement' ></div>
+	<div id='listePrescriptionTypeSearch' style='margin-top:20px;display:none;'></div>
+	<div id='listePrescriptionType' style='margin-top:20px;'>
+
+	<?php
+		$nbPrescType = count($this->prescriptionType);
+	
+		for($i=0; $i < $nbPrescType; $i++)
+		{
+			$nbAssoc = count($this->prescriptionType[$i]);
+			if ($nbAssoc == 0) {
+				continue;
+			}
+		?>
+			<li id='prescriptiontype_<?= $this->prescriptionType[$i][0]['ID_PRESCRIPTIONTYPE'] ?>' style='list-style-type:none;'>
+				<table style='width:900px;'>
+
+		<?php
+			$cpt = true;
+			for($j=0; $j < $nbAssoc; $j++)
+			{
+				$article = $this->prescriptionType[$i][$j]['LIBELLE_ARTICLE'];
+				$texte = $this->prescriptionType[$i][$j]['LIBELLE_TEXTE'];
+			?>
+					<tr>
+						<td style='width:15%;'><?= $texte ?></td>
+						<td style='width:15%;'><?= $article ?></td>
+			<?php
+				if($cpt): ?>
+					<td rowspan='<?= $nbAssoc ?>' style='width:70%;'><?= nl2br($this->prescriptionType[$i][0]['PRESCRIPTIONTYPE_LIBELLE']) ?></td>
+					<td rowspan='<?= $nbAssoc ?>'><button class='add btn btn-default' id='prescType_<?= $this->prescriptionType[$i][$j]['ID_PRESCRIPTIONTYPE'] ?>'>Ajouter</button></td>
+					
+				<?php
+					$cpt = false;
+					endif ?>
+					</tr>
+		<?php } ?>
+				</table>
+			</li>
+	<?php } ?>
+	</div>
+</form>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#motscles').keypress(function(e){
+			if(e.keyCode==13) {
+				e.preventDefault();
+				$('#wordSearch').click();
+			}
+		});
+
+		$("#wordSearch").live('click',function(){
+			$.ajax({
+				type: "POST",
+				url: "/dossier/prescriptionwordsearch",
+				data: "&motsCles="+$("#motscles").val(),
+				success: function(msg){
+					$("#listePrescriptionTypeSearch").html(msg);
+				}
+			});
+
+			return false;
+		});
+
+		$(".search").live('click',function(){
+			var type= $(this).attr('id');
+			if(type == 'emplacement'){
+				$("#emplacement").hide();
+				$("#word").show();
+				$("#selectWord").hide();
+				$("#selectEmplacement").show();
+				$("#listePrescriptionType").show();
+				$("#listePrescriptionTypeSearch").hide();
+
+				$.ajax({
+					type: "POST",
+					url: "/gestion-prescriptions/emplacement",
+					data: $("#formPrescription").serialize(),
+					success: function(msg){
+						$("#selectEmplacement").html(msg);
+					}
+				});
+			}else{
+				$("#word").hide();
+				$("#emplacement").show();
+				$("#selectEmplacement").hide();
+				$("#selectWord").show();
+				$("#listePrescriptionType").hide();
+				$("#listePrescriptionTypeSearch").show();
+			}
+
+			return false;
+		})
+	});
+</script>

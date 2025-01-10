@@ -1,0 +1,65 @@
+<!-- Titre -->
+<span style="float: right">
+    <br/>
+	<button id='button-gdc' type="button" class='btn btn-default' data-toggle="modal" data-target="#modal-gdc">Gestion des commissions</button>
+</span>
+
+<h3 class='page-header'>Gestion des commissions</h3>
+
+<!-- Liste des types de commissions -->
+<ul id="gestionCommissionMenu">
+	<?php foreach($this->rowset_typesDesCommissions as $row_typeDesCommissions) : ?>
+	<li <?php if( $row_typeDesCommissions["ID_COMMISSIONTYPE"] == 1 ) echo "class='active'" ?> >
+		<a href='/gestion-des-commissions/get-commissions?id_type_des_commissions=<?php echo $row_typeDesCommissions["ID_COMMISSIONTYPE"] ?>' class='display' ><?php echo $row_typeDesCommissions["LIBELLE_COMMISSIONTYPE"] ?></a>
+	</li>
+	<?php endforeach ?>
+</ul>
+
+<!-- Liste des commissions -->
+<div id='content_commissions'>
+	<?php echo $this->action("get-commissions", "gestion-des-commissions", null, array("id_type_des_commissions" => 1)); ?>
+</div>
+
+<div id="modal-gdc" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">Gestion des commission</h3>
+            </div>
+
+            <div class="modal-body"></div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <button id="save-gdc" type="button" class="btn btn-success">Sauvegarder</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+	// Ajout d'un type
+	$("#button-gdc").click(function() {
+		$('#modal-gdc .modal-body').load("/gestion-des-commissions/form");
+	});
+
+    $('#save-gdc').click(function() {
+        $.ajax({
+            url: "/gestion-des-commissions/save",
+            data: $("#form-gdc").serialize(),
+            type: "POST",
+            success: function () {
+                window.location.reload();
+            }
+        });
+    })
+
+	// Affichage des commissions
+	$("ul#gestionCommissionMenu a").click(function() {
+		$("#content_commissions").load( $(this).attr("href") );
+		$("ul#gestionCommissionMenu li").removeClass("active");
+		$(this).parent().addClass("active");
+		return false;
+	});
+</script>

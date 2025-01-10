@@ -224,7 +224,6 @@ class Service_Dashboard
                 'width' => 'small',
             ];
 
-            // @fixme: Ajouter les permissions
             $this->blocsConfig['nouvellesPjsPlatau'] = [
                 'service' => Service_Dashboard::class,
                 'method' => 'getDossiersPlatauNouvellesPjs',

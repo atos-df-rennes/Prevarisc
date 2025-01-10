@@ -4,6 +4,11 @@
 
 <!--- END HEADER -->
 
+## [2.7.1](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.0...v2.7.1) (10-01-2025)
+
+
+---
+
 ## [2.7.0](https://github.com/atos-df-rennes/prevarisc/compare/v2.6.0...v2.7.0) (09-01-2025)
 
 ### Évolutions

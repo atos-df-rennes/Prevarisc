@@ -29,7 +29,12 @@
         "analyse": "/usr/bin/php8.3 tools/vendor/bin/phpstan analyse --memory-limit=-1",
         "generate-baseline": "/usr/bin/php8.3 tools/vendor/bin/phpstan --memory-limit=-1 --generate-baseline",
         "test": "php vendor/bin/phpunit --bootstrap tests/bootstrap/indexTest.php --testdox tests/",
-        "test-coverage": "@test --coverage-html tests/coverage/ --whitelist application/"
+        "test-coverage": "@test --coverage-html tests/coverage/ --whitelist application/",
+        "changelog": "/usr/bin/php8.3 tools/vendor/bin/conventional-changelog",
+        "release": "/usr/bin/php8.3 tools/vendor/bin/conventional-changelog --commit",
+        "release:patch": "/usr/bin/php8.3 tools/vendor/bin/conventional-changelog --patch --commit",
+        "release:minor": "/usr/bin/php8.3 tools/vendor/bin/conventional-changelog --minor --commit",
+        "release:major": "/usr/bin/php8.3 tools/vendor/bin/conventional-changelog --major --commit"
     },
     "config": {
         "platform": {

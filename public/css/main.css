@@ -1225,6 +1225,10 @@ a.list-group-item-danger.active:focus {
     background: url('../images/msg.png') no-repeat;
 }
 
+#tabPieceJointe .popover-content {
+    word-break: break-word;
+}
+
 /* Fix provenant d'un problème IE11 / bootstrap*/
 #geoportail-container img,
 #geoconcept-container img {

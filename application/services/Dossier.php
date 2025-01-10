@@ -971,14 +971,14 @@ class Service_Dossier
     /**
      * Vérifie si un dossier Plat'AU à de nouvelles pièces.
      */
-    public function hasNewPj(array $dossier): bool
+    public function hasNewPj(array $dossier, string $sessionNamespace): bool
     {
         $serviceNotification = new Service_Notification();
         $modelPj = new Model_DbTable_PieceJointe();
         $pjs = $modelPj->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $dossier['ID_DOSSIER']);
 
         foreach ($pjs as $pj) {
-            if (!$serviceNotification->isNew($pj, Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE)) {
+            if (!$serviceNotification->isNew($pj, $sessionNamespace)) {
                 continue;
             }
 

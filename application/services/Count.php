@@ -142,6 +142,14 @@ class Service_Count extends Service_Dashboard
     }
 
     /**
+     * Retourne la liste des dossiers Plat'AU ayant de nouvelles pièces.
+     */
+    public function getDossiersPlatauNouvellesPjsCount(array $user): int
+    {
+        return $this->getDossiersPlatauNouvellesPjs($user, true);
+    }
+
+    /**
      * Retourne le nombre de dossiers avec avis différé.
      */
     public function getDossierAvecAvisDiffereCount(array $user): int

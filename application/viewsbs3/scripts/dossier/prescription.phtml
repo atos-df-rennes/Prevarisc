@@ -2,14 +2,14 @@
 <?php
 if($this->infosDossier['VERROU_DOSSIER'] == 0){
 	echo "
-		<button class='addPresc btn btn-default' id='addPrescriptionType' >Ajouter une prescription type</button>
+		<button class='addPresc btn btn-primary' id='addPrescriptionType' >Ajouter une prescription type</button>
 		&nbsp;&nbsp;
 		<a class='btn btn-default' href='".$this->url(array('controller' => 'dossier', 'action' => 'prescription-add'))."' >Ajouter une prescription</a>
 	";
 	if(count($this->prescriptionExploitation) == 0 && count($this->prescriptionAmelioration) == 0){
 		echo "
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<button class='recupPrescDossier btn btn-default' id='recupPrescDossier' >Reprendre les prescriptions d'un dossier précédent</button>
+			<button class='recupPrescDossier btn btn-success' id='recupPrescDossier' >Reprendre les prescriptions d'un dossier précédent</button>
 		";
 	}
 }

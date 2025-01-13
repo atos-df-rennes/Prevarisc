@@ -1,6 +1,9 @@
 <?php
 
-function addChamp(Odf $odf, string $nomOdf, ?string $variable){
+/**
+ * @param  Odf|Segment      $odf
+ */
+function addChamp($odf, string $nomOdf, ?string $variable){
   try{
     $odf->setVars($nomOdf, $variable ?? '', true, 'UTF8');
   } catch (Exception $e) {

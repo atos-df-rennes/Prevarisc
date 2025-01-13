@@ -136,7 +136,10 @@ foreach($this->informationsMembre as $val => $membre){
 	}
 }
 
-function addChamp(Odf $odfName, string $nomOdf, ?string $variable){
+/**
+ * @param  Odf|Segment      $odf
+ */
+function addChamp($odfName, string $nomOdf, ?string $variable){
     try{
         $odfName->setVars($nomOdf, $variable ?? '', true, 'UTF8');
     }catch (Exception $e) {

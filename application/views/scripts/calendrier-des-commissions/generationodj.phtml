@@ -136,9 +136,9 @@ foreach($this->informationsMembre as $val => $membre){
 	}
 }
 
-function addChamp($odfName, $nomOdf, $variable){
+function addChamp(Odf $odfName, string $nomOdf, ?string $variable){
     try{
-        $odfName->setVars($nomOdf,$variable,true,'UTF8');
+        $odfName->setVars($nomOdf, $variable ?? '', true, 'UTF8');
     }catch (Exception $e) {
     }
 }
@@ -401,7 +401,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                                                 }
                                             }
 
-                                            addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
+                                            addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR']);
                                             $idxCol++;
                                         }
 

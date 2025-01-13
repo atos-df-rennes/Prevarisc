@@ -583,12 +583,9 @@ function getAvis($avis) {
     }
 }
 
-function setVars($odf,$nomOdf, $variable){
+function setVars(Odf $odf, string $nomOdf, ?string $variable){
   try{
-    if($variable == "") {
-      $variable = "";
-    }
-    $odf->setVars($nomOdf,$variable, true,'UTF8');
+    $odf->setVars($nomOdf, $variable ?? '', true, 'UTF8');
   } catch (Exception $e) {
 
   }

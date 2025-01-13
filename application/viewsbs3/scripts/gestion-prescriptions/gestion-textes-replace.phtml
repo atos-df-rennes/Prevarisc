@@ -4,7 +4,7 @@
 			<input type='hidden' name='id_texte' id='id_texte' value='".$this->texteInfo['ID_TEXTE']."' />
 			<input type='hidden' name='action' id='action' value='".$this->action."' />
 			<div class='row'>
-				<div class='col-md-12' >
+				<div class='col-xs-12' >
 					<a href='/gestion-prescriptions'>Gestion des prescriptions types</a>
 					<span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span>
 					<a href='/gestion-prescriptions/gestion-textes'>Gestion des textes</a>
@@ -56,7 +56,7 @@
 			{
 				echo "
 					<div class='row texteRow' id='texteRow_".$texte['ID_TEXTE']."'>
-						<div class='col-md-12' >
+						<div class='col-xs-12' >
 							<input type='radio' class='texteRadio' name='idTexteReplace' value='".$texte['ID_TEXTE']."' /> ".$texte['LIBELLE_TEXTE']."
 						</div>
 					</div>

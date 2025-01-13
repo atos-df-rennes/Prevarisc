@@ -9,11 +9,11 @@
     <h3>Modification des Textes applicables</h3>
 
     <?php foreach($this->textes_applicables as $titre => $textes_applicables) : ?>
-        <div class="form-group col-md-12">
+        <div class="form-group col-xs-12">
             <h4><?php echo $titre ?></h4>
 
             <?php foreach($textes_applicables as $texte_applicable) : ?>
-                <div class="form-group col-md-12">
+                <div class="form-group col-xs-12">
                     <input type="hidden" name="textes_applicables[<?php echo $texte_applicable['ID_TEXTESAPPL'] ?>]" value='0' />
                     <input type="checkbox" name="textes_applicables[<?php echo $texte_applicable['ID_TEXTESAPPL'] ?>]" value='1' <?php echo array_key_exists($titre, $this->textes_applicables_de_etablissement) && array_key_exists($texte_applicable['ID_TEXTESAPPL'], $this->textes_applicables_de_etablissement[$titre]) ? "checked" : ""  ?> />
                     <span style="<?php echo array_key_exists($titre, $this->textes_applicables_de_etablissement) && array_key_exists($texte_applicable['ID_TEXTESAPPL'], $this->textes_applicables_de_etablissement[$titre]) ? "font-weight: bold" : ""  ?>">

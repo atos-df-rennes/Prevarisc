@@ -99,7 +99,7 @@
     	<div class="form-group">
             <dt>Prénom</dt>
             <dd class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <input class="form-control" type='text' name='PRENOM_UTILISATEURINFORMATIONS' value='<?php echo htmlspecialchars($this->user['infos']["PRENOM_UTILISATEURINFORMATIONS"], ENT_QUOTES) ?>' />
                 </div>
             </dd>
@@ -108,7 +108,7 @@
 		<div class="form-group">
             <dt>Nom</dt>
             <dd class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <input class="form-control" type='text' name='NOM_UTILISATEURINFORMATIONS' value='<?php echo htmlspecialchars($this->user['infos']["NOM_UTILISATEURINFORMATIONS"], ENT_QUOTES) ?>' />
                 </div>
             </dd>
@@ -117,7 +117,7 @@
     	<div class="form-group">
             <dt>Fonction</dt>
             <dd class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <select class="form-control" name='ID_FONCTION'>
                         <?php foreach($this->fonctions as $fonction) : ?>
                             <option value='<?php echo $fonction["ID_FONCTION"] ?>' <?php if(($fonction["ID_FONCTION"] == $this->user['infos']["ID_FONCTION"])) echo "selected" ?> >
@@ -132,7 +132,7 @@
 		<div class="form-group">
             <dt class='grade_user'>Grade</dt>
             <dd class='grade_user row'>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <input class="form-control" type='text' name='GRADE_UTILISATEURINFORMATIONS' value='<?php echo $this->user['infos']["GRADE_UTILISATEURINFORMATIONS"] ?>' />
                 </div>
             </dd>
@@ -147,7 +147,7 @@
                 <div class="form-group col-md-6">
                     <input class="form-control" type='text' name='TELPORTABLE_UTILISATEURINFORMATIONS' placeholder='Portable ...' value='<?php echo $this->user['infos']["TELPORTABLE_UTILISATEURINFORMATIONS"] ?>' />
                 </div>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <input class="form-control" type='text' name='TELFAX_UTILISATEURINFORMATIONS' placeholder='Fax ...' value='<?php echo $this->user['infos']["TELFAX_UTILISATEURINFORMATIONS"] ?>' />
                 </div>
             </dd>
@@ -156,7 +156,7 @@
 		<div class="form-group">
             <dt>Courriel</dt>
             <dd class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <input class="form-control" type='text' name='MAIL_UTILISATEURINFORMATIONS' value='<?php echo $this->user['infos']["MAIL_UTILISATEURINFORMATIONS"] ?>' />
                 </div>
             </dd>
@@ -165,7 +165,7 @@
 		<div class="form-group">
             <dt>Site Web</dt>
             <dd class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <input class="form-control" type='text' name='WEB_UTILISATEURINFORMATIONS' value='<?php echo $this->user['infos']["WEB_UTILISATEURINFORMATIONS"] ?>' />
                 </div>
             </dd>
@@ -173,7 +173,7 @@
 
 		<dt>Adresse</dt>
 		<dd class="row">
-            <div class="col-md-12">
+            <div class="col-xs-12">
                 <textarea class="form-control" name='OBS_UTILISATEURINFORMATIONS' style="width: 100%"><?php if(isset($this->user['infos']["OBS_UTILISATEURINFORMATIONS"])) echo $this->user['infos']["OBS_UTILISATEURINFORMATIONS"] ?></textarea>
             </div>
 		</dd>

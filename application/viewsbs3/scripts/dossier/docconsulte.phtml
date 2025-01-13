@@ -168,7 +168,7 @@ $(document).ready(function() {
 
 			$(this).next().remove();
 			$(this).remove();
-			$("#listeDocs_"+idDiv).prepend('<li id="'+idLi+'" class="divDoc col-md-12" name="divDoc">'+valeurDiv+'</li>');
+			$("#listeDocs_"+idDiv).prepend('<li id="'+idLi+'" class="divDoc col-xs-12" name="divDoc">'+valeurDiv+'</li>');
 		}
 	});
 });
@@ -225,7 +225,7 @@ foreach($this->listeNatures as $index => $nature) {
 
         if ($this->infosDossier['VERROU_DOSSIER'] == 0) {
             echo "</ul>
-                    <div class='col-md-12'>
+                    <div class='col-xs-12'>
                         <button type='button' id='docAjout_".$nature["ID_NATURE"]."' class='docAjout btn btn-default'>+ Ajouter un nouveau document</button>
                     </div>
                 </div>

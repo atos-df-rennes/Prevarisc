@@ -8,7 +8,7 @@
                 <div class="form-group">
                     <dt>Groupe</dt>
                     <dd>
-                        <div class="col-md-12">
+                        <div class="col-xs-12">
                             <select class='form-control' name='ID_GROUPE'>
                                 <?php foreach( $this->groupes as $item ) : ?>
                                     <option value='<?php echo $item["ID_GROUPE"] ?>' <?php if($item["ID_GROUPE"] == $this->user["ID_GROUPE"]) echo "selected" ?> ><?php echo $item["LIBELLE_GROUPE"] ?></option>
@@ -24,7 +24,7 @@
                 <div class="form-group" <?php if($this->item == "commune") echo "style='display: none'"; ?>>
                     <dt>Fonction</dt>
                     <dd>
-                        <div class="col-md-12">
+                        <div class="col-xs-12">
                             <select class="form-control" name='ID_FONCTION'>
                                 <?php foreach( $this->contact_fonction_list as $item ) : ?>
                                     <?php
@@ -47,7 +47,7 @@
                 <div class="form-group">
                     <dt>Société</dt>
                     <dd>
-                        <div class="col-md-12">
+                        <div class="col-xs-12">
                             <input class="form-control" type='text' value="<?php if(isset($this->user_info["SOCIETE_UTILISATEURINFORMATIONS"])) echo $this->user_info["SOCIETE_UTILISATEURINFORMATIONS"] ?>" name='SOCIETE_UTILISATEURINFORMATIONS' />
                         </div>
                     </dd>
@@ -78,7 +78,7 @@
 		<div class="form-group">
             <dt>Téléphone</dt>
             <dd>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <div class="input-group">
                         <span class="input-group-addon"><i class='glyphicon glyphicon-earphone'></i></span>
                         <input class="form-control" type='text' maxlength="20" value="<?php if(isset($this->user_info["TELFIXE_UTILISATEURINFORMATIONS"])) echo $this->user_info["TELFIXE_UTILISATEURINFORMATIONS"] ?>" name='TELFIXE_UTILISATEURINFORMATIONS'/>
@@ -90,7 +90,7 @@
         <div class="form-group">
             <dt>Fax</dt>
             <dd>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <div class="input-group">
                         <span class="input-group-addon"><i class='glyphicon glyphicon-print' ></i></span>
                         <input class="form-control" type='text' maxlength="20" value="<?php if(isset($this->user_info["TELFAX_UTILISATEURINFORMATIONS"])) echo $this->user_info["TELFAX_UTILISATEURINFORMATIONS"] ?>" name='TELFAX_UTILISATEURINFORMATIONS' />
@@ -102,7 +102,7 @@
         <div class="form-group">
             <dt>Portable</dt>
             <dd>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <div class="input-group">
                         <span class="input-group-addon"><i class='glyphicon glyphicon-phone' ></i></span>
                         <input class="form-control" type='text' maxlength="20"  value="<?php if(isset($this->user_info["TELPORTABLE_UTILISATEURINFORMATIONS"])) echo $this->user_info["TELPORTABLE_UTILISATEURINFORMATIONS"] ?>" name='TELPORTABLE_UTILISATEURINFORMATIONS' />
@@ -115,7 +115,7 @@
 		<div class="form-group">
             <dt>Courriel</dt>
             <dd>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <div class="input-group">
                         <span class="input-group-addon"><i class='glyphicon glyphicon-envelope' ></i></span>
                         <input class="form-control" type='text' maxlength="50" value="<?php if(isset($this->user_info["MAIL_UTILISATEURINFORMATIONS"])) echo $this->user_info["MAIL_UTILISATEURINFORMATIONS"] ?>" name='MAIL_UTILISATEURINFORMATIONS' />
@@ -128,7 +128,7 @@
 		<div class="form-group">
             <dt>Site web</dt>
             <dd>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <div class="input-group">
                         <span class="input-group-addon"><i class='glyphicon glyphicon-link' ></i></span>
                         <input class="form-control" type='text' maxlength="100" value="<?php if(isset($this->user_info["WEB_UTILISATEURINFORMATIONS"])) echo $this->user_info["WEB_UTILISATEURINFORMATIONS"] ?>" name='WEB_UTILISATEURINFORMATIONS' />
@@ -141,7 +141,7 @@
 		<div class="form-group">
             <dt>Adresse</dt>
             <dd class="form-horizontal">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <div class="form-group">
                         <label for="numero" class="col-md-1 control-label">Numéro</label>
                         <div class="col-md-11">
@@ -173,7 +173,7 @@
 		<!-- Observation -->
         <dt>Observation</dt>
         <dd>
-            <div class="col-md-12">
+            <div class="col-xs-12">
                 <textarea class="form-control" name='OBS_UTILISATEURINFORMATIONS' style="width: 100%"><?php if(isset($this->user_info["OBS_UTILISATEURINFORMATIONS"])) echo $this->user_info["OBS_UTILISATEURINFORMATIONS"] ?></textarea>
             </div>
         </dd>

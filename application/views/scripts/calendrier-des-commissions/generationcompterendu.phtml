@@ -1,8 +1,11 @@
 <?php
 
-function addChamp($odf,$nomOdf, $variable){
+/**
+ * @param  Odf|Segment      $odf
+ */
+function addChamp($odf, string $nomOdf, ?string $variable){
   try{
-    $odf->setVars($nomOdf,$variable, true,'UTF8');
+    $odf->setVars($nomOdf, $variable ?? '', true, 'UTF8');
   } catch (Exception $e) {
 
   }
@@ -324,7 +327,7 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                                                             }
                                                         }
 
-                                                        addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
+                                                        addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR']);
                                                         $idxCol++;
                                                     }
 

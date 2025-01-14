@@ -223,6 +223,17 @@ class Service_Dashboard
                 'height' => 'small',
                 'width' => 'small',
             ];
+
+            // @fixme: Ajouter les permissions
+            $this->blocsConfig['nouvellesPjsPlatau'] = [
+                'service' => Service_Dashboard::class,
+                'method' => 'getDossiersPlatauNouvellesPjs',
+                'acl' => ['dashboard', 'view_doss_platau_nouvelles_pjs'],
+                'title' => "Dossiers Plat'AU avec de nouvelles pièces jointes",
+                'type' => 'dossiers',
+                'height' => 'small',
+                'width' => 'small',
+            ];
         }
     }
 
@@ -499,7 +510,7 @@ class Service_Dashboard
         $serviceNotification = new Service_Notification();
         foreach ($results as $key => $result) {
             $results[$key]['IS_NEW'] = $serviceNotification->isNew($result, Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE);
-            $results[$key]['HAS_NEW_PJ'] = $serviceDossier->hasNewPj($result);
+            $results[$key]['HAS_NEW_PJ'] = $serviceDossier->hasNewPj($result, Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE);
         }
 
         return $results;
@@ -531,6 +542,36 @@ class Service_Dashboard
         $search->order('d.DATEINSERT_DOSSIER');
 
         return $search->run(false, null, false)->toArray();
+    }
+
+    /**
+     * Retourne la liste des dossiers Plat'AU ayant de nouvelles pièces.
+     *
+     * @return array|int
+     */
+    public function getDossiersPlatauNouvellesPjs(array $user, bool $getCount = false)
+    {
+        $search = new Model_DbTable_Search();
+        $search->setItem('dossier');
+        $search->join(['platauconsultation', 'platauconsultation.ID_PLATAU = d.ID_PLATAU', 'DATE_REPONSE_ATTENDUE']);
+        $search->setCriteria('d.ID_PLATAU IS NOT NULL');
+        $search->setCriteria('d.ID_DOSSIER IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)');
+        $search->order('d.DATEINSERT_DOSSIER');
+
+        $results = $search->run(false, null, false)->toArray();
+
+        $serviceDossier = new Service_Dossier();
+        foreach ($results as $key => $result) {
+            if (!$serviceDossier->hasNewPj($result, Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE)) {
+                unset($results[$key]);
+            }
+        }
+
+        if ($getCount) {
+            return count($results);
+        }
+
+        return $results;
     }
 
     /**

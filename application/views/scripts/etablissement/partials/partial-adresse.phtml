@@ -1,5 +1,5 @@
 <tr <?= $this->adresse === null ? "id='prototype_adresse' class='prototypes hide'" : "class='adresse'" ?>>
-    <td id="adresse<?= $this->adresse['ID_ADRESSE'] ?? '' ?>">
+    <td id="adresse<?= $this->adresse['ID_ADRESSE'] ?? '' ?>"> 
         <input type='hidden' value='<?= $this->adresse["NUMINSEE_COMMUNE"] ?? '' ?>' name='ADRESSES[<?= $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?? '' ?>][NUMINSEE_COMMUNE]' />
         <input type='hidden' value='<?= $this->adresse["LON_ETABLISSEMENTADRESSE"] ?? '' ?>' name='ADRESSES[<?= $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?? '' ?>][LON_ETABLISSEMENTADRESSE]' />
         <input type='hidden' value='<?= $this->adresse["LAT_ETABLISSEMENTADRESSE"] ?? '' ?>' name='ADRESSES[<?= $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?? '' ?>][LAT_ETABLISSEMENTADRESSE]' />
@@ -9,6 +9,7 @@
         <input type='hidden' value='<?= $this->adresse["ADRESSE"] ?? '' ?>' name='ADRESSES[<?= $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?? '' ?>][ADRESSE]' />
         <input type='hidden' value='<?= $this->adresse["CODEPOSTAL_COMMUNE"] ?? '' ?>' name='ADRESSES[<?= $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?? '' ?>][CODEPOSTAL_COMMUNE]' />
         <input type='hidden' value='<?= $this->adresse["LIBELLE_COMMUNE"] ?? '' ?>' name='ADRESSES[<?= $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?? '' ?>][LIBELLE_COMMUNE]' />
+        <input type='hidden' value='<?= $this->adresse["LIBELLE_RUE"] ?? '' ?>' name='ADRESSES[<?= $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?? '' ?>][LIBELLE_RUE]' />
 
         <span>
             <?php if ($this->adresse === null): ?>

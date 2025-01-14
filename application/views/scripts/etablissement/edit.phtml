@@ -1,7 +1,4 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" crossorigin=""/>
-<?php
-var_dump((1 === (int) getenv('PREVARISC_API_ADRESSE_MODAL')));
-?>
 <form id='etablissement' class="<?php echo $this->add ? 'add' : 'edit' ?>" action='<?php echo $this->url(array('action' => $this->add ? 'add' : 'edit')) ?>' method='post' >
 
     <?php if ($this->add) : ?>
@@ -383,7 +380,7 @@ var_dump((1 === (int) getenv('PREVARISC_API_ADRESSE_MODAL')));
             <table id='adresses' class='table table-condensed champ_adresse champs'>
                 <thead>
                     <tr>
-                        <th>Localisation B</th>
+                        <th>Localisation</th>
                         <th>Type</th>
                         <th></th>
                     </tr>
@@ -517,28 +514,28 @@ var_dump((1 === (int) getenv('PREVARISC_API_ADRESSE_MODAL')));
     </div>
 
     <div class="modal-body">
-        <?php var_dump(!$this->useApiAdresse);if (!$this->useApiAdresse): ?>
+        <?php if (!$this->useApiAdresse): ?>
             <!-- Contenu de l'onglet Adresse -->
             <div id="bdd" class="content">
                 <h4>Ajouter une adresse depuis BDD</h4>
                 <dl class='dl-horizontal'>
                     <dt>Ville</dt>
                     <dd>
-                        <input name='commune_ac' type='text' placeholder='Nom de la commune ou code postal ...' />
+                        <input name='commune_ac' type='text' placeholder='Nom de la commune ou code postal ...' autocomplete="off" />
                         <input name='code_insee' type='hidden' />
                         <input name='code_postal' type='hidden' />
                     </dd>
 
                     <dt>Voie</dt>
                     <dd>
-                        <input type='text' name='voie_ac' placeholder='Nom de la voie ...' disabled />
+                        <input type='text' name='voie_ac' placeholder='Nom de la voie ...' disabled autocomplete="off"/>
                         <input type='hidden' name='type_voie' />
                         <input type='hidden' name='voie' />
                     </dd>
 
                     <dt>Numéro</dt>
                     <dd>
-                        <input class="input-small" type='text' name='numero' placeholder='Numéro ...' disabled />
+                        <input class="input-small" type='text' name='numero' placeholder='Numéro ...' disabled autocomplete="off" />
                     </dd>
 
                     <dt>Complément d'adresse</dt>
@@ -606,6 +603,7 @@ var_dump((1 === (int) getenv('PREVARISC_API_ADRESSE_MODAL')));
                 <input type="hidden" name="isApi" value="1">
                 <input type="hidden" id="codePostal-api" name="code-postal" />
                 <input type="hidden" id="inseeCode-api" name="insee-code" />
+                <input type="hidden" id="street-api" name="street" />
                 <input type="hidden" id="city-api" name="city" />
 
                 <dl class='dl-horizontal'>
@@ -785,7 +783,6 @@ var_dump((1 === (int) getenv('PREVARISC_API_ADRESSE_MODAL')));
 
             } else {
                 // Remplissage des champs pour une adresse provenant de l'API
-                console.log("ASMAA888888888888888888888");
                 
                 node.find('input[name="ADRESSES[-1][ADRESSE]"]').val($('form#adresse-modal-ajout').find('input[name="adresse_complete"]').val());
                 node.find('input[name="ADRESSES[-1][LON_ETABLISSEMENTADRESSE]"]').val($('form#adresse-modal-ajout').find('input[name="lon"]').val());
@@ -793,6 +790,8 @@ var_dump((1 === (int) getenv('PREVARISC_API_ADRESSE_MODAL')));
                 node.find('input[name="ADRESSES[-1][CODEPOSTAL_COMMUNE]"]').val($('form#adresse-modal-ajout').find('input[name="code-postal"]').val());
                 node.find('input[name="ADRESSES[-1][NUMINSEE_COMMUNE]"]').val($('form#adresse-modal-ajout').find('input[name="insee-code"]').val());
                 node.find('input[name="ADRESSES[-1][LIBELLE_COMMUNE]"]').val($('form#adresse-modal-ajout').find('input[name="city"]').val());
+                node.find('input[name="ADRESSES[-1][LIBELLE_RUE]"]').val($('form#adresse-modal-ajout').find('input[name="street"]').val());
+
                 // Affichage de l'adresse complète
                 var adresseComplete = $('form#adresse-modal-ajout').find('input[name="adresse_complete"]').val();
                 node.find('span').text(adresseComplete);
@@ -1175,7 +1174,6 @@ var_dump((1 === (int) getenv('PREVARISC_API_ADRESSE_MODAL')));
 
 
    $('#adresse-modal-edit').on('shown.bs.modal', function () {
-    console.log("test");
 
     const hasBddContainer = $(this).find('#bddedit').length > 0;
         if (!hasBddContainer) {
@@ -1236,24 +1234,22 @@ $('input[name="adresse_complete"]').on('input', function () {
                             const latitude = feature.latitude;
                             const postal_code = feature.postal_code;
                             const city = feature.city;
+                            const street = feature.street;
                             const insee_code = feature.insee_code;
 
                             if (formId === 'adresse-modal-ajout') {
                                 $('#addressLongitude-api').val(longitude);
                                 $('#addressLatitude-api').val(latitude);
                                 $('#codePostal-api').val(postal_code); 
-                                $('#inseeCode-api').val(insee_code); 
+                                $('#inseeCode-api').val(insee_code);
+                                $('#street-api').val(street);
                                 $('#city-api').val(city); 
                             } else if (formId === 'adresse-modal-edit') {
-                                console.log(longitude);
-                                console.log(latitude);
-                                console.log(city);
-                                console.log(postal_code);
-                                console.log(insee_code);
 
                                 $('#addressLongitude-api-edit').val(longitude);
                                 $('#addressLatitude-api-edit').val(latitude);
                                 $('#codePostal_api_edit').val(postal_code); 
+                                $('#street_api_edit').val(street); 
                                 $('#inseeCode_api_edit').val(insee_code); 
                                 $('#city_api_edit').val(city); 
 
@@ -1370,7 +1366,7 @@ $('input[name="adresse_complete"]').on('input', function () {
                 initGeoConceptKey('<?php echo $app_id ?>', '<?php echo $token ?>');
             <?php endif ?>
 
-            var map = initGeoConceptViewer('geoconcept-container',///////////////// voila la map
+            var map = initGeoConceptViewer('geoconcept-container',
                 "<?php echo $this->geoconcept_url ?>",
                 "<?php echo getenv('PREVARISC_PLUGIN_GEOCONCEPT_LAYER') ?>",
                 [{lat: <?php echo $this->default_lat ?>,lon: <?php echo $this->default_lon ?>, description: ""}],

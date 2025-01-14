@@ -86,13 +86,19 @@ class Model_DbTable_EtablissementAdresseApi extends Zend_Db_Table_Abstract imple
             'NUMINSEE_COMMUNE' => $adresse['NUMINSEE_COMMUNE'],
             'CODEPOSTAL_COMMUNE' => $adresse['CODEPOSTAL_COMMUNE'],
             'LIBELLE_COMMUNE' => $adresse['LIBELLE_COMMUNE'],
+            'LIBELLE_RUE' => $adresse['LIBELLE_RUE'],
         ]);
     
         return $row->save();
         }
     }
 
-    /*public function delete($id) {
-        return parent::delete(['id' => $id]);
-    }*/
+    public function exists($data)
+   
+        { $select = $this->select()
+            ->where('ADRESSE = ?', $data['ADRESSE']);
+
+        return $this->fetchRow($select) !== null;
+        }
+    
 }

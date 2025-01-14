@@ -12,7 +12,7 @@ class EtablissementController extends Zend_Controller_Action
     /**
      * @var array<string, mixed>|mixed|mixed[]
      */
-    public $etablissement;
+    public $etablissement; 
 
     /**
      * @var array<string, mixed>|mixed

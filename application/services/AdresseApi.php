@@ -2,7 +2,7 @@
 
 class Service_AdresseApi
 {
-    private $baseUrl = 'https://api-adresse.data.gouv.fr/search/';
+    private $baseUrl = 'https://data.geopf.fr/geocodage/search';
 
     public function getAdresseApi(string $query, string $type, int $limit): ?array
     {
@@ -35,7 +35,8 @@ class Service_AdresseApi
                             'latitude' => $feature['geometry']['coordinates'][1] ?? '',
                             'insee_code' => $feature['properties']['citycode'] ?? '',
                             'postal_code' => $feature['properties']['postcode'] ?? '',
-                            'city' => $feature['properties']['city'] ?? ''
+                            'city' => $feature['properties']['city'] ?? '',
+                            'street' =>$feature['properties']['street'] ?? ''
                         ];
                     }
                     return $addresses;

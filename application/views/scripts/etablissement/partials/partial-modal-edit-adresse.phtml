@@ -72,6 +72,7 @@
                 <input type="hidden" name="isApi" value="1">
                 <input type="hidden" id="codePostal_api_edit" name="code_postal" />
                 <input type="hidden" id="inseeCode_api_edit" name="insee_code" />
+                <input type="hidden" id="street_api_edit" name="street" />
                 <input type="hidden" id="city_api_edit" name="city" />
                 <dl class='dl-horizontal'>
                     <dt>Adresse complète</dt>
@@ -140,15 +141,9 @@
             if (!dataToPush.numero.trim() || !dataToPush.voie_ac.trim()  || !dataToPush.commune_ac.trim()) {
                 alert("Veuillez remplir tous les champs requis pour l'adresse.");
             return; 
-            }
+            } 
             $('#adresse' + dataToPush.idAdresse + '>span').text(nouveauLibelle);
-            console.log("Voilllllllllllaaaaaaaaaa");
-                                console.log(dataToPush.code_insee);
-                                console.log(dataToPush.lon);
-                                console.log(dataToPush.lat);
-                                console.log(dataToPush.complement);
-                                console.log(dataToPush.numero);
-                                console.log(dataToPush.voie);
+            
            $('input[name="ADRESSES[' + dataToPush.idAdresse + '][NUMINSEE_COMMUNE]"]').val(dataToPush.code_insee);
             $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LON_ETABLISSEMENTADRESSE]"]').val(dataToPush.lon);
             $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LAT_ETABLISSEMENTADRESSE]"]').val(dataToPush.lat);
@@ -161,6 +156,7 @@
             const  codePostal = dataToPush.code_postal;
             const inseeCode =  dataToPush.insee_code;
             const city =  dataToPush.city;
+            const street = dataToPush.street
 
 
            
@@ -176,6 +172,8 @@
             $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LAT_ETABLISSEMENTADRESSE]"]').val(dataToPush.lat_api);
             $('input[name="ADRESSES[' + dataToPush.idAdresse + '][NUMINSEE_COMMUNE]"]').val(dataToPush.insee_code);
             $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LIBELLE_COMMUNE]"]').val(dataToPush.city);
+            $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LIBELLE_RUE]"]').val(dataToPush.street);
+
 
             if (!libelle) {
                 alert("Vous n'avez rien modifié.");

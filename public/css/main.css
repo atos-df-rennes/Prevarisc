@@ -1143,10 +1143,12 @@ a.list-group-item-danger.active:focus {
 }
 /*liste de suggestion*/
 /* Conteneur de la liste */
-#suggestions-list-ajout, #suggestions-list-edit {
+#suggestions-list-ajout, #suggestions-list-edit, #suggestions-list-recherche {
     list-style-type: none; 
     padding-left: 0; 
     margin: 0; 
+    list-style-type: none; 
+    padding-left: 0;
     max-height: 150px; 
     overflow-y: auto; 
     border: 1px solid #ccc; 
@@ -1158,7 +1160,8 @@ a.list-group-item-danger.active:focus {
 }
 /* Élément de la liste */
 #suggestions-list-ajout li,
-#suggestions-list-edit li {
+#suggestions-list-edit li,
+#suggestions-list-recherche li {
     padding: 5px 10px; 
     cursor: pointer; 
     transition: background-color 0.3s ease; 
@@ -1166,7 +1169,8 @@ a.list-group-item-danger.active:focus {
 
 /* Changement de couleur au survol */
 #suggestions-list-ajout li:hover,
-#suggestions-list-edit li:hover { 
+#suggestions-list-edit li:hover,
+#suggestions-list-recherche li:hover{ 
     background-color: blue; 
     color: white; 
 }

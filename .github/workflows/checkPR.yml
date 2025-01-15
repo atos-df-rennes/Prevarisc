@@ -3,8 +3,26 @@ name: Prevarisc PR Check
 on: pull_request
 
 jobs:
-  check-pr:
+  check-pr-label:
     runs-on: ubuntu-latest
     steps:
       - name: Checks non-draft PR has label
         uses: ryanvade/enforce-active-pr-labeled-action@v1
+
+  check-pr-title:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+        coverage: none
+    - uses: ramsey/composer-install@v3
+      with:
+        composer-options: "--prefer-dist"
+        working-directory: "tools"
+
+    - name: PR title follows conventional commit spec
+      env:
+        TITLE: ${{ github.event.pull_request.title }}
+      run: tools/vendor/bin/conventional-commits validate $TITLE

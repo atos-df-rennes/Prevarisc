@@ -384,12 +384,12 @@ class UsersController extends Zend_Controller_Action
 
                                 break;
 
-                            case '6':
-                                $name = 'etablissement_eic_';
+                            case '6': 
+                                $name = 'etablissement_bup_'; 
                                 $name .= $this->_request->groupements.'_';
                                 $name .= $this->_request->commune;
 
-                                $text = 'EIC (';
+                                $text = 'BUP (';
                                 $text .= (0 == $this->_request->groupements ? 'Ignorer les groupements' : "Sur les groupements de l'utilisateur").' - ';
                                 $text .= (0 == $this->_request->commune ? 'Ignorer la commune' : "Sur la commune de l'utilisateur");
                                 $text .= ')';

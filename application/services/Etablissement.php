@@ -12,7 +12,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
     public const ID_GENRE_ETABLISSEMENT = 2;
 
-    public const ID_GENRE_EIC = 6;
+    public const ID_GENRE_BUP = 6; 
 
     public const ID_STATUS_OUVERT = 2;
 
@@ -1006,7 +1006,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
                     break;
 
-                    // EIC
+                    // BUP
                 case 6:
                     $informations->ICPE_ETABLISSEMENTINFORMATIONS = (int) $data['ICPE_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'];
@@ -1066,8 +1066,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 }
             }
 
-            // Sauvegarde des rubriques pour les EIC
-            if (self::ID_GENRE_EIC == $id_genre && array_key_exists('RUBRIQUES', $data) && count($data['RUBRIQUES']) > 0) {
+            // Sauvegarde des rubriques pour les BUP
+            if (self::ID_GENRE_BUP == $id_genre && array_key_exists('RUBRIQUES', $data) && count($data['RUBRIQUES']) > 0) {
                 foreach ($data['RUBRIQUES'] as $key => $rubrique) {
                     if ($key > 0) {
                         $DB_rubrique->createRow([
@@ -1138,7 +1138,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                         $enfant = $DB_etablissement->getInformations($id_etablissement_enfant);
                         $genre_enfant = $enfant->ID_GENRE;
                         if (1 == $id_genre && !in_array($genre_enfant, [2, 4, 5, 6, 7, 8, 9])) {
-                            throw new Exception('L\'établissement enfant n\'est pas compatible (Un site ne ne peut contenir que des établissements, habitations, EIC, camping, manifestation, IOP)', 500);
+                            throw new Exception('L\'établissement enfant n\'est pas compatible (Un site ne ne peut contenir que des établissements, habitations, BUP, camping, manifestation, IOP)', 500);
                         }
 
                         if (in_array($id_genre, [2, 5]) && self::ID_GENRE_CELLULE != $genre_enfant) {
@@ -1186,7 +1186,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 }
 
                 if (null == $genre_pere) {
-                    throw new Exception('Le père n\'est pas compatible (Les sites, habitation, IGH et EIC n\'ont pas de père)', 500);
+                    throw new Exception('Le père n\'est pas compatible (Les sites, habitation, IGH et BUP n\'ont pas de père)', 500);
                 }
 
                 $DB_etablissements_lies->delete('ID_FILS_ETABLISSEMENT = '.$etablissement->ID_ETABLISSEMENT);

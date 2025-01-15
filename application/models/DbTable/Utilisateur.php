@@ -290,7 +290,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
 
                         break;
 
-                    case 'eic':
+                    case 'bup': 
                     case 'camp':
                     case 'temp':
                     case 'iop':

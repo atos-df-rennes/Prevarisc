@@ -12,7 +12,7 @@ class EtablissementController extends Zend_Controller_Action
     /**
      * @var array<string, mixed>|mixed|mixed[]
      */
-    public $etablissement; 
+    public $etablissement;
 
     /**
      * @var array<string, mixed>|mixed
@@ -146,7 +146,7 @@ class EtablissementController extends Zend_Controller_Action
                     }
                 }
 
-                $date = date('Y-m-d');  
+                $date = date('Y-m-d');
                 $this->serviceEtablissement->save($post['ID_GENRE'], $post, $request->id, $date);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'établissement a bien été mis à jour.'.$options]);
                 $this->_helper->redirector('index', null, null, ['id' => $request->id]);

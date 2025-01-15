@@ -1203,6 +1203,18 @@ parameters:
 		-
 			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
 			identifier: property.notFound
+			count: 2
+			path: application/controllers/MigrationAdressesController.php
+
+		-
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
+			count: 1
+			path: application/controllers/MigrationAdressesController.php
+
+		-
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/controllers/PieceJointeController.php
 
@@ -1383,12 +1395,6 @@ parameters:
 		-
 			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:setNoRender\(\)\.$#'
 			identifier: method.notFound
-			count: 1
-			path: application/controllers/ProxyController.php
-
-		-
-			message: '#^Parameter \#3 \$value of function curl_setopt expects int, string\|false given\.$#'
-			identifier: argument.type
 			count: 1
 			path: application/controllers/ProxyController.php
 
@@ -1877,6 +1883,12 @@ parameters:
 			identifier: method.nonObject
 			count: 1
 			path: application/models/DbTable/EtablissementAdresse.php
+
+		-
+			message: '#^Access to an undefined property Zend_Db_Table_Row_Abstract\:\:\$ID_GENRE\.$#'
+			identifier: property.notFound
+			count: 1
+			path: application/models/DbTable/EtablissementAdresseApi.php
 
 		-
 			message: '#^Call to an undefined method Zend_Db_Select\:\:joinLeftUsing\(\)\.$#'

@@ -189,7 +189,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
 
                                 break;
 
-                            case 'bup': 
+                            case 'bup':
                             case 'camp':
                             case 'temp':
                             case 'iop':
@@ -515,7 +515,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                 break;
 
             case '6':
-                $resource = 'etablissement_bup_'; 
+                $resource = 'etablissement_bup_';
                 $resource .= $groupements[$id_etablissement].'_';
                 $resource .= $communes[$id_etablissement];
 

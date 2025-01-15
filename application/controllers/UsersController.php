@@ -384,8 +384,8 @@ class UsersController extends Zend_Controller_Action
 
                                 break;
 
-                            case '6': 
-                                $name = 'etablissement_bup_'; 
+                            case '6':
+                                $name = 'etablissement_bup_';
                                 $name .= $this->_request->groupements.'_';
                                 $name .= $this->_request->commune;
 

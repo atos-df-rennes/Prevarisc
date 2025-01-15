@@ -12,7 +12,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
     public const ID_GENRE_ETABLISSEMENT = 2;
 
-    public const ID_GENRE_BUP = 6; 
+    public const ID_GENRE_BUP = 6;
 
     public const ID_STATUS_OUVERT = 2;
 

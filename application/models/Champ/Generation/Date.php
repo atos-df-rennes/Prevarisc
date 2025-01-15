@@ -2,7 +2,7 @@
 
 final class Model_Champ_Generation_Date implements Model_Champ_Generation_Interface_Champ
 {
-    public function getGeneratedValue(string $value): string
+    public function getGeneratedValue(?string $value): string
     {
         if ($value !== null) {
             $zendDate = new Zend_Date($value, 'dd/MM/yyyy');

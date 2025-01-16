@@ -22,7 +22,7 @@ jobs:
         composer-options: "--prefer-dist"
         working-directory: "tools"
 
-    - name: PR title follows conventional commit spec
+    - name: PR title follows conventional commit spe
       env:
         TITLE: ${{ github.event.pull_request.title }}
       run: tools/vendor/bin/conventional-commits validate "$TITLE"

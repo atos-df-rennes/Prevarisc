@@ -1292,9 +1292,15 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
             $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
             $service_dossier = new Service_Dossier();
-            $listeDossiers[$val]['prescriptionReglDossier'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 0);
-            $listeDossiers[$val]['prescriptionExploitation'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 1);
-            $listeDossiers[$val]['prescriptionAmelioration'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 2);
+
+            $regles = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 0);
+            $listeDossiers[$val]['prescriptionReglDossier'] = $service_dossier->withoutLevees($regles);
+
+            $exploitation = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 1);
+            $listeDossiers[$val]['prescriptionExploitation'] = $service_dossier->withoutLevees($exploitation);
+
+            $amelioration = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 2);
+            $listeDossiers[$val]['prescriptionAmelioration'] = $service_dossier->withoutLevees($amelioration);
 
             $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
             $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = empty($listeDossiers[$val]['infosEtab']) ? [] : $model_etablissement->getListAvisDerogationsEtablissement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT']);

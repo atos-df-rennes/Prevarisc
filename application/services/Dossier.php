@@ -383,6 +383,27 @@ class Service_Dossier
     }
 
     /**
+     * Retourne les prescriptions sans celles qui ont été levées.
+     * Remet à jour les indexs après le tri.
+     */
+    public function withoutLevees(array $prescriptions): array
+    {
+        foreach ($prescriptions as $keyAssoc => $prescriptionsAssoc) {
+            foreach ($prescriptionsAssoc as $key => $prescription) {
+                if ($prescription['DATE_LEVEE'] !== null) {
+                    unset($prescriptions[$keyAssoc][$key]);
+
+                    if ([] === $prescriptions[$keyAssoc]) {
+                        unset($prescriptions[$keyAssoc]);
+                    }
+                }
+            }
+        }
+
+        return array_values($prescriptions);
+    }
+
+    /**
      * Retourne les détails d'une prescription.
      *
      * @param int $id_prescription

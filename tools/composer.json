@@ -6,7 +6,8 @@
         "friendsofphp/php-cs-fixer": "^3.22",
         "povils/phpmnd": "^3.2",
         "tomasvotruba/class-leak": "^2.0",
-        "marcocesarato/php-conventional-changelog": "^1.17"
+        "marcocesarato/php-conventional-changelog": "^1.17",
+        "ramsey/conventional-commits": "^1.5"
     },
     "config": {
         "allow-plugins": {
@@ -19,5 +20,30 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "extra": {
+        "ramsey/conventional-commits": {
+            "config": {
+                "typeCase": "lower",
+                "types": ["adaptation", "chore", "docs", "test", "style", "refactor", "tech"],
+                "scopeCase": "kebab",
+                "scopes": [
+                    "deps",
+                    "carto",
+                    "dossier",
+                    "etablissement",
+                    "rapports",
+                    "calendrier",
+                    "platau",
+                    "unitaire",
+                    "fonctionnel",
+                    "dashboard",
+                    "prescriptions",
+                    "effectifs-degagements",
+                    "pieces-jointes",
+                    "formulaires"
+                ]
+            }
+        }
+    }
 }

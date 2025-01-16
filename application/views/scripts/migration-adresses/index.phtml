@@ -1,0 +1,89 @@
+<h2>Migration des adresses</h2>
+    <div>
+        <button id="start-migration" 
+                class="btn btn-info"
+                type="button"
+                style="margin-bottom: 5px;"
+                data-toggle="modal" 
+                data-target="#confirmationModal"
+                data-loading-text="Migration <img src='/images/load.gif' alt='Chargement...' />">
+            Lancer la migration
+        </button>
+    
+        <span id="migration-notification" class="alert alert-success mt-3" style="display: none;">
+        </span>
+    </div>
+
+    <form id="confirmationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel"aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h5 class="modal-title" id="confirmationModalLabel">Confirmation de la migration</h5>
+                </div>
+
+                <div class="modal-body">
+                    Voulez-vous vraiment lancer la migration des adresses ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button id="confirm-migration" type="button" class="btn btn-primary">Confirmer</button>
+                </div>
+            </div>
+        </div>
+
+   
+        <script>
+$(document).ready(function () {
+    $("#confirm-migration").on('click', function (e) {
+        e.preventDefault();
+
+        const button = $("#start-migration");
+        const notification = $("#migration-notification");
+
+        const modalElement = $("#confirmationModal");
+        modalElement.modal('hide');
+
+        button.html(button.data('loading-text'));
+        button.prop('disabled', true);
+
+        $.ajax({
+            url: '/migration-adresses/execute-migration',
+            method: 'GET',
+            success: function (response) {
+                button.html('Lancer la migration');
+                button.prop('disabled', false);
+
+                const data = JSON.parse(response); 
+                const { total, migrated } = data;
+
+                notification.removeClass('alert-success alert-warning alert-danger'); 
+                if (migrated == total) {
+                    notification.addClass('alert-success');
+                    notification.text('Les adresses ont été bien migrées.');
+                } else if (0 < migrated ) {
+                    notification.addClass('alert-warning');
+                    notification.text(`Migration partielle : ${migrated} sur ${total} adresses migrées. Certaines adresses manquent.`);
+                } else {
+                    notification.addClass('alert-danger');
+                    notification.text('Échec de la migration. Aucune adresse migrée.');
+                }
+
+                notification.show();
+
+                setTimeout(function () {
+                    notification.hide();
+                }, 5000);
+            },
+            error: function (xhr, status, error) {
+                button.html('Lancer la migration');
+                button.prop('disabled', false);
+
+                alert('Une erreur est survenue : ' + error);
+            }
+        });
+    });
+});
+
+</script>

@@ -152,7 +152,7 @@ foreach($this->informationsMembre as $val => $membre){
 			retrieveInfoGroupementCommission($odf, $this->commissionInfos, $this->heureDeb, $this->dateComm, $infosGroupement, $this->listeCommunes);
 
 			//Generation du segment grpLoop
-			$grpLoop = $odf->setSegment('grpLoop');
+			$grpLoop = $odf->setSegment('grpLoop'); 
 
 			retrieveInfoGroupementCommission($grpLoop, $this->commissionInfos, $this->heureDeb, $this->dateComm, $infosGroupement, $this->listeCommunes);
 

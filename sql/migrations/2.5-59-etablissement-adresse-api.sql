@@ -1,0 +1,13 @@
+CREATE TABLE `etablissementadresseapi` (
+  `ID_ADRESSE` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `ADRESSE` varchar(255) DEFAULT NULL,
+  `LON_ETABLISSEMENTADRESSE` float DEFAULT NULL,
+  `LAT_ETABLISSEMENTADRESSE` float DEFAULT NULL,
+  `ID_ETABLISSEMENT` bigint(20) unsigned NOT NULL,
+  `NUMINSEE_COMMUNE` char(5) NOT NULL,
+  `CODEPOSTAL_COMMUNE` char(5) NOT NULL,
+  `LIBELLE_COMMUNE` varchar(60) NOT NULL,
+  PRIMARY KEY (`ID_ADRESSE`),
+  KEY `fk_etablissementadresseapi_etablissement_idx` (`ID_ETABLISSEMENT`),
+  CONSTRAINT `fk_etablissementadresseapi_etablissement` FOREIGN KEY (`ID_ETABLISSEMENT`) REFERENCES `etablissement` (`ID_ETABLISSEMENT`) ON DELETE CASCADE ON UPDATE NO ACTION
+)

@@ -402,6 +402,17 @@
                         </save>
                     </pages>
                 </gestion-des-communes>
+                <migration-adresses>
+                    <label>Migration des adresses</label>
+                    <controller>migration-adresses</controller>
+                    <pages>
+                        <executeMigration>
+                            <label>Migration</label>
+                            <controller>migration-adresses</controller>
+                            <action>executeMigration</action>
+                        </executeMigration>
+                    </pages>
+                </migration-adresses>
                 <fusion-des-communes>
                     <label>Fusion des communes</label>
                     <controller>fusion-des-communes</controller>

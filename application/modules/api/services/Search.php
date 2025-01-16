@@ -23,14 +23,16 @@ class Api_Service_Search
      * @param null|mixed   $preventionniste
      * @param int          $count                    Par défaut 10, max 1000
      * @param int          $page                     par défaut = 1
+     * @param null|mixed   $type
+     * @param null|mixed   $adresse
      *
      * @return array
      */
-    public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null, $count = 10, $page = 1)
+    public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $type = null, $adresse = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null, $count = 10, $page = 1)
     {
         $service_search = new Service_Search();
 
-        return $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, $lon, $lat, $parent, null, null, null, $commissions, $groupements_territoriaux, $preventionniste, $count, $page);
+        return $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $type, $adresse, $local_sommeil, $lon, $lat, $parent, null, null, null, $commissions, $groupements_territoriaux, $preventionniste, $count, $page);
     }
 
     /**

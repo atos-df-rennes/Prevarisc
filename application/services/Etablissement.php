@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__.'/EtablissementManager.php';
 class Service_Etablissement implements Service_Interface_Etablissement
 {
     public const STATUT_CHANGE = 1;
@@ -45,7 +46,6 @@ class Service_Etablissement implements Service_Interface_Etablissement
             $search = new Model_DbTable_Search();
 
             $DB_rubriques = new Model_DbTable_EtablissementInformationsRubrique();
-            $DB_adresse = new Model_DbTable_EtablissementAdresse();
             $DB_genre = new Model_DbTable_Genre();
             $DB_categorie = new Model_DbTable_Categorie();
             $DB_famille = new Model_DbTable_Famille();
@@ -57,6 +57,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             $DB_commission_type = new Model_DbTable_CommissionType();
             $DB_statut = new Model_DbTable_Statut();
             $DB_dossier = new Model_DbTable_Dossier();
+            $etablissementManager = new Service_EtablissementManager();
 
             // Récupération de l'établissement
             $general = $model_etablissement->find($id_etablissement)->current();
@@ -260,6 +261,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $informations['PERIODICITE_ETABLISSEMENTINFORMATIONS'] = end($etablissement_parents)['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
             }
 
+            $adresseAffichée = $etablissementManager->getEtablissementAdresse()->get($id_etablissement);
             $commission = @$DB_commission->find($informations->ID_COMMISSION)->current();
             $etablissement = [
                 'general' => $general->toArray(),
@@ -291,7 +293,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 'rubriques' => $DB_rubriques->fetchAll('ID_ETABLISSEMENTINFORMATIONS = '.$informations->ID_ETABLISSEMENTINFORMATIONS, 'ID_ETABLISSEMENTINFORMATIONSRUBRIQUE')->toArray(),
                 'etablissement_lies' => $etablissement_lies,
                 'preventionnistes' => $search->setItem('utilisateur')->setCriteria('etablissementinformations.ID_ETABLISSEMENT', $id_etablissement)->run()->getAdapter()->getItems(0, 50)->toArray(),
-                'adresses' => $DB_adresse->get($id_etablissement),
+                'adresses' => $adresseAffichée,
                 'presence_dus' => [] !== $contacts_dus,
             ];
 
@@ -405,14 +407,6 @@ class Service_Etablissement implements Service_Interface_Etablissement
         }
 
         @usort($dossiers_merged, function (array $a, array $b): int {
-            if ([] === $a) {
-                return 0;
-            }
-
-            if ([] === $b) {
-                return 0;
-            }
-
             $date_a = @new Zend_Date(null != $a['DATECOMM_DOSSIER'] ? $a['DATECOMM_DOSSIER'] : $a['DATEVISITE_DOSSIER'], Zend_Date::DATES);
             $date_b = @new Zend_Date(null != $b['DATECOMM_DOSSIER'] ? $b['DATECOMM_DOSSIER'] : $b['DATEVISITE_DOSSIER'], Zend_Date::DATES);
             if ($date_a == $date_b) {
@@ -489,6 +483,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * Récupération des dossiers d'un établissement.
      *
      * @param int $id_etablissement
+     *
+     * @psalm-return array{etudes:mixed, visites:mixed, autres:mixed}
      */
     public function getDossiers($id_etablissement): array
     {
@@ -606,6 +602,10 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * Récupération des descriptifs d'un établissement.
      *
      * @param int $id_etablissement
+     *
+     * @return ((array-key|mixed)[][][]|mixed)[]
+     *
+     * @psalm-return array{historique:mixed, descriptif:mixed, derogations:mixed, descriptifs_techniques:array<string|null, array<array-key, array{value:mixed, type:mixed, length:mixed, key:array-key}>>}
      */
     public function getDescriptifs($id_etablissement): array
     {
@@ -902,6 +902,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $DB_etablissements_lies = new Model_DbTable_EtablissementLie();
         $DB_preventionniste = new Model_DbTable_EtablissementInformationsPreventionniste();
         $DB_adresse = new Model_DbTable_EtablissementAdresse();
+        $DB_adresse_api = new Model_DbTable_EtablissementAdresseApi();
+        $etablissementManager = new Service_EtablissementManager();
 
         // On commence la transaction
         $db = Zend_Db_Table::getDefaultAdapter();
@@ -920,7 +922,12 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $information_a_la_date_donnee = $DB_informations->fetchRow("ID_ETABLISSEMENT = '".$id_etablissement."' AND DATE_ETABLISSEMENTINFORMATIONS = '".$date."'");
 
                 $DB_etablissements_lies->delete('ID_ETABLISSEMENT = '.$etablissement->ID_ETABLISSEMENT);
-                $DB_adresse->delete('ID_ETABLISSEMENT = '.$etablissement->ID_ETABLISSEMENT);
+
+                if (getenv('PREVARISC_API_ADRESSE_MODAL')) {
+                    $DB_adresse_api->delete('ID_ETABLISSEMENT = '.$etablissement->ID_ETABLISSEMENT);
+                } else {
+                    $DB_adresse->delete('ID_ETABLISSEMENT = '.$etablissement->ID_ETABLISSEMENT);
+                }
 
                 if (null != $information_a_la_date_donnee) {
                     $informations = $information_a_la_date_donnee;
@@ -1112,22 +1119,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
             // Sauvegarde des adresses en fonction du genre
             if (in_array($id_genre, [2, 4, 5, 6, 7, 8, 9, 10]) && array_key_exists('ADRESSES', $data) && count($data['ADRESSES']) > 0) {
-                foreach ($data['ADRESSES'] as $key => $adresse) {
-                    if (
-                        $key > 0
-                        && array_key_exists('ID_RUE', $adresse)
-                        && (int) $adresse['ID_RUE'] > 0
-                    ) {
-                        $DB_adresse->createRow([
-                            'NUMERO_ADRESSE' => $adresse['NUMERO_ADRESSE'],
-                            'COMPLEMENT_ADRESSE' => $adresse['COMPLEMENT_ADRESSE'],
-                            'LON_ETABLISSEMENTADRESSE' => empty($adresse['LON_ETABLISSEMENTADRESSE']) ? null : $adresse['LON_ETABLISSEMENTADRESSE'],
-                            'LAT_ETABLISSEMENTADRESSE' => empty($adresse['LAT_ETABLISSEMENTADRESSE']) ? null : $adresse['LAT_ETABLISSEMENTADRESSE'],
-                            'ID_ETABLISSEMENT' => $etablissement->ID_ETABLISSEMENT,
-                            'ID_RUE' => $adresse['ID_RUE'],
-                            'NUMINSEE_COMMUNE' => $adresse['NUMINSEE_COMMUNE'],
-                        ])->save();
-                    }
+                foreach ($data['ADRESSES'] as $adresse) {
+                    $etablissementManager->getEtablissementAdresse()->save($adresse, $etablissement->ID_ETABLISSEMENT);
                 }
             }
 
@@ -1226,8 +1219,12 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * @param int   $classe
      * @param int   $id_etablissement_pere
      * @param array $ids_etablissements_enfants
+     *
+     * @return array
+     *
+     * @psalm-return array{preventionnistes?:mixed, periodicite?:mixed, local_sommeil?:bool, commission?:mixed, "commission"?:empty}
      */
-    public function getDefaultValues($genre, $numinsee = null, $type = null, $categorie = null, $local_sommeil = null, $classe = null, $id_etablissement_pere = null, $ids_etablissements_enfants = null): array
+    public function getDefaultValues($genre, $numinsee = null, $type = null, $categorie = null, $local_sommeil = null, $classe = null, $id_etablissement_pere = null, $ids_etablissements_enfants = null)
     {
         $model_prev = new Model_DbTable_Preventionniste();
         $DB_periodicite = new Model_DbTable_Periodicite();

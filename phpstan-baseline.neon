@@ -1387,6 +1387,12 @@ parameters:
 			path: application/controllers/ProxyController.php
 
 		-
+			message: '#^Parameter \#3 \$value of function curl_setopt expects int, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: application/controllers/ProxyController.php
+
+		-
 			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
 			identifier: property.notFound
 			count: 1

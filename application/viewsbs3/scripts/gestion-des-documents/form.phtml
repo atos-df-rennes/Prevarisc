@@ -1,0 +1,38 @@
+<form method='post' id='formDocType' name='formDocType' enctype='multipart/form-data' action='/gestion-des-documents/add' target='hiddeniframe'>
+	<div class="form-group">
+        <dl class='dl-horizontal'>
+            <dt>Commission</dt>
+            <dd>
+                <?php
+                    $nbCommission = count($this->liste_commission);
+                    echo "
+                        <select class='form-control' name='commission' id='commission'>
+                        <option value='0' ".( ( !isset($commission['ID_COMMISSION']) || $commission['ID_COMMISSION'] == '')? "selected" : "")." >Documents visibles après verrouillage</option>
+                    ";
+                    foreach($this->liste_commission as $commission){
+                        if(isset($id_type) && $id_type != $commission['ID_COMMISSIONTYPE']){
+                            echo "</optgroup>";
+                        }
+                        if(!isset($id_type) || isset($id_type) && $id_type != $commission['ID_COMMISSIONTYPE']){
+                            echo '<optgroup label="'.$commission['LIBELLE_COMMISSIONTYPE'].'">';
+                            $id_type = $commission['ID_COMMISSIONTYPE'];
+                        }
+                        echo "<option value='".$commission['ID_COMMISSION']."'>".$commission['LIBELLE_COMMISSION']."</option>";
+                        $nbCommission--;
+                        if($nbCommission == 0){
+                            echo "</optgroup>";
+                        }
+                    }
+                    echo "</select>";
+                ?>
+            </dd>
+        </dl>
+    </div>
+
+	<dl class='dl-horizontal'>
+		<dt>Fichier à envoyer</dt>
+		<dd>
+            <input type='file' name='fichier' id='fichier' size='30'  style='filter :alpha(opacity=0);' />
+		</dd>
+	</dl>
+</form>

@@ -1,0 +1,19 @@
+<?php
+//Page utilisée uniquement pour l'auto complétion- Retourne infos en json
+$q = strtolower($_GET["q"]);
+if(!$q)
+	return;
+
+$items = array();
+foreach($this->selectArticle as $article)
+{
+	$id = $article['ID_ARTICLE'];
+	$article = $article['LIBELLE_ARTICLE'];		
+	array_push($items, array(
+		"id" => $id,
+		"infos" => $article
+	));
+}
+
+echo json_encode($items);
+?>

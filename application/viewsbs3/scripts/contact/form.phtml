@@ -1,0 +1,184 @@
+<!-- Formulaire d'ajout d'un contact -->
+<form id='formulaire_contact' action='post'>
+	<!-- Formulaire -->
+	<dl class='dl-horizontal'>
+		<?php if(!isset($this->droitsSYS) || $this->droitsSYS == 1) : ?>
+            <!-- Groupe -->
+            <?php if( $this->item == "user" ) : ?>
+                <div class="form-group">
+                    <dt>Groupe</dt>
+                    <dd>
+                        <div class="col-xs-12">
+                            <select class='form-control' name='ID_GROUPE'>
+                                <?php foreach( $this->groupes as $item ) : ?>
+                                    <option value='<?php echo $item["ID_GROUPE"] ?>' <?php if($item["ID_GROUPE"] == $this->user["ID_GROUPE"]) echo "selected" ?> ><?php echo $item["LIBELLE_GROUPE"] ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </dd>
+                </div>
+            <?php endif ?>
+
+            <!-- Fonction du contact -->
+            <?php if( $this->item != "groupement_coord" ) : ?>
+                <div class="form-group" <?php if($this->item == "commune") echo "style='display: none'"; ?>>
+                    <dt>Fonction</dt>
+                    <dd>
+                        <div class="col-xs-12">
+                            <select class="form-control" name='ID_FONCTION'>
+                                <?php foreach( $this->contact_fonction_list as $item ) : ?>
+                                    <?php
+                                        if(
+                                            $item["ID_FONCTION"] != 2
+                                            || $this->user_info != null
+                                        ) {
+                                    ?>
+                                        <option value='<?php echo $item["ID_FONCTION"] ?>' <?php if(($item["ID_FONCTION"] == $this->user_info["ID_FONCTION"]) || ($this->item == "commune" && $item["ID_FONCTION"] == 2)) echo "selected" ?> ><?php echo $item["LIBELLE_FONCTION"] ?></option>
+                                    <?php } ?>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </dd>
+                </div>
+            <?php endif ?>
+
+            <!-- Société du contact-->
+            <?php if( $this->item != "user" && $this->item != "commune") : ?>
+                <div class="form-group">
+                    <dt>Société</dt>
+                    <dd>
+                        <div class="col-xs-12">
+                            <input class="form-control" type='text' value="<?php if(isset($this->user_info["SOCIETE_UTILISATEURINFORMATIONS"])) echo $this->user_info["SOCIETE_UTILISATEURINFORMATIONS"] ?>" name='SOCIETE_UTILISATEURINFORMATIONS' />
+                        </div>
+                    </dd>
+                </div>
+            <?php endif ?>
+		<?php endif ?>
+
+		<!-- Nom et prénom du contact-->
+        <dt>Nom</dt>
+        <dd>
+            <div class="form-group col-md-2">
+                <select class="form-control" name='ID_UTILISATEURCIVILITE'>
+                    <option value='null' >--</option>
+                    <?php foreach( $this->civilite_list as $item ) : ?>
+                        <option value="<?php echo $item["ID_UTILISATEURCIVILITE"] ?>" <?php if($item["ID_UTILISATEURCIVILITE"] == $this->user_info["ID_UTILISATEURCIVILITE"]) echo "selected" ?> ><?php echo $item["LIBELLE_UTILISATEURCIVILITE"] ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <div class="form-group col-md-5">
+                <input class="form-control" type='text' maxlength="50" value="<?php if(isset($this->user_info["NOM_UTILISATEURINFORMATIONS"])) echo $this->user_info["NOM_UTILISATEURINFORMATIONS"] ?>" name='NOM_UTILISATEURINFORMATIONS' placeholder='Nom' />
+            </div>
+            <div class="form-group col-md-5">
+                <input class="form-control" type='text' maxlength="50" value="<?php if(isset($this->user_info["PRENOM_UTILISATEURINFORMATIONS"])) echo $this->user_info["PRENOM_UTILISATEURINFORMATIONS"] ?>" name='PRENOM_UTILISATEURINFORMATIONS' placeholder='Prénom' />
+            </div>
+        </dd>
+
+		<!-- Téléphone fixe du contact -->
+		<div class="form-group">
+            <dt>Téléphone</dt>
+            <dd>
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class='glyphicon glyphicon-earphone'></i></span>
+                        <input class="form-control" type='text' maxlength="20" value="<?php if(isset($this->user_info["TELFIXE_UTILISATEURINFORMATIONS"])) echo $this->user_info["TELFIXE_UTILISATEURINFORMATIONS"] ?>" name='TELFIXE_UTILISATEURINFORMATIONS'/>
+                    </div>
+                </div>
+            </dd>
+        </div>
+
+        <div class="form-group">
+            <dt>Fax</dt>
+            <dd>
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class='glyphicon glyphicon-print' ></i></span>
+                        <input class="form-control" type='text' maxlength="20" value="<?php if(isset($this->user_info["TELFAX_UTILISATEURINFORMATIONS"])) echo $this->user_info["TELFAX_UTILISATEURINFORMATIONS"] ?>" name='TELFAX_UTILISATEURINFORMATIONS' />
+                    </div>
+                </div>
+            </dd>
+        </div>
+
+        <div class="form-group">
+            <dt>Portable</dt>
+            <dd>
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class='glyphicon glyphicon-phone' ></i></span>
+                        <input class="form-control" type='text' maxlength="20"  value="<?php if(isset($this->user_info["TELPORTABLE_UTILISATEURINFORMATIONS"])) echo $this->user_info["TELPORTABLE_UTILISATEURINFORMATIONS"] ?>" name='TELPORTABLE_UTILISATEURINFORMATIONS' />
+                    </div>
+                </div>
+            </dd>
+        </div>
+
+		<!-- Mail du contact-->
+		<div class="form-group">
+            <dt>Courriel</dt>
+            <dd>
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class='glyphicon glyphicon-envelope' ></i></span>
+                        <input class="form-control" type='text' maxlength="50" value="<?php if(isset($this->user_info["MAIL_UTILISATEURINFORMATIONS"])) echo $this->user_info["MAIL_UTILISATEURINFORMATIONS"] ?>" name='MAIL_UTILISATEURINFORMATIONS' />
+                    </div>
+                </div>
+            </dd>
+        </div>
+
+		<!-- Site web du contact-->
+		<div class="form-group">
+            <dt>Site web</dt>
+            <dd>
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class='glyphicon glyphicon-link' ></i></span>
+                        <input class="form-control" type='text' maxlength="100" value="<?php if(isset($this->user_info["WEB_UTILISATEURINFORMATIONS"])) echo $this->user_info["WEB_UTILISATEURINFORMATIONS"] ?>" name='WEB_UTILISATEURINFORMATIONS' />
+                    </div>
+                </div>
+            </dd>
+        </div>
+
+		<!-- Localisation du contact -->
+		<div class="form-group">
+            <dt>Adresse</dt>
+            <dd class="form-horizontal">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label for="numero" class="col-md-1 control-label">Numéro</label>
+                        <div class="col-md-11">
+                            <input id="numero" class="form-control" type='text' maxlength="10" value="<?php if(isset($this->user_info["NUMEROADRESSE_UTILISATEURINFORMATIONS"])) echo $this->user_info["NUMEROADRESSE_UTILISATEURINFORMATIONS"] ?>" name='NUMEROADRESSE_UTILISATEURINFORMATIONS'/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="rue" class="col-md-1 control-label">Rue</label>
+                        <div class="col-md-11">
+                            <input id="rue" class="form-control" type='text' maxlength="255" value="<?php if(isset($this->user_info["RUEADRESSE_UTILISATEURINFORMATIONS"])) echo $this->user_info["RUEADRESSE_UTILISATEURINFORMATIONS"] ?>" name='RUEADRESSE_UTILISATEURINFORMATIONS'/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cp" class="col-md-1 control-label">Code postal</label>
+                        <div class="col-md-11">
+                            <input id="cp" class="form-control" type='text' maxlength="5" value="<?php if(isset($this->user_info["CPADRESSE_UTILISATEURINFORMATIONS"])) echo $this->user_info["CPADRESSE_UTILISATEURINFORMATIONS"] ?>" name='CPADRESSE_UTILISATEURINFORMATIONS'/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ville" class="col-md-1 control-label">Ville</label>
+                        <div class="col-md-11">
+                            <input id="ville" class="form-control" type='text' maxlength="255" value="<?php if(isset($this->user_info["VILLEADRESSE_UTILISATEURINFORMATIONS"])) echo $this->user_info["VILLEADRESSE_UTILISATEURINFORMATIONS"] ?>" name='VILLEADRESSE_UTILISATEURINFORMATIONS'/>
+                        </div>
+                    </div>
+                </div>
+            </dd>
+        </div>
+
+		<!-- Observation -->
+        <dt>Observation</dt>
+        <dd>
+            <div class="col-xs-12">
+                <textarea class="form-control" name='OBS_UTILISATEURINFORMATIONS' style="width: 100%"><?php if(isset($this->user_info["OBS_UTILISATEURINFORMATIONS"])) echo $this->user_info["OBS_UTILISATEURINFORMATIONS"] ?></textarea>
+            </div>
+        </dd>
+	</dl>
+
+	<input type='hidden' name='item' value='<?php echo $this->item ?>' />
+	<input type='hidden' name='id' value='<?php echo $this->id ?>' />
+</form>

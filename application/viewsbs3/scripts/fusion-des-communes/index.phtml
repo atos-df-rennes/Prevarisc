@@ -1,0 +1,17 @@
+<h2>Fusion des communes</h2>
+
+<?php if ($this->processComplete): ?>
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        Les communes ont été fusionnées
+    </div>
+<?php endif ?>
+
+<?php if ($this->hasErrors): ?>
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        La commande a retourné des erreurs, veuillez vérifier les logs d'erreur
+    </div>
+<?php endif ?>
+
+<?= $this->form ?>

@@ -117,7 +117,7 @@ class SessionController extends Zend_Controller_Action
             }
         } catch (Exception $exception) {
             $service_user->logFailedLogin($user);
-            $this->_helper->flashMessenger(['context' => 'danger', 'title' => "Erreur d'authentification", 'message' => $exception->getMessage()]);
+            $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => "Erreur d'authentification", 'message' => $exception->getMessage()]);
         }
     }
 

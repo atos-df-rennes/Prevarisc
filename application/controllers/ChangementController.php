@@ -22,7 +22,7 @@ class ChangementController extends Zend_Controller_Action
                 $this->_helper->redirector('index', null, null, ['id' => $request->getParam('id')]);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger([
-                    'context' => 'error',
+                    'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                     'title' => '',
                     'message' => 'Les messages d\'alerte n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')',
                 ]);

@@ -151,7 +151,7 @@ class EtablissementController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'établissement a bien été mis à jour.'.$options]);
                 $this->_helper->redirector('index', null, null, ['id' => $request->id]);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
     }
@@ -220,7 +220,7 @@ class EtablissementController extends Zend_Controller_Action
                     $this->_helper->redirector('index', null, null, ['id' => $id_etablissement]);
                 }
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
 
@@ -249,8 +249,13 @@ class EtablissementController extends Zend_Controller_Action
     public function descriptifPersonnaliseAction(): void
     {
         $viewHeadLink = $this->view;
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        } else {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/tableauInputParent.css', 'all');
+        }
 
         $service_etablissement = new Service_Etablissement();
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
@@ -282,7 +287,7 @@ class EtablissementController extends Zend_Controller_Action
                     $this->serviceEtablissement->saveDescriptifs($request->getParam('id'), $post['historique'], $post['descriptif'], $post['derogations'], $post['descriptifs_techniques']);
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
                 } catch (Exception $e) {
-                    $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                    $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
                 }
 
                 $this->_helper->redirector('descriptif', null, null, ['id' => $request->getParam('id')]);
@@ -292,14 +297,23 @@ class EtablissementController extends Zend_Controller_Action
 
     public function editDescriptifPersonnaliseAction(): void
     {
-        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        } else {
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/formulaire.css', 'all');
+        }
 
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
-        $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        } else {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today-bs3.js', 'text/javascript');
+        }
 
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
 
@@ -329,7 +343,7 @@ class EtablissementController extends Zend_Controller_Action
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('descriptif', null, null, ['id' => $idEtablissement]);
@@ -359,7 +373,7 @@ class EtablissementController extends Zend_Controller_Action
                 $this->serviceEtablissement->saveTextesApplicables($id, $post['textes_applicables']);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les textes applicables ont bien été mis à jour.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les textes applicables n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les textes applicables n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('textes-applicables', null, null, ['id' => $id]);
@@ -426,7 +440,7 @@ class EtablissementController extends Zend_Controller_Action
                 $this->serviceEtablissement->addPJ($id, $_FILES['file'], $name, $description, $mise_en_avant);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'La pièce jointe a bien été ajoutée.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'La pièce jointe n\'a été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Mise à jour annulée', 'message' => 'La pièce jointe n\'a été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('edit-pieces-jointes', null, null, ['id' => $id]);
@@ -445,7 +459,7 @@ class EtablissementController extends Zend_Controller_Action
                 $this->serviceEtablissement->deletePJ($id, $this->getRequest()->getParam('id_pj'));
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'La pièce jointe a bien été supprimée.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Suppression annulée', 'message' => 'La pièce jointe n\'a été supprimée. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Suppression annulée', 'message' => 'La pièce jointe n\'a été supprimée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('edit-pieces-jointes', null, null, ['id' => $id]);
@@ -489,7 +503,7 @@ class EtablissementController extends Zend_Controller_Action
                 $this->serviceEtablissement->addContact($id, $post['firstname'], $post['lastname'], $post['id_fonction'], $post['societe'], $post['fixe'], $post['mobile'], $post['fax'], $post['mail'], $post['adresse'], $post['web']);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Le contact a bien été ajouté.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Le contact n\'a été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Mise à jour annulée', 'message' => 'Le contact n\'a été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('edit-contacts', null, null, ['id' => $id]);
@@ -507,7 +521,7 @@ class EtablissementController extends Zend_Controller_Action
                 $this->serviceEtablissement->addContactExistant($id, $this->getRequest()->getParam('id_contact'));
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Le contact a bien été ajouté.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Le contact n\'a été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Mise à jour annulée', 'message' => 'Le contact n\'a été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('edit-contacts', null, null, ['id' => $id]);
@@ -526,7 +540,7 @@ class EtablissementController extends Zend_Controller_Action
                 $this->serviceEtablissement->deleteContact($id, $this->getRequest()->getParam('id_contact'));
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'Le contact a bien été supprimé de la fiche établissement.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Suppression annulée', 'message' => 'Le contact n\'a été supprimé. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Suppression annulée', 'message' => 'Le contact n\'a été supprimé. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('edit-contacts', null, null, ['id' => $id]);
@@ -590,7 +604,7 @@ class EtablissementController extends Zend_Controller_Action
             $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'établissement a bien été supprimé.']);
             $this->redirect('/search/etablissement?label=&page=1');
         } catch (Exception $exception) {
-            $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été supprimé. Veuillez rééssayez. ('.$exception->getMessage().')']);
+            $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été supprimé. Veuillez rééssayez. ('.$exception->getMessage().')']);
         }
     }
 
@@ -608,8 +622,13 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('etablissement');
 
         $viewHeadLink = $this->view;
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        } else {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/tableauInputParent.css', 'all');
+        }
 
         $service_etablissement = new Service_Etablissement();
         $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
@@ -627,14 +646,23 @@ class EtablissementController extends Zend_Controller_Action
 
     public function effectifsDegagementsEtablissementEditAction(): void
     {
-        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        } else {
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/formulaire.css', 'all');
+        }
 
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
-        $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        } else {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today-bs3.js', 'text/javascript');
+        }
 
         $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
         $idEtablissement = $this->getRequest()->getParam('id');
@@ -664,7 +692,7 @@ class EtablissementController extends Zend_Controller_Action
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les effectifs et dégagements ont bien été mis à jour.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('effectifs-degagements-etablissement', null, null, ['id' => $idEtablissement]);

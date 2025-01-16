@@ -1,0 +1,18 @@
+<?php switch ($this->champ['ID_TYPECHAMP']) {
+    case 1:
+    case 3:
+    case 4: ?>
+        <p class="form-control-static"><?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?></p>
+
+        <?php break;
+    case 2: ?>
+        <p class="form-control-static"><?= nl2br(htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES)) ?></p>
+
+        <?php break;
+    case 7: ?>
+        <p class="form-control-static"><?= htmlspecialchars(Service_Utils_Date::formatDateWithDayName($this->champ['VALEUR']), ENT_QUOTES) ?></p>
+
+        <?php break;
+    default:
+        break;
+} ?>

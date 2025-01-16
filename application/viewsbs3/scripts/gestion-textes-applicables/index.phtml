@@ -1,0 +1,139 @@
+<?php
+echo "
+    <h3 class='page-header'>Gestion des textes applicables</h3>
+	<button id='createTexteAppl' class='btn btn-primary'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>&nbsp;Ajouter un texte applicable</button><br/><br/>
+";
+
+$idTypeMarq = "";
+$marqueur = 1;
+
+foreach($this->listeTextesAppl as $val => $ue){
+	$idType = $ue['ID_TYPETEXTEAPPL'];
+	if($idTypeMarq != $idType){
+		//Pour l'affichage par catégorie
+		if($marqueur != 1){
+			echo "</ul>";
+		}
+		echo "
+			<div class='row'>
+			<div class='col-xs-12' style='font-weight:bold;font-size:25px;' >".$ue['LIBELLE_TYPETEXTEAPPL']."</div>
+			</div>
+		";
+		$idTypeMarq = $idType;
+		echo "<ul class='sortTexteAppl list-unstyled' id='liste_".$ue['ID_TYPETEXTEAPPL']."'>";
+		$marqueur = 0;
+	}
+	echo "
+		<li class='row' style='margin-top:15px;margin-bottom:10px;' id='".$ue['ID_TEXTESAPPL']."'>
+			<div class='col-md-10'>".nl2br($ue['LIBELLE_TEXTESAPPL'])."</div>
+			<div class='col-md-1'><button class='editTexteAppl btn btn-default' id='".$ue['ID_TEXTESAPPL']."' ><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>&nbsp;Editer</button></div>
+			<div class='col-md-1'>".( ($ue['VISIBLE_TEXTESAPPL'] == 1 )? "<img src='/images/visible.gif' alt='visible' />" : "<img src='/images/nonvisible.gif' alt='non visible' />")."</div>
+		</li>
+	";
+}
+
+?>
+<script type='text/javascript' >
+$(document).ready(function() {
+	$(".sortTexteAppl").sortable({
+		update: function(event, ui) {
+			var id = $(this).attr('id');
+			var listeTexteApplUpdate = new Array();
+			var listeOrder = "";
+			$("#"+id+" > li").each(function(){
+				//on parcour les li pour récolter les changements et mettre à jour dans la base
+				//on recupere id du li en cours
+				var liId = $(this).attr('id');
+				listeOrder += liId+",";
+				listeTexteApplUpdate.push(liId);
+			});
+			$.ajax({
+				url: "/gestion-textes-applicables/updateorder",
+				data: "tableUpdate="+listeTexteApplUpdate,
+				type:"POST",
+				beforeSend: function(){
+
+				},
+				success: function(affichageResultat){
+					return false;
+				},
+				error: function()	{
+					return false;
+				}
+			});
+		}
+	});
+
+	var dialogEditTexteAppl = $('<div style="display:none"></div>').appendTo('body');
+
+	$(".editTexteAppl").click(function(){
+		//On ouvre la boite de dialogue
+		var id = $(this).attr('id');
+		$.ajax({
+			type: "POST",
+			url: "/gestion-textes-applicables/formtexteappl",
+			data: "&id="+id,
+			success: function(msg){
+				dialogEditTexteAppl.html(msg);
+				dialogEditTexteAppl.dialog("open");
+			}
+		});
+	});
+
+	$("#createTexteAppl").click(function(){
+		$.ajax({
+			type: "POST",
+			url: "/gestion-textes-applicables/formtexteappl",
+			success: function(msg){
+				dialogEditTexteAppl.html(msg);
+				dialogEditTexteAppl.dialog("open");
+			}
+		});
+	});
+
+	dialogEditTexteAppl.dialog({
+		title: "Modification texte applicable",
+		modal: true,
+		autoOpen: false,
+		width: 'auto',
+		height: 'auto',
+		buttons: [
+            {
+                text: 'Sauvegarder',
+                class: 'btn btn-success',
+                click: function() {
+                    $.ajax({
+                        type: "POST",
+                        url: "/gestion-textes-applicables/save",
+                        data: $("#formTexteAppl").serialize(),
+                        success: function(msg){
+                            dialogEditTexteAppl.html("");
+                            dialogEditTexteAppl.dialog("close");
+                            if($("#gestionTextesAppl").length){
+                                $("#gestionTextesAppl").click();
+                            }else{
+                                window.location='/gestion-textes-applicables';
+                            }
+
+                        }
+                    });
+
+                    return false;
+                }
+            },
+            {
+                text: 'Annuler',
+                class: 'btn btn-default',
+                click: function() {
+                    dialogEditTexteAppl.dialog("close");
+                }
+            }
+        ],
+		close: function(event, ui){
+
+		}
+
+	});
+
+});
+</script>

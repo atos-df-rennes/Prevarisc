@@ -1,0 +1,109 @@
+<?php
+	echo "<br/><br/>";
+
+	echo "
+		<form id='FormPrescriptionarticle_".$this->idTexte."' >
+			<input type='hidden' name='type' value='article' />
+			<ul class='prescriptionarticle_".$this->idTexte." list-unstyled classement'>
+	";
+	foreach($this->listePrescriptionArticle as $val => $ue){
+		echo "
+			<li id='article_".$ue['ID_PRESCRIPTIONARTICLE']."'>
+				<span style='font-style:italic;'>
+					<input type='hidden' name='article[]' value='".$ue['ID_PRESCRIPTIONARTICLE']."' />
+					".$ue['LIBELLE_PRESCRIPTIONARTICLE']."
+				</span>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class='showDetailArticle btn btn-default' id='showDetailArticle_".$ue['ID_PRESCRIPTIONARTICLE']."' >Afficher les détails</button>
+				<button class='hideDetailArticle btn btn-default' id='hideDetailArticle_".$ue['ID_PRESCRIPTIONARTICLE']."' style='display:none;'>Masquer les détails</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class='editArticle btn btn-default' id='".$ue['ID_PRESCRIPTIONARTICLE']."' ><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>&nbsp;Modifier</button>
+				<br/>
+				<div style='margin-left:30px;padding-left:10px;border-left:1px solid black;' id='articleDetail_".$ue['ID_PRESCRIPTIONARTICLE']."'></div>
+				<br/>
+			</li>
+		";
+	}
+	echo "</ul>";
+	echo "
+		</ul>
+		</form>
+		<form id='FormPrescriptiontypeTexte_".$this->idTexte."' >
+			<input type='hidden' name='type' value='prescriptionType' />
+			<ul class='prescriptiontypeTexte_".$this->idTexte." list-unstyled classement'>
+	";
+	$nbPrescType = count($this->prescriptionType);
+	for($i=0; $i < $nbPrescType; $i++)
+	{
+		if(isset($this->prescriptionType[$i][0]['ID_PRESCRIPTIONTYPE']))
+		{
+			echo "
+				<li id='prescriptiontype_".$this->prescriptionType[$i][0]['ID_PRESCRIPTIONTYPE']."' style='border-bottom:1px solid grey;'>
+					<table class='row' >
+			";
+
+			$nbAssoc = count($this->prescriptionType[$i]);
+			$cpt = true;
+			for($j=0; $j < $nbAssoc; $j++)
+			{
+				$article = $this->prescriptionType[$i][$j]['LIBELLE_ARTICLE'];
+				$texte = $this->prescriptionType[$i][$j]['LIBELLE_TEXTE'];
+				echo "
+					<tr>
+						<td class='col-md-3' style='vertical-align:top;'>".$texte."</td>
+						<td class='col-md-3' style='vertical-align:top;'>".$article."</td>
+				";
+				if($cpt)
+				{
+					echo "
+						<td rowspan='".$nbAssoc."' class='col-md-5'>
+							<input type='hidden' name='prescType[]' value='".$this->prescriptionType[$i][0]['ID_PRESCRIPTIONTYPE']."' />
+							".nl2br($this->prescriptionType[$i][0]['PRESCRIPTIONTYPE_LIBELLE'])."
+						</td>";
+					echo "<td rowspan='".$nbAssoc."' class='col-md-1' style='vertical-align:top;'><a href='#myModal' role='button' class='editPrescriptionType btn btn-default' data-toggle='modal'>Editer</a></td>";
+					$cpt = false;
+				}
+				echo "
+					</tr>
+				";
+			}
+			echo "
+					</table>
+				</li>
+			";
+		}
+	}
+	echo "
+			</ul>
+		</form>
+	";
+	echo "<br/>";
+	echo "
+		<button class='addArticleTexte btn btn-default' >Ajouter un article</button>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<a href='#myModal' role='button' class='prescription btn btn-default' id='addPrescriptionTexte_".$this->idTexte."' data-toggle='modal'>Ajouter une prescription</a>
+	";
+
+?>
+
+<script type="text/javascript">
+
+	$(".classement").sortable({
+		update: function(event, ui) {
+			var formId = $(this).parent();
+			var data = formId.serialize();
+			$.ajax({
+				type: "POST",
+				url: "/gestion-prescriptions/move",
+				data: data,
+				beforeSend: function(){
+					$(this).disableSelection();
+				},
+				success: function(msg){
+					$(this).enableSelection();
+				}
+			});
+		}
+	});
+
+</script>

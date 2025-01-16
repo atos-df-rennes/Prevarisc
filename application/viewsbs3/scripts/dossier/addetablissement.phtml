@@ -1,0 +1,12 @@
+<div class='grid_14 alpha'>
+	<a href="/etablissement/index/id/<?php echo $this->infosEtab['ID_ETABLISSEMENT'] ?>"><?php echo $this->libelleEtab ?></a>
+	<input type='hidden' name='idEtablissementDossier' value="<?php echo $this->infosEtab['ID_ETABLISSEMENTDOSSIER'] ?>" />
+	&nbsp;&nbsp;
+	<span>
+		<button class='deleteChoix' >Supprimer l'etablissement</button>
+	</span>
+	<span style='display:none;' >
+		<button class='confirmDelete' >Supprimer l'etablissement</button>
+		<button class='cancelDelete' >Annuler</button>
+	</span>
+</div>

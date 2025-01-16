@@ -298,7 +298,7 @@ class PieceJointeController extends Zend_Controller_Action
             echo "<script type='text/javascript'>window.top.window.callback('".$nouvellePJ->ID_PIECEJOINTE."', '".$extension."');</script>";
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de l\'ajout de la pièce jointe',
                 'message' => $exception->getMessage(),
             ]);
@@ -388,7 +388,7 @@ class PieceJointeController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la suppression de la pièce jointe',
                 'message' => $exception->getMessage(),
             ]);

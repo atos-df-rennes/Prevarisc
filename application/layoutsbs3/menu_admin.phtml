@@ -1,0 +1,80 @@
+<?php $this->placeholder('lateral_navigation')->captureStart(); // Capture du 'lateral_navigation' ?>
+<!-- @fixme: Revoir le markup -->
+<ul class="nav nav-tabs nav-stacked menu_dashboard">
+    <li class="nav-header">Général</li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'admin') echo "class='active'" ?> >
+        <a href='/admin' ><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Informations</a>
+    </li>
+
+    <li class="nav-header">Gestion des entités</li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'retablir') echo "class='active'" ?> >
+        <a href='/retablir' ><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Gestion des éléments supprimés</a>
+    </li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'users') echo "class='active'" ?> >
+        <a href='/users/index' ><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Gestion des utilisateurs</a>
+    </li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-des-communes') echo "class='active'" ?> >
+        <a href='/gestion-des-communes' ><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Gestion des communes</a>
+    </li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() === 'fusion-des-communes') echo "class='active'" ?> >
+        <a href='/fusion-des-communes' ><span class="glyphicon glyphicon-random" aria-hidden="true"></span> Fusion des communes</a>
+    </li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'couches-cartographiques') echo "class='active'" ?> >
+        <a href='/couches-cartographiques/list' ><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Gestion des couches cartographiques</a>
+    </li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-des-commissions') echo "class='active'" ?> >
+        <a href='/gestion-des-commissions' ><span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> Gestion des commissions</a>
+    </li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-des-documents') echo "class='active'" ?> >
+        <a href='/gestion-des-documents' ><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Gestion des documents</a>
+    </li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-prescriptions') echo "class='active'" ?> >
+        <a href='/gestion-prescriptions' ><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> Gestion des prescriptions</a>
+    </li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-textes-applicables') echo "class='active'" ?> >
+        <a href='/gestion-textes-applicables' ><span class="glyphicon glyphicon-align-center" aria-hidden="true"></span> Gestion des textes applicables</a>
+    </li>
+
+    <li class="nav-header">Paramétrage du logiciel</li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'tableau-des-periodicites') echo "class='active'" ?> >
+        <a href='/tableau-des-periodicites' ><span class="glyphicon glyphicon-th" aria-hidden="true"></span> Tableau des périodicités</a>
+    </li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'groupement') echo "class='active'" ?> >
+        <a href='/groupement' ><span class="glyphicon glyphicon-tags" aria-hidden="true"></span> Groupements de communes</a>
+    </li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'changement') echo "class='active'" ?> >
+        <a href='/changement' ><span class="glyphicon glyphicon-bell" aria-hidden="true"></span> Messages des alertes</a>
+    </li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'formulaire') echo "class='active'" ?> >
+        <a href='/formulaire' ><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Formulaires</a>
+    </li>
+</ul>
+
+<?php $this->placeholder('lateral_navigation')->captureEnd(); ?>
+<?php $this->placeholder('before_content')->captureStart() // Capture du 'before_content' ?>
+
+<h1 class='page-header'>Administration</h1>
+
+<div class='row'>
+   <div class='col-xs-12' >
+        <?php $this->placeholder('before_content')->captureEnd() ?>
+        <?php $this->placeholder('after_content')->captureStart() // Capture du 'after_content' ?>
+   </div>
+</div>
+
+<?php $this->placeholder('after_content')->captureEnd() ?>
+<?php echo $this->render('dashboard.phtml') // Rendu du layout par défaut avec les placeholders ?>

@@ -1,0 +1,40 @@
+<?php foreach ($this->listeDossierParType as $type => $dossiers): ?>
+    <div class="col-md-4">
+        <ul id='avis-derogations-leves' class='list-unstyled'>
+            <?= $type ?>
+            <?php if ([] === $dossiers): ?>
+                : <strong>Aucun dossier de ce type disponible</strong>
+            <?php endif ?>
+
+            <?=
+                $this->partial(
+                    'dossier/results/avisderogation/dossier.phtml',
+                    [
+                        'DOSSIERS_ETAB' => $dossiers,
+                        'ID_DOSSIER_LIE' => $this->ID_DOSSIER_LIE ?? null
+                    ]
+                );
+            ?>
+
+            <?php if (count($this->listeDossierParTypeN[$type]) > 0): ?>
+                <div id="<?= 'dossTypeN'.$type ?>">
+                    <?=
+                        $this->partial(
+                            'dossier/results/avisderogation/dossier.phtml',
+                            [
+                                'DOSSIERS_ETAB' => $this->listeDossierParTypeN[$type],
+                                'ID_DOSSIER_LIE' => $this->ID_DOSSIER_LIE ?? null
+                            ]
+                        );
+                    ?>
+                </div>
+            <?php endif ?>
+        </ul>
+
+        <?php if (count($this->listeDossierParTypeN[$type]) > 0): ?>
+            <button class='btn btn-default buttonOpenClose' type='button' type-dossier="<?= 'dossTypeN'.$type ?>">
+                Voir plus
+            </button>
+        <?php endif ?>
+    </div>
+<?php endforeach ?>

@@ -1,0 +1,173 @@
+<div id="bloc__connexion-platau" class="mb-4"></div>
+
+<div id="home" class="dashboard">
+    <?php foreach($this->blocs as $id => $bloc): ?>
+        <?php echo $this->partial('index/partials/'.$bloc['type'].'_bloc.phtml', array_merge($bloc, array('id' => $id))) ?>
+    <?php endforeach ?>
+    <div class="grid-gutter"></div>
+
+</div>
+
+<div id="reponse-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+<br>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Gestion des boites modales
+        $("a[data-toggle='modal']").click(function() {
+            var target = $(this).attr("data-target");
+            var url = $(this).attr("href");
+            $(target).load(url);
+        });
+
+        $container = $('.dashboard').packery({
+            itemSelector: '.panel',
+            gutter: '.grid-gutter',
+            // disable initial layout
+            isInitLayout: false
+        });
+
+        var pckry = $container.data('packery');
+
+        // ----- initial sort ----- //
+        var sortOrder = []; // global variable for saving order, used later
+        var storedSortOrder = <?php echo json_encode($this->blocsOrder) ?>;
+        if ( storedSortOrder ) {
+            // create a hash of items by their tabindex
+            var itemsByTabIndex = {};
+            var tabIndex;
+            for (var i=0, len = pckry.items.length; i < len; i++ ) {
+                var item = pckry.items[i];
+                tabIndex = $( item.element ).attr('id');
+                itemsByTabIndex[tabIndex] = item;
+            }
+            // overwrite packery item order
+            i = 0; len = storedSortOrder.length;
+            var j = 0;
+            for (; i < len; i++) {
+                tabIndex = storedSortOrder[i];
+                if (itemsByTabIndex[tabIndex] !== undefined) {
+                   pckry.items[j] = itemsByTabIndex[tabIndex];
+                   j++;
+                }
+            }
+        }
+
+        // ----- packery setup ----- //
+        // optim de perf : on évite au navigateur de dessiner les blocs
+        // avant qu'ils aient pris leur place finale
+        $('.panel').show();
+
+        // trigger initial layout
+        $container.packery();
+
+        var $itemElems = $($container.packery('getItemElements') );
+        $itemElems.draggable({
+            handle: ".panel-heading",
+            containment: "parent"
+        });
+        $container.packery( 'bindUIDraggableEvents', $itemElems );
+
+        var saveTimeout = null;
+        var saveTimeoutMilliseconds = 1000;
+
+        function orderItems() {
+            // First cancel previous timeouts
+            clearTimeout(saveTimeout);
+
+            var itemElems = pckry.getItemElements();
+            // reset / empty oder array
+            sortOrder.length = 0;
+            for (var i=0; i< itemElems.length; i++) {
+                sortOrder[i] = itemElems[i].getAttribute("id");
+            }
+
+            // Init a new timemout
+            if ($('.panel.loading').length == 0) {
+                saveTimeout = setTimeout(function() {
+                    $.post("/api/1.0/user/preferences", {
+                        id: <?php echo $this->user['ID_UTILISATEUR'] ?>,
+                        preferences: {
+                            'DASHBOARD_BLOCS': sortOrder
+                        }
+                    });
+                }, saveTimeoutMilliseconds);
+            }
+        }
+
+        $container.packery( 'on', 'layoutComplete', orderItems );
+
+        $('#reinitBlocOrder').click(function() {
+            $.post("/api/1.0/user/preferences", {
+                id: <?php echo $this->user['ID_UTILISATEUR'] ?>,
+                preferences: {
+                    'DASHBOARD_BLOCS': null
+                }
+            }, function() {
+                window.location.reload();
+            });
+        });
+
+        $(".panel-heading .glyphicon").click(function() {
+            var $self = $(this);
+            var $panel = $self.parents('.panel');
+            $panel.toggleClass('folded');
+            if ($self.hasClass('glyphicon-chevron-right')) {
+                $self.removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');
+                if ($panel.hasClass('empty') && !$panel.hasClass('loading')) {
+                    $panel.find('.panel-body img').show();
+                    loadBloc($panel);
+                } else {
+                    $panel.find('.panel-body').show();
+                    $container.packery('fit', $panel.get(0));
+                }
+            } else {
+                $self.removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
+                $panel.find('.panel-body').hide();
+                $container.packery('fit', $panel.get(0));
+            }
+        });
+
+        // Vérification de la connexion à Plat'AU
+        <?php if (!filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN)): ?>
+            $.ajax({
+                type: 'GET',
+                url: '/index/platau-healthcheck',
+                beforeSend: function() {
+                    $("#bloc__connexion-platau").html("Vérification de la connexion à Plat'AU <img src='/images/load.gif' />");
+                },
+                success: function(result) {
+                    const res = JSON.parse(result)
+
+                    if (res.healthcheckOk) {
+                        $("#bloc__connexion-platau").html(`<div class="alert alert-info">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>La connexion à Plat'AU a fonctionné.</strong>
+                        </div>`)
+                    } else {
+                        if (res.errorOrigin === 'prevarisc') {
+                            $("#bloc__connexion-platau").html(`<div class="alert alert-block alert-danger">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <h4>La connexion à Plat'AU depuis Prevarisc a échoué.</h4>
+                                Veuillez contacter votre service informatique.
+                            </div>`)
+                        } else if (res.errorOrigin === 'PlatAU') {
+                            $("#bloc__connexion-platau").html(`<div class="alert alert-block alert-danger">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <h4>Plat'AU est en erreur.</h4>
+                                Veuillez réessayer ultérieurement.
+                            </div>`)
+                        }
+                    }
+                },
+                error: function() {
+                    $("#bloc__connexion-platau").html(`<div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Une erreur s'est produite lors de la vérification de la connexion à Plat'AU.</strong>
+                    </div>`);
+                },
+            })
+        <?php endif ?>
+    });
+</script>

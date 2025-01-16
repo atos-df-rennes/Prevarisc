@@ -1,0 +1,47 @@
+<?php if($this->ext != true) : ?>
+    <h3>Informations sur la commune</h3>
+    <dl class='dl-horizontal'>
+        <dt>Code INSEE</dt>
+        <dd>
+            <div class="col-xs-12">
+                <?php echo $this->commune->NUMINSEE_COMMUNE ?>
+            </div>
+        </dd>
+
+        <dt>Code postal</dt>
+        <dd>
+            <div class="col-xs-12">
+                <?php echo $this->commune->CODEPOSTAL_COMMUNE ?>
+            </div>
+        </dd>
+    </dl>
+
+    <h3>Coordonnées</h3>
+<?php endif ?>
+
+<?php echo $this->action('form', 'contact', null, array("item" => "commune")) ?>
+
+<?php if($this->ext != true) : ?>
+    <dl class='dl-horizontal'>
+        <dt></dt>
+        <dd><input type='submit' id='save' value='Sauvegarder' class='btn btn-success' /></dd>
+    </dl>
+
+    <script>
+        $( "#save" ).live('click', function() {
+            $.ajax({
+                url: "/gestion-des-communes/save?numinsee=" + $("select#choix_commune").val(),
+                data: $("#formulaire_contact").serialize(),
+                type: "post",
+                beforeSend: function() {
+                    $("#save").attr("disabled", "disabled");
+                },
+                success: function() {
+                    $("#save").removeAttr("disabled");
+                }
+            });
+
+            return false;
+        });
+    </script>
+<?php endif ?>

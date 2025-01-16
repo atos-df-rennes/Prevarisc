@@ -25,4 +25,4 @@ jobs:
     - name: PR title follows conventional commit spec
       env:
         TITLE: ${{ github.event.pull_request.title }}
-      run: tools/vendor/bin/conventional-commits validate $TITLE
+      run: tools/vendor/bin/conventional-commits validate "$TITLE"

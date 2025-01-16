@@ -1,5 +1,6 @@
-
 SET NAMES 'utf8';
+
+UPDATE `genre` SET `LIBELLE_GENRE` = 'BUP' WHERE `LIBELLE_GENRE` = 'EIC';
 
 UPDATE `resources` 
 SET `name` = 'etablissement_bup_0_0' 

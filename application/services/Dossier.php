@@ -383,33 +383,6 @@ class Service_Dossier
     }
 
     /**
-     * Filtre les prescriptions selon une condition sur un des champs.
-     * Remet à jour les indexs après le tri.
-     * 
-     * @param array $prescriptions Tableau initial des prescriptions récupéré depuis l'appel à getPrescriptions.
-     * 
-     * @see Service_Dossier::getPrescriptions()
-     */
-    private function filterPrescriptions(array $prescriptions, string $champ, bool $equals, ?mixed $value): array
-    {
-        foreach ($prescriptions as $keyAssoc => $prescriptionsAssoc) {
-            foreach ($prescriptionsAssoc as $key => $prescription) {
-                $condition = $equals ? $prescription[$champ] === $value : $prescription[$champ] !== $value;
-
-                if ($condition) {
-                    unset($prescriptions[$keyAssoc][$key]);
-
-                    if ([] === $prescriptions[$keyAssoc]) {
-                        unset($prescriptions[$keyAssoc]);
-                    }
-                }
-            }
-        }
-
-        return $prescriptions;
-    }
-
-    /**
      * Retourne les prescriptions sans celles qui ont été levées.
      */
     public function withoutLevees(array $prescriptions): array
@@ -1037,5 +1010,35 @@ class Service_Dossier
         }
 
         return false;
+    }
+
+    /**
+     * Filtre les prescriptions selon une condition sur un des champs.
+     * Remet à jour les indexs après le tri.
+     *
+     * @param array  $prescriptions tableau initial des prescriptions récupéré depuis l'appel à getPrescriptions
+     * @param string $champ         champ se lequel porte la condition
+     * @param bool   $equals        teste l'équalité ou l'inégalité stricte
+     * @param        $value         Valeur testée
+     *
+     * @see Service_Dossier::getPrescriptions()
+     */
+    private function filterPrescriptions(array $prescriptions, string $champ, bool $equals, $value): array
+    {
+        foreach ($prescriptions as $keyAssoc => $prescriptionsAssoc) {
+            foreach ($prescriptionsAssoc as $key => $prescription) {
+                $condition = $equals ? $prescription[$champ] === $value : $prescription[$champ] !== $value;
+
+                if ($condition) {
+                    unset($prescriptions[$keyAssoc][$key]);
+
+                    if ([] === $prescriptions[$keyAssoc]) {
+                        unset($prescriptions[$keyAssoc]);
+                    }
+                }
+            }
+        }
+
+        return $prescriptions;
     }
 }

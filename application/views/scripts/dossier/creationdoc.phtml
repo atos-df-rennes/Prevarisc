@@ -338,86 +338,128 @@ if (!function_exists('addPrescription')) {
 }
 
 if (!function_exists('addPrescriptionCC')) {
-    function addPrescriptionCC($listePrescription,$type,$odf) {
+    function addPrescriptionCC($listePrescription,$type,$odf,$typeContenu) {
         //TYPE_PRESCRIPTION_DOSSIER
-        if ($type == 0) {
-            try{
-                $prescription = $odf->listeRegCellule;
-            } catch (Exception $e) {
+        try {
+            if ($type == 0) {
+                switch ($typeContenu) {
+                    case 'default':
+                        $prescription = $odf->listeRegCellule;
 
+                        break;
+                    case 'reprises':
+                        $prescription = $odf->listeRegCelluleReprises;
+
+                        break;
+                    case 'actuelles':
+                        $prescription = $odf->listeRegCelluleActuelles;
+
+                        break;
+                    default:
+                        throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
+
+                        break;
+                }
+            } else if ($type == 1) {
+                switch ($typeContenu) {
+                    case 'default':
+                        $prescription = $odf->listeExploitationCellule;
+
+                        break;
+                    case 'reprises':
+                        $prescription = $odf->listeExploitationCelluleReprises;
+
+                        break;
+                    case 'actuelles':
+                        $prescription = $odf->listeExploitationCelluleActuelles;
+
+                        break;
+                    default:
+                        throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
+
+                        break;
+                }
+            } else if ($type == 2) {
+                switch ($typeContenu) {
+                    case 'default':
+                        $prescription = $odf->listeAmeliorationCellule;
+
+                        break;
+                    case 'reprises':
+                        $prescription = $odf->listeAmeliorationCelluleReprises;
+
+                        break;
+                    case 'actuelles':
+                        $prescription = $odf->listeAmeliorationCelluleActuelles;
+
+                        break;
+                    default:
+                        throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
+
+                        break;
+                }
             }
-        } else if ($type == 1) {
-            try{
-                $prescription = $odf->listeExploitationCellule;
-            } catch (Exception $e) {
 
-            }
-        } else if ($type == 2) {
-            try{
-                $prescription = $odf->listeAmeliorationCellule;
-            } catch (Exception $e) {
+            $nbPrescDossier = count($listePrescription);
 
-            }
-        }
-
-        $nbPrescDossier = count($listePrescription);
-
-        if ( isset($prescription) ) {
-            if ($nbPrescDossier && $nbPrescDossier > 0)
-            {
-                for($i=0; $i < $nbPrescDossier; $i++)
+            if ( isset($prescription) ) {
+                if ($nbPrescDossier && $nbPrescDossier > 0)
                 {
-                    $nbAssoc = count($listePrescription[$i]);
-                    $cpt = true;
-                    $textearticle = '';
-                    $nbCpt = $nbAssoc;
-                    for($j=0; $j < $nbAssoc; $j++)
+                    for($i=0; $i < $nbPrescDossier; $i++)
                     {
-                        $articleT = $listePrescription[$i][$j]['LIBELLE_ARTICLE'];
-                        $texteT = $listePrescription[$i][$j]['LIBELLE_TEXTE'];
-
-                        if ($texteT != '') {
-                            $textearticle .= $texteT." - ";
-                        } else {
-                            $textearticle .= " - ";
-                        }
-                        if ($nbCpt > 1) {
-                            if ($articleT != '') {
-                                $textearticle .= $articleT.", ";
-                            } else {
-                                $textearticle .= ", ";
-                            }
-                        } else {
-                            if ($articleT != '') {
-                                $textearticle .= $articleT." ";
-                            } else {
-                                $textearticle .= " ";
-                            }
-                        }
-                        if ($cpt)
+                        $nbAssoc = count($listePrescription[$i]);
+                        $cpt = true;
+                        $textearticle = '';
+                        $nbCpt = $nbAssoc;
+                        for($j=0; $j < $nbAssoc; $j++)
                         {
-                            addChamp($prescription, 'num', $listePrescription[$i][0]['NUM_PRESCRIPTION_DOSSIER']);
+                            $articleT = $listePrescription[$i][$j]['LIBELLE_ARTICLE'];
+                            $texteT = $listePrescription[$i][$j]['LIBELLE_TEXTE'];
 
-                            if ( $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER'] == '')
-                            {
-                                addChamp($prescription, 'libelle', $listePrescription[$i][0]['PRESCRIPTIONTYPE_LIBELLE']);
+                            if ($texteT != '') {
+                                $textearticle .= $texteT." - ";
                             } else {
-                                addChamp($prescription, 'libelle', $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER']);
+                                $textearticle .= " - ";
                             }
-                            $cpt = false;
+                            if ($nbCpt > 1) {
+                                if ($articleT != '') {
+                                    $textearticle .= $articleT.", ";
+                                } else {
+                                    $textearticle .= ", ";
+                                }
+                            } else {
+                                if ($articleT != '') {
+                                    $textearticle .= $articleT." ";
+                                } else {
+                                    $textearticle .= " ";
+                                }
+                            }
+                            if ($cpt)
+                            {
+                                addChamp($prescription, 'num', $listePrescription[$i][0]['NUM_PRESCRIPTION_DOSSIER']);
+
+                                if ( $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER'] == '')
+                                {
+                                    addChamp($prescription, 'libelle', $listePrescription[$i][0]['PRESCRIPTIONTYPE_LIBELLE']);
+                                } else {
+                                    addChamp($prescription, 'libelle', $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER']);
+                                }
+                                $cpt = false;
+                            }
+                            $nbCpt--;
                         }
-                        $nbCpt--;
+                        addChamp($prescription, 'textearticle', $textearticle);
+                        $prescription->merge();
                     }
-                    addChamp($prescription, 'textearticle', $textearticle);
+
+                } else {
+                    addChamp($prescription, 'num', "");
+                    addChamp($prescription, 'libelle', "");
+                    addChamp($prescription, 'textearticle', "");
                     $prescription->merge();
                 }
-
-            } else {
-                addChamp($prescription, 'num', "");
-                addChamp($prescription, 'libelle', "");
-                addChamp($prescription, 'textearticle', "");
-                $prescription->merge();
             }
+        } catch (OdfException $e) {
         }
     }
 }
@@ -435,14 +477,23 @@ if ($this->id_typeactivite == 29) {
                 addChamp($cellulesPresc, 'libelleCellule', $cellule['LIBELLE_ETABLISSEMENTINFORMATIONS']);
 
                 if ($this->idDossier == $cellule['ID_DOSSIER']) {
-                    addPrescriptionCC($cellule['regl'],0,$cellulesPresc);
+                    addPrescriptionCC($cellule['regl'],0,$cellulesPresc,'default');
+                    addPrescriptionCC($cellule['reglReprises'],0,$cellulesPresc,'reprises');
+                    addPrescriptionCC($cellule['reglActuelles'],0,$cellulesPresc,'actuelles');
                 } else {
                     $val = array();
-                    addPrescriptionCC($val,0,$cellulesPresc);
+                    addPrescriptionCC($val,0,$cellulesPresc,'default');
+                    addPrescriptionCC($val,0,$cellulesPresc,'reprises');
+                    addPrescriptionCC($val,0,$cellulesPresc,'actuelles');
                 }
 
-                addPrescriptionCC($cellule['exploit'],1,$cellulesPresc);
-                addPrescriptionCC($cellule['amelio'],2,$cellulesPresc);
+                addPrescriptionCC($cellule['exploit'],1,$cellulesPresc,'default');
+                addPrescriptionCC($cellule['exploitReprises'],1,$cellulesPresc,'reprises');
+                addPrescriptionCC($cellule['exploitActuelles'],1,$cellulesPresc,'actuelles');
+
+                addPrescriptionCC($cellule['amelio'],2,$cellulesPresc,'default');
+                addPrescriptionCC($cellule['amelioReprises'],2,$cellulesPresc,'reprises');
+                addPrescriptionCC($cellule['amelioActuelles'],2,$cellulesPresc,'actuelles');
 
                 $cellulesPresc->merge();
             }
@@ -451,9 +502,17 @@ if ($this->id_typeactivite == 29) {
                 addChamp($cellulesPresc, 'libelleCellule', $cellule['LIBELLE_ETABLISSEMENTINFORMATIONS']);
 
                 foreach($cellule['dossiers']['etudes'] as $dossierKey => $dossier) {
-                    addPrescriptionCC($dossier['regl'],0,$cellulesPresc);
-                    addPrescriptionCC($dossier['exploit'],1,$cellulesPresc);
-                    addPrescriptionCC($dossier['amelio'],2,$cellulesPresc);
+                    addPrescriptionCC($dossier['regl'],0,$cellulesPresc,'default');
+                    addPrescriptionCC($dossier['reglReprises'],0,$cellulesPresc,'reprises');
+                    addPrescriptionCC($dossier['reglActuelles'],0,$cellulesPresc,'actuelles');
+
+                    addPrescriptionCC($dossier['exploit'],1,$cellulesPresc,'default');
+                    addPrescriptionCC($dossier['exploitReprises'],1,$cellulesPresc,'reprises');
+                    addPrescriptionCC($dossier['exploitActuelles'],1,$cellulesPresc,'actuelles');
+
+                    addPrescriptionCC($dossier['amelio'],2,$cellulesPresc,'default');
+                    addPrescriptionCC($dossier['amelioReprises'],2,$cellulesPresc,'reprises');
+                    addPrescriptionCC($dossier['amelioActuelles'],2,$cellulesPresc,'actuelles');
 
                     $cellulesPresc->merge();
                 }

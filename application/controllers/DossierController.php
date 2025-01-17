@@ -2451,12 +2451,18 @@ class DossierController extends Zend_Controller_Action
                 foreach ($listeDossierConcerne as $dossier) {
                     $regl = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 0);
                     $listeDossierConcerne[$cptIdArray]['regl'] = $service_dossier->withoutLevees($regl);
+                    $listeDossierConcerne[$cptIdArray]['reglReprises'] = $service_dossier->withoutActuals($listeDossierConcerne[$cptIdArray]['regl']);
+                    $listeDossierConcerne[$cptIdArray]['reglActuelles'] = $service_dossier->withoutPrevious($listeDossierConcerne[$cptIdArray]['regl']);
 
                     $exploit = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 1);
                     $listeDossierConcerne[$cptIdArray]['exploit'] = $service_dossier->withoutLevees($exploit);
+                    $listeDossierConcerne[$cptIdArray]['exploitReprises'] = $service_dossier->withoutActuals($listeDossierConcerne[$cptIdArray]['exploit']);
+                    $listeDossierConcerne[$cptIdArray]['exploitActuelles'] = $service_dossier->withoutPrevious($listeDossierConcerne[$cptIdArray]['exploit']);
 
                     $amelio = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 2);
                     $listeDossierConcerne[$cptIdArray]['amelio'] = $service_dossier->withoutLevees($amelio);
+                    $listeDossierConcerne[$cptIdArray]['amelioReprises'] = $service_dossier->withoutActuals($listeDossierConcerne[$cptIdArray]['amelio']);
+                    $listeDossierConcerne[$cptIdArray]['amelioActuelles'] = $service_dossier->withoutPrevious($listeDossierConcerne[$cptIdArray]['amelio']);
                     ++$cptIdArray;
                 }
 
@@ -2492,12 +2498,18 @@ class DossierController extends Zend_Controller_Action
                                 // on pousse les prescriptions
                                 $regles = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 0);
                                 $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['regl'] = $service_dossier->withoutLevees($regles);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['reglReprises'] = $service_dossier->withoutActuals($cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['regl']);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['reglActuelles'] = $service_dossier->withoutPrevious($cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['regl']);
 
                                 $exploitation = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 1);
                                 $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['exploit'] = $service_dossier->withoutLevees($exploitation);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['exploitReprises'] = $service_dossier->withoutActuals($cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['exploit']);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['exploitActuelles'] = $service_dossier->withoutPrevious($cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['exploit']);
 
                                 $amelioration = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 2);
                                 $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['amelio'] = $service_dossier->withoutLevees($amelioration);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['amelioReprises'] = $service_dossier->withoutActuals($cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['amelio']);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['amelioActuelles'] = $service_dossier->withoutPrevious($cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['amelio']);
                             } else {
                                 unset($cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]);
                             }

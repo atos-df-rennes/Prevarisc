@@ -433,7 +433,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             $value = 1 == $dossier->AVIS_DOSSIER_COMMISSION ? 'Favorable' : 'Défavorable';
             $author = null;
 
-            if (null != $value && (!isset($historique[$key]) || $tmp['valeur'] != $value)) {
+            if ((!isset($historique[$key]) || $tmp['valeur'] != $value)) {
                 $date = new Zend_Date(null != $dossier->DATECOMM_DOSSIER ? $dossier->DATECOMM_DOSSIER : $dossier->DATEVISITE_DOSSIER, Zend_Date::DATES);
                 if (null != $tmp) {
                     $historique[$key][count($historique[$key]) - 1]['fin'] = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);

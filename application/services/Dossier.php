@@ -383,14 +383,20 @@ class Service_Dossier
     }
 
     /**
-     * Retourne les prescriptions sans celles qui ont été levées.
+     * Filtre les prescriptions selon une condition sur un des champs.
      * Remet à jour les indexs après le tri.
+     * 
+     * @param array $prescriptions Tableau initial des prescriptions récupéré depuis l'appel à getPrescriptions.
+     * 
+     * @see Service_Dossier::getPrescriptions()
      */
-    public function withoutLevees(array $prescriptions): array
+    private function filterPrescriptions(array $prescriptions, string $champ, bool $equals, ?mixed $value): array
     {
         foreach ($prescriptions as $keyAssoc => $prescriptionsAssoc) {
             foreach ($prescriptionsAssoc as $key => $prescription) {
-                if ($prescription['DATE_LEVEE'] !== null) {
+                $condition = $equals ? $prescription[$champ] === $value : $prescription[$champ] !== $value;
+
+                if ($condition) {
                     unset($prescriptions[$keyAssoc][$key]);
 
                     if ([] === $prescriptions[$keyAssoc]) {
@@ -401,6 +407,30 @@ class Service_Dossier
         }
 
         return array_values($prescriptions);
+    }
+
+    /**
+     * Retourne les prescriptions sans celles qui ont été levées.
+     */
+    public function withoutLevees(array $prescriptions): array
+    {
+        return $this->filterPrescriptions($prescriptions, 'DATE_LEVEE', false, null);
+    }
+
+    /**
+     * Retourne seulement les prescriptions reprises d'autres dossiers.
+     */
+    public function withoutActuals(array $prescriptions): array
+    {
+        return $this->filterPrescriptions($prescriptions, 'ID_DOSSIER_REPRISE', true, null);
+    }
+
+    /**
+     * Retourne seulement les prescriptions non-reprises d'autres dossiers.
+     */
+    public function withoutPrevious(array $prescriptions): array
+    {
+        return $this->filterPrescriptions($prescriptions, 'ID_DOSSIER_REPRISE', false, null);
     }
 
     /**

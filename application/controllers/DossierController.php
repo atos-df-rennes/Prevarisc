@@ -2521,16 +2521,30 @@ class DossierController extends Zend_Controller_Action
 
         $prescriptionReglDossier = $service_dossier->getPrescriptions((int) $idDossier, 0);
         $prescriptionReglDossier = $service_dossier->withoutLevees($prescriptionReglDossier);
+        $prescriptionReglDossierAnterieures = $service_dossier->withoutActuals($prescriptionReglDossier);
+        $prescriptionReglDossierActuelles = $service_dossier->withoutPrevious($prescriptionReglDossier);
 
         $prescriptionExploitation = $service_dossier->getPrescriptions((int) $idDossier, 1);
         $prescriptionExploitation = $service_dossier->withoutLevees($prescriptionExploitation);
+        $prescriptionExploitationAnterieures = $service_dossier->withoutActuals($prescriptionExploitation);
+        $prescriptionExploitationActuelles = $service_dossier->withoutPrevious($prescriptionExploitation);
 
         $prescriptionAmelioration = $service_dossier->getPrescriptions((int) $idDossier, 2);
         $prescriptionAmelioration = $service_dossier->withoutLevees($prescriptionAmelioration);
+        $prescriptionAmeliorationAnterieures = $service_dossier->withoutActuals($prescriptionAmelioration);
+        $prescriptionAmeliorationActuelles = $service_dossier->withoutPrevious($prescriptionAmelioration);
 
         $this->view->assign('prescriptionReglDossier', $prescriptionReglDossier);
+        $this->view->assign('prescriptionReglDossierAnterieures', $prescriptionReglDossierAnterieures);
+        $this->view->assign('prescriptionReglDossierActuelles', $prescriptionReglDossierActuelles);
+
         $this->view->assign('prescriptionExploitation', $prescriptionExploitation);
+        $this->view->assign('prescriptionExploitationAnterieures', $prescriptionExploitationAnterieures);
+        $this->view->assign('prescriptionExploitationActuelles', $prescriptionExploitationActuelles);
+
         $this->view->assign('prescriptionAmelioration', $prescriptionAmelioration);
+        $this->view->assign('prescriptionAmeliorationAnterieures', $prescriptionAmeliorationAnterieures);
+        $this->view->assign('prescriptionAmeliorationActuelles', $prescriptionAmeliorationActuelles);
 
         // GESTION DES DATES
         // Conversion de la date de dépot en mairie pour l'afficher

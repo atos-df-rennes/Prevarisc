@@ -12,86 +12,128 @@ function addChamp($odf, string $nomOdf, ?string $variable){
 }
 
 // PARTIE PRESCRIPTION
-function addPrescription($listePrescription,$type,$odf){
+function addPrescription($listePrescription,$type,$odf,$typeContenu){
     //TYPE_PRESCRIPTION_DOSSIER
-    if($type == 0){
-		try{
-			$prescription = $odf->listeReg;
-		} catch (Exception $e) {
+    try {
+        if($type == 0){
+            switch ($typeContenu) {
+                case 'default':
+                    $prescription = $odf->listeReg;
 
-		}
-    }else if ($type == 1){
-        try{
-			$prescription = $odf->listeExploitation;
-		} catch (Exception $e) {
+                    break;
+                case 'reprises':
+                    $prescription = $odf->listeRegReprises;
 
-		}
-    }else if ($type == 2){
-        try{
-			$prescription = $odf->listeAmelioration;
-		} catch (Exception $e) {
+                    break;
+                case 'actuelles':
+                    $prescription = $odf->listeRegActuelles;
 
-		}
-    }
+                    break;
+                default:
+                    throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
 
-    $nbPrescDossier = count($listePrescription);
+                    break;
+            }
+        }else if ($type == 1){
+            switch ($typeContenu) {
+                case 'default':
+                    $prescription = $odf->listeExploitation;
 
-    if(isset($prescription) ){
-        if($nbPrescDossier)
-        {
-            for($i=0; $i < $nbPrescDossier; $i++)
+                    break;
+                case 'reprises':
+                    $prescription = $odf->listeExploitationReprises;
+
+                    break;
+                case 'actuelles':
+                    $prescription = $odf->listeExploitationActuelles;
+
+                    break;
+                default:
+                    throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
+
+                    break;
+            }
+        }else if ($type == 2){
+            switch ($typeContenu) {
+                case 'default':
+                    $prescription = $odf->listeAmelioration;
+
+                    break;
+                case 'reprises':
+                    $prescription = $odf->listeAmeliorationReprises;
+
+                    break;
+                case 'actuelles':
+                    $prescription = $odf->listeAmeliorationActuelles;
+
+                    break;
+                default:
+                    throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
+
+                    break;
+            }
+        }
+
+        $nbPrescDossier = count($listePrescription);
+
+        if(isset($prescription) ){
+            if($nbPrescDossier)
             {
-                $nbAssoc = count($listePrescription[$i]);
-                $cpt = true;
-                $textearticle = '';
-                $nbCpt = $nbAssoc;
-                for($j=0; $j < $nbAssoc; $j++)
+                for($i=0; $i < $nbPrescDossier; $i++)
                 {
-                    $articleT = $listePrescription[$i][$j]['LIBELLE_ARTICLE'];
-                    $texteT = $listePrescription[$i][$j]['LIBELLE_TEXTE'];
-
-                    if($texteT != ''){
-                        $textearticle .= $texteT." - ";
-                    }else{
-                        $textearticle .= " - ";
-                    }
-                    if($nbCpt > 1){
-                        if($articleT != ''){
-                            $textearticle .= $articleT.", ";
-                        }else{
-                            $textearticle .= ", ";
-                        }
-                    }else{
-                        if($articleT != ''){
-                            $textearticle .= $articleT." ";
-                        }else{
-                            $textearticle .= " ";
-                        }
-                    }
-                    if($cpt)
+                    $nbAssoc = count($listePrescription[$i]);
+                    $cpt = true;
+                    $textearticle = '';
+                    $nbCpt = $nbAssoc;
+                    for($j=0; $j < $nbAssoc; $j++)
                     {
-                        addChamp($prescription, 'num', $listePrescription[$i][0]['NUM_PRESCRIPTION_DOSSIER']);
+                        $articleT = $listePrescription[$i][$j]['LIBELLE_ARTICLE'];
+                        $texteT = $listePrescription[$i][$j]['LIBELLE_TEXTE'];
 
-                        if( $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER'] == '')
-                        {
-                            addChamp($prescription, 'libelle', $listePrescription[$i][0]['PRESCRIPTIONTYPE_LIBELLE']);
+                        if($texteT != ''){
+                            $textearticle .= $texteT." - ";
                         }else{
-                            addChamp($prescription, 'libelle', $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER']);
+                            $textearticle .= " - ";
                         }
-                        $cpt = false;
+                        if($nbCpt > 1){
+                            if($articleT != ''){
+                                $textearticle .= $articleT.", ";
+                            }else{
+                                $textearticle .= ", ";
+                            }
+                        }else{
+                            if($articleT != ''){
+                                $textearticle .= $articleT." ";
+                            }else{
+                                $textearticle .= " ";
+                            }
+                        }
+                        if($cpt)
+                        {
+                            addChamp($prescription, 'num', $listePrescription[$i][0]['NUM_PRESCRIPTION_DOSSIER']);
+
+                            if( $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER'] == '')
+                            {
+                                addChamp($prescription, 'libelle', $listePrescription[$i][0]['PRESCRIPTIONTYPE_LIBELLE']);
+                            }else{
+                                addChamp($prescription, 'libelle', $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER']);
+                            }
+                            $cpt = false;
+                        }
+                        $nbCpt--;
                     }
-                    $nbCpt--;
+                    addChamp($prescription, 'textearticle', $textearticle);
+                    $prescription->merge();
                 }
-                addChamp($prescription, 'textearticle', $textearticle);
+
+            } else {
+                addChamp($prescription, 'num', "");
+                addChamp($prescription, 'libelle', "");
+                addChamp($prescription, 'textearticle', "");
                 $prescription->merge();
             }
-
-        } else {
-            addChamp($prescription, 'num', "");
-            addChamp($prescription, 'libelle', "");
-            addChamp($prescription, 'textearticle', "");
-            $prescription->merge();
         }
+    } catch (OdfException $e) {
     }
 }
 
@@ -489,9 +531,17 @@ foreach($this->membresFiles as $val => $membre){
 						}
 						addChamp($dossInfos,'numDocUrba', $listeDocUrba);
 
-						addPrescription($dossierInfos['prescriptionReglDossier'],0,$dossInfos);
-						addPrescription($dossierInfos['prescriptionExploitation'],1,$dossInfos);
-						addPrescription($dossierInfos['prescriptionAmelioration'],2,$dossInfos);
+						addPrescription($dossierInfos['prescriptionReglDossier'],0,$dossInfos,'default');
+						addPrescription($dossierInfos['prescriptionReglDossierReprises'],0,$dossInfos,'reprises');
+						addPrescription($dossierInfos['prescriptionReglDossierActuelles'],0,$dossInfos,'actuelles');
+
+						addPrescription($dossierInfos['prescriptionExploitation'],1,$dossInfos,'default');
+						addPrescription($dossierInfos['prescriptionExploitationReprises'],1,$dossInfos,'reprises');
+						addPrescription($dossierInfos['prescriptionExploitationActuelles'],1,$dossInfos,'actuelles');
+
+						addPrescription($dossierInfos['prescriptionAmelioration'],2,$dossInfos,'default');
+						addPrescription($dossierInfos['prescriptionAmeliorationReprises'],2,$dossInfos,'reprises');
+						addPrescription($dossierInfos['prescriptionAmeliorationActuelles'],2,$dossInfos,'actuelles');
 
 						$dossInfos->merge();
 					}

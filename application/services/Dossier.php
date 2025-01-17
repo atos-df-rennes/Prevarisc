@@ -406,7 +406,7 @@ class Service_Dossier
             }
         }
 
-        return array_values($prescriptions);
+        return $prescriptions;
     }
 
     /**

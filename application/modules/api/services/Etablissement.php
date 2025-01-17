@@ -143,4 +143,11 @@ class Api_Service_Etablissement
 
         return $serviceAdresse->getAdresseById($id);
     }
+
+    public function getAdresseApi(string $query, string $type, int $limit): ?array
+    {
+        $service_etablissement = new Service_AdresseApi();
+
+        return $service_etablissement->getAdresseApi($query, $type, $limit);
+    }
 }

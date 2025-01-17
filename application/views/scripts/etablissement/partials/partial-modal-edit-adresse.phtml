@@ -1,4 +1,4 @@
-<form id="adresse-modal-edit" class="modal hide adresse fade adresse-modal-edit" method='post'>
+<form id="adresse-modal-edit" class="modal hide adresse fade adresse-modal-edit" method="post">
     <input type='hidden' name='idAdresse' value=""/>
 
     <div class="modal-header">
@@ -7,96 +7,187 @@
     </div>
 
     <div class="modal-body">
-        <dl class='dl-horizontal'>
-            <dt>Ville</dt>
-            <dd>
-                <input name='commune_ac' type='text' placeholder='Nom de la commune ou code postal ...' />
-                <input name='code_insee' type='hidden' />
-                <input name='code_postal' type='hidden' />
-            </dd>
+        <?php 
+        if (!getenv('PREVARISC_API_ADRESSE_MODAL')): ?>
+            <div id="bddedit" class="content">
+                <h4>Ajouter une adresse depuis BDD</h4>
+                <dl class='dl-horizontal'>
+                    <dt>Ville</dt>
+                    <dd>
+                        <input name='commune_ac' type='text' placeholder='Nom de la commune ou code postal ...' />
+                        <input name='code_insee' type='hidden' />
+                        <input name='code_postal' type='hidden' />
+                    </dd>
 
-            <dt>Voie</dt>
-            <dd>
-                <input type='text' name='voie_ac' placeholder='Nom de la voie ...' disabled />
-                <input type='hidden' name='type_voie' />
-                <input type='hidden' name='voie' />
-            </dd>
+                    <dt>Voie</dt>
+                    <dd>
+                        <input type='text' name='voie_ac' placeholder='Nom de la voie ...' />
+                        <input type='hidden' name='type_voie' />
+                        <input type='hidden' name='voie' />
+                    </dd>
 
-            <dt>Numéro</dt>
-            <dd>
-                <input class="input-small" type='text' name='numero' placeholder='Numéro ...' disabled />
-            </dd>
+                    <dt>Numéro</dt>
+                    <dd>
+                        <input class="input-small" type='text' name='numero' placeholder='Numéro ...' />
+                    </dd>
 
-            <dt>Complément d'adresse</dt>
-            <dd>
-                <input type='text' name='complement' placeholder="Complément d'adresse" disabled />
-            </dd>
+                    <dt>Complément d'adresse</dt>
+                    <dd>
+                        <input type='text' name='complement' placeholder="Complément d'adresse" />
+                    </dd>
 
-            <dt>Type de l'adresse</dt>
-            <dd>
-                <select>
-                    <option>Adresse postale</option>
-                </select>
-            </dd>
+                    <dt>Type de l'adresse</dt>
+                    <dd>
+                        <select name="type_adresse">
+                            <option>Adresse postale</option>
+                        </select>
+                    </dd>
 
-            <dt>Géolocalisation</dt>
-            <dd>
-                <?php if ($this->key_ign !== null) : ?><button id="geolocme" type='button' class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
-                <br/>
-                <small>Résultat : <span class='result'>Inconnu</span></small>
-            </dd>
+                    <dt>Géolocalisation</dt>
+                    <dd>
+                        <?php if ($this->key_ign !== null) : ?>
+                            <button id="geolocme" type='button' class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)</button>
+                        <?php endif; ?>
+                        <br/>
+                        <small>Résultat : <span class='result'>Inconnu</span></small>
+                    </dd>
 
-            <dt>Longitude</dt>
-            <dd>
-                 <input id="addressLongitude" type='text' name='lon' />
-            </dd>
+                    <dt>Longitude</dt>
+                    <dd>
+                        <input id="addressLongitude" type='text' name='lon' />
+                    </dd>
 
-            <dt>Latitude</dt>
-            <dd>
-                 <input id="addressLatitude" type='text' name='lat' />
-            </dd>
-        </dl>
-        <?php if ($this->key_ign !== null): ?>
-            <div id="edit-geoportail-container" style="height: 400px;"></div>
+                    <dt>Latitude</dt>
+                    <dd>
+                        <input id="addressLatitude" type='text' name='lat' />
+                    </dd>
+                </dl>
+                <?php if ($this->key_ign !== null): ?>
+                    <div id="edit-geoportail-container" style="height: 400px;"></div>
+                <?php endif; ?>
+            </div>
+        <?php else: ?>
+            <div id="apiedit" class="content">
+                <h4>Ajouter une adresse depuis API adresse</h4>
+                <input type="hidden" name="isApi" value="1">
+                <input type="hidden" id="codePostal_api_edit" name="code_postal" />
+                <input type="hidden" id="inseeCode_api_edit" name="insee_code" />
+                <input type="hidden" id="street_api_edit" name="street" />
+                <input type="hidden" id="city_api_edit" name="city" />
+                <dl class='dl-horizontal'>
+                    <dt>Adresse complète</dt>
+                    <dd>
+                        <input id="adresse-complete-edit" name='adresse_complete' type='text' placeholder='Tapez l’adresse complète ...' required autocomplete="off"/>
+                        <ul id="suggestions-list-edit" style="list-style-type: none; padding-left: 0;"></ul>
+                    </dd>
 
-            <!-- Déplacement du bouton FullScreen (sinon supperposé avec le gestionnaire de couches) -->
-            <style>
-                .ol-full-screen {right:9px; top:49px}
-            </style>
-        <?php endif ?>
+                    <dt>Type de l'adresse</dt>
+                    <dd>
+                        <select name="address_type"> 
+                            <option value="housenumber">House number</option>
+                            <option value="street">Street</option>
+                        </select>
+                    </dd>
+
+                    <dt>Longitude</dt>
+                    <dd>
+                        <input id="addressLongitude-api-edit" type='text' name='lon_api' maxlength="11" readonly required />
+                    </dd>
+
+                    <dt>Latitude</dt>
+                    <dd>
+                        <input id="addressLatitude-api-edit" type='text' name='lat_api' maxlength="10" readonly required />
+                    </dd>
+
+                    <dt>Géolocalisation</dt>
+                    <dd>
+                        <?php if ($this->key_ign !== null) : ?>
+                            <button id="geolocme" type='button' class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)</button>
+                        <?php endif; ?>
+                        <br/>
+                        <small>Résultat : <span class='result'>Inconnu</span></small>
+                    </dd>
+                </dl>
+                <?php if ($this->key_ign !== null): ?>
+                    <div id="edit-geoportail-container-api" style="height: 400px;"></div>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
     </div>
 
     <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn">Annuler</a>
-        <button id='submit-adresse-edit' class="btn btn-success">Modifier</a>
+        <button type="button" data-dismiss="modal" class="btn">Annuler</button>
+        <button id='submit-adresse-edit' class="btn btn-success" type="submit">Modifier</button>
     </div>
 </form>
 
 <script>
     $('#submit-adresse-edit').click(function (e) {
-        e.preventDefault()
-        const dataToPush = {}
+        e.preventDefault();
+        const dataToPush = {};
+        const hasBddContainer = $('#adresse-modal-edit').find('#bddedit').length > 0;
+        
+        $('#adresse-modal-edit :input').each((idx, input) => {
+            dataToPush[input.name] = input.value;
+        });
 
-        $('#adresse-modal-edit :input').each(idx => {
-            dataToPush[$('#adresse-modal-edit :input')[idx].name] = $('#adresse-modal-edit :input')[idx].value
-        })
+        if (hasBddContainer) {
+            const nouveauLibelle =
+                dataToPush.numero + ' ' +
+                dataToPush.voie_ac + ' ' +
+                dataToPush.complement + ' ' +
+                dataToPush.code_postal + ' ' +
+                dataToPush.commune_ac;
+            if (!dataToPush.numero.trim() || !dataToPush.voie_ac.trim()  || !dataToPush.commune_ac.trim()) {
+                alert("Veuillez remplir tous les champs requis pour l'adresse.");
+            return; 
+            } 
+            $('#adresse' + dataToPush.idAdresse + '>span').text(nouveauLibelle);
+            
+           $('input[name="ADRESSES[' + dataToPush.idAdresse + '][NUMINSEE_COMMUNE]"]').val(dataToPush.code_insee);
+            $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LON_ETABLISSEMENTADRESSE]"]').val(dataToPush.lon);
+            $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LAT_ETABLISSEMENTADRESSE]"]').val(dataToPush.lat);
+            $('input[name="ADRESSES[' + dataToPush.idAdresse + '][NUMERO_ADRESSE]"]').val(dataToPush.numero);
+            $('input[name="ADRESSES[' + dataToPush.idAdresse + '][ID_RUE]"]').val(dataToPush.voie);
+            $('input[name="ADRESSES[' + dataToPush.idAdresse + '][COMPLEMENT_ADRESSE]"]').val(dataToPush.complement);
+        } 
+        else {
+            const libelle = dataToPush.adresse_complete;
+            const  codePostal = dataToPush.code_postal;
+            const inseeCode =  dataToPush.insee_code;
+            const city =  dataToPush.city;
+            const street = dataToPush.street
 
-        const nouveauLibelle =
-            dataToPush.numero + ' ' +
-            dataToPush.voie_ac + ' ' +
-            dataToPush.complement + ' ' +
-            dataToPush.code_postal + ' ' +
-            dataToPush.commune_ac
 
-        $('#adresse' + dataToPush.idAdresse + '>span').text(nouveauLibelle)
+           
+             if (!libelle.trim()) {
+                alert("L'adresse complète ne peut pas être vide.");
+                return; 
+            }
+            $('#adresse' + dataToPush.idAdresse + '>span').text(libelle);
+            
+            $('input[name="ADRESSES[' + dataToPush.idAdresse + '][ADRESSE]"]').val(dataToPush.adresse_complete);
+            $('input[name="ADRESSES[' + dataToPush.idAdresse + '][CODEPOSTAL_COMMUNE]"]').val(dataToPush.code_postal);
+            $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LON_ETABLISSEMENTADRESSE]"]').val(dataToPush.lon_api);
+            $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LAT_ETABLISSEMENTADRESSE]"]').val(dataToPush.lat_api);
+            $('input[name="ADRESSES[' + dataToPush.idAdresse + '][NUMINSEE_COMMUNE]"]').val(dataToPush.insee_code);
+            $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LIBELLE_COMMUNE]"]').val(dataToPush.city);
+            $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LIBELLE_RUE]"]').val(dataToPush.street);
 
-        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][NUMINSEE_COMMUNE]"]').val(dataToPush.code_insee)
-        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LON_ETABLISSEMENTADRESSE]"]').val(dataToPush.lon)
-        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LAT_ETABLISSEMENTADRESSE]"]').val(dataToPush.lat)
-        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][NUMERO_ADRESSE]"]').val(dataToPush.numero)
-        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][ID_RUE]"]').val(dataToPush.voie)
-        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][COMPLEMENT_ADRESSE]"]').val(dataToPush.complement)
 
-        $('#adresse-modal-edit .close').click()
+            if (!libelle) {
+                alert("Vous n'avez rien modifié.");
+                return;
+            }
+
+        }
+
+        if (!hasBddContainer) { // Cas API
+            const adresseInput = $('#adresse-complete-edit');
+            if (adresseInput.length > 0 && adresseInput.val() && adresseInput.val().trim() === '') {
+                adresseInput.val('');
+            }
+        }
+        $('#adresse-modal-edit .close').click();
     });
 </script>

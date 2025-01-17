@@ -110,6 +110,8 @@ foreach($this->membresFiles as $val => $membre){
 			$odf = new Odf(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier);
 			$dossInfos = $odf->setSegment('dossierInfos');
 
+
+            
 			foreach($this->dossierComm as $val => $dossierInfos){
 				if(isset($dossierInfos['infosEtab'])){
 					$nbAdresse = count($dossierInfos['infosEtab']['adresses']);
@@ -393,8 +395,10 @@ foreach($this->membresFiles as $val => $membre){
 							addChamp($dossInfos,'dateVisite', $dateVisite->get(Zend_Date::DAY." ".Zend_Date::MONTH_NAME." ".Zend_Date::YEAR));
 						}else{
 							addChamp($dossInfos,'dateVisite', "");
-						}
+						} 
 
+
+                        
 						//DEBUT Adresse
 						if(isset($dossierInfos['infosEtab']['adresses'][0]["LIBELLE_RUE"])) {
 							addChamp($dossInfos,'libelleRue', $dossierInfos['infosEtab']['adresses'][0]["LIBELLE_RUE"]);
@@ -414,6 +418,9 @@ foreach($this->membresFiles as $val => $membre){
 							addChamp($dossInfos,'libelleCommune','');
 						}
 						//FIN Adresse
+
+
+
 
 						//DEBUT Effectif total
 						$effectifTotal = $dossierInfos['infosEtab']['informations']["EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"] + $dossierInfos['infosEtab']['informations']["EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"];

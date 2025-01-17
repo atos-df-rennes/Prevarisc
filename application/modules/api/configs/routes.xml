@@ -51,6 +51,10 @@
                         <route>get_adresse</route>
                         <defaults method="getAdresse" />
                     </get_adresse>
+                    <get_adresse_api type="Zend_Controller_Router_Route">
+                        <route>get_adresse_api</route>
+                        <defaults method="getAdresseApi" />
+                    </get_adresse_api>
                 </chains>
             </etablissement>
 

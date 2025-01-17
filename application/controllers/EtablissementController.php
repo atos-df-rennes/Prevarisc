@@ -31,6 +31,7 @@ class EtablissementController extends Zend_Controller_Action
         $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
         $this->view->assign('nomOngletDescriptif', $modelCapsuleRubrique->getCapsuleRubriqueByInternalName('descriptifEtablissement')['NOM']);
         $this->view->assign('nomOngletEffectifsDegagements', $modelCapsuleRubrique->getCapsuleRubriqueByInternalName('effectifsDegagementsEtablissement')['NOM']);
+        $this->view->assign('useApiAdresse', getenv('PREVARISC_API_ADRESSE_MODAL'));
 
         $this->serviceEtablissement = new Service_Etablissement();
         $id = $this->getRequest()->getParam('id');
@@ -88,7 +89,6 @@ class EtablissementController extends Zend_Controller_Action
         $viewHeadLink->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
 
         $service_carto = new Service_Carto();
-
         $this->view->assign('key_ign', getenv('PREVARISC_PLUGIN_IGNKEY'));
         $this->view->assign('geoconcept_url', getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL'));
         $this->view->assign('default_lon', getenv('PREVARISC_CARTO_DEFAULT_LON') ?: '2.71490430425517');

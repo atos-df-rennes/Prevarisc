@@ -1,4 +1,4 @@
-<div id='etablissement'>
+<div id='etablissement'> 
     <div class='pull-right'>
         <a class='btn' href="<?php echo $this->url(array('action' => 'edit')) ?>">Modifier la fiche</a>
     </div>
@@ -275,6 +275,7 @@
                 <?php if (count($this->etablissement['diapo']) > 0) : ?>
                     <li class='tabs-right' ><a href='#diaporama-tab-pane' data-toggle="tab">Diaporama</a></li>
                 <?php endif ?>
+
                 <?php if (count($this->etablissement['adresses']) > 0 && $this->key_ign != null && $this->etablissement['adresses'][0]['LAT_ETABLISSEMENTADRESSE'] != null && $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] != null) : ?>
                     <li class='tabs-right' ><a href='#geoportail' data-toggle="tab">Carte IGN</a></li>
                 <?php endif ?>
@@ -304,10 +305,14 @@
                                                 [<?php echo $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] ?>,
                                                 <?php echo $this->etablissement['adresses'][0]['LAT_ETABLISSEMENTADRESSE'] ?>],
                                                 "<b><?php echo htmlspecialchars($this->etablissement['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS'], ENT_QUOTES) ?></b><br/>"+
-                                                    "<?php echo $this->etablissement['adresses'][0]['NUMERO_ADRESSE'] ?>, "
-                                                    +"<?php echo htmlspecialchars($this->etablissement['adresses'][0]['LIBELLE_RUE'], ENT_QUOTES) ?><br/>"+
-                                                    "<?php echo $this->etablissement['adresses'][0]['CODEPOSTAL_COMMUNE'] ?> "+
-                                                    "<?php echo $this->etablissement['adresses'][0]['LIBELLE_COMMUNE'] ?>",
+                                                    "<?php if (isset( $this->etablissement['adresses'][0]['NUMERO_ADRESSE'])): ?> " +
+                                                    "<?php echo  $this->etablissement['adresses'][0]['NUMERO_ADRESSE'] ?>, " +
+                                                    "<?php echo htmlspecialchars( $this->etablissement['adresses'][0]['LIBELLE_RUE'], ENT_QUOTES) ?><br/>" +
+                                                    "<?php echo  $this->etablissement['adresses'][0]['CODEPOSTAL_COMMUNE'] ?> " +
+                                                    "<?php echo  $this->etablissement['adresses'][0]['LIBELLE_COMMUNE'] ?>" +
+                                                    "<?php else: ?>" +
+                                                    "<?php echo  $this->etablissement['adresses'][0]['ADRESSE'] ?>" +
+                                                    "<?php endif; ?>",
                                                     '<?php echo $autoconf_path ?>');
 
                             viewer.listen('mapLoaded', afterInitMap);
@@ -347,8 +352,12 @@
                                     points.push({
                                         lat: <?php echo $adresse['LAT_ETABLISSEMENTADRESSE'] ?>,
                                         lon: <?php echo $adresse['LON_ETABLISSEMENTADRESSE'] ?>,
-                                        description: "<?php echo htmlentities(strtolower($adresse["NUMERO_ADRESSE"]." ".$adresse["LIBELLE_RUE"]." ".$adresse["CODEPOSTAL_COMMUNE"]). " " .$adresse["LIBELLE_COMMUNE"])." <br />" ?>"
-                                                    + "long=<?php echo $adresse['LON_ETABLISSEMENTADRESSE'] ?>, lat=<?php echo $adresse['LAT_ETABLISSEMENTADRESSE'] ?>"
+                                        description: "<?php if (isset($adresse['NUMERO_ADRESSE'])): ?>" +
+                                                    "<?php echo htmlentities(strtolower($adresse['NUMERO_ADRESSE'] . ' ' . $adresse['LIBELLE_RUE'] . ' ' . $adresse['CODEPOSTAL_COMMUNE']) . ' ' . $adresse['LIBELLE_COMMUNE']) ?> <br />" +
+                                                    "<?php else: ?>" +
+                                                    "<?php echo htmlentities(strtolower($adresse['ADRESSE'])) ?>" +
+                                                    "<?php endif; ?>" +
+                                                    "long=<?php echo $adresse['LON_ETABLISSEMENTADRESSE'] ?>, lat=<?php echo $adresse['LAT_ETABLISSEMENTADRESSE'] ?>"
                                     });
                                 <?php endif ?>
                             <?php endforeach ?>
@@ -384,11 +393,15 @@
 
                            var infowindow = new google.maps.InfoWindow({
                                 content:
-                                "<?php echo $this->etablissement['adresses'][0]['NUMERO_ADRESSE'] ?>, "+
-                                "<?php echo $this->etablissement['adresses'][0]['LIBELLE_RUE'] ?> <br />"+
-                                "<?php echo $this->etablissement['adresses'][0]['CODEPOSTAL_COMMUNE'] ?> "+
-                                "<?php echo $this->etablissement['adresses'][0]['LIBELLE_COMMUNE'] ?> "
-                            });
+                                content: "<?php if (isset($this->etablissement['adresses'][0]['NUMERO_ADRESSE'])): ?>" +
+                                        "<?php echo $this->etablissement['adresses'][0]['NUMERO_ADRESSE'] ?>, " +
+                                        "<?php echo htmlspecialchars($this->etablissement['adresses'][0]['LIBELLE_RUE'], ENT_QUOTES) ?> <br />" +
+                                        "<?php echo $this->etablissement['adresses'][0]['CODEPOSTAL_COMMUNE'] ?> " +
+                                        "<?php echo htmlspecialchars($this->etablissement['adresses'][0]['LIBELLE_COMMUNE'], ENT_QUOTES) ?>" +
+                                        "<?php else: ?>" +
+                                        "<?php echo htmlspecialchars($this->etablissement['adresses'][0]['ADRESSE'], ENT_QUOTES) ?>" +
+                                        "<?php endif; ?>"
+                                    });
                             infowindow.open(map,marker);
                           };
 
@@ -476,15 +489,23 @@
                     <table class='table table-condensed champ_adresse champs'>
                         <thead>
                             <tr>
-                                <th>Localisation</th>
+                                <th>Localisation</th> 
                                 <th>Type</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($this->etablissement['adresses'] as $adresse) : ?>
+                            <?php 
+                            foreach ($this->etablissement['adresses'] as $adresse) : ?>
                                 <tr>
-                                    <td><?php echo strtolower($adresse["NUMERO_ADRESSE"]." ".$adresse["LIBELLE_RUE"]." ".$adresse["COMPLEMENT_ADRESSE"]." ".$adresse["CODEPOSTAL_COMMUNE"])." ".$adresse["LIBELLE_COMMUNE"] ?></td>
-                                    <td>Adresse postale</td>
+                                <td>
+                                <?php
+                                   if (isset($adresse["ADRESSE"])) {
+                                    echo strtolower($adresse["ADRESSE"]);}
+                                    else {echo strtolower($adresse["NUMERO_ADRESSE"] . " " . $adresse["LIBELLE_RUE"] . " " . $adresse["COMPLEMENT_ADRESSE"] . " " . $adresse["CODEPOSTAL_COMMUNE"] . " " . $adresse["LIBELLE_COMMUNE"]);}
+                                ?>
+                                </td>
+                               
+                                <td>Adresse postale</td>
                                 </tr>
                             <?php endforeach ?>
                         </tbody>

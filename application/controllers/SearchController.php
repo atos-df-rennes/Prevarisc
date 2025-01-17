@@ -65,8 +65,10 @@ class SearchController extends Zend_Controller_Action
                     $commissions = array_key_exists('commissions', $parameters) && '' != $parameters['commissions'] ? $parameters['commissions'] : null;
                     $groupements_territoriaux = array_key_exists('groupements_territoriaux', $parameters) && '' != $parameters['groupements_territoriaux'] ? $parameters['groupements_territoriaux'] : null;
                     $preventionniste = array_key_exists('preventionniste', $parameters) && '' != $parameters['preventionniste'] ? $parameters['preventionniste'] : null;
+                    $type = array_key_exists('type', $parameters) && '' != $parameters['type'] ? $parameters['type'] : null;
+                    $adresse = array_key_exists('adresse', $parameters) && '' != $parameters['adresse'] ? $parameters['adresse'] : null;
 
-                    $search = $service_search->extractionEtablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux, $preventionniste);
+                    $search = $service_search->extractionEtablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $type, $adresse, $city, $street, $number, $commissions, $groupements_territoriaux, $preventionniste);
 
                     $objPHPExcel = new PHPExcel();
                     $objPHPExcel->setActiveSheetIndex(0);
@@ -251,12 +253,14 @@ class SearchController extends Zend_Controller_Action
                     $avis_favorable = array_key_exists('avis', $parameters) && 1 == count($parameters['avis']) ? 'true' == $parameters['avis'][0] : null;
                     $statuts = $parameters['statuts'] ?? null;
                     $local_sommeil = array_key_exists('presences_local_sommeil', $parameters) && 1 == count($parameters['presences_local_sommeil']) ? 'true' == $parameters['presences_local_sommeil'][0] : null;
-                    $city = array_key_exists('city', $parameters) && '' != $parameters['city'] ? $parameters['city'] : null;
                     $street = array_key_exists('street', $parameters) && '' != $parameters['street'] ? $parameters['street'] : null;
                     $number = array_key_exists('number', $parameters) && '' != $parameters['number'] ? $parameters['number'] : null;
+                    $city = array_key_exists('city', $parameters) && '' != $parameters['city'] ? $parameters['city'] : null;
+
                     $commissions = array_key_exists('commissions', $parameters) && '' != $parameters['commissions'] ? $parameters['commissions'] : null;
                     $preventionniste = array_key_exists('preventionniste', $parameters) && '' != $parameters['preventionniste'] ? $parameters['preventionniste'] : null;
-
+                    $type = array_key_exists('type', $parameters) && '' != $parameters['type'] ? $parameters['type'] : null;
+                    $adresse = array_key_exists('adresse', $parameters) && '' != $parameters['adresse'] ? $parameters['adresse'] : null;
                     if (array_key_exists('groupements_territoriaux', $parameters) && '' != $parameters['groupements_territoriaux']) {
                         $groupements_territoriaux = $parameters['groupements_territoriaux'];
                     } elseif (null != $this->view->user && array_key_exists('groupements', $this->view->user) && count($this->view->user['groupements']) > 0) {
@@ -270,7 +274,7 @@ class SearchController extends Zend_Controller_Action
                         $groupements_territoriaux = null;
                     }
 
-                    $search = $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux, $preventionniste, 50, $page);
+                    $search = $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $type, $adresse, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux, $preventionniste, 50, $page);
 
                     $paginator = new Zend_Paginator(new SDIS62_Paginator_Adapter_Array($search['results'], $search['search_metadata']['count']));
                     $paginator->setItemCountPerPage(50)->setCurrentPageNumber($page)->setDefaultScrollingStyle('Elastic');

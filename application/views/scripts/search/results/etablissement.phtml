@@ -20,6 +20,7 @@
                 <?php echo empty($this->LIBELLE_ETABLISSEMENTINFORMATIONS) ? "<em class='muted'>Libellé non renseigné</em>" : $this->LIBELLE_ETABLISSEMENTINFORMATIONS ?>
                 <small>
                     <?php
+                    if (!getenv('PREVARISC_API_ADRESSE_MODAL')){
                         switch($this->ID_GENRE)
                         {
                             case 1:
@@ -38,6 +39,19 @@
                                 if(!empty($this->LIBELLE_COMMUNE_ADRESSE_DEFAULT))
                                     echo " - " . $this->LIBELLE_COMMUNE_ADRESSE_DEFAULT;
                         }
+                    }else{
+                        $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
+                        $select ->from('etablissementadresseapi', ['LIBELLE_COMMUNE'])
+                                ->where('ID_ETABLISSEMENT = ?', $this->ID_ETABLISSEMENT)  
+                                ->order('ID_ADRESSE ASC')  
+                                ->limit(1);  
+
+                        $results = $select->query()->fetchAll();
+                        if (!empty($results)) {
+                            $lastAddressCity = $results[0]['LIBELLE_COMMUNE'];
+                            echo " - " . $lastAddressCity;
+                        }
+                    }
                     ?>
                 </small>
             </a>

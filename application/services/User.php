@@ -1,5 +1,6 @@
 <?php
 
+use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 
 class Service_User
@@ -196,7 +197,7 @@ class Service_User
             if (null !== $avatar && isset($avatar['tmp_name']) && is_file($avatar['tmp_name'])) {
                 $path = REAL_DATA_PATH.DS.'uploads'.DS.'avatars'.DS;
 
-                $imagine = new Imagine\Gd\Imagine();
+                $imagine = new Imagine();
 
                 $image = $imagine->open($avatar['tmp_name']);
                 $imageService = new Service_Utils_Image($image);

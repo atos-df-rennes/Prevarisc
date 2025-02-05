@@ -1,5 +1,6 @@
 <?php
 
+use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 
 class Service_Etablissement implements Service_Interface_Etablissement
@@ -1419,7 +1420,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             $miniature['EXTENSION_PIECEJOINTE'] = '.jpg';
             $miniature_path = $store->getFilePath($miniature, 'etablissement_miniature', $id_etablissement, true);
 
-            $imagine = new Imagine\Gd\Imagine();
+            $imagine = new Imagine();
 
             $image = $imagine->open($file_path);
             $imageService = new Service_Utils_Image($image);

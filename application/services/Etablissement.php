@@ -1,5 +1,8 @@
 <?php
 
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+
 class Service_Etablissement implements Service_Interface_Etablissement
 {
     public const STATUT_CHANGE = 1;
@@ -1416,7 +1419,16 @@ class Service_Etablissement implements Service_Interface_Etablissement
             $miniature = $piece_jointe;
             $miniature['EXTENSION_PIECEJOINTE'] = '.jpg';
             $miniature_path = $store->getFilePath($miniature, 'etablissement_miniature', $id_etablissement, true);
-            GD_Resize::run($file_path, $miniature_path, 450);
+
+            $imagine = new Imagine();
+
+            $image = $imagine->open($file_path);
+            $imageService = new Service_Utils_Image($image);
+
+            $image->resize(new Box(450, $imageService->calculateHeightFromWidth(450)))
+                ->save($miniature_path)
+            ;
+
             if (!is_file($miniature_path)) {
                 throw new Exception('Cannot create miniature file: '.$miniature_path);
             }

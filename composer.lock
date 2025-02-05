@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "45b7d0dd9061d855c160c65f68087525",
+    "content-hash": "ad0f42106859adb2179768aae375d7fa",
     "packages": [
         {
             "name": "cybermonde/odtphp",
@@ -2264,8 +2264,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "autoload": {
@@ -2423,11 +2423,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.0"
+        "php": "~7.1.0"
     },
     "platform-dev": [],
-    "platform-overrides": {
-        "php": "7.1.33"
-    },
     "plugin-api-version": "2.2.0"
 }

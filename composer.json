@@ -9,7 +9,7 @@
     "homepage": "https://github.com/SDIS62/prevarisc",
     "license": "CECILL-B",
     "require": {
-        "php": "^7.0",
+        "php": "~7.1.0",
         "zendframework/zendframework1": "^1.0",
         "cybermonde/odtphp": "^1.0",
         "michelf/php-markdown": "^1.0",
@@ -31,14 +31,6 @@
         "test": "php vendor/bin/phpunit --bootstrap tests/bootstrap/indexTest.php --testdox tests/",
         "test-coverage": "@test --coverage-html tests/coverage/ --whitelist application/",
         "changelog": "/usr/bin/php8.3 tools/vendor/bin/conventional-changelog",
-        "release": "/usr/bin/php8.3 tools/vendor/bin/conventional-changelog --commit",
-        "release:patch": "/usr/bin/php8.3 tools/vendor/bin/conventional-changelog --patch --commit",
-        "release:minor": "/usr/bin/php8.3 tools/vendor/bin/conventional-changelog --minor --commit",
-        "release:major": "/usr/bin/php8.3 tools/vendor/bin/conventional-changelog --major --commit"
-    },
-    "config": {
-        "platform": {
-            "php": "7.1.33"
-        }
+        "release": "/usr/bin/php8.3 tools/vendor/bin/conventional-changelog --commit"
     }
 }

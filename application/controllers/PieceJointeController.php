@@ -1,5 +1,8 @@
 <?php
 
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+
 class PieceJointeController extends Zend_Controller_Action
 {
     public $store;
@@ -268,13 +271,14 @@ class PieceJointeController extends Zend_Controller_Action
                     $miniature['EXTENSION_PIECEJOINTE'] = '.jpg';
                     $miniature_path = $this->store->getFilePath($miniature, 'etablissement_miniature', $this->getRequest()->getParam('id'), true);
 
-                    $imagine = new Imagine\Gd\Imagine();
+                    $imagine = new Imagine();
 
                     $image = $imagine->open($file_path);
                     $imageService = new Service_Utils_Image($image);
 
-                    $image->resize(new Imagine\Image\Box(450, $imageService->calculateHeightFromWidth(450)))
-                        ->save($miniature_path);
+                    $image->resize(new Box(450, $imageService->calculateHeightFromWidth(450)))
+                        ->save($miniature_path)
+                    ;
 
                     $linkPj->PLACEMENT_ETABLISSEMENTPJ = $this->_request->PLACEMENT_ETABLISSEMENTPJ;
                 }

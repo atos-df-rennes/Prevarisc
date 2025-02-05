@@ -1,5 +1,7 @@
 <?php
 
+use Imagine\Image\Box;
+
 class Service_User
 {
     /**
@@ -199,12 +201,15 @@ class Service_User
                 $image = $imagine->open($avatar['tmp_name']);
                 $imageService = new Service_Utils_Image($image);
 
-                $image->resize(new Imagine\Image\Box(25, 25))
-                    ->save($path.'small'.DS.$user->ID_UTILISATEUR.'.jpg');
-                $image->resize(new Imagine\Image\Box(150, $imageService->calculateHeightFromWidth(150)))
-                    ->save($path.'medium'.DS.$user->ID_UTILISATEUR.'.jpg');
-                $image->resize(new Imagine\Image\Box(224, $imageService->calculateHeightFromWidth(224)))
-                    ->save($path.'large'.DS.$user->ID_UTILISATEUR.'.jpg');
+                $image->resize(new Box(25, 25))
+                    ->save($path.'small'.DS.$user->ID_UTILISATEUR.'.jpg')
+                ;
+                $image->resize(new Box(150, $imageService->calculateHeightFromWidth(150)))
+                    ->save($path.'medium'.DS.$user->ID_UTILISATEUR.'.jpg')
+                ;
+                $image->resize(new Box(224, $imageService->calculateHeightFromWidth(224)))
+                    ->save($path.'large'.DS.$user->ID_UTILISATEUR.'.jpg')
+                ;
             }
         } catch (Exception $exception) {
             $db->rollBack();

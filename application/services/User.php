@@ -194,9 +194,17 @@ class Service_User
             if (null !== $avatar && isset($avatar['tmp_name']) && is_file($avatar['tmp_name'])) {
                 $path = REAL_DATA_PATH.DS.'uploads'.DS.'avatars'.DS;
 
-                GD_Resize::run($avatar['tmp_name'], $path.'small'.DS.$user->ID_UTILISATEUR.'.jpg', 25, 25);
-                GD_Resize::run($avatar['tmp_name'], $path.'medium'.DS.$user->ID_UTILISATEUR.'.jpg', 150);
-                GD_Resize::run($avatar['tmp_name'], $path.'large'.DS.$user->ID_UTILISATEUR.'.jpg', 224);
+                $imagine = new Imagine\Gd\Imagine();
+
+                $image = $imagine->open($avatar['tmp_name']);
+                $imageService = new Service_Utils_Image($image);
+
+                $image->resize(new Imagine\Image\Box(25, 25))
+                    ->save($path.'small'.DS.$user->ID_UTILISATEUR.'.jpg');
+                $image->resize(new Imagine\Image\Box(150, $imageService->calculateHeightFromWidth(150)))
+                    ->save($path.'medium'.DS.$user->ID_UTILISATEUR.'.jpg');
+                $image->resize(new Imagine\Image\Box(224, $imageService->calculateHeightFromWidth(224)))
+                    ->save($path.'large'.DS.$user->ID_UTILISATEUR.'.jpg');
             }
         } catch (Exception $exception) {
             $db->rollBack();

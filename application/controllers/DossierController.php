@@ -2449,9 +2449,20 @@ class DossierController extends Zend_Controller_Action
                 $cptIdArray = 0;
                 $listeDossierConcerne = $dbAffectDossier->getDossierNonAffect($affectDossier['ID_DATECOMMISSION_AFFECT']);
                 foreach ($listeDossierConcerne as $dossier) {
-                    $listeDossierConcerne[$cptIdArray]['regl'] = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 0);
-                    $listeDossierConcerne[$cptIdArray]['exploit'] = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 1);
-                    $listeDossierConcerne[$cptIdArray]['amelio'] = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 2);
+                    $regl = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 0);
+                    $listeDossierConcerne[$cptIdArray]['regl'] = $service_dossier->withoutLevees($regl);
+                    $listeDossierConcerne[$cptIdArray]['reglReprises'] = $service_dossier->withoutActuals($listeDossierConcerne[$cptIdArray]['regl']);
+                    $listeDossierConcerne[$cptIdArray]['reglActuelles'] = $service_dossier->withoutPrevious($listeDossierConcerne[$cptIdArray]['regl']);
+
+                    $exploit = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 1);
+                    $listeDossierConcerne[$cptIdArray]['exploit'] = $service_dossier->withoutLevees($exploit);
+                    $listeDossierConcerne[$cptIdArray]['exploitReprises'] = $service_dossier->withoutActuals($listeDossierConcerne[$cptIdArray]['exploit']);
+                    $listeDossierConcerne[$cptIdArray]['exploitActuelles'] = $service_dossier->withoutPrevious($listeDossierConcerne[$cptIdArray]['exploit']);
+
+                    $amelio = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 2);
+                    $listeDossierConcerne[$cptIdArray]['amelio'] = $service_dossier->withoutLevees($amelio);
+                    $listeDossierConcerne[$cptIdArray]['amelioReprises'] = $service_dossier->withoutActuals($listeDossierConcerne[$cptIdArray]['amelio']);
+                    $listeDossierConcerne[$cptIdArray]['amelioActuelles'] = $service_dossier->withoutPrevious($listeDossierConcerne[$cptIdArray]['amelio']);
                     ++$cptIdArray;
                 }
 
@@ -2485,9 +2496,20 @@ class DossierController extends Zend_Controller_Action
                             if (substr($dossier['DATECOMM_DOSSIER'], 0, 10) === $dateCommGen) {
                                 ++$nbEtude;
                                 // on pousse les prescriptions
-                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['regl'] = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 0);
-                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['exploit'] = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 1);
-                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['amelio'] = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 2);
+                                $regles = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 0);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['regl'] = $service_dossier->withoutLevees($regles);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['reglReprises'] = $service_dossier->withoutActuals($cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['regl']);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['reglActuelles'] = $service_dossier->withoutPrevious($cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['regl']);
+
+                                $exploitation = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 1);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['exploit'] = $service_dossier->withoutLevees($exploitation);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['exploitReprises'] = $service_dossier->withoutActuals($cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['exploit']);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['exploitActuelles'] = $service_dossier->withoutPrevious($cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['exploit']);
+
+                                $amelioration = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 2);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['amelio'] = $service_dossier->withoutLevees($amelioration);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['amelioReprises'] = $service_dossier->withoutActuals($cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['amelio']);
+                                $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['amelioActuelles'] = $service_dossier->withoutPrevious($cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['amelio']);
                             } else {
                                 unset($cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]);
                             }
@@ -2509,9 +2531,35 @@ class DossierController extends Zend_Controller_Action
             $this->view->assign('celluleDossierLevee', $cellulesListe);
         }
 
-        $this->view->assign('prescriptionReglDossier', $service_dossier->getPrescriptions((int) $idDossier, 0));
-        $this->view->assign('prescriptionExploitation', $service_dossier->getPrescriptions((int) $idDossier, 1));
-        $this->view->assign('prescriptionAmelioration', $service_dossier->getPrescriptions((int) $idDossier, 2));
+        $prescriptionReglDossier = $service_dossier->getPrescriptions((int) $idDossier, 0);
+        $prescriptionReglDossier = $service_dossier->withoutLevees($prescriptionReglDossier);
+
+        $prescriptionReglDossierAnterieures = $service_dossier->withoutActuals($prescriptionReglDossier);
+        $prescriptionReglDossierActuelles = $service_dossier->withoutPrevious($prescriptionReglDossier);
+
+        $prescriptionExploitation = $service_dossier->getPrescriptions((int) $idDossier, 1);
+        $prescriptionExploitation = $service_dossier->withoutLevees($prescriptionExploitation);
+
+        $prescriptionExploitationAnterieures = $service_dossier->withoutActuals($prescriptionExploitation);
+        $prescriptionExploitationActuelles = $service_dossier->withoutPrevious($prescriptionExploitation);
+
+        $prescriptionAmelioration = $service_dossier->getPrescriptions((int) $idDossier, 2);
+        $prescriptionAmelioration = $service_dossier->withoutLevees($prescriptionAmelioration);
+
+        $prescriptionAmeliorationAnterieures = $service_dossier->withoutActuals($prescriptionAmelioration);
+        $prescriptionAmeliorationActuelles = $service_dossier->withoutPrevious($prescriptionAmelioration);
+
+        $this->view->assign('prescriptionReglDossier', $prescriptionReglDossier);
+        $this->view->assign('prescriptionReglDossierAnterieures', $prescriptionReglDossierAnterieures);
+        $this->view->assign('prescriptionReglDossierActuelles', $prescriptionReglDossierActuelles);
+
+        $this->view->assign('prescriptionExploitation', $prescriptionExploitation);
+        $this->view->assign('prescriptionExploitationAnterieures', $prescriptionExploitationAnterieures);
+        $this->view->assign('prescriptionExploitationActuelles', $prescriptionExploitationActuelles);
+
+        $this->view->assign('prescriptionAmelioration', $prescriptionAmelioration);
+        $this->view->assign('prescriptionAmeliorationAnterieures', $prescriptionAmeliorationAnterieures);
+        $this->view->assign('prescriptionAmeliorationActuelles', $prescriptionAmeliorationActuelles);
 
         // GESTION DES DATES
         // Conversion de la date de dépot en mairie pour l'afficher

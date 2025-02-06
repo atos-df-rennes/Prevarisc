@@ -65,7 +65,7 @@ jobs:
         coverage: none
     - uses: ramsey/composer-install@v3
       with:
-        composer-options: "--prefer-dist"
+        composer-options: "--prefer-dist --ignore-platform-req=php+"
     - uses: ramsey/composer-install@v3
       with:
         composer-options: "--prefer-dist"

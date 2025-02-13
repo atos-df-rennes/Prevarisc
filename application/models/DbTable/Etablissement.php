@@ -91,14 +91,10 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         }
 
         // Etape 2 : Code commune
-        if ('S' != $genre || 'C' != $genre) {
-            $codecommune = str_pad($adresses[0]['NUMINSEE_COMMUNE'], 6, '0', STR_PAD_LEFT);
-        } else {
-            $codecommune = '000000';
-        }
+        $codecommune = 'S' != $genre ? str_pad($adresses[0]['NUMINSEE_COMMUNE'], 6, '0', STR_PAD_LEFT) : '000000';
 
         // Etape 3 : Ordre sur la commune
-        if ('S' != $genre || 'C' != $genre) {
+        if ('S' != $genre) {
             $select = $this->select()
                 ->setIntegrityCheck(false)
                 ->distinct()

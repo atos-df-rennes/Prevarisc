@@ -1,13 +1,16 @@
 <?php
 
-$finder = PhpCsFixer\Finder::create()
+use PhpCsFixer\Finder;
+use PhpCsFixer\Config;
+
+$finder = Finder::create()
     ->exclude('vendor')
     ->exclude('public/min')
     ->notPath('application/Bootstrap.php')
     ->in(__DIR__)
 ;
 
-$config = new PhpCsFixer\Config();
+$config = new Config();
 return $config->setRules([
         '@PhpCsFixer' => true,
     ])

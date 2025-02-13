@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "39cf0882390e174eda091591402ebd12",
+    "content-hash": "ad0f42106859adb2179768aae375d7fa",
     "packages": [
         {
             "name": "cybermonde/odtphp",
@@ -44,6 +44,68 @@
                 "source": "https://github.com/cybermonde/odtphp/tree/v1.7"
             },
             "time": "2015-06-02T07:28:25+00:00"
+        },
+        {
+            "name": "imagine/imagine",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-imagine/Imagine.git",
+                "reference": "80ab21434890dee9ba54969d31c51ac8d4d551e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-imagine/Imagine/zipball/80ab21434890dee9ba54969d31c51ac8d4d551e0",
+                "reference": "80ab21434890dee9ba54969d31c51ac8d4d551e0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.5 || ^8.4 || ^9.3"
+            },
+            "suggest": {
+                "ext-exif": "to read EXIF metadata",
+                "ext-gd": "to use the GD implementation",
+                "ext-gmagick": "to use the Gmagick implementation",
+                "ext-imagick": "to use the Imagick implementation"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Imagine\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bulat Shakirzyanov",
+                    "email": "mallluhuct@gmail.com",
+                    "homepage": "http://avalanche123.com"
+                }
+            ],
+            "description": "Image processing for PHP",
+            "homepage": "http://imagine.readthedocs.org/",
+            "keywords": [
+                "drawing",
+                "graphics",
+                "image manipulation",
+                "image processing"
+            ],
+            "support": {
+                "issues": "https://github.com/php-imagine/Imagine/issues",
+                "source": "https://github.com/php-imagine/Imagine/tree/1.5.0"
+            },
+            "time": "2024-12-03T14:37:55+00:00"
         },
         {
             "name": "jasig/phpcas",
@@ -111,54 +173,6 @@
             },
             "abandoned": "apereo/phpcas",
             "time": "2021-05-30T19:53:34+00:00"
-        },
-        {
-            "name": "kdubuc/gd_resize",
-            "version": "1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kdubuc/gd_resize.git",
-                "reference": "27fc61f943f13a76d76b778d9d4827c29621c6c5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kdubuc/gd_resize/zipball/27fc61f943f13a76d76b778d9d4827c29621c6c5",
-                "reference": "27fc61f943f13a76d76b778d9d4827c29621c6c5",
-                "shasum": ""
-            },
-            "require": {
-                "ext-exif": "*",
-                "ext-gd": "*",
-                "php": ">=5.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "GD": "library"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kévin DUBUC",
-                    "email": "kevindubuc62@gmail.com"
-                }
-            ],
-            "description": "PHP Class to resize images with GD.",
-            "homepage": "https://github.com/kdubuc/gd_resize",
-            "keywords": [
-                "gd",
-                "resize"
-            ],
-            "support": {
-                "issues": "https://github.com/kdubuc/gd_resize/issues",
-                "source": "https://github.com/kdubuc/gd_resize/tree/1.0.0"
-            },
-            "abandoned": true,
-            "time": "2014-06-30T12:26:10+00:00"
         },
         {
             "name": "michelf/php-markdown",
@@ -2250,8 +2264,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "autoload": {
@@ -2409,11 +2423,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.0"
+        "php": "~7.1.0"
     },
     "platform-dev": [],
-    "platform-overrides": {
-        "php": "7.1.33"
-    },
     "plugin-api-version": "2.2.0"
 }

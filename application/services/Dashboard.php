@@ -224,7 +224,6 @@ class Service_Dashboard
                 'width' => 'small',
             ];
 
-            // @fixme: Ajouter les permissions
             $this->blocsConfig['nouvellesPjsPlatau'] = [
                 'service' => Service_Dashboard::class,
                 'method' => 'getDossiersPlatauNouvellesPjs',
@@ -401,7 +400,7 @@ class Service_Dashboard
             $etablissements = array_merge($search->run(false, null, false)->toArray(), $etablissements);
         }
 
-        // EIC - IGH - HAB - Autres
+        // BUP - IGH - HAB - Autres
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement', $getCount);
         $search->setCriteria('utilisateur.ID_UTILISATEUR', $id_user);

@@ -6,34 +6,39 @@
         <dl class='dl-horizontal'>
             <dt>Version</dt>
             <dd>
-            <p>
-                <?php echo $this->version_prevarisc ?>
-                <?php if($this->is_uptodate === false) : ?>
-                    <span class='avis' style='background-color: #3a87ad; font-size: .7em;'>Mise à jour disponible sur SDIS62/prevarisc</span>
-                <?php endif ?>
-            </p>
+                <p>
+                    <?php echo $this->version_prevarisc ?>
+                    <?php if($this->is_uptodate === false) : ?>
+                        <span class='avis' style='background-color: #3a87ad; font-size: .7em;'>Mise à jour disponible sur SDIS62/prevarisc</span>
+                    <?php endif ?>
+                </p>
             </dd>
 
             <dt>Authentification</dt>
             <dd>
-            <p><?php echo $this->authentification ?></p>
-            <p>Renforcement de la sécurité : <?php echo $this->enforce_security ? 'activé' : 'Désactivé' ?></p>
+                <p><?php echo $this->authentification ?></p>
+                <p>Renforcement de la sécurité : <?php echo $this->enforce_security ? 'activé' : 'Désactivé' ?></p>
             </dd>
 
             <dt>Base utilisée</dt>
             <dd>
-            <p><em><?php echo $this->dbname ?></em> sur <em><?php echo $this->db_url ?></em></p>
+                <p><em><?php echo $this->dbname ?></em> sur <em><?php echo $this->db_url ?></em></p>
+            </dd>
+
+            <dt>Chemin des fichiers</dt>
+            <dd>
+                <p><em><?= $this->files_path ?></em></p>
             </dd>
 
             <dt>Cache</dt>
             <dd>
-            <?php if ($this->cache_enabled): ?>
-                <p><?php echo $this->cache_adapter ?></p>
-                <p><?php echo $this->cache_url ?></p>
-                <p><?php echo $this->cache_lifetime ?> sec de durée de vie</p>
-            <?php else: ?>
-                <p>Désactivé</p>
-            <?php endif ?>
+                <?php if ($this->cache_enabled): ?>
+                    <p><?php echo $this->cache_adapter ?></p>
+                    <p><?php echo $this->cache_url ?></p>
+                    <p><?php echo $this->cache_lifetime ?> sec de durée de vie</p>
+                <?php else: ?>
+                    <p>Désactivé</p>
+                <?php endif ?>
             </dd>
 
             <dt>Clé(s) IGN</dt>
@@ -49,33 +54,60 @@
 
             <dt>Clé Google MAP</dt>
             <dd>
-            <p><?php echo $this->key_googlemap != null ? $this->key_googlemap : 'Aucune clé' ?></p>
+                <p><?php echo $this->key_googlemap != null ? $this->key_googlemap : 'Aucune clé' ?></p>
             </dd>
 
             <dt>Carte Geoconcept</dt>
             <dd>
-            <?php if ($this->geoconcept_url): ?>
-                <?php foreach($this->geoconcept_infos as $key => $info): ?>
-                    <p><?php echo $key . " : " . $info ?></p>
-                <?php endforeach ?>
-            <?php else: ?>
-                <p>Désactivé</p>
-            <?php endif ?>
+                <?php if ($this->geoconcept_url): ?>
+                    <?php foreach($this->geoconcept_infos as $key => $info): ?>
+                        <p><?php echo $key . " : " . $info ?></p>
+                    <?php endforeach ?>
+                <?php else: ?>
+                    <p>Désactivé</p>
+                <?php endif ?>
             </dd>
 
             <dt>HTTP API</dt>
             <dd>
-            <p><?php echo $this->api_enabled ? 'Activé' : 'Désactivé' ?></p>
+                <p><?php echo $this->api_enabled ? 'Activé' : 'Désactivé' ?></p>
             </dd>
 
             <dt>Proxy HTTP</dt>
             <dd>
-            <p><?php echo $this->proxy_enabled != 1 ? 'Désactivé' : 'Activé' ?></p>
+                <p><?php echo $this->proxy_enabled != 1 ? 'Désactivé' : 'Activé' ?></p>
             </dd>
 
             <dt>Plugins Tiers</dt>
             <dd>
-            <p><?php echo $this->third_party_plugins ? $this->third_party_plugins : 'Aucuns' ?></p>
+                <p><?php echo $this->third_party_plugins ? $this->third_party_plugins : 'Aucun' ?></p>
+            </dd>
+
+            <hr />
+
+            <dt>Relance périodicité</dt>
+            <dd>
+                <p><?= $this->relance_periodicite_commission ? 'Date de commission' : 'Date de visite' ?></p>
+            </dd>
+
+            <dt>Unité périodicité</dt>
+            <dd>
+                <p><?= $this->unite_periodicite ? 'Années' : 'Mois' ?></p>
+            </dd>
+
+            <dt>Connexion à Plat'AU</dt>
+            <dd>
+                <p><?= !$this->platau ? 'Activée' : 'Désactivée' ?></p>
+            </dd>
+
+            <dt>Nb de dossiers affichés</dt>
+            <dd>
+                <p><?= $this->nb_dossiers ? $this->nb_dossiers : '5' ?></p>
+            </dd>
+
+            <dt>Version de l'interface</dt>
+            <dd>
+                <p><?= $this->bs3 ? 'Nouvelle' : 'Standard' ?></p>
             </dd>
         </dl>
     </div>

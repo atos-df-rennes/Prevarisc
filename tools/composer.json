@@ -25,7 +25,7 @@
         "ramsey/conventional-commits": {
             "config": {
                 "typeCase": "lower",
-                "types": ["adaptation", "chore", "docs", "test", "style", "refactor", "tech"],
+                "types": ["adaptation", "chore", "docs", "test", "style", "refactor", "tech", "migration"],
                 "scopeCase": "kebab",
                 "scopes": [
                     "deps",

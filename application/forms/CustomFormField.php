@@ -12,12 +12,14 @@ class Form_CustomFormField extends Zend_Form
             'required' => true,
             'filters' => [new Zend_Filter_HtmlEntities(), new Zend_Filter_StripTags()],
             'validators' => [new Zend_Validate_StringLength(1, 255)],
+            'class' => 'form-control',
         ]);
 
         $this->addElement('select', 'type_champ', [
             'label' => 'Type du champ',
             'required' => true,
             'multiOptions' => $this->getAllListeTypeChampRubrique(),
+            'class' => 'form-control',
         ]);
 
         $submit = new Zend_Form_Element_Button('save');

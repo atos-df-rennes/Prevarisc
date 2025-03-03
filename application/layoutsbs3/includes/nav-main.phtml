@@ -1,0 +1,110 @@
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src='/images/layout-header-logo.png' alt='Prevarisc' /></a>
+        </div>
+        <div id="main-navbar" class="collapse navbar-collapse">
+            <ul class='nav navbar-nav'>
+                <li><a href='/'><span class="glyphicon glyphicon-home grey-icn-plus" aria-hidden="true" title="Accueil"></span></a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Établissements <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href='/search/etablissement?label=&page=1'><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Rechercher</a></li>
+                        <li><a href='/etablissement/add'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Dossiers <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href='/search/dossier?objet=&page=1'><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>  Rechercher</a></li>
+                        <li><a href='/dossier/add'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Ajouter</a></li>
+                    </ul>
+                </li>
+                <li><a href='/calendrier-des-commissions'>Calendrier</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-plus grey-icn-plus" aria-hidden="true" title="Plus"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href='/statistiques'>Statistiques</a></li>
+                        <li><a href='/admin'>Administration</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class='nav navbar-nav navbar-right'>
+                <li class="li-searched">
+                    <form class="navbar-search" action="/search/etablissement" method="get">
+                        <div class="input-group">
+                            <input name="label" class="form-control" id="nav-main-search-field" type="text" placeholder="Rechercher ..." />
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </button>
+                                <a class="btn btn-default" href="/search/etablissement?&statuts%5B%5D=2&statuts%5B%5D=4">Avancée &raquo;</a>
+                            </div>
+                        </div>
+                        <input name="page" type="hidden" value="1" />
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#nav-main-search-field").autocomplete("/api/1.0/search/etablissements?format=json", {
+            extraParams: {
+                label: function() {
+                    return $("#nav-main-search-field").val().trim();
+                }
+            },
+            minChars: 3,
+            cacheLength: 0,
+            width: 500,
+            parse: function(data) {
+                return $.map(data["response"]["results"], function(row) {
+                    return {
+                        data: row,
+                        value: row.LIBELLE_ETABLISSEMENTINFORMATIONS,
+                        result: row.LIBELLE_ETABLISSEMENTINFORMATIONS
+                    }
+                });
+            },
+            formatItem: function(item) {
+                var LIBELLE_COMMUNE = "non localisée";
+                switch(item.ID_GENRE) {
+                    case "1":
+                        LIBELLE_COMMUNE = item.LIBELLE_COMMUNE_ADRESSE_SITE;
+                        break;
+
+                    case "3":
+                        LIBELLE_COMMUNE = item.LIBELLE_COMMUNE_ADRESSE_CELLULE;
+                        break;
+
+                    default:
+                        LIBELLE_COMMUNE = item.LIBELLE_COMMUNE_ADRESSE_DEFAULT;
+                }
+
+                if (LIBELLE_COMMUNE) {
+                    return "[" + item.LIBELLE_GENRE + "] " + item.LIBELLE_ETABLISSEMENTINFORMATIONS + " (" + LIBELLE_COMMUNE + ")";
+                }
+                else {
+                    return "[" + item.LIBELLE_GENRE + "] " + item.LIBELLE_ETABLISSEMENTINFORMATIONS;
+                }
+            }
+        }).result(function(e, item) {
+            window.location.href= "/etablissement/index/id/" + item.ID_ETABLISSEMENT;
+        });
+    });
+</script>

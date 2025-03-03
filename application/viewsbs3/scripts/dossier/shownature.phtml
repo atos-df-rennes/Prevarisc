@@ -1,0 +1,13 @@
+<div id="listeNature">			
+	<select id="selectNature" name="selectNature" class="form-control">
+		<option value="0">Veuillez sélectionner une nature</option>
+<?php
+	foreach($this->dossierNatureListe as $listeNature)
+	{
+		echo "
+			<option value='".$listeNature['ID_DOSSIERNATURE']."'>".$listeNature['LIBELLE_DOSSIERNATURE']."</option>
+		";
+	}
+?>
+	</select>
+</div>

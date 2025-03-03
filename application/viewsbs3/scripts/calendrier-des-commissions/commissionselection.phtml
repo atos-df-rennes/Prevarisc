@@ -1,0 +1,22 @@
+<?php
+
+//Page utilisée uniquement pour l'auto complétion- Retourne infos en json
+$q = strtolower($_GET["q"]);
+if(!$q) {
+	return;
+}
+
+$items = array();
+foreach($this->commissionsListe as $commission)
+{
+	//Filtre en fonction du type car ne fonctionne pas dans la requete
+	$infos = $commission['LIBELLE_COMMISSION'];
+	$id = $commission['ID_COMMISSION'];
+	array_push($items, array(
+			"id" => $id,
+			"infos" => $infos
+		));
+}
+echo json_encode($items);
+
+?>

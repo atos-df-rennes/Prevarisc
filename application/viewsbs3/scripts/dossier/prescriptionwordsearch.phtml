@@ -1,0 +1,58 @@
+<?php
+$nbPrescType = count($this->prescriptionType);
+$tabMotClesHighlight = array();
+foreach($this->tabMotCles as $motCle) {
+    $tabMotClesHighlight[] = "<span class='highlight'>".nl2br($motCle)."</span>";
+}
+if ($nbPrescType == 0) {
+    echo "<li class='noresult'><i>Aucun résultat de recherche</i></li>";
+}
+for($i=0; $i < $nbPrescType; $i++)
+{
+	echo "
+		<li id='prescriptiontype_".$this->prescriptionType[$i][0]['ID_PRESCRIPTIONTYPE']."'>
+			<table style='width:900px;'>
+	";
+
+	$nbAssoc = count($this->prescriptionType[$i]);
+	$cpt = true;
+	for($j=0; $j < $nbAssoc; $j++)
+	{
+		$article = nl2br($this->prescriptionType[$i][$j]['LIBELLE_ARTICLE']);
+                $article = str_ireplace($this->tabMotCles, $tabMotClesHighlight, $article);
+		$texte = nl2br($this->prescriptionType[$i][$j]['LIBELLE_TEXTE']);
+                $texte = str_ireplace($this->tabMotCles, $tabMotClesHighlight, $texte);
+		echo "
+			<tr>
+				<td style='width:15%;'>".$texte."</td>
+				<td style='width:15%;'>".$article."</td>
+		";
+		if($cpt)
+		{       $libelle = nl2br($this->prescriptionType[$i][0]['PRESCRIPTIONTYPE_LIBELLE']);
+                        $libelle = str_ireplace($this->tabMotCles, $tabMotClesHighlight, $libelle); 
+			echo "<td rowspan='".$nbAssoc."' style='width:70%;'>".$libelle."</td>";
+			echo "<td rowspan='".$nbAssoc."'><button class='add btn btn-default' id='prescType_".$this->prescriptionType[$i][$j]['ID_PRESCRIPTIONTYPE']."'>Ajouter</button></td>";
+			$cpt = false;
+		}
+		echo "
+			</tr>
+		";
+	}
+	echo "
+			</table>
+		</li>
+	";
+}
+?>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+	$(".add").button({
+		icons: {
+			primary: 'ui-icon-plus'
+		}
+	});
+});
+
+</script>

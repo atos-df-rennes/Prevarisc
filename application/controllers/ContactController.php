@@ -143,7 +143,7 @@ class ContactController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => "Erreur lors de l'ajout du contact",
                 'message' => $exception->getMessage(),
             ]);
@@ -184,7 +184,7 @@ class ContactController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la modification du contact',
                 'message' => $exception->getMessage(),
             ]);
@@ -264,7 +264,7 @@ class ContactController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la suppression du contact',
                 'message' => $exception->getMessage(),
             ]);

@@ -1,0 +1,145 @@
+<?php
+    $champStr = 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]);
+
+    if ($this->idxTableau) {
+        $champStr .= '-'.$this->idxTableau;
+    }
+    if ($this->idParent) {
+        $champStr .= '-'.$this->idParent;
+    }
+?>
+
+<!-- Cas particulier pour la case à cocher et le champ parent -->
+<?php if ($this->canWrite || in_array($this->champ['ID_TYPECHAMP'], [5, 6])): ?>
+    <?php switch ($this->champ['ID_TYPECHAMP']) {
+        // Texte
+        case 1: ?>
+            <input
+                class='form-control'
+                type='text'
+                name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>'
+                value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'
+            >
+        <?php break;
+        // Texte long
+        case 2: ?>
+            <textarea class='form-control' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>'><?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?></textarea>
+        <?php break;
+        // Liste
+        case 3: ?>
+            <select class='form-control' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>'>
+                <option selected value>Sélectionnez un élément</option>
+                <?php foreach($this->champsvaleurliste[$this->champ['ID_CHAMP']] as $champvaleurliste): ?>
+                    <option
+                        value="<?= htmlspecialchars($champvaleurliste['VALEUR'], ENT_QUOTES) ?>"
+                        <?= $champvaleurliste['VALEUR'] === $this->champ['VALEUR'] ? 'selected' : '' ?>
+                    >
+                        <?= $champvaleurliste['VALEUR'] ?>
+                    </option>
+                <?php endforeach ?>
+            </select>
+        <?php break;
+        // Nombre
+        case 4: ?>
+            <input class='form-control' type='number' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' min='0' value='<?= $this->champ['VALEUR'] ?>'>
+        <?php break;
+        // Case à cocher
+        case 5: ?>
+            <input
+                type="hidden"
+                name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>'
+                value="0"
+                <?= $this->canWrite ? '' : 'disabled' ?>
+            >
+            <input
+                type="checkbox"
+                name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>'
+                value="1"
+                <?= $this->canWrite ? '' : 'disabled' ?>
+                <?= $this->champ['VALEUR'] ? 'checked' : '' ?>
+            >
+        <?php break;
+        // Parent
+        case 6: ?>
+            <?php if(1 === $this->champ['tableau']): ?>
+                <table class='table table-hover'>
+                    <thead>
+                        <tr>
+                            <?php if ($this->canWrite): ?>
+                                <th></th>
+                            <?php endif ?>
+                            <?php foreach($this->champ['FILS'] as $champsFils) :?>
+                                <?php if(!empty($champsFils['NOM'])) : ?>
+                                    <th>
+                                        <?= $champsFils['NOM'] ?>
+                                    </th>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                            <?php if($this->canWrite) :?>
+                                <th>Supprimer</th>
+                            <?php endif ?>
+                        </tr>
+                    </thead>
+                    <tbody id= <?= 'tbody-'.$this->champ['ID_CHAMP'] ?> class='grp'>
+                        <?php if ($this->canWrite): ?>
+                            <tr class='ligneTableau hidden'>
+                                <?= $this->partial('formulaire/partials/tableau/partial-input-tableau.phtml',
+                                    [
+                                        'inputs' => $this->champ['FILS']['INPUTS'],
+                                        'champsvaleurliste' => $this->champsvaleurliste
+                                    ]);
+                                ?>
+                            </tr>
+                        <?php endif ?>
+                        <?= $this->partial('formulaire/partials/tableau/partial-tableau.phtml', [
+                                'colonnesChamp' => $this->champ['FILS'],
+                                'champsvaleurliste' => $this->champsvaleurliste,
+                                'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                            ]);
+                        ?>
+                    </tbody>
+                </table>
+                <?php if ($this->canWrite): ?>
+                    <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
+                    <button type='button' class='btn btn-info addRow' idparent=<?= $this->champ['ID_CHAMP'] ?>>Ajouter une ligne</button>
+                <?php endif ?>
+            <?php else: ?>
+                <div class="tableInput">
+                    <?php foreach ($this->champ["FILS"] as $champsFils): ?>
+                        <div class="colTableInput">
+                            <label><?= $champsFils['NOM'] ?></label>
+                            <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                                'champ' => $champsFils,
+                                'champsvaleurliste' => $this->champsvaleurliste,
+                                'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                            ]) ?>
+                        </div>
+                    <?php endforeach ?>
+                </div>
+            <?php endif;
+            break;
+        // Date
+        case 7: ?>
+            <div class="input-group">
+                <input type='text' class='date form-control' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'>
+                <span class="input-group-btn">
+                    <button type="button" class='today btn btn-default'>
+                        <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
+                    </button>
+                </span>
+            </div>
+            <?php break;
+        default:
+            break;
+    } ?>
+<?php else:
+    if ($this->champ['VALEUR'] === NULL) {
+        echo $this->partial('formulaire/partials/partial-input-champ-null.phtml', [
+            'champ' => $this->champ,
+        ]);
+    } else {
+        echo $this->partial('formulaire/partials/partial-input-champ-not-null.phtml', [
+            'champ' => $this->champ,
+        ]);
+    }
+endif ?>

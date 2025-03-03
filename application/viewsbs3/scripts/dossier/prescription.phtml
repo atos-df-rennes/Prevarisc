@@ -1,0 +1,541 @@
+<h3>Gestion des prescriptions</h3>
+
+<?php if($this->infosDossier['VERROU_DOSSIER'] == 0): ?>
+	<div class="btn-toolbar" role="toolbar">
+		<div class="btn-group" role="group">
+			<button class='addPresc btn btn-primary' id='addPrescriptionType'>Ajouter une prescription type</button>
+			<a class='btn btn-default' href='<?= $this->url(array('controller' => 'dossier', 'action' => 'prescription-add')) ?>' >Ajouter une prescription</a>
+		</div>
+
+		<button class='recupPrescDossier btn btn-success' id='recupPrescDossier'>Reprendre les prescriptions d'un dossier précédent</button>
+	</div>
+<?php endif;
+
+echo "
+	<h3 id='prescRappelRegTitle'>Rappels réglementaires</h3>
+	<div class='row'>
+		<ul id='prescRappelReg' class='listePrescriptions'>
+";
+	echo showPrescription($this->prescriptionReglDossier,$this->id_dossier,$this->infosDossier['VERROU_DOSSIER']);
+echo "
+		</ul>
+	</div>
+	<br/>
+	<h3>Prescriptions liées à l'exploitation</h3>
+	<div class='row'>
+		<ul id='prescExploitation' class='listePrescriptions'>
+";
+	echo showPrescription($this->prescriptionExploitation,$this->id_dossier,$this->infosDossier['VERROU_DOSSIER']);
+echo "
+		</ul>
+	</div>
+	<br/>
+	<h3>Recommandations liées à l'amélioration du niveau de sécurité</h3>
+	<div class='row'>
+		<ul id='prescAmelioration' class='listePrescriptions'>
+";
+	echo showPrescription($this->prescriptionAmelioration,$this->id_dossier,$this->infosDossier['VERROU_DOSSIER']);
+echo "
+		</ul>
+	</div>
+";
+
+
+	function showPrescription($tabPrescriptions,$id_dossier,$verrou)
+	{
+		$listePrescr = $tabPrescriptions;
+		$nbPrescDossier = count($listePrescr);
+
+		if($nbPrescDossier == 0){
+			echo "<div class='col-xs-12' style='font-style:italic;'>Actuellement aucune prescription dans cette catégorie</div>";
+		}
+
+		for($i=0; $i < $nbPrescDossier; $i++)
+		{
+			if(isset($listePrescr[$i][0]['ID_PRESCRIPTION_DOSSIER']))
+			{
+				echo "
+					<li class='table-responsive' id='prescriptionDossier_".$listePrescr[$i][0]['ID_PRESCRIPTION_DOSSIER']."' style='list-style-type:none; margin-bottom:15px;'>
+						<table class='table'>
+				";
+				$nbAssoc = count($listePrescr[$i]);
+				$cpt = true;
+				for($j=0; $j < $nbAssoc; $j++)
+				{
+					$article = $listePrescr[$i][$j]['LIBELLE_ARTICLE'];
+					$texte = $listePrescr[$i][$j]['LIBELLE_TEXTE'];
+					echo "
+						<tr>
+							<td class='col-md-3'>".$texte."</td>
+							<td class='col-md-2'>".$article."</td>
+					";
+
+					if($cpt)
+					{
+						if($listePrescr[$i][$j]['TYPE_PRESCRIPTION_DOSSIER'] != 0){
+							echo "
+								<td rowspan='".$nbAssoc."' class='col-md-1 numPresc'>
+									".$listePrescr[$i][0]['NUM_PRESCRIPTION_DOSSIER']."
+								</td>
+							";
+						}
+					?>
+
+						<td rowspan='<?= $nbAssoc ?>' class='<?= $listePrescr[$i][$j]['TYPE_PRESCRIPTION_DOSSIER'] != 0 ? "col-md-5" : "col-md-6" ?>'>
+							<div class="row row-no-gutters">	
+								<?php if (null !== $listePrescr[$i][$j]['ID_DOSSIER_REPRISE']) : ?>
+									<div class='col-xs-12'>
+										<span class='label label-warning'>
+											Reprise du dossier
+											<a href="/dossier/index/id/<?= $listePrescr[$i][$j]['ID_DOSSIER_REPRISE'] ?>" target="_blank">
+												<?= $listePrescr[$i][$j]['OBJET_DOSSIER'] ?? $listePrescr[$i][$j]['LIBELLE_DOSSIERTYPE']. ' - ' . $listePrescr[$i][$j]['LIBELLE_DOSSIERNATURE'] ?>
+											</a>
+											créé le <?= $listePrescr[$i][$j]['DATEINSERT_DOSSIER'] ?>
+										</span>
+									</div>
+								<?php endif;
+
+								if ($listePrescr[$i][$j]['DATE_LEVEE'] !== null) : ?>
+									<span class='label label-info'>
+										Levée le <?= $listePrescr[$i][$j]['DATE_LEVEE_FULL'] ?>
+									</span>
+								<?php endif;
+
+								if ($listePrescr[$i][$j]['JUSTIFICATIF_LEVEE']) : ?>
+									<i
+										class='icon-label-right glyphicon glyphicon-info-sign'
+										title='Justification'
+										data-content='<?= nl2br($listePrescr[$i][$j]['JUSTIFICATIF_LEVEE']) ?>'
+										data-html='true'
+										data-placement='top'
+									></i>
+								<?php endif;
+
+								if ($listePrescr[$i][0]["ID_PRESCRIPTION_TYPE"] == null) : ?>
+									<p><?= nl2br($listePrescr[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER']) ?></p>
+								<?php else : ?>
+									<p><?= nl2br($listePrescr[$i][0]['PRESCRIPTIONTYPE_LIBELLE']) ?></p>
+								<?php endif ?>
+							</div>
+						</td>
+
+					<?php
+						if($verrou == 0){
+							echo "
+								<td class='col-md-1' rowspan='".$nbAssoc."'>
+									<a class='btn btn-default' href='/dossier/prescription-edit/id/".$id_dossier."/id-prescription/".$listePrescr[$i][0]['ID_PRESCRIPTION_DOSSIER']."' >Modifier</a>
+								</td>
+							";
+						}
+						$cpt = false;
+					}
+					echo "
+						</tr>
+					";
+				}
+				echo "
+						</table>
+					</li>
+				";
+			}
+		}
+	}	//FIN fonction show prescriptions
+
+?>
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+<?php if($this->infosDossier['VERROU_DOSSIER'] == 0){ ?>
+
+	$(".listePrescriptions").sortable({
+		update: function(event, ui) {
+			var listePrescriptionUpdateReg = new Array();
+			var listePrescriptionUpdate = new Array();
+			var num = 1;
+
+			$("#prescRappelReg > li").each(function(){
+				//on parcour les li pour récolter les changements et mettre à jour dans la base
+				//on change le num de li
+				$(this).attr('num',num);
+				//on change le num affiché
+				$(this).children().children().children().children(".numPresc").html(num);
+
+				//on recupere id du li en cours "presc_x"
+				var liId = $(this).attr('id');
+				var liId = liId.split('_');
+				listePrescriptionUpdateReg.push(liId[1]);
+
+				num = num + 1;
+			});
+
+			var num = 1;
+			$("#prescExploitation > li").each(function(){
+				//on parcour les li pour récolter les changements et mettre à jour dans la base
+				//on change le num de li
+				$(this).attr('num',num);
+				//on change le num affiché
+				$(this).children().children().children().children(".numPresc").html(num);
+
+				//on recupere id du li en cours "presc_x"
+				var liId = $(this).attr('id');
+				var liId = liId.split('_');
+				listePrescriptionUpdate.push(liId[1]);
+
+				num = num + 1;
+			});
+
+			$("#prescAmelioration > li").each(function(){
+				//on parcour les li pour récolter les changements et mettre à jour dans la base
+				//on change le num de li
+				$(this).attr('num',num);
+				//on change le num affiché
+				$(this).children().children().children().children(".numPresc").html(num);
+
+				//on recupere id du li en cours "presc_x"
+				var liId = $(this).attr('id');
+				var liId = liId.split('_');
+				listePrescriptionUpdate.push(liId[1]);
+
+				num = num + 1;
+			});
+
+			$.ajax({
+				url: "/dossier/prescriptionchangepos",
+				data: "do=changePrescOrder&tableUpdate="+listePrescriptionUpdate+"&tableUpdateReg="+listePrescriptionUpdateReg+"&idDossier="+$("#idDossier").val(),
+				type:"POST",
+				beforeSend: function(){
+
+				},
+				success: function(affichageResultat){
+					return false;
+				},
+				error: function()	{
+					return false;
+				}
+			});
+		}
+	});
+
+<?php } ?>
+//Ajout prescription type
+	var dialogPrescType = $('<div style="display:none;"></div>').appendTo('body');
+
+	dialogPrescType.dialog({
+		title: "Ajout d'une prescription type",
+		modal: true,
+		autoOpen: false,
+		width: 1000,
+		height: 'auto',
+		buttons: [
+            {
+                text: 'Fermer',
+                class: 'btn btn-default',
+                click: function() {
+                    dialogPrescType.html("");
+                    dialogPrescType.dialog("close");
+                }
+            }
+        ],
+	});
+
+	$("#addPrescriptionType").live('click',function(){
+		//On ouvre la boite de dialogue
+		$.ajax({
+			type: "POST",
+			url: "/dossier/prescriptiontypeform",
+			data: "&action=dossier",
+			success: function(msg){
+				dialogPrescType.html(msg);
+				dialogPrescType.dialog("open");
+				$.ajax({
+					type: "POST",
+					url: "/dossier/emplacement",
+					data: $("#formPrescription").serialize(),
+					success: function(msg){
+						$("#selectEmplacement").html(msg);
+					}
+				});
+			}
+		});
+		return false;
+	});
+
+	$(".selectCategorie").live('click',function(){
+		$("#PRESCRIPTIONTYPE_CATEGORIE").val($(this).attr('id'));
+		changeEmplacement();
+		return false;
+	});
+
+	$(".selectTexte").live('click',function(){
+		$("#PRESCRIPTIONTYPE_TEXTE").val($(this).attr('id'));
+		changeEmplacement();
+		return false;
+	});
+
+	$(".selectArticle").live('click',function(){
+		$("#PRESCRIPTIONTYPE_ARTICLE").val($(this).attr('id'));
+		changeEmplacement();
+		return false;
+	});
+
+	$(".retour").live('click',function(){
+		if($(this).attr('id') == 'retourCategorie'){
+			$("#PRESCRIPTIONTYPE_CATEGORIE").val('');
+		}else if($(this).attr('id') == 'retourTexte'){
+			$("#PRESCRIPTIONTYPE_TEXTE").val('');
+		}else if($(this).attr('id') == 'retourArticle'){
+			$("#PRESCRIPTIONTYPE_ARTICLE").val('');
+		}
+		changeEmplacement();
+		return false;
+	});
+
+	function changeEmplacement()
+	{
+		$("#listePrescriptionType").html('');
+		$.ajax({
+			type: "POST",
+			url: "/dossier/emplacement",
+			data: $("#formPrescription").serialize(),
+			success: function(msg){
+				$("#selectEmplacement").html(msg);
+				affichePrescription();
+			}
+		});
+	}
+
+	function affichePrescription()
+	{
+		$.ajax({
+			type: "POST",
+			url: "/dossier/prescriptionshowemplacement",
+			data: $("#formPrescription").serialize(),
+			success: function(msg){
+				$("#listePrescriptionType").html(msg);
+			}
+		});
+	}
+
+	$(".add").live('click',function(){
+            var $this = $(this);
+            var tabId = $this.attr('id').split('_');
+            var id = tabId[1];
+
+            var typePresc = $("#TYPE_PRESCRIPTION_DOSSIER").val();
+            //On enregistre la prescription associée au dossier puis on integre le tableau retourné dans le li class=listePrescriptions
+
+            $.ajax({
+                type: "POST",
+                url: "/dossier/prescriptionaddtype",
+                data: "&idPrescType="+id+"&idDossier="+$("#idDossier").val()+"&typePrescriptionDossier="+typePresc,
+                success: function(msg){
+                    var $list = $('#prescRappelReg');
+                    if (typePresc == 1) {
+                        $list = $('#prescExploitation');
+                    } else if (typePresc == 2) {
+                        $list = $('#prescAmelioration');
+                    }
+                    $list.find('> div').remove(); /* Retrait du message empty list */
+                    $list.append(msg);
+                    $this.attr('disabled', 'disabled').html('Ajouté ');
+                }
+            });
+		return false;
+	});
+
+	//Ajout d'une prescription ordinaire
+	var dialogPresc = $('<div style="display:none;"></div>').appendTo('body');
+
+	dialogPresc.dialog({
+		title: "Ajout d'une prescription",
+		modal: true,
+		autoOpen: false,
+		width: 1000,
+		height: 'auto',
+		buttons: {
+			"Ajouter la prescription": function() {
+				var compteurTA = 0;
+				$("input[name='texte[]']").each(function(){
+					compteurTA++;
+				});
+				if(compteurTA > 0  && $("#LIBELLE_PRESCRIPTIONTYPE").val() != '')
+				{
+					$.ajax({
+						type: "POST",
+						url: "/dossier/prescriptionadd",
+						data: $("#formPrescription").serialize()+"&idDossier="+$("#idDossier").val(),
+						success: function(msg){
+							window.location.reload();
+						}
+					});
+					dialogPresc.html("");
+					dialogPresc.dialog("close");
+				}
+				return false;
+			},
+			"Annuler": function() {
+				dialogPresc.html("");
+				dialogPresc.dialog("close");
+			}
+		},
+		close: function(event, ui){
+
+		}
+	});
+
+	$("#addPrescription").live('click',function(){
+		//On ouvre la boite de dialogue
+		$.ajax({
+			type: "POST",
+			url: "/dossier/formprescription",
+			success: function(msg){
+				dialogPresc.html(msg);
+				dialogPresc.dialog("open");
+			}
+		});
+		return false;
+	});
+
+
+	$(".suppAssoc").live('click',function(){
+		$(this).parent().parent().remove();
+		return false;
+	});
+
+	//Récupération des prescriptions d'un autre dossier
+	var dialogRecupPresc = $('<div style="display:none;"></div>').appendTo('body');
+
+	dialogRecupPresc.dialog({
+		title: "Reprise des prescriptions d'un dossier précédent",
+		modal: true,
+		autoOpen: false,
+		width: 1200,
+		height: 'auto',
+		buttons: [
+            {
+                text: 'Reprendre les prescriptions',
+                class: 'btn btn-success',
+                click: function() {
+                    if ($('input[type=checkbox][name^=dossierSelect-]:checked').length > 0) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/dossier/recupprescription",
+                            data: $("#selectionDossier").serialize(),
+                            before: function(){
+                                dialogRecupPresc.html("Veuillez patienter pendant la reprise des prescriptions <img src='/images/load.gif' />");
+                            },
+                            success: function(msg){
+                                window.location='/dossier/prescription/id/'+$("#idDossier").val();
+                            }
+                        });
+                    } else {
+                        return false;
+                    }
+
+                    return false;
+                }
+            },
+            {
+                text: 'Annuler',
+                class: 'btn btn-default',
+                click: function() {
+                    $(this).html("");
+                    $(this).dialog("close");
+                }
+            }
+        ],
+	});
+
+	$(".recupPrescDossier").live('click',function(){
+		//On ouvre la boite de dialogue
+		$.ajax({
+			type: "POST",
+			url: "/dossier/formrecupprescription",
+			data: "&idDossier="+$("#idDossier").val(),
+			success: function(msg){
+				dialogRecupPresc.html(msg);
+				dialogRecupPresc.dialog("open");
+			}
+		});
+		return false;
+	});
+
+	//Edition des prescriptions d'un dossier
+	var dialogPrescEdit = $('<div style="display:none;"></div>').appendTo('body');
+
+	dialogPrescEdit.dialog({
+		title: "Ajout d'une prescription type",
+		modal: true,
+		autoOpen: false,
+		width: 1000,
+		height: 'auto',
+		buttons: {
+			"Modifier la prescription": function() {
+				$.ajax({
+					type: "POST",
+					url: "/dossier/prescriptioneditsave",
+					data: $("#formPrescriptionEdit").serialize(),
+					success: function(msg){
+						window.location='/dossier/prescription/id/'+$("#idDossier").val();
+					}
+				});
+				return false;
+			},
+			"Annuler": function() {
+				dialogPrescEdit.html("");
+				dialogPrescEdit.dialog("close");
+			}
+		},
+		close: function(event, ui){
+
+		}
+	});
+
+	$(".edit").live('click',function(){
+		var tabId = $(this).attr('id').split('_');
+		var idPrescDossier = tabId[1];
+		var numPrecs = $(this).parent().prev().prev().html();
+		$.ajax({
+			type: "POST",
+			url: "/dossier/prescriptionedit",
+			data: "&idPrescDossier="+idPrescDossier+"&idDossier="+$("#idDossier").val()+"&numPresc="+numPrecs,
+			success: function(msg){
+				dialogPrescEdit.html(msg);
+				dialogPrescEdit.dialog("open");
+			}
+		});
+		return false;
+	});
+
+	//Suppression d'une prescription
+	$(".deletePrescDossier").live('click',function(){
+		$(this).hide();
+		$(".deleteOption").show();
+		return false;
+	});
+
+	$(".cancelDelete").live('click',function(){
+		$(".deleteOption").hide();
+		$(".deletePrescDossier").show();
+		return false;
+	});
+
+	$(".validDelete").live('click',function(){
+		var tabId = $(this).attr('id').split('_');
+		var idPrescDossier = tabId[1];
+		$.ajax({
+			type: "POST",
+			url: "/dossier/prescriptiondelete",
+			data: "&idPrescDossier="+idPrescDossier+"&idDossier="+$("#idDossier").val(),
+			success: function(msg){
+				$("#prescriptionDossier_"+idPrescDossier).remove();
+				window.location='/dossier/prescription/id/'+$("#idDossier").val();
+			}
+		});
+		return false;
+	});
+
+    $('.icon-label-right').popover()
+});
+</script>

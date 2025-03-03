@@ -1,0 +1,583 @@
+<?php
+
+/**
+ * @param  Odf|Segment      $odf
+ */
+function addChamp($odf, string $nomOdf, ?string $variable){
+    try{
+        $odf->setVars($nomOdf, $variable ?? '', true, 'UTF8');
+    } catch (Exception $e) {
+
+    }
+}
+
+// PARTIE PRESCRIPTION
+function addPrescription($listePrescription,$type,$odf,$typeContenu){
+    //TYPE_PRESCRIPTION_DOSSIER
+    try {
+        if($type == 0){
+            switch ($typeContenu) {
+                case 'default':
+                    $prescription = $odf->listeReg;
+
+                    break;
+                case 'reprises':
+                    $prescription = $odf->listeRegReprises;
+
+                    break;
+                case 'actuelles':
+                    $prescription = $odf->listeRegActuelles;
+
+                    break;
+                default:
+                    throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
+
+                    break;
+            }
+        }else if ($type == 1){
+            switch ($typeContenu) {
+                case 'default':
+                    $prescription = $odf->listeExploitation;
+
+                    break;
+                case 'reprises':
+                    $prescription = $odf->listeExploitationReprises;
+
+                    break;
+                case 'actuelles':
+                    $prescription = $odf->listeExploitationActuelles;
+
+                    break;
+                default:
+                    throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
+
+                    break;
+            }
+        }else if ($type == 2){
+            switch ($typeContenu) {
+                case 'default':
+                    $prescription = $odf->listeAmelioration;
+
+                    break;
+                case 'reprises':
+                    $prescription = $odf->listeAmeliorationReprises;
+
+                    break;
+                case 'actuelles':
+                    $prescription = $odf->listeAmeliorationActuelles;
+
+                    break;
+                default:
+                    throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
+
+                    break;
+            }
+        }
+
+        $nbPrescDossier = count($listePrescription);
+
+        if(isset($prescription) ){
+            if($nbPrescDossier)
+            {
+                for($i=0; $i < $nbPrescDossier; $i++)
+                {
+                    $nbAssoc = count($listePrescription[$i]);
+                    $cpt = true;
+                    $textearticle = '';
+                    $nbCpt = $nbAssoc;
+                    for($j=0; $j < $nbAssoc; $j++)
+                    {
+                        $articleT = $listePrescription[$i][$j]['LIBELLE_ARTICLE'];
+                        $texteT = $listePrescription[$i][$j]['LIBELLE_TEXTE'];
+
+                        if($texteT != ''){
+                            $textearticle .= $texteT." - ";
+                        }else{
+                            $textearticle .= " - ";
+                        }
+                        if($nbCpt > 1){
+                            if($articleT != ''){
+                                $textearticle .= $articleT.", ";
+                            }else{
+                                $textearticle .= ", ";
+                            }
+                        }else{
+                            if($articleT != ''){
+                                $textearticle .= $articleT." ";
+                            }else{
+                                $textearticle .= " ";
+                            }
+                        }
+                        if($cpt)
+                        {
+                            addChamp($prescription, 'num', $listePrescription[$i][0]['NUM_PRESCRIPTION_DOSSIER']);
+
+                            if( $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER'] == '')
+                            {
+                                addChamp($prescription, 'libelle', $listePrescription[$i][0]['PRESCRIPTIONTYPE_LIBELLE']);
+                            }else{
+                                addChamp($prescription, 'libelle', $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER']);
+                            }
+                            $cpt = false;
+                        }
+                        $nbCpt--;
+                    }
+                    addChamp($prescription, 'textearticle', $textearticle);
+                    $prescription->merge();
+                }
+
+            } else {
+                addChamp($prescription, 'num', "");
+                addChamp($prescription, 'libelle', "");
+                addChamp($prescription, 'textearticle', "");
+                $prescription->merge();
+            }
+        }
+    } catch (OdfException $e) {
+    }
+}
+
+$consonne = array("a", "e", "i", "o", "u", "y", "A", "E", "I", "O", "U", "Y");
+if(count($this->membresFiles) == 0){
+	echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Aucun membre n'a été renseigné pour la commission</span><br/><br/><br/>";
+	return false;
+}
+foreach($this->membresFiles as $val => $membre){
+	//On boucle sur les membres
+	if($membre->ID_GROUPEMENT == NULL){
+		$nomFichier = $membre->ID_COMMISSIONMEMBRE."PV_".$membre->COURRIER_PV;
+
+		if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier)){
+
+			$odf = new Odf(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier);
+			$dossInfos = $odf->setSegment('dossierInfos');
+
+			foreach($this->dossierComm as $val => $dossierInfos){
+				if(isset($dossierInfos['infosEtab'])){
+					$nbAdresse = count($dossierInfos['infosEtab']['adresses']);
+				}else{
+					$nbAdresse = 0;
+				}
+
+				if($nbAdresse != 0){
+					foreach($dossierInfos['infosEtab']['adresses'] as $commune){
+						addChamp($dossInfos,'commissionNom', $this->commissionInfos[0]['LIBELLE_COMMISSION']);
+
+						if(isset($commune["LIBELLE_COMMUNE"])){
+							addChamp($dossInfos,'communeDossier', $commune["LIBELLE_COMMUNE"]);
+						}
+
+						addChamp($dossInfos,'objetDossier', $dossierInfos['OBJET_DOSSIER']);
+						addChamp($dossInfos,'natureDossier', $dossierInfos["LIBELLE_DOSSIERNATURE"]);
+
+                        // Gestion des avis & dérogations
+                        try {
+                            $avisDerogations = $dossInfos->avisDerogations;
+                        } catch (Exception $e) {}
+
+                        if (isset($avisDerogations)) {
+                            if (!empty($dossierInfos["AVIS_DEROGATIONS"])) {
+                                foreach ($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation) {
+                                    addChamp($avisDerogations, 'type', $avisDerogation['TYPE']);
+                                    addChamp($avisDerogations, 'titre', $avisDerogation['TITRE']);
+                                    addChamp($avisDerogations, 'objet', $avisDerogation['OBJET']);
+                                    addChamp($avisDerogations, 'justification', $avisDerogation['JUSTIFICATION']);
+                                    addChamp($avisDerogations, 'articles_concernes', $avisDerogation['ARTICLES_CONCERNES']);
+                                    addChamp($avisDerogations, 'mesures_compensatoires_proposees', $avisDerogation['MESURES_COMPENSATOIRES_PROPOSEES']);
+                                    addChamp($avisDerogations, 'analyse_de_risque', $avisDerogation['ANALYSE_DE_RISQUE']);
+                                    addChamp($avisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
+                                    addChamp($avisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
+
+                                    $date = null;
+                                    if (null !== $avisDerogation['DATECOMM_DOSSIER']) {
+                                        $date = new Zend_Date($avisDerogation['DATECOMM_DOSSIER'], Zend_Date::DATES);
+                                    } elseif (null !== $avisDerogation['DATEVISITE_DOSSIER']) {
+                                        $date = new Zend_Date($avisDerogation['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+                                    }
+
+                                    if ($date instanceof Zend_Date) {
+                                        $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+                                    }
+
+                                    addChamp($avisDerogations, 'date', $date);
+
+                                    $avisDerogations->merge();
+                                }
+                            } else {
+                                addChamp($avisDerogations, 'type', '');
+                                addChamp($avisDerogations, 'titre', '');
+                                addChamp($avisDerogations, 'objet', '');
+                                addChamp($avisDerogations, 'justification', '');
+                                addChamp($avisDerogations, 'articles_concernes', '');
+                                addChamp($avisDerogations, 'mesures_compensatoires_proposees', '');
+                                addChamp($avisDerogations, 'analyse_de_risque', '');
+                                addChamp($avisDerogations, 'avis', '');
+                                addChamp($avisDerogations, 'identifiantdossierleve', '');
+                                addChamp($avisDerogations, 'date', '');
+
+                                $avisDerogations->merge();
+                            }
+                        }
+
+                        // Gestion des avis & dérogations établissement
+                        try {
+                            $avisDerogationsEtablissement = $dossInfos->avisDerogationsEtablissement;
+                        } catch (Exception $e) {}
+
+                        if (isset($avisDerogationsEtablissement)) {
+                            if (!empty($dossierInfos["AVIS_DEROGATIONS_ETABLISSEMENT"])) {
+                                foreach ($dossierInfos["AVIS_DEROGATIONS_ETABLISSEMENT"] as $avisDerogationEtablissement) {
+                                    addChamp($avisDerogationsEtablissement, 'type', $avisDerogationEtablissement['TYPE']);
+                                    addChamp($avisDerogationsEtablissement, 'titre', $avisDerogationEtablissement['TITRE']);
+                                    addChamp($avisDerogationsEtablissement, 'objet', $avisDerogationEtablissement['OBJET']);
+                                    addChamp($avisDerogationsEtablissement, 'justification', $avisDerogationEtablissement['JUSTIFICATION']);
+                                    addChamp($avisDerogationsEtablissement, 'articles_concernes', $avisDerogationEtablissement['ARTICLES_CONCERNES']);
+                                    addChamp($avisDerogationsEtablissement, 'mesures_compensatoires_proposees', $avisDerogationEtablissement['MESURES_COMPENSATOIRES_PROPOSEES']);
+                                    addChamp($avisDerogationsEtablissement, 'analyse_de_risque', $avisDerogationEtablissement['ANALYSE_DE_RISQUE']);
+                                    addChamp($avisDerogationsEtablissement, 'avis', $avisDerogationEtablissement['LIBELLE_AVIS']);
+                                    addChamp($avisDerogationsEtablissement, 'identifiantdossierleve', $avisDerogationEtablissement['ID_DOSSIER_LIE']);
+
+                                    $date = null;
+                                    if (null !== $avisDerogationEtablissement['DATECOMM_DOSSIER']) {
+                                        $date = new Zend_Date($avisDerogationEtablissement['DATECOMM_DOSSIER'], Zend_Date::DATES);
+                                    } elseif (null !== $avisDerogationEtablissement['DATEVISITE_DOSSIER']) {
+                                        $date = new Zend_Date($avisDerogationEtablissement['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+                                    }
+
+                                    if ($date instanceof Zend_Date) {
+                                        $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+                                    }
+
+                                    addChamp($avisDerogationsEtablissement, 'date', $date);
+
+                                    $avisDerogationsEtablissement->merge();
+                                }
+                            } else {
+                                addChamp($avisDerogationsEtablissement, 'type', '');
+                                addChamp($avisDerogationsEtablissement, 'titre', '');
+                                addChamp($avisDerogationsEtablissement, 'objet', '');
+                                addChamp($avisDerogationsEtablissement, 'justification', '');
+                                addChamp($avisDerogationsEtablissement, 'articles_concernes', '');
+                                addChamp($avisDerogationsEtablissement, 'mesures_compensatoires_proposees', '');
+                                addChamp($avisDerogationsEtablissement, 'analyse_de_risque', '');
+                                addChamp($avisDerogationsEtablissement, 'avis', '');
+                                addChamp($avisDerogationsEtablissement, 'identifiantdossierleve', '');
+                                addChamp($avisDerogationsEtablissement, 'date', '');
+
+                                $avisDerogationsEtablissement->merge();
+                            }
+                        }
+
+                        // Gestion des formulaires personnalisés
+                        $serviceUtils = new Service_Utils();
+
+						//Ajout du model permettant de recuperer les champ fils d un parent
+						$modelChamp = new Model_DbTable_Champ();
+
+                        foreach ($dossierInfos['FORMULAIRES'] as $formulaire) {
+                            if (is_array($formulaire['RUBRIQUES'])) {
+                                // Permet d'avoir les informations unitairement
+                                foreach ($formulaire['RUBRIQUES'] as $rubrique) {
+                                    foreach ($rubrique['CHAMPS'] as $champ) {
+                                        if ('Parent' === $champ['TYPE']) {
+                                            if (1 === $champ['tableau']) {
+                                                foreach ($champ['FILS'] as $idx => $champFils) {
+                                                    if(is_int($idx)){
+                                                        addChamp(
+                                                            $dossInfos,
+                                                            $serviceUtils->getFullFusionName(
+                                                                $formulaire['NOM_INTERNE'],
+                                                                [
+                                                                    $rubrique['NOM'],
+                                                                    $champ['NOM'],
+                                                                    $champFils['idx']
+                                                                ]
+                                                            ),
+                                                            $champFils['NOM']
+                                                        );
+                                                    }
+                                                }
+
+                                                $nomFusion = $serviceUtils->getFusionNameMagicalCase(
+                                                    $formulaire['NOM_INTERNE'].' '.
+                                                    $rubrique['NOM'].' '.
+                                                    $champ['NOM'].' '.
+                                                    'valeurs'
+                                                );
+
+                                                try {
+                                                    $segmentTableau = $dossInfos->$nomFusion;
+                                                } catch (Exception $e) {}
+
+                                                if (isset($segmentTableau)) {
+                                                    if (count($champ['FILS']['VALEURS']) === 0) {
+                                                        foreach ($champ['FILS'] as $index => $fils) {
+                                                            if(is_int($index)) {
+                                                                addChamp($segmentTableau, sprintf('valeur%d', $index), '');
+                                                            }
+                                                        }
+
+                                                        $segmentTableau->merge();
+                                                    } else {
+                                                        foreach ($champ['FILS']['VALEURS'] as $ligne) {
+                                                            $idxCol = 0;
+
+                                                            foreach ($ligne as $col) {
+                                                                if ('Case à cocher' === $col['TYPE']) {
+                                                                    if (true === boolval($col['VALEUR'])) {
+                                                                        $col['VALEUR'] = 'Oui';
+                                                                    } else {
+                                                                        $col['VALEUR'] = 'Non';
+                                                                    }
+                                                                } else {
+                                                                    // Définition du libellé pour les dates
+                                                                    if ('Date' === $col['TYPE']) {
+                                                                        if ($col['VALEUR'] !== null) {
+                                                                            $zendDate = new Zend_Date($col['VALEUR'], 'dd/MM/yyyy');
+                                                                            $col['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                                                        } else {
+                                                                            $col['VALEUR'] = "";
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR']);
+                                                                $idxCol++;
+                                                            }
+
+                                                            $segmentTableau->merge();
+                                                        }
+                                                    }
+                                                }
+
+                                                $segmentTableau = null;
+                                            } else {
+                                                foreach ($champ['FILS'] as $champFils) {
+                                                    if ('Case à cocher' === $champFils['TYPE']) {
+                                                        if (true === boolval($champFils['VALEUR'])) {
+                                                            $champFils['VALEUR'] = 'Oui';
+                                                        } else {
+                                                            $champFils['VALEUR'] = 'Non';
+                                                        }
+                                                    } else {
+                                                        // Définition du libellé pour les dates
+                                                        if ('Date' === $champFils['TYPE']) {
+                                                            if ($champFils['VALEUR'] !== null) {
+                                                                $zendDate = new Zend_Date($champFils['VALEUR'], 'dd/MM/yyyy');
+                                                                $champFils['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                                            } else {
+                                                                $champFils['VALEUR'] = "";
+                                                            }
+                                                        }
+                                                    }
+
+                                                    addChamp(
+                                                        $dossInfos,
+                                                        $serviceUtils->getFullFusionName(
+                                                            $formulaire['NOM_INTERNE'],
+                                                            [
+                                                                $rubrique['NOM'],
+                                                                $champ['NOM'],
+                                                                $champFils['NOM']
+                                                            ]
+                                                        ),
+                                                        $champFils['VALEUR']
+                                                    );
+                                                }
+                                            }
+                                        } else {
+                                            // Définition du libellé pour les cases à cocher
+                                            if ('Case à cocher' === $champ['TYPE']) {
+                                                if (true === boolval($champ['VALEUR'])) {
+                                                    $champ['VALEUR'] = 'Oui';
+                                                } else {
+                                                    $champ['VALEUR'] = 'Non';
+                                                }
+                                            } else {
+                                                // Définition du libellé pour les dates
+                                                if ('Date' === $champ['TYPE']) {
+                                                    if ($champ['VALEUR'] !== null) {
+                                                        $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
+                                                        $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                                    } else {
+                                                        $champ['VALEUR'] = "";
+                                                    }
+                                                }
+                                            }
+
+                                            addChamp(
+                                                $dossInfos,
+                                                $serviceUtils->getFullFusionName(
+                                                    $formulaire['NOM_INTERNE'],
+                                                    [
+                                                        $rubrique['NOM'],
+                                                        $champ['NOM']
+                                                    ]
+                                                ),
+                                                $champ['VALEUR']
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+						$dateComm = new Zend_Date($this->dateComm);
+						addChamp($dossInfos,'dateCommission', $dateComm->get(Zend_Date::DAY." ".Zend_Date::MONTH_NAME." ".Zend_Date::YEAR));
+
+						if(isset($dossierInfos["DATEVISITE_DOSSIER"]) && $dossierInfos["DATEVISITE_DOSSIER"] != NULL){
+							$dateVisite = new Zend_Date($dossierInfos["DATEVISITE_DOSSIER"]);
+						}else if(isset($dossierInfos['infosEtab']["last_visite"]) && $dossierInfos['infosEtab']["last_visite"] != NULL){
+							$dateVisite = new Zend_Date($dossierInfos['infosEtab']["last_visite"]);
+						}
+
+						if(isset($dateVisite) && $dateVisite != ""){
+							addChamp($dossInfos,'dateVisite', $dateVisite->get(Zend_Date::DAY." ".Zend_Date::MONTH_NAME." ".Zend_Date::YEAR));
+						}else{
+							addChamp($dossInfos,'dateVisite', "");
+						}
+
+						//DEBUT Adresse
+						if(isset($dossierInfos['infosEtab']['adresses'][0]["LIBELLE_RUE"])) {
+							addChamp($dossInfos,'libelleRue', $dossierInfos['infosEtab']['adresses'][0]["LIBELLE_RUE"]);
+						} else {
+							addChamp($dossInfos,'libelleRue', '');
+						}
+
+						if(isset($dossierInfos['infosEtab']['adresses'][0]["CODEPOSTAL_COMMUNE"])) {
+							addChamp($dossInfos,'codePostal', $dossierInfos['infosEtab']['adresses'][0]["CODEPOSTAL_COMMUNE"]);
+						} else {
+							addChamp($dossInfos,'codePostal', '');
+						}
+
+						if(isset($dossierInfos['infosEtab']['adresses'][0]["LIBELLE_COMMUNE"])) {
+							addChamp($dossInfos,'libelleCommune', $dossierInfos['infosEtab']['adresses'][0]["LIBELLE_COMMUNE"]);
+						} else {
+							addChamp($dossInfos,'libelleCommune','');
+						}
+						//FIN Adresse
+
+						//DEBUT Effectif total
+						$effectifTotal = $dossierInfos['infosEtab']['informations']["EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"] + $dossierInfos['infosEtab']['informations']["EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"];
+
+						if($effectifTotal == 0) {
+							addChamp($dossInfos,'effectifTotal', "non renseigné");
+						} else {
+							addChamp($dossInfos,'effectifTotal', $effectifTotal);
+						}
+						//FIN Effectif total
+
+						switch($dossierInfos['TYPE_DOSSIER']){
+							case 1:
+								$type = "Étude";
+							    break;
+							case 2:
+								$type = "Visite de commission";
+							    break;
+							case 3:
+								$type = "Groupe de visite";
+							    break;
+							default:
+								$type = "";
+							    break;
+						}
+						addChamp($dossInfos,'typeDossier', $type);
+
+						if(isset($dossierInfos['infosEtab']['parents'][0]["LIBELLE_ETABLISSEMENTINFORMATIONS"])) {
+							addChamp($dossInfos,'nomPereEtab', $dossierInfos['infosEtab']['parents'][0]["LIBELLE_ETABLISSEMENTINFORMATIONS"]);
+						} else {
+							addChamp($dossInfos,'nomPereEtab', '');
+						}
+
+						if(isset($dossierInfos['infosEtab']['informations'])){
+							addChamp($dossInfos,'nomEtab', $dossierInfos['infosEtab']['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"]);
+							addChamp($dossInfos,'categorieEtab', $dossierInfos['infosEtab']['informations']["LIBELLE_CATEGORIE"]);
+							addChamp($dossInfos,'typeEtab', $dossierInfos['infosEtab']['informations']["LIBELLE_TYPE_PRINCIPAL"]);
+						}else{
+							addChamp($dossInfos,'nomEtab', '');
+							addChamp($dossInfos,'categorieEtab', '');
+							addChamp($dossInfos,'typeEtab', '');
+						}
+
+						switch($dossierInfos['AVIS_DOSSIER']){
+							case 1:
+								$avis = "Favorable";
+							    break;
+							case 2:
+								$avis = "Défavorable";
+							    break;
+							default:
+								$avis = "";
+							    break;
+						}
+						addChamp($dossInfos,'avisDossier', $avis);
+
+						switch($dossierInfos['AVIS_DOSSIER_COMMISSION']){
+							case 1:
+								$avis = "Favorable";
+							    break;
+							case 2:
+								$avis = "Défavorable";
+							    break;
+							default:
+								$avis = "";
+							    break;
+						}
+						addChamp($dossInfos,'avisDossierCommission', $avis);
+
+						$listeDocUrba = "";
+						foreach($dossierInfos["listeDocUrba"] as $va => $docurb){
+							$listeDocUrba .= $docurb['NUM_DOCURBA']."    ";
+						}
+						addChamp($dossInfos,'numDocUrba', $listeDocUrba);
+
+						addPrescription($dossierInfos['prescriptionReglDossier'],0,$dossInfos,'default');
+						addPrescription($dossierInfos['prescriptionReglDossierReprises'],0,$dossInfos,'reprises');
+						addPrescription($dossierInfos['prescriptionReglDossierActuelles'],0,$dossInfos,'actuelles');
+
+						addPrescription($dossierInfos['prescriptionExploitation'],1,$dossInfos,'default');
+						addPrescription($dossierInfos['prescriptionExploitationReprises'],1,$dossInfos,'reprises');
+						addPrescription($dossierInfos['prescriptionExploitationActuelles'],1,$dossInfos,'actuelles');
+
+						addPrescription($dossierInfos['prescriptionAmelioration'],2,$dossInfos,'default');
+						addPrescription($dossierInfos['prescriptionAmeliorationReprises'],2,$dossInfos,'reprises');
+						addPrescription($dossierInfos['prescriptionAmeliorationActuelles'],2,$dossInfos,'actuelles');
+
+						$dossInfos->merge();
+					}
+				}
+			}
+
+			$odf->mergeSegment($dossInfos);
+			$nouvellePJ = savePj($this->idComm,"Le pv a bien été généré");
+            $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
+            $path = $store->getFilePath($nouvellePJ, 'dateCommission', $this->idComm, true);
+			$odf->saveToDisk($path);
+			echo "<span id='notif' class='ui-state-highlight' style='padding: 0.3em;'>Le PV a été généré avec succes</span><br/><br/><br/>";
+		}else{
+			echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le fichier pour le membre : ".$membre->LIBELLE_COMMISSIONMEMBRE." n'a pas été renseigné</span><br/><br/><br/>";
+		}
+	}else{
+		echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le fichier pour le membre : ".$membre->LIBELLE_COMMISSIONMEMBRE." n'a pas été renseigné</span><br/><br/><br/>";
+	}
+}
+
+function savePj($dateCommId,$libelleDocument){
+	//ENREGISTEMENT DANS PIECE JOINTES
+	$dateDuJour = new Zend_Date();
+	$DBpieceJointe = new Model_DbTable_PieceJointe;
+	$nouvellePJ = $DBpieceJointe->createRow();
+	$nouvellePJ->NOM_PIECEJOINTE = "P.V.";
+	$nouvellePJ->EXTENSION_PIECEJOINTE = ".odt";
+	$nouvellePJ->DESCRIPTION_PIECEJOINTE = "PV : ".$libelleDocument." ".$dateDuJour->get(Zend_Date::DAY."/".Zend_Date::MONTH."/".Zend_Date::YEAR." à ".Zend_Date::HOUR.":".Zend_Date::MINUTE);
+	$nouvellePJ->DATE_PIECEJOINTE = $dateDuJour->get(Zend_Date::YEAR."-".Zend_Date::MONTH."-".Zend_Date::DAY." ".Zend_Date::HOUR.":".Zend_Date::MINUTE.":".Zend_Date::SECOND);
+	$nouvellePJ->save();
+	//ENREGISTEMENT DANS PIECE JOINTES
+	$DBsave = new Model_DbTable_DateCommissionPj;
+	$linkPj = $DBsave->createRow();
+	$linkPj->ID_DATECOMMISSION = $dateCommId;
+	$linkPj->ID_PIECEJOINTE = $nouvellePJ->ID_PIECEJOINTE;
+	$linkPj->save();
+
+	return $nouvellePJ;
+}

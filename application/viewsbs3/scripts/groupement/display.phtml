@@ -1,0 +1,219 @@
+<!-- Onglet -->
+<div id='tabs'>
+	<ul>
+		<li id='general'><a href='#tabs-1'>Général</a></li>
+		<li id='prev'><a href='#tabs-2'>Préventionnistes affectés</a></li>
+		<li id='coordonnee'><a href='#tabs-3'>Coordonnées</a></li>
+		<li id='contact' ><a href='#tabs-4'>Contacts liés au groupement</a></li>
+	</ul>
+
+	<!-- Partie générale -->
+	<div id="tabs-1">
+		<dl class='dl-horizontal'>
+			<!-- Libellé du groupement -->
+			<div class="form-group">
+                <dt>Libellé du groupement</dt>
+                <dd>
+                    <input class="form-control" type='text' id='nom_groupement' name='nom_groupement' value='<?php echo htmlspecialchars($this->libelle, ENT_QUOTES) ?>' size=30 />
+                </dd>
+            </div>
+
+			<!-- Type du groupement-->
+			<div class="form-group">
+                <dt>Type</st>
+                <dd>
+                    <select class="form-control" id='type_groupement' name='type_groupement'>
+                    <?php
+                        foreach($this->types as $value)
+                            echo '<option id="'.$value["ID_GROUPEMENTTYPE"].'" value="'.$value["ID_GROUPEMENTTYPE"].'" '.( ($value["ID_GROUPEMENTTYPE"] == $this->type)?"selected":"" )." >".$value["LIBELLE_GROUPEMENTTYPE"]."</option>";
+                    ?>
+                    </select>
+                </dd>
+            </div>
+
+			<!-- Liste des villes -->
+            <dt>Villes du groupement</dt>
+            <dd style="display: flex; align-items: center;">
+                <select class="form-control" id='liste_villes' multiple size=20 class='pull-left' style='height: 300px; width: 30%;'>
+                    <?php
+                    foreach($this->villes as $value) {
+                        echo "<option id='".$value["NUMINSEE_COMMUNE"]."' value='".$value["NUMINSEE_COMMUNE"]."'>".$value["NUMINSEE_COMMUNE"]." ".$value["LIBELLE_COMMUNE"]."</option>";
+                    }
+                    ?>
+                </select>
+
+                <div class="btn-group btn-group-vertical" style='padding: 20px;'>
+                    <button id='add_ville' type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
+                    <button id='remove_ville' type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+                </div>
+
+                <select class="form-control" id='villes_groupement' name='villes[]' class='pull-left' multiple size=20 style='height: 300px; width: 30%;'>
+                    <?php
+                    if(is_array($this->ville_du_groupement))
+                    {
+                        foreach($this->ville_du_groupement as $value) {
+                            echo "<option id='".$value["NUMINSEE_COMMUNE"]."' value='".$value["NUMINSEE_COMMUNE"]."' >".$value["NUMINSEE_COMMUNE"]." ".$value["LIBELLE_COMMUNE"]."</option>";
+                        }
+                    }
+                    ?>
+                </select>
+            </dd>
+		</dl>
+	</div>
+
+	<!-- Partie des préventionnistes -->
+	<div id="tabs-2">
+		<!-- Ajouter un préventionniste -->
+		 <select id="preventionnistes-autocomplete" placeholder="Saisissez le nom d'un préventionniste ..." name="prev[]" multiple>
+		 	<?php foreach ($this->preventionnistes as $preventionniste): ?>
+				<option value="<?= $preventionniste["ID_UTILISATEUR"] ?>">
+					<?= $preventionniste["NOM_UTILISATEURINFORMATIONS"] . " " . $preventionniste["PRENOM_UTILISATEURINFORMATIONS"] ?>
+				</option>
+			<?php endforeach ?>
+		 </select>
+
+        <?php if (count($this->preventionnistes) > 0): ?>
+            <button
+                id='preventionniste'
+                class='btn btn-info'
+                type='button'
+                style='margin-top: 10px;'
+                data-loading-text="Affectation <img src='/images/load.gif' />"
+            >
+                Affecter aux établissements
+            </button>
+            <span id='preventionniste-notification' class='ui-state-highlight ui-helper-hidden' style='padding: .5em;'>
+				Les préventionnistes ont été affectés.
+			</span>
+        <?php endif ?>
+	</div>
+
+	<!-- Coordonnées -->
+	<div id='tabs-3'>
+		<?php echo $this->action('form', 'contact', null, array("item" => "groupement_coord")) ?>
+	</div>
+
+	<!-- Partie contact -->
+	<div id="tabs-4"></div>
+</div>
+
+<script type="text/javascript">
+    //réaffecter un préventioiste
+    $("#preventionniste").click(function() {
+        $.ajax({
+            url: "/groupement/preventionniste",
+            data: "groupement="+$("#gpt option:selected").text(),
+            type: "POST",
+            beforeSend: function() {
+                $("#preventionniste").button('loading')
+            },
+            success: function() {
+                $("#preventionniste").button('reset')
+                $('#preventionniste-notification').show()
+                setTimeout(function() {
+                    $("#preventionniste-notification").fadeOut();
+                }, 2500)
+            },
+        })
+	});
+
+	// Onglets
+	$( "#tabs" ).tabs();
+
+	// Ajouter une ville
+	$("#add_ville").click(function() {
+		$('#liste_villes option:selected').each( function() {
+			$("#villes_groupement").append( $("<option></option>").val( $(this).val() ).html( $(this).text() ) );
+			$(this).attr("disabled","disabled").removeAttr("selected");
+		});
+		$('#liste_villes').change();
+		return false;
+	});
+
+	// Enlever une ville
+	$("#remove_ville").click(function() {
+		$('#villes_groupement option:selected').each( function() {
+			$(this).remove();
+			$("#liste_villes option[value=" + $(this).val() + "]").removeAttr("disabled");
+		});
+		$('#liste_villes').change();
+		$('#villes_groupement').change();
+		return false;
+	});
+
+	// Gestion des boutons du milieux
+	$("#liste_villes, #villes_groupement").change(function() {
+		if( $(this).children(":selected").size() == 0 )
+			$( (($(this).attr("id") == "liste_villes") ? "#add_ville" : "#remove_ville") ).button("disable");
+		else
+			$( (($(this).attr("id") == "liste_villes") ? "#add_ville" : "#remove_ville") ).button("enable");
+	});
+
+	// Partie prev ----------------------------------------------------------------------------------------------------------------
+
+	const preventionnistes = <?= json_encode($this->preventionnistes) ?> ?? []
+	// Auto-complétion des préventionnistes
+	new TomSelect("#preventionnistes-autocomplete", {
+		plugins: {
+			remove_button: {
+				title: 'Supprimer cet élément'
+			}
+		},
+		valueField: 'ID_UTILISATEUR',
+		labelField: 'NOM_UTILISATEURINFORMATIONS',
+		searchField: 'NOM_UTILISATEURINFORMATIONS',
+		items: preventionnistes.map((preventionniste) => preventionniste.ID_UTILISATEUR),
+		load: function(query, process) {
+			$.ajax({
+				url: "/api/1.0/search/users",
+				type: 'get',
+				data: {
+					name: query,
+					fonctions: 13,
+					limit: 100
+				},
+				success: function (result) {
+					process(result.response.results);
+				}
+			});
+		},
+		shouldLoad(query) {
+			return query.length >= 3
+		},
+		render: {
+			option: function(data, escape) {
+				let res = "<div><span>" + escape(data.NOM_UTILISATEURINFORMATIONS) + " " + escape(data.PRENOM_UTILISATEURINFORMATIONS) + "</span>"
+
+				if ('' !== data.GRADE_UTILISATEURINFORMATIONS) {
+					res += "<br /><span class='text-muted'>" + escape(data.GRADE_UTILISATEURINFORMATIONS) + "</span>"
+				}
+
+				res += "</div>"
+
+				return res
+			},
+			item: function(data, escape) {
+				let res = "<div>" + escape(data.NOM_UTILISATEURINFORMATIONS)
+
+				if (data.PRENOM_UTILISATEURINFORMATIONS) {
+					res += " " + escape(data.PRENOM_UTILISATEURINFORMATIONS)
+				}
+
+				res += "</div>"
+
+				return res
+			},
+			no_results: function(data, escape) {
+				return '<div class="no-results">Aucun résultat trouvé pour "'+escape(data.input)+'"</div>';
+			}
+		}
+	})
+
+	// Partie Contact ----------------------------------------------------------------------------------------------------------------
+	$("#tabs-4").load("/contact?item=groupement&id=<?php echo $_GET["id"] ?>");
+
+	// On cache les villes déjà selectionnées
+	$("#villes_groupement option").each( function() {
+		$( "#liste_villes option[id='" + $(this).attr("id")  + "']" ).attr("disabled","disabled");
+	});
+</script>

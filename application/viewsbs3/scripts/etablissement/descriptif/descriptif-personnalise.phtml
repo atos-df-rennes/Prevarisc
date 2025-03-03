@@ -1,0 +1,53 @@
+<div class='action-buttons pull-right'>
+    <a class='btn btn-default' href="<?= $this->url(array('action' => 'edit-descriptif')) ?>">Modifier les descriptifs</a>
+</div>
+
+<div id='descriptif-personnalise'>
+    <div class="descriptif-personnalise--header">
+        <h3>Descriptifs</h3>
+        <?php if ($this->hideButton === null): ?>
+            <button type="button" class="btn btn-link" id="descEtab" data-href="<?= $this->url(['action' => 'descriptif']).'?original=true' ?>" data-target="#modal-desc" data-toggle="modal">Afficher le descriptif original</button>
+        <?php endif ?>
+    </div>
+
+    <h4 class='h4_subtitle'>Descriptif technique</h4>
+    <div class="descriptif-personnalise_rubriques-infos">
+        <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
+    </div>
+
+    <div id='affichage-informations' class='form-horizontal'>
+        <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
+            'rubriques' => $this->rubriques,
+            'champsvaleurliste' => $this->champsvaleurliste,
+            'canWrite' => false
+        ]); ?>
+    </div>
+    <div class="modal fade" id="modal-desc" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title">Descriptif original</h3>
+                </div>
+                <div class="modal-body">
+                    Chargement des éléments...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type='text/javascript'>
+    $('#descEtab').click(function() {
+        $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            success: function(result) {
+                $('#modal-desc .modal-body').html(result)
+            }
+        })
+    })
+</script>

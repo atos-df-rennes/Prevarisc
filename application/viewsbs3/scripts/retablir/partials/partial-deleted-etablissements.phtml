@@ -1,0 +1,58 @@
+<div class="text-muted">
+    <small>Nombre total d'éléments : <?= count($this->data) ?></small>
+</div>
+
+<?php if (count($this->data) > 0): ?>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="whitespace-nowrap">Supprimé par</th>
+                <th>Nom de l'établissement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($this->data as $deletedElement) : ?>
+                <tr>
+                    <td class="whitespace-nowrap">
+                        <div class="deleted-element__deleted-by">
+                            <div class="deleted-element__deleted-by_informations">
+                                <?php if (null !== $deletedElement['DELETED_BY']): ?>
+                                    <?= $deletedElement['USERNAME_UTILISATEUR'] ?>
+                                    <?php $this->avatar($deletedElement['DELETED_BY'], 'small', ['style' => 'border-radius: 50%;']) ?>
+                                <?php else: ?>
+                                    Inconnu
+                                    <?php $this->avatar('default', 'small', ['style' => 'border-radius: 50%;']) ?>
+                                <?php endif ?>
+                            </div>
+
+                            <small class='text-muted'>
+                                <?php
+                                    $dateSuppression = new Zend_Date($deletedElement['DATESUPPRESSION_ETABLISSEMENT'], 'yyyy-MM-dd');
+                                    $dateSuppression = $dateSuppression
+                                        ->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR, 'fr');;
+                                ?>
+                                Le <?= $dateSuppression ?>
+                            </small>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="deleted-element__name">
+                            <?= $deletedElement['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
+                            <?php if ('' !== $deletedElement['LIBELLE_COMMUNE']): ?>
+                                - <?= $deletedElement['LIBELLE_COMMUNE'] ?>
+                            <?php endif ?>
+                            <a
+                                class='btn btn-sm btn-default deleted-element__restore-button'
+                                href=<?= '/etablissement/retablir-etablissement/idEtablissement/'.$deletedElement['ID_ETABLISSEMENT'] ?>
+                            >
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                Rétablir l'établissement
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+<?php endif ?>

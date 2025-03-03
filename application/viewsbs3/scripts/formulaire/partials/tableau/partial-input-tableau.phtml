@@ -1,0 +1,21 @@
+<td class='tdMove'>
+    <span class="glyphicon glyphicon-move" aria-hidden="true"></span>
+</td>
+<?php $genTimesTamp = time(); ?>
+<?php foreach ($this->inputs as &$input) : ?>
+    <?php
+        $input['STR_DATA'] = 'valeur-'.$genTimesTamp.'-'.$input['ID_PARENT'].'-'.$input['ID_CHAMP'];
+    ?>
+    <td>
+        <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                'champ' => $input,
+                'canWrite' => true,
+                'idxTableau' => '0',
+                'champsvaleurliste' => $this->champsvaleurliste
+            ]);
+        ?>
+    </td>
+<?php endforeach ?>
+<td>
+    <button type='button' class='deleteRow btn btn-danger'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button>
+</td>

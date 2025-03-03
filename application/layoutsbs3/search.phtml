@@ -1,0 +1,15 @@
+<?php $this->placeholder('lateral_navigation')->captureStart(); // Capture du 'lateral_navigation' ?>
+<?php $action_name = Zend_Controller_Front::getInstance()->getRequest()->getActionName() ?>
+<ul class="nav nav-tabs nav-stacked menu_dashboard" >
+    <li class="<?php echo $action_name == 'etablissement' ? 'active' : '' ?>"><a href='/search/etablissement?label=&page=1'><span class="glyphicon glyphicon-home" aria-hidden="true"></span>   Établissements</a></li>
+    <li class="<?php echo $action_name == 'dossier' ? 'active' : '' ?>"><a href='/search/dossier?objet=&page=1'><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>   Dossiers</a></li>
+    <li><a href='../etablissement/add'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un établissement</a></li>
+    <li><a href='../dossier/add'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un dossier</a></li>
+</ul>
+<?php $this->placeholder('lateral_navigation')->captureEnd(); ?>
+
+<?php $this->placeholder('before_content')->captureStart() // Capture du 'before_content' ?>
+
+<?php $this->placeholder('before_content')->captureEnd() ?>
+
+<?php echo $this->render('dashboard.phtml') // Rendu du layout par défaut avec les placeholders ?>

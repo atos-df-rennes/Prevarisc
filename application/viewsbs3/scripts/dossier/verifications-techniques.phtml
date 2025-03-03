@@ -1,0 +1,20 @@
+<div class='action-buttons pull-right'>
+    <a class='btn btn-default' href="<?= $this->url(array('action' => 'edit-verifications-techniques')) ?>">Modifier les vérifications techniques</a>
+</div>
+
+<div id='descriptif-personnalise'>
+    <h3>Vérifications Techniques</h3>
+
+    <h4 class='h4_subtitle'>Rubriques</h4>
+    <div class="descriptif-personnalise_rubriques-infos">
+        <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
+    </div>
+
+    <div id='affichage-informations' class='form-horizontal'>
+        <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
+            'rubriques' => $this->rubriques,
+            'champsvaleurliste' => $this->champsvaleurliste,
+            'canWrite' => false
+        ]); ?>
+    </div>
+</div>

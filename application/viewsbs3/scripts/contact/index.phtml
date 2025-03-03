@@ -1,0 +1,219 @@
+<?php if( !$this->ajax && $this->verrou == 0) : ?>
+	<p style='float: right;'><a id='add-contact' class='btn btn-default' href="/contact/form?item=<?php echo $this->item ?>&id=<?php echo $this->id ?>">Ajouter un nouveau contact</a></p>
+	<p style='float: right; margin-right: 1em'><a id='add-contact-existant' class='btn btn-default' href="/contact/form?item=<?php echo $this->item ?>&id=<?php echo $this->id ?>">Ajouter un contact existant</a></p>
+<?php endif ?>
+
+<div style='clear: both'></div>
+<div id='contact-content-ajax'>
+	<!-- Contacts parents pour les ets -->
+        <?php if(isset($this->contacts_parent) && count($this->contacts_parent) > 0) : ?>
+        <h3>Contacts des établissements parents</h3>
+        <?php
+            foreach($this->contacts_parent as $contacts){
+                echo $this->partialLoop("contact/partial_fiche_read.phtml", $contacts);
+            }
+        ?>
+        <hr />
+	<?php endif ?>
+
+	<!-- Contacts de l'ets -->
+	<?php if(isset($this->contacts_parent) && count($this->contacts_parent) > 0) : ?>
+	    <h3>Contacts de l'établissement</h3>
+	<?php endif ?>
+
+	<?php
+		if( count($this->contacts) != 0 ) {
+			echo $this->partialLoop("contact/partial_fiche.phtml", $this->contacts);
+		} else {
+			echo "<p><strong>Aucun contact.</strong></p>";
+		}
+	?>
+
+    <div style='clear: both'></div>
+</div>
+
+<?php if (!$this->ajax) : ?>
+    <!-- Ajout d'un contact -->
+	<div class="modal fade" id="dialog-add-contact" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title">Ajout d'un contact</h3>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button id="modal-add-contact" type="button" class="btn btn-success">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edition d'un contact -->
+    <div class="modal fade" id="dialog-edit-contact" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title">Modification d'un contact</h3>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button id="edit-contact" type="button" class="btn btn-success">Modifier</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ajout d'un contact existant -->
+    <div class="modal fade" id="dialog-add-contact-existant" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title">Ajout d'un contact existant</h3>
+                </div>
+                <div class="modal-body">
+                    <label>Nom du contact</label>
+                    <input class="form-control" type="text" id="nom_contact_existant" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suppression d'un contact -->
+    <div class="modal fade" id="dialog-delete-contact" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title">Suppression d'un contact</h3>
+                </div>
+                <div class="modal-body">
+                    Voulez-vous vraiment supprimer ce contact ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button id="delete-contact" type="button" class="btn btn-danger">Supprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<script type="text/javascript">
+		// Suppression d'un contact
+		$("a.contact-delete").live("click", function() {
+			var a = this;
+
+            $('#dialog-delete-contact').modal("show")
+            $('#delete-contact').click(function() {
+                $.ajax({
+                    url: a.href + "&format=json",
+                    type: "POST",
+                    success: function () {
+                        $(a).parents(".fiche_contact").remove();
+                        $("#dialog-delete-contact").modal("hide");
+                    }
+                });
+            })
+			return false;
+		});
+
+		// Ajout d'un contact
+		$("a#add-contact").live("click", function() {
+			var a = this;
+
+            $("#dialog-add-contact").modal('show')
+			$.ajax({
+				url: a.href + "&format=html",
+				success: function(result) {
+                    $('#dialog-add-contact .modal-body').html(result)
+
+                    $("#modal-add-contact").click(function() {
+                        $.ajax({
+                            url: "/contact/add?format=json",
+                            data: $("#dialog-add-contact #formulaire_contact").serialize(),
+                            type: "POST",
+                            success: function () {
+                                $('#dialog-add-contact').modal("hide");
+                                $("#contact-content-ajax").load("/contact?item=<?php echo $this->item ?>&id=<?php echo $this->id ?>&ajax=1");
+                            }
+                        });
+                    })
+				}
+			});
+			return false;
+		});
+
+		// Edition d'un contact
+		$(".fiche_edit a").live("click", function() {
+			var a = this;
+
+            $("#dialog-edit-contact").modal('show')
+			$.ajax({
+				url: a.href + "&format=html",
+				success: function(result) {
+                    $("#dialog-edit-contact .modal-body").html(result)
+
+                    $('#edit-contact').click(function() {
+                        $.ajax({
+                            url: "/contact/edit",
+                            data: $("#dialog-edit-contact #formulaire_contact").serialize(),
+                            type: "POST",
+                            success: function () {
+                                $("#dialog-edit-contact").modal('hide')
+                                $("#contact-content-ajax").load("/contact?item=<?php echo $this->item ?>&id=<?php echo $this->id ?>&ajax=1");
+                            }
+                        });
+                    })
+				}
+			});
+			return false;
+		});
+
+		$("a#add-contact-existant").click(function() {
+            $("#nom_contact_existant").val('')
+			$('#dialog-add-contact-existant').modal("show");
+            return false;
+		});
+
+		$("#nom_contact_existant").autocomplete("/contact/get?format=json", {
+			minChars: 3,
+			cacheLength: 0,
+			max: 100,
+			parse: function(data) {
+				return $.map(data["resultats"], function(row) {
+					return {
+						data: row,
+						value: row.NOM_UTILISATEURINFORMATIONS + " " + row.PRENOM_UTILISATEURINFORMATIONS,
+						result: row.NOM_UTILISATEURINFORMATIONS + " " + row.PRENOM_UTILISATEURINFORMATIONS
+					}
+				});
+			},
+			formatItem: function(item) {
+				return item.NOM_UTILISATEURINFORMATIONS + " " + item.PRENOM_UTILISATEURINFORMATIONS;
+			}
+		}).result(function(e, item) {
+			$.ajax({
+				url: "/contact/add",
+				data: {
+					format: "json",
+					exist: true,
+					ID_UTILISATEURINFORMATIONS: item.ID_UTILISATEURINFORMATIONS,
+					item: "<?php echo $this->item ?>",
+					id: "<?php echo $this->id ?>"
+				},
+				type: "POST",
+				success: function () {
+					$('#dialog-add-contact-existant').modal("hide");
+					$("#contact-content-ajax").load("/contact?item=<?php echo $this->item ?>&id=<?php echo $this->id ?>&ajax=1");
+				}
+			});
+		});
+	</script>
+<?php endif ?>

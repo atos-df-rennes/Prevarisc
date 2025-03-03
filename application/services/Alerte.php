@@ -2,7 +2,7 @@
 
 class Service_Alerte
 {
-    public const ALERTE_LINK = '<a data-value="%s"%s class="pull-right alerte-link"><i class="icon-bell icon-black"></i>Alerter</a>';
+    public const ALERTE_LINK = '<a data-value="%s"%s class="pull-right alerte-link"><span class="glyphicon glyphicon-bell" aria-hidden="true"></span>Alerter</a>';
 
     public function getLink($idTypeChangement, $idEtablissement = null): string
     {

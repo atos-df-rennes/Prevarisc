@@ -1,0 +1,1154 @@
+<?php
+
+if (!function_exists('addChamp')) {
+    /**
+     * @param  Odf|Segment      $odf
+     */
+    function addChamp($odf, string $nomOdf, ?string $variable) {
+        try{
+            $odf->setVars($nomOdf, $variable ?? '', true, 'UTF8');
+        } catch (Exception $e) {
+
+        }
+    }
+}
+
+$odf = new Odf($this->fichierSelect);
+
+addChamp($odf, 'dateDuJour', $this->dateDuJour);
+
+addChamp($odf, 'typeDossier', $this->typeDossier);
+addChamp($odf, 'natureDossier', $this->natureDossier);
+
+if (isset($this->commissionInfos['LIBELLE_COMMISSION'])) {
+    addChamp($odf, 'libelle_commission', $this->commissionInfos['LIBELLE_COMMISSION']);
+}
+
+addChamp($odf, 'date_commEntete', $this->dateCommEntete);
+addChamp($odf, 'numWinPrev', $this->numWinPrev);
+addChamp($odf, 'objetDossier', $this->infosDossier['OBJET_DOSSIER']);
+addChamp($odf, 'analyseRisque', $this->infosDossier['ANOMALIE_DOSSIER']);
+addChamp($odf, 'observationDossier', $this->infosDossier['OBSERVATION_DOSSIER']);
+addChamp($odf, 'descriptifDossier', $this->infosDossier['DESCRIPTIF_DOSSIER']);
+addChamp($odf, 'criticite', $this->infosDossier['FACTDANGE_DOSSIER']);
+
+addChamp($odf, 'dateRvrat', $this->dateRvrat);
+addChamp($odf, 'dateDelaipresc', $this->dateDelaipresc);
+
+if ($this->infosDossier['HORSDELAI_DOSSIER'] == 0) {
+    $horsdelai = "Non";
+} else {
+    $horsdelai = "Oui";
+}
+addChamp($odf, 'horsDelai',$horsdelai);
+addChamp($odf, 'docManquant', $this->listeDocManquant['DOCMANQUANT']);
+addChamp($odf, 'dateDocManquant', $this->DATE_DOCSMANQUANT);
+addChamp($odf, 'dateReceptionDocManquant', $this->DATE_RECEPTION_DOC);
+
+if ($this->infosDossier['DATEVISITE_DOSSIER']) {
+    addChamp($odf, 'dateVisite', $this->dateVisite);
+    addChamp($odf, 'heureVisite', $this->heureVisite);
+} else {
+    addChamp($odf, 'dateVisite',"");
+    addChamp($odf, 'heureVisite',"");
+}
+
+//Date de génération du rapport
+$dateGen = new Zend_Date(Zend_Date::DATES);
+$dateGen = $dateGen->get(Zend_Date::DAY." ".Zend_Date::MONTH_NAME." ".Zend_Date::YEAR);
+addChamp($odf, 'dateGeneration',$dateGen);
+
+if ($this->infosDossier['DATECOMM_DOSSIER']) {
+    $date = new Zend_Date($this->infosDossier['DATECOMM_DOSSIER'], Zend_Date::DATES);
+    $date = $date->get(Zend_Date::DAY." ".Zend_Date::MONTH_NAME." ".Zend_Date::YEAR);
+    addChamp($odf, 'dateComm',$date);
+} else {
+    addChamp($odf, 'dateComm',"");
+}
+
+if ($this->infosDossier['DATEINCOMPLET_DOSSIER']) {
+    $date = new Zend_Date($this->infosDossier['DATEINCOMPLET_DOSSIER'], Zend_Date::DATES);
+    $date = $date->get(Zend_Date::DAY." ".Zend_Date::MONTH_NAME." ".Zend_Date::YEAR);
+    addChamp($odf, 'dateIncomplet',$date);
+} else {
+    addChamp($odf, 'dateIncomplet',"");
+}
+
+addChamp($odf, 'demandeurDossier', $this->infosDossier['DEMANDEUR_DOSSIER']);
+addChamp($odf, 'servInstructeur', $this->servInstructeur);
+addChamp($odf, 'servInstructeurPrenomContact', $this->servInstructeurPrenomContact);
+addChamp($odf, 'servInstructeurNomContact', $this->servInstructeurNomContact);
+addChamp($odf, 'servInstructeurMail', $this->servInstructeurMail);
+
+//Derogation
+addChamp($odf, 'reglesDerog', $this->infosDossier['REGLEDEROG_DOSSIER']);
+addChamp($odf, 'justificationDerog', $this->infosDossier['JUSTIFDEROG_DOSSIER']);
+addChamp($odf, 'mesuresCompensatoiresDerog', $this->infosDossier['MESURESCOMPENS_DOSSIER']);
+addChamp($odf, 'mesuresComplementairesDerog', $this->infosDossier['MESURESCOMPLE_DOSSIER']);
+
+//PARTIE PREVENTIONNISTE
+try{
+    $preventionniste = $odf->setSegment('preventionnistes');
+    $nbPrev = count($this->preventionnistes);
+    foreach($this->preventionnistes as $prev) {
+        if (array_key_exists("GRADE_UTILISATEURINFORMATIONS", $prev)) {
+            addChamp($preventionniste, 'grade', $prev['GRADE_UTILISATEURINFORMATIONS']);
+        }
+        addChamp($preventionniste, 'nom', $prev['NOM_UTILISATEURINFORMATIONS']);
+        if ($nbPrev > 1) {
+            $sep = ", ";
+        } else {
+            $sep = " ";
+        }
+        addChamp($preventionniste, 'prenom', $prev['PRENOM_UTILISATEURINFORMATIONS']);
+        addChamp($preventionniste, 'grade', $prev['GRADE_UTILISATEURINFORMATIONS'].$sep);
+        $preventionniste->merge();
+        $nbPrev--;
+    }
+    $odf->mergeSegment($preventionniste);
+} catch (OdfException $e) {
+
+}
+
+try{
+    $preventionnisteTel = $odf->setSegment('preventionnistesTel');
+    $nbPrev = count($this->preventionnistes);
+    foreach($this->preventionnistes as $prev) {
+        if ($nbPrev > 1) {
+            $sep = ", ";
+        } else {
+            $sep = " ";
+        }
+        addChamp($preventionnisteTel, 'tel', $prev['TELFIXE_UTILISATEURINFORMATIONS'].$sep);
+        $preventionnisteTel->merge();
+        $nbPrev--;
+    }
+    $odf->mergeSegment($preventionnisteTel);
+} catch (OdfException $e) {
+
+}
+
+$listeMailPreventionniste = [];
+foreach ($this->preventionnistes as $prev) {
+    $listeMailPreventionniste[] = $prev['MAIL_UTILISATEURINFORMATIONS'];
+}
+addChamp($odf, 'listeMailPreventioniste', implode(', ', $listeMailPreventionniste));
+
+// PARTIE DOC CONSULTE
+//Generation du segment listeDocs
+try{
+    $docConsulte = $odf->setSegment('listeDocs');
+    foreach($this->listeDocs as $document) {
+        $exist = false;
+        foreach($this->dossierDocConsutle as $docExistant) {
+            if ($docExistant['ID_DOC'] == $document['ID_DOC']) {
+                $exist = true;
+                $ref = $docExistant['REF_CONSULTE'];
+                $date = $docExistant['DATE_CONSULTE'];
+            }
+        }
+        addChamp($docConsulte, 'libelledoc', $document['LIBELLE_DOC']);
+        if ($exist) {
+            addChamp($docConsulte, 'exist', "X");
+            addChamp($docConsulte, 'refdoc', $ref);
+            //Conversion de la date ang -> fr
+            if ($date) {
+                if ($date != "0000-00-00") {
+                    $date = new Zend_Date($date, Zend_Date::DATES);
+                    $date = $date->get(Zend_Date::DAY."/".Zend_Date::MONTH."/".Zend_Date::YEAR);
+                } else {
+                    $date = "";
+                }
+            }
+            addChamp($docConsulte, 'datedoc',  $date."\n");
+            $docConsulte->merge();
+        }
+    }
+    $odf->mergeSegment($docConsulte);
+} catch (OdfException $e) {
+
+}
+
+//Liste des doncuments conusltés ajoutés
+try{
+    $listeDocAjout = $this->listeDocsAjout;
+    $docAjout = $odf->setSegment('listeDocsAjout');
+    foreach($this->listeDocsAjout as $documentAjout) {
+        addChamp($docAjout, 'exist', "X");
+        addChamp($docAjout, 'libelledoc', $documentAjout['LIBELLE_DOCAJOUT']);
+        addChamp($docAjout, 'refdoc', $documentAjout['REF_DOCAJOUT']);
+        if ($documentAjout['DATE_DOCAJOUT']) {
+            if ($documentAjout['DATE_DOCAJOUT'] != "0000-00-00") {
+                $date = new Zend_Date($documentAjout['DATE_DOCAJOUT'], Zend_Date::DATES);
+                $date = $date->get(Zend_Date::DAY."/".Zend_Date::MONTH."/".Zend_Date::YEAR);
+            } else {
+                $date = "";
+            }
+        }
+        if (isset($date) && $date != '') {
+            addChamp($docAjout, 'datedoc', $date);
+        } else {
+            addChamp($docAjout, 'datedoc', '');
+        }
+        $docAjout->merge();
+    }
+    $odf->mergeSegment($docAjout);
+} catch (OdfException $e) {
+
+}
+
+function getPrescriptionSegmentName(string $type, string $typeContenu): string
+{
+    switch ($type) {
+        case 0:
+            switch ($typeContenu) {
+                case 'default':
+                    $name = 'listeReg';
+
+                    break;
+                case 'reprises':
+                    $name = 'listeRegReprises';
+
+                    break;
+                case 'actuelles':
+                    $name = 'listeRegActuelles';
+
+                    break;
+                default:
+                    throw new Exception(sprintf('Type de contenu inconnu: %s.', $typeContenu));
+        
+                    break;
+            }
+
+            break;
+        case 1:
+            switch ($typeContenu) {
+                case 'default':
+                    $name = 'listeExploitation';
+
+                    break;
+                case 'reprises':
+                    $name = 'listeExploitationReprises';
+
+                    break;
+                case 'actuelles':
+                    $name = 'listeExploitationActuelles';
+
+                    break;
+                default:
+                    throw new Exception(sprintf('Type de contenu inconnu: %s.', $typeContenu));
+        
+                    break;
+            }
+
+            break;
+        case 2:
+            switch ($typeContenu) {
+                case 'default':
+                    $name = 'listeAmelioration';
+
+                    break;
+                case 'reprises':
+                    $name = 'listeAmeliorationReprises';
+
+                    break;
+                case 'actuelles':
+                    $name = 'listeAmeliorationActuelles';
+
+                    break;
+                default:
+                    throw new Exception(sprintf('Type de contenu inconnu: %s.', $typeContenu));
+        
+                    break;
+            }
+
+            break;
+        default:
+            throw new Exception(sprintf('Type de prescriptions inconnu: %s.', $type));
+
+            break;
+    }
+
+    return $name;
+}
+
+if (!function_exists('addPrescription')) {
+    // PARTIE PRESCRIPTION
+    function addPrescription($listePrescription,$type,$odf,$typeContenu) {
+        //TYPE_PRESCRIPTION_DOSSIER
+        try{
+            $prescription = $odf->setSegment(getPrescriptionSegmentName($type, $typeContenu));
+
+            $nbPrescDossier = count($listePrescription);
+
+            if ($nbPrescDossier != 0)
+            {
+                for($i=0; $i < $nbPrescDossier; $i++)
+                {
+                    $nbAssoc = count($listePrescription[$i]);
+                    $cpt = true;
+                    $textearticle = '';
+                    $nbCpt = $nbAssoc;
+                    for($j=0; $j < $nbAssoc; $j++)
+                    {
+                        $articleT = $listePrescription[$i][$j]['LIBELLE_ARTICLE'];
+                        $texteT = $listePrescription[$i][$j]['LIBELLE_TEXTE'];
+
+                        if ($texteT != '') {
+                            $textearticle .= $texteT." - ";
+                        } else {
+                            $textearticle .= " - ";
+                        }
+                        if ($nbCpt > 1) {
+                            if ($articleT != '') {
+                                $textearticle .= $articleT.", ";
+                            } else {
+                                $textearticle .= ", ";
+                            }
+                        } else {
+                            if ($articleT != '') {
+                                $textearticle .= $articleT." ";
+                            } else {
+                                $textearticle .= " ";
+                            }
+                        }
+                        if ($cpt)
+                        {
+                            addChamp($prescription, 'num', $listePrescription[$i][0]['NUM_PRESCRIPTION_DOSSIER']);
+
+                            if ( $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER'] == '')
+                            {
+                                addChamp($prescription, 'libelle', $listePrescription[$i][0]['PRESCRIPTIONTYPE_LIBELLE']);
+                            } else {
+                                addChamp($prescription, 'libelle', $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER']);
+                            }
+                            $cpt = false;
+                        }
+                        $nbCpt--;
+                    }
+                    addChamp($prescription, 'textearticle',$textearticle);
+                    $prescription->merge();
+                }
+
+            }
+            $odf->mergeSegment($prescription);
+        } catch (OdfException $e) {
+        }
+    }
+}
+
+if (!function_exists('addPrescriptionCC')) {
+    function addPrescriptionCC($listePrescription,$type,$odf,$typeContenu) {
+        //TYPE_PRESCRIPTION_DOSSIER
+        try {
+            if ($type == 0) {
+                switch ($typeContenu) {
+                    case 'default':
+                        $prescription = $odf->listeRegCellule;
+
+                        break;
+                    case 'reprises':
+                        $prescription = $odf->listeRegCelluleReprises;
+
+                        break;
+                    case 'actuelles':
+                        $prescription = $odf->listeRegCelluleActuelles;
+
+                        break;
+                    default:
+                        throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
+
+                        break;
+                }
+            } else if ($type == 1) {
+                switch ($typeContenu) {
+                    case 'default':
+                        $prescription = $odf->listeExploitationCellule;
+
+                        break;
+                    case 'reprises':
+                        $prescription = $odf->listeExploitationCelluleReprises;
+
+                        break;
+                    case 'actuelles':
+                        $prescription = $odf->listeExploitationCelluleActuelles;
+
+                        break;
+                    default:
+                        throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
+
+                        break;
+                }
+            } else if ($type == 2) {
+                switch ($typeContenu) {
+                    case 'default':
+                        $prescription = $odf->listeAmeliorationCellule;
+
+                        break;
+                    case 'reprises':
+                        $prescription = $odf->listeAmeliorationCelluleReprises;
+
+                        break;
+                    case 'actuelles':
+                        $prescription = $odf->listeAmeliorationCelluleActuelles;
+
+                        break;
+                    default:
+                        throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
+
+                        break;
+                }
+            }
+
+            $nbPrescDossier = count($listePrescription);
+
+            if ( isset($prescription) ) {
+                if ($nbPrescDossier && $nbPrescDossier > 0)
+                {
+                    for($i=0; $i < $nbPrescDossier; $i++)
+                    {
+                        $nbAssoc = count($listePrescription[$i]);
+                        $cpt = true;
+                        $textearticle = '';
+                        $nbCpt = $nbAssoc;
+                        for($j=0; $j < $nbAssoc; $j++)
+                        {
+                            $articleT = $listePrescription[$i][$j]['LIBELLE_ARTICLE'];
+                            $texteT = $listePrescription[$i][$j]['LIBELLE_TEXTE'];
+
+                            if ($texteT != '') {
+                                $textearticle .= $texteT." - ";
+                            } else {
+                                $textearticle .= " - ";
+                            }
+                            if ($nbCpt > 1) {
+                                if ($articleT != '') {
+                                    $textearticle .= $articleT.", ";
+                                } else {
+                                    $textearticle .= ", ";
+                                }
+                            } else {
+                                if ($articleT != '') {
+                                    $textearticle .= $articleT." ";
+                                } else {
+                                    $textearticle .= " ";
+                                }
+                            }
+                            if ($cpt)
+                            {
+                                addChamp($prescription, 'num', $listePrescription[$i][0]['NUM_PRESCRIPTION_DOSSIER']);
+
+                                if ( $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER'] == '')
+                                {
+                                    addChamp($prescription, 'libelle', $listePrescription[$i][0]['PRESCRIPTIONTYPE_LIBELLE']);
+                                } else {
+                                    addChamp($prescription, 'libelle', $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER']);
+                                }
+                                $cpt = false;
+                            }
+                            $nbCpt--;
+                        }
+                        addChamp($prescription, 'textearticle', $textearticle);
+                        $prescription->merge();
+                    }
+
+                } else {
+                    addChamp($prescription, 'num', "");
+                    addChamp($prescription, 'libelle', "");
+                    addChamp($prescription, 'textearticle', "");
+                    $prescription->merge();
+                }
+            }
+        } catch (OdfException $e) {
+        }
+    }
+}
+
+if ($this->id_typeactivite == 29) {
+    try{
+        $cellulesPresc = $odf->setSegment('cellulesPresc');
+    } catch (OdfException $e) {
+        echo "<span class='label label-warning'>Le document que vous avez sélectionné pour la génération ne correspond pas à un centre commercial</span><br/><br/>";
+    }
+
+    if (isset($cellulesPresc)) {
+        if (isset($this->celluleDossier)) {
+            foreach($this->celluleDossier as $cellulesInfos => $cellule) {
+                addChamp($cellulesPresc, 'libelleCellule', $cellule['LIBELLE_ETABLISSEMENTINFORMATIONS']);
+
+                if ($this->idDossier == $cellule['ID_DOSSIER']) {
+                    addPrescriptionCC($cellule['regl'],0,$cellulesPresc,'default');
+                    addPrescriptionCC($cellule['reglReprises'],0,$cellulesPresc,'reprises');
+                    addPrescriptionCC($cellule['reglActuelles'],0,$cellulesPresc,'actuelles');
+                } else {
+                    $val = array();
+                    addPrescriptionCC($val,0,$cellulesPresc,'default');
+                    addPrescriptionCC($val,0,$cellulesPresc,'reprises');
+                    addPrescriptionCC($val,0,$cellulesPresc,'actuelles');
+                }
+
+                addPrescriptionCC($cellule['exploit'],1,$cellulesPresc,'default');
+                addPrescriptionCC($cellule['exploitReprises'],1,$cellulesPresc,'reprises');
+                addPrescriptionCC($cellule['exploitActuelles'],1,$cellulesPresc,'actuelles');
+
+                addPrescriptionCC($cellule['amelio'],2,$cellulesPresc,'default');
+                addPrescriptionCC($cellule['amelioReprises'],2,$cellulesPresc,'reprises');
+                addPrescriptionCC($cellule['amelioActuelles'],2,$cellulesPresc,'actuelles');
+
+                $cellulesPresc->merge();
+            }
+        } else if (isset($this->celluleDossierLevee)) {
+            foreach($this->celluleDossierLevee as $celluleKey => $cellule) {
+                addChamp($cellulesPresc, 'libelleCellule', $cellule['LIBELLE_ETABLISSEMENTINFORMATIONS']);
+
+                foreach($cellule['dossiers']['etudes'] as $dossierKey => $dossier) {
+                    addPrescriptionCC($dossier['regl'],0,$cellulesPresc,'default');
+                    addPrescriptionCC($dossier['reglReprises'],0,$cellulesPresc,'reprises');
+                    addPrescriptionCC($dossier['reglActuelles'],0,$cellulesPresc,'actuelles');
+
+                    addPrescriptionCC($dossier['exploit'],1,$cellulesPresc,'default');
+                    addPrescriptionCC($dossier['exploitReprises'],1,$cellulesPresc,'reprises');
+                    addPrescriptionCC($dossier['exploitActuelles'],1,$cellulesPresc,'actuelles');
+
+                    addPrescriptionCC($dossier['amelio'],2,$cellulesPresc,'default');
+                    addPrescriptionCC($dossier['amelioReprises'],2,$cellulesPresc,'reprises');
+                    addPrescriptionCC($dossier['amelioActuelles'],2,$cellulesPresc,'actuelles');
+
+                    $cellulesPresc->merge();
+                }
+            }
+        }
+
+        $odf->mergeSegment($cellulesPresc);
+    }
+}
+
+// On ajoute toujours les prescriptions du dossier concerné
+addPrescription($this->prescriptionReglDossier,0,$odf,'default');
+addPrescription($this->prescriptionReglDossierAnterieures,0,$odf,'reprises');
+addPrescription($this->prescriptionReglDossierActuelles,0,$odf,'actuelles');
+
+addPrescription($this->prescriptionExploitation,1,$odf,'default');
+addPrescription($this->prescriptionExploitationAnterieures,1,$odf,'reprises');
+addPrescription($this->prescriptionExploitationActuelles,1,$odf,'actuelles');
+
+addPrescription($this->prescriptionAmelioration,2,$odf,'default');
+addPrescription($this->prescriptionAmeliorationAnterieures,2,$odf,'reprises');
+addPrescription($this->prescriptionAmeliorationActuelles,2,$odf,'actuelles');
+
+//PARTIE TEXTE APPLICABLE
+try{
+    $texteAppl = $odf->setSegment('texteAppl');
+    foreach($this->listeTextesAppl as $texteappl) {
+    	$texteappl = str_replace("’","'",$texteappl['LIBELLE_TEXTESAPPL']);
+    	addChamp($texteAppl, 'libelleTexteAppl', $texteappl);
+    	$texteAppl->merge();
+    }
+    $odf->mergeSegment($texteAppl);
+} catch (OdfException $e) {
+
+}
+
+//GESTION DATES
+addChamp($odf, 'dateDepotMairie', $this->DATEMAIRIE);
+addChamp($odf, 'dateDepotSec', $this->DATESECRETARIAT);
+addChamp($odf, 'dateSDIS', $this->DATESDIS);
+addChamp($odf, 'dateCreationDossier', $this->DATEINSERTDOSSIER);
+
+//INFORMATIONS CONCERNANT L'ETABLISSEMENT
+addChamp($odf, 'genreEtab', $this->genreEtab);
+addChamp($odf, 'etablissementLibelle', $this->etablissementLibelle);
+addChamp($odf, 'typeLettreP', $this->typeLettreP);
+addChamp($odf, 'activiteP', $this->libelleActiviteP);
+addChamp($odf, 'typeLettreS', $this->typeSecondaire);
+addChamp($odf, 'activiteS', $this->activiteSecondaire);
+addChamp($odf, 'communeEtab', $this->communeEtab);
+addChamp($odf, 'etablissementAdresse', $this->etablissementAdresse);
+addChamp($odf, 'numDocUrba', $this->listeDocUrba);
+addChamp($odf, 'categorieEtab', $this->categorieEtab);
+addChamp($odf, 'familleEtab', $this->etablissementInfos['informations']['LIBELLE_FAMILLE']);
+addChamp($odf, 'numPublic', $this->numPublic);
+addChamp($odf, 'numPersonnel', $this->numPersonnel);
+addChamp($odf, 'numTotal', $this->numTotal);
+addChamp($odf, 'numHeberge', $this->numHeberge);
+addChamp($odf, 'avisDossier', $this->avisDossier);
+addChamp($odf, 'avisDossierCommission', $this->avisDossierCommission);
+addChamp($odf, 'etatDossier', $this->etatDossier);
+addChamp($odf, 'idDossier', $this->idDossier);
+addChamp($odf, 'numTelEtab', $this->numTelEtab);
+addChamp($odf, 'numFaxEtab', $this->numFaxEtab);
+addChamp($odf, 'mailEtab', $this->mailEtab);
+
+addChamp($odf, 'periodiciteEtab', $this->etablissementInfos['informations']['PERIODICITE_ETABLISSEMENTINFORMATIONS']);
+addChamp($odf, 'prochaineVisite', $this->etablissementInfos['next_visite']);
+
+//Date de la dernière visite periodique
+addChamp($odf, 'dateLastVP', $this->dateLastVP);
+addChamp($odf, 'avisLastVP', $this->avisLastVP);
+
+//Informations du maire de l'adresse de l'établissement
+addChamp($odf, 'nomMaire', $this->maire['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomMaire', $this->maire['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailMaire', $this->maire['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeMaire', $this->maire['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortMaire', $this->maire['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxMaire', $this->maire['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numeroMaire', $this->maire['NUMEROADRESSE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'rueMaire', $this->maire['RUEADRESSE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'cpMaire', $this->maire['CPADRESSE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'villeMaire', $this->maire['VILLEADRESSE_UTILISATEURINFORMATIONS'] ?? '');
+
+//Informations du DUS du dossier
+addChamp($odf, 'nomDus', $this->dusDossier['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomDus', $this->dusDossier['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailDus', $this->dusDossier['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeDus', $this->dusDossier['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortDus', $this->dusDossier['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxDus', $this->dusDossier['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeDus', $this->dusDossier['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
+
+//Informations de l'exploitant du dossier
+addChamp($odf, 'nomExploitant', $this->exploitantDossier['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomExploitant', $this->exploitantDossier['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailExploitant', $this->exploitantDossier['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeExploitant', $this->exploitantDossier['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortExploitant', $this->exploitantDossier['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxExploitant', $this->exploitantDossier['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeExploitant', $this->exploitantDossier['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
+
+//Informations du responsable sécurité du dossier
+addChamp($odf, 'nomRespSecu', $this->respsecuDossier['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomRespSecu', $this->respsecuDossier['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailRespSecu', $this->respsecuDossier['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeRespSecu', $this->respsecuDossier['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortRespSecu', $this->respsecuDossier['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxRespSecu', $this->respsecuDossier['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeRespSecu', $this->respsecuDossier['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
+
+//Informations du proprietaire de l'établissement
+addChamp($odf, 'nomProprio', $this->proprioInfos['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomProprio', $this->proprioInfos['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailProprio', $this->proprioInfos['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeProprio', $this->proprioInfos['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortProprio', $this->proprioInfos['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxProprio', $this->proprioInfos['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeProprio', $this->proprioInfos['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
+
+//Informations sur le maitre d'oeuvre
+addChamp($odf, 'nomMaitreOeuvre', $this->maitreOeuvre['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomMaitreOeuvre', $this->maitreOeuvre['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailMaitreOeuvre', $this->maitreOeuvre['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeMaitreOeuvre', $this->maitreOeuvre['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortMaitreOeuvre', $this->maitreOeuvre['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxMaitreOeuvre', $this->maitreOeuvre['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeMaitreOeuvre', $this->maitreOeuvre['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
+
+//Informations du prefet
+addChamp($odf, 'nomPrefet', $this->prefetInfos['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomPrefet', $this->prefetInfos['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailPrefet', $this->prefetInfos['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixePrefet', $this->prefetInfos['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortPrefet', $this->prefetInfos['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxPrefet', $this->prefetInfos['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societePrefet', $this->prefetInfos['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
+
+//Informations sur le maitre d'ouvrage
+addChamp($odf, 'nomMaitreOuvrage', $this->maitreOuvrage['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomMaitreOuvrage', $this->maitreOuvrage['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailMaitreOuvrage', $this->maitreOuvrage['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeMaitreOuvrage', $this->maitreOuvrage['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortMaitreOuvrage', $this->maitreOuvrage['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxMaitreOuvrage', $this->maitreOuvrage['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeMaitreOuvrage', $this->maitreOuvrage['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
+
+//Informations sur le Pétitionnaire demandeur
+addChamp($odf, 'nomPetitionnaireDemandeur', $this->petitionnaireDemandeur['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomPetitionnaireDemandeur', $this->petitionnaireDemandeur['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailPetitionnaireDemandeur', $this->petitionnaireDemandeur['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixePetitionnaireDemandeur', $this->petitionnaireDemandeur['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortPetitionnaireDemandeur', $this->petitionnaireDemandeur['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxPetitionnaireDemandeur', $this->petitionnaireDemandeur['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societePetitionnaireDemandeur', $this->petitionnaireDemandeur['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
+
+//Informations sur le Controller Technique
+addChamp($odf, 'nomControllerTechnique', $this->controllerTechnique['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomControllerTechnique', $this->controllerTechnique['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailControllerTechnique', $this->controllerTechnique['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeControllerTechnique', $this->controllerTechnique['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortControllerTechnique', $this->controllerTechnique['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxControllerTechnique', $this->controllerTechnique['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeControllerTechnique', $this->controllerTechnique['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
+
+//Informations sur participant
+addChamp($odf, 'nomParticipant', $this->participant['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomParticipant', $this->participant['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailParticipant', $this->participant['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeParticipant', $this->participant['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortParticipant', $this->participant['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxParticipant', $this->participant['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeParticipant', $this->participant['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
+
+//Informations sur demandeur
+addChamp($odf, 'nomDemandeur', $this->demandeur['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomDemandeurt', $this->demandeur['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailDemandeur', $this->demandeur['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeDemandeur', $this->demandeur['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortDemandeur', $this->demandeur['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxDemandeur', $this->demandeur['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeDemandeur', $this->demandeur['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
+
+// Descriptif standard de l'établissement
+addChamp($odf, 'historiqueDescriptifEtab', $this->etabDesc['DESCRIPTIF_HISTORIQUE_ETABLISSEMENT']);
+addChamp($odf, 'descriptifEtab', $this->etabDesc['DESCRIPTIF_ETABLISSEMENT']);
+addChamp($odf, 'derogAccEtab', $this->etabDesc['DESCRIPTIF_DEROGATIONS_ETABLISSEMENT']);
+
+//Implantation
+addChamp($odf, 'surfaceEmpriseSol', $this->etabDesc['DESCTECH_IMPLANTATION_SURFACE_ETABLISSEMENT']);
+addChamp($odf, 'SHON', $this->etabDesc['DESCTECH_IMPLANTATION_SHON_ETABLISSEMENT']);
+addChamp($odf, 'SHOB', $this->etabDesc['DESCTECH_IMPLANTATION_SHOB_ETABLISSEMENT']);
+addChamp($odf, 'nbNiveaux', $this->etabDesc['DESCTECH_IMPLANTATION_NBNIVEAUX_ETABLISSEMENT']);
+addChamp($odf, 'PBDN', $this->etabDesc['DESCTECH_IMPLANTATION_PBDN_ETABLISSEMENT']);
+addChamp($odf, 'surfaceTotale', $this->etabDesc['DESCTECH_IMPLANTATION_SURFACETOTALE_ETABLISSEMENT']);
+addChamp($odf, 'surfaceAccessible', $this->etabDesc['DESCTECH_IMPLANTATION_SURFACEACCPUBLIC_ETABLISSEMENT']);
+
+//Desserte
+addChamp($odf, 'nbFacadeAccess', $this->etabDesc['DESCTECH_DESSERTE_NBFACADELIBRE_ETABLISSEMENT']);
+addChamp($odf, 'voieEngin', $this->etabDesc['DESCTECH_DESSERTE_VOIEENGIN_ETABLISSEMENT']);
+addChamp($odf, 'voieEchelle', $this->etabDesc['DESCTECH_DESSERTE_VOIEECHELLE_ETABLISSEMENT']);
+addChamp($odf, 'espaceLibre', $this->etabDesc['DESCTECH_DESSERTE_ESPACELIBRE_ETABLISSEMENT']);
+
+//Isolement par rapport aux tiers
+addChamp($odf, 'lateralCF', $this->etabDesc['DESCTECH_ISOLEMENT_LATERALCF_ETABLISSEMENT']);
+addChamp($odf, 'superposeCF', $this->etabDesc['DESCTECH_ISOLEMENT_SUPERPOSECF_ETABLISSEMENT']);
+addChamp($odf, 'visAvis', $this->etabDesc['DESCTECH_ISOLEMENT_VISAVIS_ETABLISSEMENT']);
+
+//Stabilité au feu
+addChamp($odf, 'structureSF', $this->etabDesc['DESCTECH_STABILITE_STRUCTURESF_ETABLISSEMENT']);
+addChamp($odf, 'plancherSF', $this->etabDesc['DESCTECH_STABILITE_PLANCHERSF_ETABLISSEMENT']);
+
+//Distribution intérieure
+$cloisonnementTrad = $this->etabDesc['DESCTECH_DISTRIBUTION_CLOISONNEMENTTRAD_ETABLISSEMENT'];
+if ($cloisonnementTrad == 1) {
+    $cloisonnementTrad = "Oui";
+} else {
+    $cloisonnementTrad = "Non";
+}
+addChamp($odf, 'cloisonnementTrad',$cloisonnementTrad);
+
+$secteurs = $this->etabDesc['DESCTECH_DISTRIBUTION_SECTEURS_ETABLISSEMENT'];
+if ($secteurs == 1) {
+    $secteurs = "Oui";
+} else {
+    $secteurs = "Non";
+}
+addChamp($odf, 'secteurs',$secteurs);
+
+$compartiments = $this->etabDesc['DESCTECH_DISTRIBUTION_COMPARTIMENTS_ETABLISSEMENT'];
+if ($compartiments == 1) {
+    $compartiments = "Oui";
+} else {
+    $compartiments = "Non";
+}
+addChamp($odf, 'compartiments',$compartiments);
+
+//Locaux à risques
+addChamp($odf, 'locauxRisquesMoyens', $this->etabDesc['DESCTECH_LOCAUXARISQUE_NBRISQUESMOYENS_ETABLISSEMENT']);
+addChamp($odf, 'locauxRisquesImportants', $this->etabDesc['DESCTECH_LOCAUXARISQUE_NBRISQUESIMPORTANTS_ETABLISSEMENT']);
+
+//Espaces d'attentes sécurisés
+addChamp($odf, 'espacesAttentesNombre', $this->etabDesc['DESCTECH_ESPACES_NOMBRE_ETABLISSEMENT']);
+addChamp($odf, 'espacesAttentesNiveaux', $this->etabDesc['DESCTECH_ESPACES_NIVEAUCONCERNE_ETABLISSEMENT']);
+
+//Désenfumage
+$desenfNaturel = $this->etabDesc['DESCTECH_DESENFUMAGE_NATUREL_ETABLISSEMENT'];
+if ($desenfNaturel == 1) {
+    $desenfNaturel = "Oui";
+} else {
+    $desenfNaturel = "Non";
+}
+addChamp($odf, 'desenfNaturel',$desenfNaturel);
+
+$desenfMecanique = $this->etabDesc['DESCTECH_DESENFUMAGE_MECANIQUE_ETABLISSEMENT'];
+if ($desenfMecanique == 1) {
+    $desenfMecanique = "Oui";
+} else {
+    $desenfMecanique = "Non";
+}
+addChamp($odf, 'desenfMecanique',$desenfMecanique);
+addChamp($odf, 'desenfCommentaire', $this->etabDesc['DESCTECH_DESENFUMAGE_COMMENTAIRE_ETABLISSEMENT']);
+
+//Chaufferies
+addChamp($odf, 'nbChaufferie', $this->etabDesc['DESCTECH_CHAUFFERIES_NB_ETABLISSEMENT']);
+addChamp($odf, 'puissanceMaxChauff', $this->etabDesc['DESCTECH_CHAUFFERIES_PUISSMAX_ETABLISSEMENT']);
+addChamp($odf, 'nbChauff30kw', $this->etabDesc['DESCTECH_CHAUFFERIES_NB30KW']);
+addChamp($odf, 'nbChauff70kw', $this->etabDesc['DESCTECH_CHAUFFERIES_NB70KW']);
+addChamp($odf, 'nbChauff2mw', $this->etabDesc['DESCTECH_CHAUFFERIES_NB2MW']);
+addChamp($odf, 'puissTotalChaff', $this->etabDesc['DESCTECH_CHAUFFERIES_PUISSANCETOTALE']);
+
+//Localisation des coupures d'énergies
+addChamp($odf, 'locGaz', $this->etabDesc['DESCTECH_COUPURENRJ_GAZ_ETABLISSEMENT']);
+addChamp($odf, 'locElectricite', $this->etabDesc['DESCTECH_COUPURENRJ_ELEC_ETABLISSEMENT']);
+addChamp($odf, 'locPhotovoltaique', $this->etabDesc['DESCTECH_COUPURENRJ_PHOTOVOLTAIQUE_ETABLISSEMENT']);
+addChamp($odf, 'locAutre', $this->etabDesc['DESCTECH_COUPURENRJ_AUTRE_ETABLISSEMENT']);
+
+//Ascenseurs
+addChamp($odf, 'nbAscTot', $this->etabDesc['DESCTECH_ASCENSEURS_NBTOTAL_ETABLISSEMENT']);
+addChamp($odf, 'nbAscAS4', $this->etabDesc['DESCTECH_ASCENSEURS_NBAS4_ETABLISSEMENT']);
+
+//Moyens de secours
+$colSeches = $this->etabDesc['DESCTECH_MOYENSSECOURS_COLONNESSECHES_ETABLISSEMENT'];
+if ($colSeches == 1) {
+    $colSeches = "Oui";
+} else {
+    $colSeches = "Non";
+}
+addChamp($odf, 'colSeches',$colSeches);
+
+$colHumides = $this->etabDesc['DESCTECH_MOYENSSECOURS_COLONNESHUMIDES_ETABLISSEMENT'];
+if ($colHumides == 1) {
+    $colHumides = "Oui";
+} else {
+    $colHumides = "Non";
+}
+addChamp($odf, 'colHumides',$colHumides);
+
+$ria = $this->etabDesc['DESCTECH_MOYENSSECOURS_RIA_ETABLISSEMENT'];
+if ($ria == 1) {
+    $ria = "Oui";
+} else {
+    $ria = "Non";
+}
+addChamp($odf, 'RIA',$ria);
+
+$sprinkleur = $this->etabDesc['DESCTECH_MOYENSSECOURS_SPRINKLEUR_ETABLISSEMENT'];
+if ($sprinkleur == 1) {
+    $sprinkleur = "Oui";
+} else {
+    $sprinkleur = "Non";
+}
+addChamp($odf, 'sprinkleur',$sprinkleur);
+
+$brouillardEau = $this->etabDesc['DESCTECH_MOYENSSECOURS_BROUILLARDEAU_ETABLISSEMENT'];
+if ($brouillardEau == 1) {
+    $brouillardEau = "Oui";
+} else {
+    $brouillardEau = "Non";
+}
+addChamp($odf, 'brouillardEau',$brouillardEau);
+
+//PC sécurité
+$presencePCS = $this->etabDesc['DESCTECH_PCSECU_PRESENCE_ETABLISSEMENT'];
+if ($presencePCS == 1) {
+    $presencePCS = "Oui";
+} else {
+    $presencePCS = "Non";
+}
+addChamp($odf, 'presencePCS',$presencePCS);
+
+addChamp($odf, 'localisationPCS', $this->etabDesc['DESCTECH_PCSECU_LOCALISATION_ETABLISSEMENT']);
+
+//SSI
+$presenceSSI = $this->etabDesc['DESCTECH_SSI_PRESENCE_ETABLISSEMENT'];
+if ($presenceSSI == 1) {
+    $presenceSSI = "Oui";
+} else {
+    $presenceSSI = "Non";
+}
+addChamp($odf, 'presenceSSI',$presenceSSI);
+
+addChamp($odf, 'catSSI', $this->etabDesc['DESCTECH_SSI_CATEGORIE_ETABLISSEMENT']);
+addChamp($odf, 'alarmeSSI', $this->etabDesc['DESCTECH_SSI_ALARME_TYPE_ETABLISSEMENT']);
+
+//Service de sécurité
+$persQualEL18 = $this->etabDesc['DESCTECH_SERVICESECU_EL18_ETABLISSEMENT'];
+if ($persQualEL18 == 1) {
+    $persQualEL18 = "Oui";
+} else {
+    $persQualEL18 = "Non";
+}
+addChamp($odf, 'persQualEL18',$persQualEL18);
+
+$persDesignes = $this->etabDesc['DESCTECH_SERVICESECU_PERSONNELSDESIGNES_ETABLISSEMENT'];
+if ($persDesignes == 1) {
+    $persDesignes = "Oui";
+} else {
+    $persDesignes = "Non";
+}
+addChamp($odf, 'persDesignes',$persDesignes);
+
+addChamp($odf, 'nbAgentSecu', $this->etabDesc['DESCTECH_SERVICESECU_AGENTDESECU_ETABLISSEMENT']);
+addChamp($odf, 'nbChefEquipeSecu', $this->etabDesc['DESCTECH_SERVICESECU_CHEFEQUIPE_ETABLISSEMENT']);
+addChamp($odf, 'nbChefServSecu', $this->etabDesc['DESCTECH_SERVICESECU_CHEFDESERVICESECU_ETABLISSEMENT']);
+addChamp($odf, 'nbSp', $this->etabDesc['DESCTECH_SERVICESECU_SP_ETABLISSEMENT']);
+addChamp($odf, 'commentaireSp', $this->etabDesc['DESCTECH_SERVICESECU_COMMENTAIRESP_ETABLISSEMENT']);
+
+//Défense incendie
+addChamp($odf, 'nbPointEau', $this->etabDesc['DESCTECH_DEFENSE_PTEAU_ETABLISSEMENT']);
+addChamp($odf, 'volumePointEau', $this->etabDesc['DESCTECH_DEFENSE_VOLUMEPTEAU_ETABLISSEMENT']);
+addChamp($odf, 'commentairePointEauNat', $this->etabDesc['DESCTECH_DEFENSE_PTEAUCOMMENTAIRE_ETABLISSEMENT']);
+addChamp($odf, 'PI', $this->etabDesc['DESCTECH_DEFENSE_PI_ETABLISSEMENT']);
+addChamp($odf, 'BI', $this->etabDesc['DESCTECH_DEFENSE_BI_ETABLISSEMENT']);
+addChamp($odf, 'debitSimultane', $this->etabDesc['DESCTECH_DEFENSE_DEBITSIMULTANE_ETABLISSEMENT']);
+
+//INFORMATION CONCERNANT LE PERE DE L'ENTITE
+addChamp($odf, 'etablissementLibelleP', $this->infoPere['LIBELLE_ETABLISSEMENTINFORMATIONS']);
+addChamp($odf, 'typeLettrePPere', $this->typeLettrePPere);
+addChamp($odf, 'activitePPere', $this->libelleActivitePPere);
+addChamp($odf, 'categorieEtabPere', $this->categorieEtabPere);
+addChamp($odf, 'genrePere', $this->genrePere);
+
+//INFORMATION DU GN
+if ($this->GN == 2) {
+    addChamp($odf, 'gn2','×');
+    addChamp($odf, 'gn3','');
+} else if ($this->GN == 3) {
+    addChamp($odf, 'gn2','');
+    addChamp($odf, 'gn3','×');
+}
+
+// Gestion des effectifs & dégagements
+$tabEffDegKV = array(
+    'descriptionEffectifDossier' => $this->effectifDossier,
+    'descriptionDegagementDossier' => $this->degagementDossier,
+    'descriptionEffectifEtablissement' => $this->effectifEtablissement,
+    'descriptionDegagementEtablissement' => $this->degagementEtablissement,
+);
+
+foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
+    addChamp($odf, $nomChamp, $valeurChamp);
+}
+
+try {
+    // Gestion des avis et dérogations du dossier
+    $segmentAvisDerogations = $odf->setSegment('avisDerogations');
+
+    foreach ($this->avisDerogations as $avisDerogation) {
+        addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
+        addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
+        addChamp($segmentAvisDerogations, 'objet', $avisDerogation['OBJET']);
+        addChamp($segmentAvisDerogations, 'justification', $avisDerogation['JUSTIFICATION']);
+        addChamp($segmentAvisDerogations, 'articles_concernes', $avisDerogation['ARTICLES_CONCERNES']);
+        addChamp($segmentAvisDerogations, 'mesures_compensatoires_proposees', $avisDerogation['MESURES_COMPENSATOIRES_PROPOSEES']);
+        addChamp($segmentAvisDerogations, 'analyse_de_risque', $avisDerogation['ANALYSE_DE_RISQUE']);
+        addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
+        addChamp($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
+
+        $date = null;
+        if (null !== $avisDerogation['DATECOMM_DOSSIER']) {
+            $date = new Zend_Date($avisDerogation['DATECOMM_DOSSIER'], Zend_Date::DATES);
+        } elseif (null !== $avisDerogation['DATEVISITE_DOSSIER']) {
+            $date = new Zend_Date($avisDerogation['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+        }
+
+        if ($date instanceof Zend_Date) {
+            $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+        }
+
+        addChamp($segmentAvisDerogations, 'date', $date);
+
+        $segmentAvisDerogations->merge();
+    }
+
+    $odf->mergeSegment($segmentAvisDerogations);
+} catch (OdfException $e) {}
+
+try {
+    // Gestion des avis et dérogations historisés sur l'établissement
+    $segmentAvisDerogationsEtablissement = $odf->setSegment('avisDerogationsEtablissement');
+
+    foreach ($this->avisDerogationsEtablissement as $avisDerogationEtablissement) {
+        addChamp($segmentAvisDerogationsEtablissement, 'type', $avisDerogationEtablissement['TYPE']);
+        addChamp($segmentAvisDerogationsEtablissement, 'titre', $avisDerogationEtablissement['TITRE']);
+        addChamp($segmentAvisDerogationsEtablissement, 'objet', $avisDerogationEtablissement['OBJET']);
+        addChamp($segmentAvisDerogationsEtablissement, 'justification', $avisDerogationEtablissement['JUSTIFICATION']);
+        addChamp($segmentAvisDerogationsEtablissement, 'articles_concernes', $avisDerogationEtablissement['ARTICLES_CONCERNES']);
+        addChamp($segmentAvisDerogationsEtablissement, 'mesures_compensatoires_proposees', $avisDerogationEtablissement['MESURES_COMPENSATOIRES_PROPOSEES']);
+        addChamp($segmentAvisDerogationsEtablissement, 'analyse_de_risque', $avisDerogationEtablissement['ANALYSE_DE_RISQUE']);
+        addChamp($segmentAvisDerogationsEtablissement, 'avis', $avisDerogationEtablissement['LIBELLE_AVIS']);
+        addChamp($segmentAvisDerogationsEtablissement, 'identifiantdossierleve', $avisDerogationEtablissement['ID_DOSSIER_LIE']);
+
+        $date = null;
+        if (null !== $avisDerogationEtablissement['DATECOMM_DOSSIER']) {
+            $date = new Zend_Date($avisDerogationEtablissement['DATECOMM_DOSSIER'], Zend_Date::DATES);
+        } elseif (null !== $avisDerogationEtablissement['DATEVISITE_DOSSIER']) {
+            $date = new Zend_Date($avisDerogationEtablissement['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+        }
+
+        if ($date instanceof Zend_Date) {
+            $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+        }
+
+        addChamp($segmentAvisDerogationsEtablissement, 'date', $date);
+
+        $segmentAvisDerogationsEtablissement->merge();
+    }
+
+    $odf->mergeSegment($segmentAvisDerogationsEtablissement);
+} catch (OdfException $e) {}
+
+// Gestion des formulaires personnalisés
+$serviceUtils = new Service_Utils();
+
+foreach ($this->formulaires as $formulaire) {
+    // Permet d'avoir les informations unitairement
+    foreach ($formulaire['RUBRIQUES'] as $rubrique) {
+        foreach ($rubrique['CHAMPS'] as $champ) {
+            if ('Parent' === $champ['TYPE']) {
+                if (1 === $champ['tableau']) {
+                    foreach ($champ['FILS'] as $idx => $champFils) {
+                        if(is_int($idx)){
+                            addChamp(
+                                $odf,
+                                $serviceUtils->getFullFusionName(
+                                    $formulaire['NOM_INTERNE'],
+                                    [
+                                        $rubrique['NOM'],
+                                        $champ['NOM'],
+                                        $champFils['idx']
+                                    ]
+                                ),
+                                $champFils['NOM']
+                            );
+                        }
+                    }
+
+                    $nomFusion = $serviceUtils->getFusionNameMagicalCase(
+                        $formulaire['NOM_INTERNE'].' '.
+                        $rubrique['NOM'].' '.
+                        $champ['NOM'].' '.
+                        'valeurs'
+                    );
+
+                    try {
+                        $segmentTableau = $odf->setSegment($nomFusion);
+                    } catch (Exception $e) {}
+
+                    if (isset($segmentTableau)) {
+                        if (count($champ['FILS']['VALEURS']) === 0) {
+                            foreach ($champ['FILS'] as $index => $fils) {
+                                if(is_int($index)) {
+                                    addChamp($segmentTableau, sprintf('valeur%d', $index), '');
+                                }
+                            }
+
+                            $segmentTableau->merge();
+                        } else {
+                            foreach ($champ['FILS']['VALEURS'] as $ligne) {
+                                $idxCol = 0;
+
+                                foreach ($ligne as $col) {
+                                    if ('Case à cocher' === $col['TYPE']) {
+                                        if (true === boolval($col['VALEUR'])) {
+                                            $col['VALEUR'] = 'Oui';
+                                        } else {
+                                            $col['VALEUR'] = 'Non';
+                                        }
+                                    }
+                                    else{
+                                        // Définition du libellé pour les dates
+                                        if ('Date' === $col['TYPE']) {
+                                            if ($col['VALEUR'] !== null) {
+                                                $zendDate = new Zend_Date($col['VALEUR'], 'dd/MM/yyyy');
+                                                $col['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                            } else {
+                                                $col['VALEUR'] = "";
+                                            }
+                                        }
+                                    }
+
+                                    addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR']);
+                                    $idxCol++;
+                                }
+
+                                $segmentTableau->merge();
+                            }
+                        }
+
+                        $odf->mergeSegment($segmentTableau);
+                    }
+                } else {
+                    foreach ($champ['FILS'] as $champFils) {
+                        if ('Case à cocher' === $champFils['TYPE']) {
+                            if (true === boolval($champFils['VALEUR'])) {
+                                $champFils['VALEUR'] = 'Oui';
+                            } else {
+                                $champFils['VALEUR'] = 'Non';
+                            }
+                        } else {
+                            // Définition du libellé pour les dates
+                            if ('Date' === $champFils['TYPE']) {
+                                if ($champFils['VALEUR'] !== null) {
+                                    $zendDate = new Zend_Date($champFils['VALEUR'], 'dd/MM/yyyy');
+                                    $champFils['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                } else {
+                                    $champFils['VALEUR'] = "";
+                                }
+                            }
+                        }
+                        addChamp(
+                            $odf,
+                            $serviceUtils->getFullFusionName(
+                                $formulaire['NOM_INTERNE'],
+                                [
+                                    $rubrique['NOM'],
+                                    $champ['NOM'],
+                                    $champFils['NOM']
+                                ]
+                            ),
+                            $champFils['VALEUR']
+                        );
+                    }
+                }
+            } else {
+                // Définition du libellé pour les cases à cocher
+                if ('Case à cocher' === $champ['TYPE']) {
+                    if (true === boolval($champ['VALEUR'])) {
+                        $champ['VALEUR'] = 'Oui';
+                    } else {
+                        $champ['VALEUR'] = 'Non';
+                    }
+                } else {
+                    // Définition du libellé pour les dates
+                    if ('Date' === $champ['TYPE']) {
+                        if ($champ['VALEUR'] !== null) {
+                            $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
+                            $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                        } else {
+                            $champ['VALEUR'] = "";
+                        }
+                    }
+                }
+                addChamp(
+                    $odf,
+                    $serviceUtils->getFullFusionName(
+                        $formulaire['NOM_INTERNE'],
+                        [
+                            $rubrique['NOM'],
+                            $champ['NOM']
+                        ]
+                    ),
+                    $champ['VALEUR']
+                );
+            }
+
+        }
+    }
+}
+
+try{
+    $chemin = null;
+
+    if ($this->infosDossier['ID_PLATAU'] !== null) {
+        $chemin = implode(DS, array(
+            REAL_DATA_PATH,
+            'uploads',
+            'pieces-jointes',
+            $this->nouvellePJ->ID_PIECEJOINTE.$this->nouvellePJ->EXTENSION_PIECEJOINTE
+        ));
+    } else {
+        $chemin = $this->store->getFilePath($this->nouvellePJ, 'dossier', $this->idDossier, true);
+    }
+    $odf->saveToDisk($chemin);
+} catch (OdfException $e) {
+
+}

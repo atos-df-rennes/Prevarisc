@@ -115,7 +115,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             ->appendName('description', 'Logiciel de gestion du service Prévention')
             ->appendName('author', 'SDIS62 - Service Recherche et Développement');
 
-        $view->addHelperPath(APPLICATION_PATH.'/views/helpers');
+        if (getenv('PREVARISC_BOOTSTRAP_3')) {
+            $view->setBasePath(APPLICATION_PATH.'/viewsbs3');
+        }
 
         return $view;
     }
@@ -125,7 +127,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initLayout(): Zend_Layout
     {
-        return Zend_Layout::startMvc(['layoutPath' => APPLICATION_PATH.DS.'layouts']);
+        return getenv('PREVARISC_BOOTSTRAP_3') ? Zend_Layout::startMvc(['layoutPath' => APPLICATION_PATH.DS.'layoutsbs3']) : Zend_Layout::startMvc(['layoutPath' => APPLICATION_PATH.DS.'layouts']);
     }
 
     /**

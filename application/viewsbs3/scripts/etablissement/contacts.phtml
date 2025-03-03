@@ -1,0 +1,11 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#contact-content").load("/contact?item=etablissement&id=<?php echo $this->etablissement['general']['ID_ETABLISSEMENT'] ?>&verrou=0");
+	});
+</script>
+<div>
+	<h4>Liste des contacts</h4>
+</div>
+<div id='contact-content'>
+</div>
+<br/>

@@ -13,6 +13,7 @@ class Form_Login extends Zend_Form
             'filters' => [new Zend_Filter_HtmlEntities(), new Zend_Filter_StripTags()],
             'validators' => [new Zend_Validate_StringLength(1, 255)],
             'autocomplete' => getenv('PREVARISC_ENFORCE_SECURITY') ? 'off' : 'on',
+            'class' => 'form-control',
         ]);
 
         $password_validators = [
@@ -36,6 +37,7 @@ class Form_Login extends Zend_Form
             'required' => true,
             'filters' => [new Zend_Filter_HtmlEntities(), new Zend_Filter_StripTags()],
             'validators' => $password_validators,
+            'class' => 'form-control',
         ]);
 
         $this->addElement(new Zend_Form_Element_Submit('Connexion', ['class' => 'btn btn-primary']), 'submit');

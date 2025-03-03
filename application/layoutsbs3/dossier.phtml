@@ -1,0 +1,435 @@
+<?php if ($this->action != "add" && $this->do != "new") : ?>
+    <?php $this->placeholder('lateral_navigation')->captureStart(); // Capture du 'lateral_navigation'?>
+
+    <input type='hidden' name='ID_CREATEUR' id='ID_CREATEUR' value='<?= $this->idUser; ?>' />
+
+    <ul class="nav nav-tabs nav-stacked menu_dashboard" >
+        <li class="<?= ($this->action == "index") ? "active" : "" ?>">
+            <a href='<?= $this->url(array("controller" => "dossier", "id" => $this->idDossier), false, true) ?>'>
+                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                Informations générales
+            </a>
+        </li>
+
+        <?php if ($this->idTypeDossier == 1 && $this->natureDossier != 3 && $this->natureDossier != 9): ?>
+            <li class='<?= ($this->action == "descriptif") ? "active" : "" ?>'>
+                <a href='<?= $this->url(array("controller" => "dossier", "action" => "descriptif", "id" => $this->idDossier), false, true) ?>'>
+                    <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+                    Descriptif <?php if ($this->natureDossier == 1 || $this->natureDossier == 2) ?> des travaux
+                </a>
+            </li>
+        <?php endif ?>
+
+        <?php if ($this->idTypeDossier == 1 || $this->idTypeDossier == 2 || $this->idTypeDossier == 3): ?>
+            <li class='<?= strpos($this->action, "textes-applicables") !== false ? "active" : "" ?>'>
+                <a href='<?= $this->url(array("controller" => "dossier", "action" => "textes-applicables", "id" => $this->idDossier), false, true) ?>'>
+                    <span class="glyphicon glyphicon-align-center" aria-hidden="true"></span>
+                    Textes applicables
+                </a>
+            </li>
+        <?php endif ?>
+
+        <?php if ($this->idTypeDossier != 5): ?>
+            <li class = <?= $this->action == "docconsulte" ? "active" : "" ?>>
+                <a href= <?= $this->url(array("controller" => "dossier", "action" => "docconsulte", "id" => $this->idDossier), false, true) ?>>
+                    <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                    Documents consultés
+                </a>
+            </li>
+        <?php endif ?>
+
+        <?php if (($this->idTypeDossier === 2 || $this->idTypeDossier === 3) && $this->isAllowedVerificationsTechniques): ?>
+            <li class="<?= strpos($this->action, 'verifications-techniques') !== false ? 'active' : '' ?>">
+                <a href= <?= $this->url(array("controller" => "dossier", "action" => "verifications-techniques", "id" => $this->idDossier), false, true) ?>>
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                    <?= $this->nomOngletVerificationsTechniques ?>
+                </a>
+            </li>
+        <?php endif ?>
+
+        <?php if ($this->idTypeDossier === 1 && $this->isAllowedEffectifsDegagements): ?>
+            <li class="<?= strpos($this->action, 'effectifs-degagements-dossier') !== false ? 'active' : '' ?>">
+                <a class='sep' href='<?= $this->url(array('action' => 'effectifs-degagements-dossier')) ?>' >
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                    <?=  $this->nomOngletEffectifsDegagements ?>
+                </a>
+            </li>
+        <?php endif ?>
+
+        <?php if ($this->idTypeDossier === 1 && $this->isAllowedAvisDerogation): ?>
+            <li class="<?= strpos($this->action, 'avis-et-derogations') !== false ? 'active' : '' ?>">
+                <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations', 'id' => $this->idDossier], false, true) ?>">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    Avis et dérogations
+
+                    <?php if($this->hasAvisDerogation): ?>
+                        <div class="greenCircle pull-right"></div>
+                    <?php endif ?>
+                </a>
+            </li>
+        <?php endif ?>
+
+        <?php if (!in_array($this->natureDossier, [3, 5, 31, 32, 40, 41, 42, 44])): ?>
+            <li class="<?= strpos($this->action, 'presc') !== false || in_array($this->action, ['edit', 'edit-type']) ? 'active' : '' ?>">
+                <a href='<?= $this->url(array("controller" => "dossier", "action" => "prescription", "id" => $this->idDossier), false, true) ?>'>
+                    <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                    Prescriptions
+                </a>
+            </li>
+        <?php endif ?>
+
+        <li class='<?= strpos($this->action, "liees") !== false ? "active" : "" ?>'>
+            <a href='<?= $this->url(array("controller" => "dossier", "action" => "liees", "id" => $this->idDossier), false, true) ?>'>
+                <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+                Établissements et dossiers liés
+            </a>
+        </li>
+
+        <?php if (!in_array($this->natureDossier, [40, 41, 42, 44])): ?>
+            <li class='<?= ($this->action == "contact") ? "active" : "" ?>'>
+                <a href='<?= $this->url(array("controller" => "dossier", "action" => "contact", "id" => $this->idDossier), false, true) ?>'>
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    Contacts
+                </a>
+            </li>
+        <?php endif ?>
+
+        <li class='<?= ($this->action == "piece-jointe") ? "active" : "" ?>'>
+            <a href='<?= $this->url(array("controller" => "dossier", "action" => "piece-jointe", "id" => $this->idDossier), false, true) ?>'>
+                <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
+                Pièces jointes
+
+                <?php if($this->nombreNouvellesPiecesJointes > 0): ?>
+                    <div class="label label-danger pull-right">
+                        <?= $this->nombreNouvellesPiecesJointes ?>
+                    </div>
+                <?php endif ?>
+            </a>
+        </li>
+
+        <li class="nav-header">Actions</li>
+
+        <?php
+            $verrou = true;
+            if ($this->verrou == 1  || (isset($action) && $action == 'new')) {
+                $label = "Déverrouiller";
+                $idLink = "DEVERROU";
+            } else {
+                $label = "Verrouiller";
+                $idLink = "VERROU";
+                $verrou = false;
+            }
+        ?>
+
+        <li>
+            <a class="sep" id="<?= $idLink; ?>" style='cursor:pointer;'><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> <?= $label; ?></a>
+        </li>
+
+        <li class='<?= ($this->action == "rapport") ? "active" : "read" ?>'>
+            <a href='<?= $this->url(array("controller" => "dossier", "action" => "rapport", "id" => $this->idDossier), false, true) ?>'>
+                <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+                Rapport
+            </a>
+        </li>
+
+        <?php if (!$verrou && ($this->idDateCommissionAffect != null)) : ?>
+            <li>
+                <a class="sep" href='/calendrier-des-commissions/gestionodj/dateCommId/<?= $this->idDateCommissionAffect; ?>'>
+                    <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span> Afficher ordre du jour
+                </a>
+            </li>
+        <?php endif ?>
+
+        <?php if (!$verrou && $this->is_allowed_delete_dossier) : ?>
+            <li>
+                <?php if ($this->dossierSupprime) : ?>
+                    <a id="retablissementDossier" href=<?= "/dossier/retablir-dossier/idDossier/". $this->idDossier ?>>
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        Rétablir le dossier
+                    </a>
+                <?php else :?>
+                    <a id="suppressionDossier" href="#">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        Supprimer le dossier
+                    </a>
+                <?php endif ?>
+            </li>
+        <?php endif ?>
+    </ul>
+
+    <?php $this->placeholder('lateral_navigation')->captureEnd();
+endif ?>
+
+<?php $this->placeholder('page_header')->captureStart();  // Capture du 'before_content'?>
+
+<?php if($this->action == "add" || $this->do == "new" ): ?>
+    <h2 class='page-header'>Création d'un nouveau dossier</h2>
+    <h3 class='page-header'>
+        <div style='margin:10px; line-height: 20px;' id='infosEtablissement'>
+            <?php if($this->enteteEtab) : ?>
+                Etablissement(s) concerné(s) :
+                <button
+                    type="button"
+                    class="btn btn-link btn-sm"
+                    data-href=<?= '/etablissement/descriptif/id/'.$this->enteteEtab['ID_ETABLISSEMENT'].'?hideButton=true' ?>
+                    data-target='#modal-desc'
+                    data-toggle='modal'
+                    id='descEtab'
+                    title='Afficher le descriptif'>
+                    <span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span>
+                </button>
+                <a
+                    class="btn btn-link btn-sm"
+                    href=<?= '/etablissement/dossiers/id/'. $this->enteteEtab['ID_ETABLISSEMENT']?>
+                    title='Se rendre à la liste des dossiers' >
+                    <span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>
+                </a>
+
+                <a href=<?= '/etablissement/index/id/'.$this->enteteEtab['ID_ETABLISSEMENT'] ?> class='etab'>
+                    <?= $this->enteteEtab['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
+
+                    <?php if($this->enteteEtab['adresses']) : ?>
+                        (<?= $this->enteteEtab['adresses'][0]['LIBELLE_COMMUNE'] ?>)
+                    <?php endif ?>
+
+                    <?php if(isset($this->enteteEtab['etablissementInfos']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])): ?>
+                        [<?= $this->enteteEtab['etablissementInfos']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>]
+                    <?php endif ?>
+                </a>
+
+                <?php if(isset($this->enteteEtab['etablissementInfos']['general']['ID_DOSSIER_DONNANT_AVIS']) && null !== ($this->enteteEtab['etablissementInfos']['general']['ID_DOSSIER_DONNANT_AVIS'])): ?>
+                    <?php if($this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] == "Favorable"): ?>
+                        <span class='avis F'><?= $this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] ?></span>
+                    <?php elseif($this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] == "Défavorable"): ?>
+                        <span class='avis D'><?= $this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] ?></span>&nbsp;
+                    <?php elseif($this->enteteEtab['etablissementInfos']['infosEtab']['presence_avis_differe']): ?>
+                        <span class='label label-info'>Avis différé</span>&nbsp;
+                    <?php else: ?>
+                        <span class='avis'>Avis indisponible</span>&nbsp;
+                    <?php endif ?>
+                <?php else: ?>
+                    <span class='avis'>Avis indisponible</span>&nbsp;
+                <?php endif ?>
+
+                <?php $nbPrev = sizeof($this->enteteEtab['etablissementInfos']['preventionnistes']) ?>
+                <?php if($nbPrev > 0) : ?>
+                    <span style='font-size:10px'>(
+                        <?php foreach($this->enteteEtab['etablissementInfos']['preventionnistes'] as $prev ): ?>
+                            <?= $prev['NOM_UTILISATEURINFORMATIONS']." ".$prev['PRENOM_UTILISATEURINFORMATIONS'] ?>
+                            <?php if($nbPrev > 1): ?>
+                                <?php $nbPrev-- ?>
+                                ,
+                            <?php endif ?>
+                        <?php endforeach ?>
+                    )</span>
+                <?php endif ?>
+
+                <span style='font-size:10px'>#<?= $this->enteteEtab['etablissementInfos']['general']['NUMEROID_ETABLISSEMENT'] ?></span>
+            <?php endif ?>
+        </div>
+    </h3>
+<?php else :?>
+    <h2 class='page-header'>
+        <span><?= $this->libelleType ?></span>
+
+        <?php if ($this->dossierSupprime): ?>
+            <span class='label label-danger'>
+                DOSSIER SUPPRIME
+            </span>
+        <?php endif ?>
+
+        <small><br/><?= nl2br($this->objetDossier) ?></small>
+
+	    <?php if (null !== $this->id_platau): ?>
+            <p style='font-size: medium;' class='dossier__identifiant-platau label label-primary'>
+                <strong>CONSULTATION PLATAU : <?= $this->id_platau ?></strong>
+            </p>
+        <?php endif ?>
+
+        <div style='margin:10px; line-height: 20px;' id='infosEtabs'>
+            <?php
+            $nbEtab = count($this->enteteEtab);
+
+            if($nbEtab > 0): ?>
+                <?php if($nbEtab == 1 && $this->enteteEtab[0]["LIBELLE_GENRE"] == "Site"): ?>
+                    Site concerné :
+                    <a href=<?='/etablissement/index/id/'.$this->enteteEtab[0]['ID_ETABLISSEMENT'] ?> class='etab'>
+                        <?= $this->enteteEtab[0]['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
+                    </a>
+                    <span style='font-size:10px'>#<?=$this->enteteEtab[0]['infosEtab']['general']['NUMEROID_ETABLISSEMENT'] ?></span>
+                <?php else:
+                    $idEtabEnCour = null;
+                ?>
+                    Etablissement(s) concerné(s) :
+                    <?php foreach($this->enteteEtab as $etab => $value): ?>
+                        <?php if($value['ID_ETABLISSEMENTDOSSIER'] !== $idEtabEnCour) :
+                            $idEtabEnCour = $value['ID_ETABLISSEMENTDOSSIER'];
+                        ?>
+                            <button
+                                type="button"
+                                class="btn btn-link btn-sm"
+                                data-href=<?= '/etablissement/descriptif/id/'.$value['ID_ETABLISSEMENT'].'?hideButton=true' ?>
+                                data-target='#modal-desc'
+                                data-toggle='modal'
+                                id='descEtab'
+                                title='Afficher le descriptif'>
+                                <span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span>
+                            </button>
+                            <a
+                                class="btn btn-link btn-sm"
+                                href=<?= '/etablissement/dossiers/id/'.$value['ID_ETABLISSEMENT'] ?>
+                                title='Se rendre à la liste des dossiers' >
+                                <span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>
+                            </a>
+                            <a
+                                href=<?='/etablissement/index/id/'.$value['ID_ETABLISSEMENT'] ?>
+                                class='etab'
+                            >
+                                <?= $value['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
+                                <?php
+                                    $nbAdresse = count($value['infosEtab']['adresses']);
+
+                                    if($nbAdresse != 0): ?>
+                                    (<?php foreach($value['infosEtab']['adresses'] as $commune): ?><?= $commune['LIBELLE_COMMUNE'] ?><?php if($nbAdresse != 1): ?>,<?php $nbAdresse-- ?><?php endif ?><?php endforeach ?>)
+                                <?php else: ?>
+                                    (adresse non renseignée)
+                                <?php endif ?>
+
+                                <?php if(isset($value['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])): ?>
+                                    [<?= $value['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>]
+                                <?php endif ?>
+                            </a>
+
+                            <?php if($value['infosEtab']['general']['ID_DOSSIER_DONNANT_AVIS'] != null): ?>
+                                <?php if($value['avisExploitation']['LIBELLE_AVIS'] == "Favorable"): ?>
+                                    <span class='avis F'><?= $value['avisExploitation']['LIBELLE_AVIS'] ?></span>&nbsp;
+                                <?php elseif($value['avisExploitation']['LIBELLE_AVIS'] == "Défavorable"): ?>
+                                    <span class='avis D'><?=$value['avisExploitation']['LIBELLE_AVIS']?></span>&nbsp;
+                                <?php elseif($value['infosEtab']['presence_avis_differe']): ?>
+                                    <span class='label label-info'>Avis différé</span>&nbsp;
+                                <?php else: ?>
+                                    <span class='avis'>Avis indisponible</span>&nbsp;
+                                <?php endif ?>
+                            <?php else: ?>
+                                <span class='avis'>Avis indisponible</span>&nbsp;
+                            <?php endif ?>
+
+                            <?php $nbPrev = count($value['infosEtab']['preventionnistes']) ?>
+
+                            <?php if($nbPrev > 0): ?>
+                                <span style='font-size:10px'>
+                                (
+                                    <?php foreach($value['infosEtab']['preventionnistes'] as $prev) : ?>
+                                        <?=
+                                            $prev['NOM_UTILISATEURINFORMATIONS']
+                                            ." ".
+                                            $prev['PRENOM_UTILISATEURINFORMATIONS']
+                                        ?>
+                                        <?php if($nbPrev > 1): ?>
+                                            ,
+                                        <?php endif;
+                                        $nbPrev--;
+                                    endforeach ?>
+                                )
+                            <?php endif ?>
+                            <span style='font-size:10px'>#<?=$value['infosEtab']['general']['NUMEROID_ETABLISSEMENT']?></span>
+                        <?php endif ?>
+                    <?php endforeach ?>
+                <?php endif ?>
+            <?php endif ?>
+        </div>
+    </h2>
+<?php endif ?>
+
+<div class='grid_16' >
+    <?= "<input type='hidden' name='idDossier' id='idDossier' value='".$this->idDossier."' />"; ?>
+
+    <?php $this->placeholder('page_header')->captureEnd(); //$this->placeholder('before_content')->captureEnd()?>
+    <?php $this->placeholder('after_content')->captureStart() // Capture du 'after_content'?>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" tabindex="-1" id="modal-desc" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">Descriptif de l'établissement</h3>
+            </div>
+            <div class="modal-body">
+                Chargement des éléments...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+		$("#VERROU").live('click',function(){
+			$.ajax({
+                url: "/dossier/verrou",
+                data: "idDossier="+$("#idDossier").val()+"&ID_CREATEUR="+$("#ID_CREATEUR").val(),
+                type:"POST",
+                beforeSend: function(){
+                    $("#chargement").html("<img src='/images/load.gif' />");
+                },
+                success: function(affichageResultat){
+                    window.location= affichageResultat;
+                },
+                statusCode: {
+                    401:function(){
+                        alert("Vous n'êtes pas autorisé à effectuer cette action");
+                        $("#chargement").html("");
+                    },
+                },
+                error: function(){
+                    return false;
+                }
+			});
+
+			return false;
+		});
+
+		$("#DEVERROU").live('click',function(){
+			$.ajax({
+                url: "/dossier/deverrou",
+                data: "idDossier="+$("#idDossier").val(),
+                type:"POST",
+                beforeSend: function(){
+                    $("#chargement").html("<img src='/images/load.gif' />");
+                },
+                success: function(affichageResultat){
+                    window.location= affichageResultat;
+                },
+                statusCode: {
+                    401:function(){
+                        alert("Vous n'êtes pas autorisé à effectuer cette action");
+                        $("#chargement").html("");
+                    },
+                },
+                error: function(){
+                    return false;
+                }
+			});
+
+			return false;
+		});
+
+        $('#descEtab').click(function() {
+            $.ajax({
+                url: $(this).attr('data-href'),
+                type: 'GET',
+                success: function(result) {
+                    $('#modal-desc .modal-body').html(result)
+                }
+            })
+        })
+    });
+</script>
+
+<?php $this->placeholder('after_content')->captureEnd() ?>
+
+<?= $this->render('dashboard.phtml') // Rendu du layout par défaut avec les placeholders?>

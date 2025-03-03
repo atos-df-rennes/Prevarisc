@@ -243,13 +243,13 @@ parameters:
 		-
 			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
 			identifier: property.notFound
-			count: 4
+			count: 5
 			path: application/controllers/DossierController.php
 
 		-
 			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
 			identifier: property.notFound
-			count: 16
+			count: 17
 			path: application/controllers/DossierController.php
 
 		-
@@ -645,7 +645,7 @@ parameters:
 		-
 			message: '#^Call to an undefined method Zend_View_Interface\:\:headLink\(\)\.$#'
 			identifier: method.notFound
-			count: 11
+			count: 21
 			path: application/controllers/DossierController.php
 
 		-
@@ -657,7 +657,7 @@ parameters:
 		-
 			message: '#^Call to an undefined method Zend_View_Interface\:\:inlineScript\(\)\.$#'
 			identifier: method.notFound
-			count: 18
+			count: 27
 			path: application/controllers/DossierController.php
 
 		-
@@ -759,7 +759,7 @@ parameters:
 		-
 			message: '#^Call to an undefined method Zend_View_Interface\:\:headLink\(\)\.$#'
 			identifier: method.notFound
-			count: 12
+			count: 20
 			path: application/controllers/EtablissementController.php
 
 		-
@@ -771,7 +771,7 @@ parameters:
 		-
 			message: '#^Call to an undefined method Zend_View_Interface\:\:inlineScript\(\)\.$#'
 			identifier: method.notFound
-			count: 10
+			count: 12
 			path: application/controllers/EtablissementController.php
 
 		-
@@ -789,7 +789,7 @@ parameters:
 		-
 			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
 			identifier: property.notFound
-			count: 4
+			count: 5
 			path: application/controllers/FormulaireController.php
 
 		-
@@ -825,13 +825,13 @@ parameters:
 		-
 			message: '#^Call to an undefined method Zend_View_Interface\:\:headLink\(\)\.$#'
 			identifier: method.notFound
-			count: 6
+			count: 12
 			path: application/controllers/FormulaireController.php
 
 		-
 			message: '#^Call to an undefined method Zend_View_Interface\:\:inlineScript\(\)\.$#'
 			identifier: method.notFound
-			count: 10
+			count: 13
 			path: application/controllers/FormulaireController.php
 
 		-
@@ -2107,7 +2107,31 @@ parameters:
 			path: application/plugins/Security.php
 
 		-
+			message: '#^Access to an undefined property Zend_View\:\:\$branch_prevarisc\.$#'
+			identifier: property.notFound
+			count: 2
+			path: application/plugins/View.php
+
+		-
+			message: '#^Access to an undefined property Zend_View\:\:\$revision_prevarisc\.$#'
+			identifier: property.notFound
+			count: 2
+			path: application/plugins/View.php
+
+		-
+			message: '#^Access to an undefined property Zend_View\:\:\$version_prevarisc\.$#'
+			identifier: property.notFound
+			count: 2
+			path: application/plugins/View.php
+
+		-
 			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:setView\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: application/plugins/View.php
+
+		-
+			message: '#^Call to an undefined method Zend_View_Helper_Navigation\:\:breadcrumbs\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: application/plugins/View.php

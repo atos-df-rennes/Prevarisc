@@ -1,0 +1,11 @@
+<h4>Avis et dérogations en vigueur</h4>
+<?php
+    echo $this->partial("etablissement/partials/partial-historique-avisderogations.phtml", array(
+        "array" => $this->historiqueAvisDerogations
+    ));
+?>
+
+<?php if (null !== $this->derogationsOriginales && '' !== $this->derogationsOriginales): ?>
+    <h4>Dérogations originales</h4>
+    <?= nl2br($this->derogationsOriginales) ?>
+<?php endif ?>

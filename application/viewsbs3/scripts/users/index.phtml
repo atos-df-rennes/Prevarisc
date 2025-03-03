@@ -1,0 +1,79 @@
+<?php echo $this->partial('users/partials/menu_admin_user.phtml') ?>
+
+<div class='row mt-4'>
+    <ul class="col-md-2 nav nav-pills nav-stacked" style="padding-left: 15px;">
+        <li <?php if(!isset($_GET['gid'])) echo "class='active'" ?>><a href='/users/index' >Tous les utilisateurs</a></li>
+        <?php foreach($this->groupes as $groupe) : ?>
+            <li <?php if(isset($_GET['gid']) && $_GET['gid'] == $groupe['ID_GROUPE']) echo "class='active'" ?> >
+                <a href='/users/index?gid=<?php echo $groupe["ID_GROUPE"] ?>' ><?php echo $groupe["LIBELLE_GROUPE"] ?></a>
+            </li>
+        <?php endforeach ?>
+    </ul>
+
+    <div class='col-md-10'>
+        <?php if(array_key_exists('gid', $_GET)) : ?>
+            <a href='/users/edit-group?gid=<?php echo $_GET['gid'] ?>' class='btn btn-default pull-right' >Modifier le groupe</a>
+        <?php endif ?>
+
+        <h4>Utilisateurs actifs <small>(<?php echo count($this->users)?> utilisateurs)</small></h4>
+        <?php if($this->users == null) : ?>
+            <p class='lead'><strong>Aucun résultat.</strong></p>
+        <?php else : ?>
+            <table class='table table-condensed table-striped'>
+                <thead>
+                    <tr>
+                        <th>Identifiant</th>
+                        <th>Nom et prénom</th>
+                        <th>Groupe</th>
+                        <th>Fonction</th>
+                        <th>Etat</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach( $this->users as $user ) : ?>
+                    <tr <?php if(!$user["ACTIF_UTILISATEUR"]) echo "class='text-muted'" ?> >
+                        <td style='font-style: italic' ><?php echo $user["USERNAME_UTILISATEUR"] ?></td>
+                        <td><?php echo $user["GRADE_UTILISATEURINFORMATIONS"] . " " . $user["NOM_UTILISATEURINFORMATIONS"] . " " . $user["PRENOM_UTILISATEURINFORMATIONS"] ?></td>
+                        <td><?php echo $user["LIBELLE_GROUPE"] ?></td>
+                        <td><?php echo $user["LIBELLE_FONCTION"] ?></td>
+                        <td><?php echo ( time() - strtotime($user["LASTACTION_UTILISATEUR"]) < ini_get('session.gc_maxlifetime') ) ? "<span class='label label-success'>En ligne</span>" : "<span class='label label-default'>Hors ligne</span>" ?></td>
+                        <td><a href='/users/edit/uid/<?php echo $user["uid"] ?>'>Modifier</a></td>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        <?php endif ?>
+
+        <h4>Utilisateurs inactifs <small>(<?php echo count($this->inactives_users)?> utilisateurs)</small></h4>
+        <?php if($this->inactives_users == null) : ?>
+            <p class='lead'><strong>Aucun résultat.</strong></p>
+        <?php else : ?>
+            <table class='table table-condensed table-striped'>
+                <thead>
+                    <tr>
+                        <th>Identifiant</th>
+                        <th>Nom et prénom</th>
+                        <th>Groupe</th>
+                        <th>Fonction</th>
+                        <th>Etat</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach( $this->inactives_users as $user ) : ?>
+                    <tr <?php if(!$user["ACTIF_UTILISATEUR"]) echo "class='text-muted'" ?> >
+                        <td style='font-style: italic' ><?php echo $user["USERNAME_UTILISATEUR"] ?></td>
+                        <td><?php echo $user["GRADE_UTILISATEURINFORMATIONS"] . " " . $user["NOM_UTILISATEURINFORMATIONS"] . " " . $user["PRENOM_UTILISATEURINFORMATIONS"] ?></td>
+                        <td><?php echo $user["LIBELLE_GROUPE"] ?></td>
+                        <td><?php echo $user["LIBELLE_FONCTION"] ?></td>
+                        <td><span class='label'>Inactif</span></td>
+                        <td><a href='/users/edit/uid/<?php echo $user["uid"] ?>'>Modifier</a></td>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        <?php endif ?>
+    </div>
+
+</div>

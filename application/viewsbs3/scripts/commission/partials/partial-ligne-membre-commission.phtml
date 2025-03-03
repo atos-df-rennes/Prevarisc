@@ -1,0 +1,146 @@
+<tr>
+	<td style='width: 300px'>
+		<div class='inner_scroll'>
+            <!-- ID de la règle -->
+            <input type='hidden' name='ID_COMMISSIONMEMBRE[]' value='<?php echo $this->id_membre ?>' />
+
+            <!-- Libellé du membre-->
+            <input class="form-control" type='text' name='<?php echo $this->id_membre ?>_LIBELLE_COMMISSIONMEMBRE' value='<?php echo htmlspecialchars($this->libelle, ENT_QUOTES) ?>' />
+            <br/>
+
+            <!-- Obligatoire / facultatif / pour information -->
+            <select class="form-control" name='<?php echo $this->id_membre ?>_PRESENCE_COMMISSIONMEMBRE' >
+                <option value='0' >Membre Obligatoire</option>
+                <option value='1' <?php if($this->presence == 1) echo "selected" ?>>Membre Facultatif</option>
+                <option value='2' <?php if($this->presence == 2) echo "selected" ?>>Membre Pour information</option>
+            </select>
+
+            <hr/>
+
+            <!-- Type de membre -->
+            <p>
+                <select class="form-control mb-4" name='<?php echo $this->id_membre ?>_typemembre'>
+                    <option value='1' >Groupement de commune</option>
+                    <option value='2' <?php if($this->contact != null) echo "selected" ?> >Contact de la commission</option>
+                    <option value='3' <?php if($this->groupement == null && $this->contact == null) echo "selected" ?> >Commune</option>
+                </select>
+
+                <!-- Groupement de commune -->
+                <span class='<?php echo $this->id_membre ?>_type-membre <?php echo $this->id_membre ?>_type-membre-groupement <?php if (null != $this->groupement && is_array($this->groupement)) { if(array_key_exists('ID_GROUPEMENT', $this->groupement) && $this->groupement["ID_GROUPEMENT"] == null) { echo "ui-helper-hidden"; } } ?>'>
+                    <?php echo $this->listeGroupement($this->groupement, array("name" => $this->id_membre . "_ID_GROUPEMENT", "class" => "form-control")); ?>
+                </span>
+
+                <!-- Liste des contacts -->
+                <?php if(count($this->contacts) > 0 ) : ?>
+                <span class='<?php echo $this->id_membre ?>_type-membre <?php echo $this->id_membre ?>_type-membre-contact <?php if($this->contact["ID_UTILISATEURINFORMATIONS"] == null) echo "ui-helper-hidden" ?>'>
+                    <select class="form-control" name='<?php echo $this->id_membre . "_ID_UTILISATEURINFORMATIONS" ?>'>
+                        <?php foreach( $this->contacts as $row_contact ) : ?>
+                        <option value='<?php echo $row_contact["ID_UTILISATEURINFORMATIONS"] ?>' <?php if($this->contact == $row_contact["ID_UTILISATEURINFORMATIONS"]) echo "selected" ?> ><?php echo $row_contact["NOM_UTILISATEURINFORMATIONS"] . " " . $row_contact["PRENOM_UTILISATEURINFORMATIONS"] ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </span>
+                <?php endif ?>
+
+                <script>
+                    $("select[name=<?php echo $this->id_membre ?>_typemembre]").change(function() {
+                        $(".<?php echo $this->id_membre ?>_type-membre").hide();
+
+                        switch( $(this).val() ) {
+                            case "1":
+                                $(".<?php echo $this->id_membre ?>_type-membre-groupement").show();
+                                break;
+
+                            case "2":
+                                $(".<?php echo $this->id_membre ?>_type-membre-contact").show();
+                                break;
+                        }
+                    }).change();
+                </script>
+            </p>
+        </div>
+	</td>
+
+	<!-- Catégorie -->
+	<td class='checkbox_area' >
+        <div class='inner_scroll'>
+            <ul class='list-unstyled'>
+            <?php foreach( $this->categories as $categorie ) : ?>
+                <li>
+                    <input name='<?php echo $this->id_membre ?>_ID_CATEGORIE[]' type='checkbox' value='<?php echo $categorie["ID_CATEGORIE"] ?>' <?php if( $categorie["ID_COMMISSIONMEMBRE"] != null ) echo "checked" ?> />
+                    <?php echo $categorie["LIBELLE_CATEGORIE"] ?>
+                </li>
+            <?php endforeach ?>
+            </ul>
+		</div>
+	</td>
+
+	<!-- Le type -->
+	<td class='checkbox_area' >
+        <div class='inner_scroll'>
+            <dl class='list-unstyled'>
+                <?php foreach( $this->types as $libelle_type => $_type ) : ?>
+                    <dt><?php echo $libelle_type ?><dt>
+                    <dd>
+                        <ul class='list-unstyled'>
+                        <?php foreach( $_type as $type ) : ?>
+                        <li>
+                            <input name='<?php echo $this->id_membre ?>_ID_TYPEACTIVITE[]' type='checkbox' value='<?php echo $type["ID_TYPEACTIVITE"] ?>' <?php if( $type["ID_COMMISSIONMEMBRE"] != null ) echo "checked" ?> />
+                            <?php echo $type["LIBELLE_ACTIVITE"] ?>
+                        </li>
+                        <?php endforeach ?>
+                        </ul>
+                    </dd>
+                <?php endforeach ?>
+            </dl>
+        </div>
+	</td>
+
+	<!-- Classe -->
+	<td class='checkbox_area' >
+		<div class='inner_scroll'>
+            <ul class='list-unstyled'>
+            <?php foreach( $this->classes as $classe ) : ?>
+                <li>
+                    <input name='<?php echo $this->id_membre ?>_ID_CLASSE[]' type='checkbox' value='<?php echo $classe["ID_CLASSE"] ?>' <?php if( $classe["ID_COMMISSIONMEMBRE"] != null ) echo "checked" ?> />
+                    <?php echo $classe["LIBELLE_CLASSE"] ?>
+                </li>
+            <?php endforeach ?>
+            </ul>
+		</div>
+	</td>
+
+	<!-- Le type de dossier -->
+	<td class='checkbox_area' >
+		<div class='inner_scroll'>
+            <ul class='list-unstyled'>
+                <input type="hidden" name="type_membre_value" value="<?php echo $this->id_membre ?>" />
+
+                <?php foreach( $this->dossiertypes as $dossiertype ) : ?>
+                    <li>
+                    	<input name='<?php echo $this->id_membre ?>_ID_DOSSIERTYPE[]' type='checkbox' value='<?php echo $dossiertype["ID_DOSSIERTYPE"] ?>' <?php if( $dossiertype["ID_COMMISSIONMEMBRE"] != null ) echo "checked" ?> onclick="if($(this).attr('checked')) $(this).next('ul').find('input').attr('checked', true); else $(this).next('ul').find('input').removeAttr('checked');" />
+
+                    	<?php echo $dossiertype["LIBELLE_DOSSIERTYPE"] ?>
+
+						<ul class='list-unstyled' style='margin-left: 1em;'>
+							<?php foreach( $this->dossiernatures as $dossiernature ) : ?>
+								<?php if($dossiernature["ID_DOSSIERTYPE"] == $dossiertype["ID_DOSSIERTYPE"]) : ?>
+									<li class='<?php echo $this->id_membre."_DOSSIERNATURETYPE_".$dossiernature["ID_DOSSIERTYPE"] ?>' >
+										<input name='<?php echo $this->id_membre ?>_ID_DOSSIERNATURE[]' type='checkbox' value='<?php echo $dossiernature["ID_DOSSIERNATURE"] ?>' <?php if( $dossiernature["ID_COMMISSIONMEMBRE"] != null ) echo "checked" ?> />
+										<?php echo $dossiernature["LIBELLE_DOSSIERNATURE"] ?>
+									</li>
+								<?php endif ?>
+							<?php endforeach ?>
+						</ul>
+                    </li>
+                <?php endforeach ?>
+            </ul>
+		</div>
+	</td>
+
+	<!-- Action -->
+	<td style='text-align: center;' >
+		<a class='delete-membre' href='/commission/delete-membre?id_membre=<?php echo $this->id_membre ?>' title='Supprimer' >
+			Supprimer
+		</a>
+	</td>
+</tr>

@@ -1,0 +1,103 @@
+<h4 class="h4_subtitle"><?= $this->avisDerogations['TYPE'] ?> - <?= $this->avisDerogations['TITRE'] ?></h4>
+
+<form class="form-horizontal col-md-8" method="post">
+    <div class="btn-group pull-right">
+        <a class="btn btn-default" href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations', 'id' => $this->avisDerogations['ID_DOSSIER']], false, true) ?>">Annuler la modification</a>
+        <input type="submit" class="btn btn-success" value="Sauvegarder" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label" for="inputType">Type</label>
+        <div>
+            <select id="inputType" name="TYPE" required>
+                <option value="Avis" <?= 'Avis' === $this->avisDerogations['TYPE'] ? 'selected' : '' ?>>
+                    Avis
+                </option>
+                <option value="Dérogation" <?= 'Dérogation' === $this->avisDerogations['TYPE'] ? 'selected' : '' ?>>
+                    Dérogation
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label" for="inputTitre">Titre</label>
+        <div>
+            <input name="TITRE" type="text" id="inputTitre" required value='<?= htmlspecialchars($this->avisDerogations['TITRE'], ENT_QUOTES) ?>'>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label no-padding-top" for="inputObjet">Objet</label>
+        <div>
+            <textarea id="inputObjet" name="OBJET"><?= $this->avisDerogations['OBJET'] ?></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label no-padding-top" for="inputJustification">Justification</label>
+        <div>
+            <textarea id="inputJustification" name="JUSTIFICATION"><?= $this->avisDerogations['JUSTIFICATION'] ?></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label no-padding-top" for="inputArticlesConcernes">Article(s) concerné(s)</label>
+        <div>
+            <textarea id="inputArticlesConcernes" name="ARTICLES_CONCERNES"><?= $this->avisDerogations['ARTICLES_CONCERNES'] ?></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label no-padding-top" for="inputMesuresCompensatoiresProposees">Mesure(s) compensatoire(s) proposée(s)</label>
+        <div>
+            <textarea id="inputMesuresCompensatoiresProposees" name="MESURES_COMPENSATOIRES_PROPOSEES"><?= $this->avisDerogations['MESURES_COMPENSATOIRES_PROPOSEES'] ?></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label no-padding-top" for="inputAnalyseDeRisque">Analyse de risque</label>
+        <div>
+            <textarea id="inputAnalyseDeRisque" name="ANALYSE_DE_RISQUE"><?= $this->avisDerogations['ANALYSE_DE_RISQUE'] ?></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+    <label class="control-label" for="inputAvis">Avis</label>
+        <div>
+            <select id="inputAvis" name="AVIS">
+                <?php foreach ($this->listeAvis as $avis): ?>
+                    <option value='<?= $avis["ID_AVIS"] ?>' <?= $this->avisDerogations['AVIS'] === $avis['ID_AVIS'] ? 'selected' : '' ?>><?= $avis['LIBELLE_AVIS'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label no-padding-top">Avis/Dérogation levé(e):</label>
+        <?=
+            $this->partial(
+                'dossier/results/avisderogation/liste-dossier.phtml',
+                [
+                    'listeDossierParType' => $this->listDossierEtab,
+                    'listeDossierParTypeN' => $this->listDossierEtabN,
+                    'ID_DOSSIER_LIE' => $this->avisDerogations['ID_DOSSIER_LIE']
+                ]
+            );
+        ?>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label no-padding-top" for="DISPLAY_HISTORIQUE">Afficher dans l'onglet de l'établissement</label>
+        <div>
+            <input type='hidden' name='DISPLAY_HISTORIQUE' value='0'>
+            <input
+                type="checkbox"
+                id="DISPLAY_HISTORIQUE"
+                name="DISPLAY_HISTORIQUE"
+                value='1'
+                <?= ($this->avisDerogations['DISPLAY_HISTORIQUE'] == true ? 'checked' : '') ?>
+            >
+        </div>
+    </div>
+</form>

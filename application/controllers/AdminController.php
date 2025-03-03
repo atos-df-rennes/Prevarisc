@@ -40,6 +40,7 @@ class AdminController extends Zend_Controller_Action
             ],
             'dbname' => getenv('PREVARISC_DB_DBNAME'),
             'db_url' => getenv('PREVARISC_DB_HOST').(getenv('PREVARISC_DB_PORT') ? ':'.getenv('PREVARISC_DB_PORT') : ''),
+            'files_path' => getenv('PREVARISC_REAL_DATA_PATH'),
             'api_enabled' => '' != getenv('PREVARISC_SECURITY_KEY'),
             'proxy_enabled' => getenv('PREVARISC_PROXY_ENABLED'),
             'third_party_plugins' => implode(', ', explode(';', getenv('PREVARISC_THIRDPARTY_PLUGINS'))),
@@ -66,6 +67,14 @@ class AdminController extends Zend_Controller_Action
             'cache_lifetime' => $cache_config['lifetime'],
             'cache_enabled' => $cache_config['enabled'],
             'enforce_security' => 1 == getenv('PREVARISC_ENFORCE_SECURITY'),
+        ]);
+
+        $this->view->assign([
+            'relance_periodicite_commission' => getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'),
+            'unite_periodicite' => getenv('PREVARISC_UNITE_PERIODICITE_ANNEES'),
+            'platau' => getenv('PREVARISC_DEACTIVATE_PLATAU'),
+            'nb_dossiers' => getenv('PREVARISC_DOSSIERS_MAX_A_AFFICHER'),
+            'bs3' => getenv('PREVARISC_BOOTSTRAP_3'),
         ]);
 
         $service_search = new Service_Search();

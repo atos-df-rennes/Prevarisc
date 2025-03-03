@@ -1,0 +1,28 @@
+<?php foreach ($this->rubriques as $rubrique) : ?>
+    <div id='afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>' class="<?= boolval($rubrique['DISPLAY']) === false ? 'hide' : '' ?>">
+        <h4 id='<?= strtolower(preg_replace('/\s|\'+/', '-', $rubrique['NOM'])) ?>' class='h4_subtitle'><?= $rubrique['NOM'] ?></h4>
+
+        <?php if (empty($rubrique['CHAMPS'])): ?>
+            <?=
+                $this->partial('formulaire/partials/partial-information-manquante.phtml', [
+                    'message' => 'Aucun champ renseigné. Contactez un administrateur Prevarisc.'
+                ]);
+            ?>
+        <?php else : ?>
+            <?php foreach ($rubrique['CHAMPS'] as $champ) : ?>
+                <div class='form-group'>
+                    <label for='champ-<?= htmlspecialchars($champ["ID_CHAMP"]) ?>' class='col-md-2 control-label'>
+                        <strong><?= htmlspecialchars($champ['NOM']) ?></strong>
+                    </label>
+                    <div class='col-md-10'>
+                        <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                            'champ' => $champ,
+                            'champsvaleurliste' => $this->champsvaleurliste,
+                            'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                        ]); ?>
+                    </div>
+                </div>
+            <?php endforeach ?>
+        <?php endif ?>
+    </div>
+<?php endforeach ?>

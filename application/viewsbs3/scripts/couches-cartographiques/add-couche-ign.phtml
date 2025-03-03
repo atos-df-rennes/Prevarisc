@@ -1,0 +1,121 @@
+<div class='pull-right btn-group'>
+    <a class='btn btn-default' href="<?php echo $this->url(array('action' => 'list')) ?>">Revenir sur la liste des couches cartographiques</a>
+</div>
+
+<h3>Ajout d'une couche cartographique IGN</h3>
+
+<div class="panel-group" id="ign-accordion" role="tablist" aria-multiselectable="true">
+    <?php foreach ($this->formats as $index => $format): ?>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab">
+                <a role="button" class="accordion-toggle" data-toggle="collapse" data-parent="#ign-accordion" href="#<?= str_replace(' ', '-', $format) ?>">
+                    <?= strtoupper($format) ?>
+                </a>
+            </div>
+            <div id="<?= str_replace(' ', '-', $format) ?>" class="panel-collapse collapse <?= $index === 0 ? 'in' : '' ?>" role="tabpanel">
+                <div class="panel-body">
+                    <table class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nom de la couche</th>
+                                <th scope="col">Nom de la couche dans le flux</th>
+                                <th scope="col">Format de l'image dans le flux</th>
+                                <th scope="col">Couche masquée ?</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <?php endforeach ?>
+</div>
+
+<script type="text/javascript">
+    let result = null
+    let contentDiv = null
+    const formats = ['wmts', 'wms raster', 'wms vecteur']
+
+    formats.forEach(format => {
+        const baseFormat = format.split(' ')[0]
+
+        const [parser, urlToCall] = getCapabilities(format, baseFormat)
+
+        $.ajax({
+            url: urlToCall,
+            type: 'get',
+            success: function (result) {
+                const layers = getCapabilitiesLayers(parser, format, baseFormat, result)
+
+                if (layers.length > 0) {
+                    contentDiv = $(`#${format.replace(' ', '-')} .panel-body table tbody`)
+
+                    for (let i = 0; i < layers.length; i++) {
+                        contentDiv.append(`<tr id="${layers[i].internalName}-${format.replace(' ', '-')}">`)
+                        let row = $('#' + layers[i].internalName.replace(/\./g, '\\.') + '-' + format.replace(' ', '-'))
+                        row.append(`
+                            <td title="${layers[i].name}">
+                                <form action="/couches-cartographiques/add-couche-ign" method="post" id="form-${layers[i].internalName}-${format.replace(' ', '-')}">
+                                    <input type="hidden" name="TYPE_COUCHECARTO" value="${layers[i].type}">
+                                    <input type="hidden" name="NOM_COUCHECARTO" value="${layers[i].name}" />
+                                    <input type="hidden" name="LAYERS_COUCHECARTO" value="${layers[i].internalName}" />
+                                    <input type="hidden" name="URL_COUCHECARTO" value="${layers[i].url}" />
+                                </form>
+                                ${layers[i].name}
+                            </td>
+                        `)
+
+                        row.append(`<td title="${layers[i].internalName}">${layers[i].internalName}</td>`)
+
+                        if (baseFormat === 'wms') {
+                            const pngChecked = layers[i].format === 'image/png'
+                            const jpegChecked = layers[i].format === 'image/jpeg'
+
+                            row.append(`
+                                <td>
+                                    <select class="form-control" form="form-${layers[i].internalName}-${format.replace(' ', '-')}" name="FORMAT_COUCHECARTO">
+                                    </select>
+                                </td>
+                            `)
+
+                            const select = $(row.selector + ' select[name="FORMAT_COUCHECARTO"]')
+
+                            if (pngChecked === true) {
+                                select.append(
+                                    `<option value="image/png" selected>image/png</option>
+                                    <option value="image/jpeg">image/jpeg</option>`
+                                )
+                            } else if (jpegChecked === true) {
+                                select.append(
+                                    `<option value="image/png">image/png</option>
+                                    <option value="image/jpeg" selected>image/jpeg</option>`
+                                )
+                            }
+                        } else {
+                            row.append(`
+                                <td>
+                                    ${layers[i].format}
+                                    <input form="form-${layers[i].internalName}-${format.replace(' ', '-')}" type="hidden" name="FORMAT_COUCHECARTO" value="${layers[i].format}" />
+                                </td>
+                            `)
+                        }
+
+                        row.append(`
+                            <td>
+                                <input id="couche-visible" form="form-${layers[i].internalName}-${format.replace(' ', '-')}" name="TRANSPARENT_COUCHECARTO" type="checkbox" value="0" />
+                            </td>
+                        `)
+                        row.append(`
+                            <td>
+                                <input form="form-${layers[i].internalName}-${format.replace(' ', '-')}" type="submit" class="btn btn-success" value="Ajouter">
+                            </td>
+                        `)
+
+                        contentDiv.append('</tr>')
+                    }
+                }
+            }
+        })
+    })
+</script>

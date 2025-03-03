@@ -1,0 +1,87 @@
+<?php if(count($this->array_membres) == 0 ) : ?>
+	<br />
+	<p><strong>Pas de membres définis pour cette commission. <a class='add-membre' href='/commission/add-membre?id_commission=<?php echo $_GET["id_commission"] ?>'>Vous pouvez en ajouter un ici.</a></strong></p>
+<?php else : ?>
+	<p style='text-align: right' ><a class='add-membre btn btn-default' href='/commission/add-membre?id_commission=<?php echo $_GET["id_commission"] ?>'>Ajouter un membre</a></p>
+
+	<form method='post' action='/commission/saveMembres?id_commission=<?php echo $_GET["id_commission"] ?>' >
+		<!-- Tableau contenant les membres -->
+		<table class='table table-condensed'>
+			<thead>
+				<tr>
+					<th rowspan="2" >Libellé du membre</th>
+					<th colspan="2" >ERP</th>
+					<th colspan="1" >IGH</th>
+					<th rowspan="2">Type/nature de dossier</th>
+					<th></th>
+				</tr>
+				<tr>
+					<th>Catégorie</th>
+					<th>Type</th>
+					<th>Classe</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<?php echo $this->partialLoop("commission/partials/partial-ligne-membre-commission.phtml", $this->array_membres); ?>
+			</tbody>
+		</table>
+	</form>
+
+	<div id="save_div" style="text-align: center" >
+		<button class='save-membres save btn btn-success' data-loading-text="Sauvegarde des membres <img src='/images/load.gif' />">Sauvegarder les membres</button>
+
+		<span id='<?php echo $_GET["id_commission"] ?>_membres_notification' class='ui-state-highlight ui-helper-hidden' style='padding: .5em;'>
+			Les membres de la commission ont bien été sauvegardés.
+		</span>
+	</div>
+<?php endif ?>
+
+<div id="document"></div>
+
+<script type="text/javascript">
+	// Bouton de sauvegarde
+	$("#<?php echo $_GET["id_commission"] ?>_tabs .save-membres").button({
+		icons: { primary: "ui-icon-disk" }
+	}).click(function() {
+		$.ajax({
+			url: "/commission/save-membres",
+			data: $(this).parent().prev().serialize(),
+			type: "post",
+            beforeSend: function() {
+                $("#<?php echo $_GET["id_commission"] ?>_tabs .save-membres").button('loading')
+            },
+			success: function() {
+                $("#<?php echo $_GET["id_commission"] ?>_tabs .save-membres").button('reset')
+				$("#<?php echo $_GET["id_commission"] ?>_membres_notification").show();
+				setTimeout( function() { $("#<?php echo $_GET["id_commission"] ?>_membres_notification").fadeOut(); }, 2500);
+			}
+		});
+	});
+
+	// Lien pour ajouter un membre
+	$("#<?php echo $_GET["id_commission"] ?>_tabs .add-membre").click(function() {
+		var a = this;
+		$.ajax({
+			url: a.href,
+			success: function() {
+				var current_index = $("#<?php echo $_GET["id_commission"] ?>_tabs").tabs("option","active");
+                $("#<?php echo $_GET["id_commission"] ?>_tabs").tabs('load',current_index);
+			}
+		});
+		return false;
+	});
+
+	// Lien pour supprimer un membre
+	$("#<?php echo $_GET["id_commission"] ?>_tabs .delete-membre").click(function() {
+		var a = this;
+		$.ajax({
+			url: a.href,
+			success: function() {
+				var current_index = $("#<?php echo $_GET["id_commission"] ?>_tabs").tabs("option","active");
+                $("#<?php echo $_GET["id_commission"] ?>_tabs").tabs('load',current_index);
+			}
+		});
+		return false;
+	});
+</script>

@@ -1,0 +1,45 @@
+form #save-element {
+    margin: 0;
+}
+
+.alert.alert-info {
+    color: black;
+}
+.champFusionTable {
+    margin: 0;
+    word-wrap: anywhere;
+}
+.champFusionTable > tbody > tr > td {
+    border-color: black;
+}
+
+.form-inline input:not([type="submit"]),
+.form-inline select {
+    margin-bottom: 10px;
+}
+
+label.optional {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+.infos-champ #div-list-value {
+    display: none;
+}
+
+#default-display,
+#actions,
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+td.tdMove {
+    text-align: center;
+}
+
+#actions a,
+#actions button {
+    padding: 0.5rem;
+    text-decoration: none;
+    color: black;
+}

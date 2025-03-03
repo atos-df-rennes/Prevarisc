@@ -176,7 +176,12 @@ class DossierController extends Zend_Controller_Action
     public function init(): void
     {
         $this->_helper->layout->setLayout('dossier');
-        $this->view->inlineScript()->appendFile('/js/dossier/dossierGeneral.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->inlineScript()->appendFile('/js/dossier/dossierGeneral.js', 'text/javascript');
+        } else {
+            $this->view->inlineScript()->appendFile('/js/dossier/dossierGeneral-bs3.js', 'text/javascript');
+        }
+
         $this->view->inlineScript()->appendFile('/js/dossier/platau.js', 'text/javascript');
         $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/greenCircle.css', 'all');
 
@@ -1445,7 +1450,7 @@ class DossierController extends Zend_Controller_Action
             echo json_encode($idArray);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la sauvegarde du dossier',
                 'message' => $exception->getMessage(),
             ]);
@@ -1514,7 +1519,7 @@ class DossierController extends Zend_Controller_Action
                     }
                 }
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => "Erreur lors de l'enregistrement.", 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => "Erreur lors de l'enregistrement.", 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
             }
         }
 
@@ -1615,7 +1620,11 @@ class DossierController extends Zend_Controller_Action
     // GESTION DOCUMENTS CONSULTES
     public function docconsulteAction(): void
     {
-        $this->view->inlineScript()->appendFile('/js/dossier/dossierDocConsulte.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->inlineScript()->appendFile('/js/dossier/dossierDocConsulte.js', 'text/javascript');
+        } else {
+            $this->view->inlineScript()->appendFile('/js/dossier/dossierDocConsulte-bs3.js', 'text/javascript');
+        }
 
         // récupération du type de dossier (etude / visite)
         $service_dossier = new Service_Dossier();
@@ -1705,7 +1714,7 @@ class DossierController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => "Erreur lors de l'ajout du document",
                 'message' => $exception->getMessage(),
             ]);
@@ -1846,7 +1855,7 @@ class DossierController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de l\'ajout de l\'établissement',
                 'message' => $exception->getMessage(),
             ]);
@@ -1908,7 +1917,7 @@ class DossierController extends Zend_Controller_Action
             }
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => "Erreur lors de la suppression du lien à l'établissement.",
                 'message' => $exception->getMessage(),
             ]);
@@ -1932,7 +1941,7 @@ class DossierController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la suppression du lien avec ledossier',
                 'message' => $exception->getMessage(),
             ]);
@@ -2763,7 +2772,7 @@ class DossierController extends Zend_Controller_Action
                 $service_dossier->saveTextesApplicables($id, $post['textes_applicables']);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les textes applicables ont bien été mis à jour.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les textes applicables n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les textes applicables n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('textes-applicables', null, null, ['id' => $id]);
@@ -2845,7 +2854,7 @@ class DossierController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression effectué.', 'message' => 'La prescription a bien été supprimée']);
                 }
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => "Erreur lors de l'enregistrement.", 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => "Erreur lors de l'enregistrement.", 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
             }
         }
 
@@ -2907,7 +2916,11 @@ class DossierController extends Zend_Controller_Action
 
     public function prescriptionEditAction(): void
     {
-        $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        } else {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today-bs3.js', 'text/javascript');
+        }
 
         $idDossier = $this->getRequest()->getParam('id');
         $id_prescription = $this->getRequest()->getParam('id-prescription');
@@ -3143,7 +3156,7 @@ class DossierController extends Zend_Controller_Action
                 ]);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger([
-                    'context' => 'error',
+                    'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                     'title' => 'Erreur lors de l\'ajout de l\'établissement',
                     'message' => $e->getMessage(),
                 ]);
@@ -3204,7 +3217,7 @@ class DossierController extends Zend_Controller_Action
             $this->redirect('/search/dossier?objet=&page=1');
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => '',
                 'message' => 'L\'établissement n\'a pas été mis à jour. Veuillez rééssayez. ('.$exception->getMessage().')',
             ]);
@@ -3214,8 +3227,13 @@ class DossierController extends Zend_Controller_Action
     public function effectifsDegagementsDossierAction(): void
     {
         $viewHeadLink = $this->view;
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        } else {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/tableauInputParent.css', 'all');
+        }
 
         $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
         $service_dossier = new Service_Dossier();
@@ -3247,14 +3265,23 @@ class DossierController extends Zend_Controller_Action
 
     public function effectifsDegagementsDossierEditAction(): void
     {
-        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        } else {
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/formulaire.css', 'all');
+        }
 
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
-        $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        } else {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today-bs3.js', 'text/javascript');
+        }
 
         $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
 
@@ -3283,7 +3310,7 @@ class DossierController extends Zend_Controller_Action
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les effectifs et dégagements ont bien été mis à jour.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('effectifs-degagements-dossier', null, null, ['id' => $request->getParam('id')]);
@@ -3293,8 +3320,13 @@ class DossierController extends Zend_Controller_Action
     public function verificationsTechniquesAction(): void
     {
         $viewHeadLink = $this->view;
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        } else {
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/descriptif.css', 'all');
+            $viewHeadLink->headLink()->appendStylesheet('/css/formulaire-bs3/tableauInputParent.css', 'all');
+        }
 
         $serviceDossierVerificationsTechniques = new Service_DossierVerificationsTechniques();
         $service_dossier = new Service_Dossier();
@@ -3309,14 +3341,23 @@ class DossierController extends Zend_Controller_Action
 
     public function editVerificationsTechniquesAction(): void
     {
-        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        } else {
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/edit-table.css', 'all');
+            $this->view->headLink()->appendStylesheet('/css/formulaire-bs3/formulaire.css', 'all');
+        }
 
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
-        $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+        } else {
+            $this->view->inlineScript()->appendFile('/js/calendrier/today-bs3.js', 'text/javascript');
+        }
 
         $serviceDossierVerificationsTechniques = new Service_DossierVerificationsTechniques();
 
@@ -3345,7 +3386,7 @@ class DossierController extends Zend_Controller_Action
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les vérifications techniques ont bien été mises à jour.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les vérifications techniques n\'ont pas été mises à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les vérifications techniques n\'ont pas été mises à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('verifications-techniques', null, null, ['id' => $request->getParam('id')]);
@@ -3355,9 +3396,15 @@ class DossierController extends Zend_Controller_Action
     // Avis et derogations action donne une vue du/des avis et derogations donne sur ce dossier
     public function avisEtDerogationsAction(): void
     {
-        $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
-        $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
-        $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
+            $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
+            $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
+        } else {
+            $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations-bs3.css', 'all');
+            $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation-bs3.js');
+            $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button-bs3.js');
+        }
 
         $dbAvisDerogation = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();
@@ -3394,9 +3441,15 @@ class DossierController extends Zend_Controller_Action
      */
     public function avisEtDerogationsEditAction(): void
     {
-        $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
-        $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
-        $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
+        if (!getenv('PREVARISC_BOOTSTRAP_3')) {
+            $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
+            $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
+            $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
+        } else {
+            $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations-bs3.css', 'all');
+            $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation-bs3.js');
+            $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button-bs3.js');
+        }
 
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();
@@ -3440,6 +3493,9 @@ class DossierController extends Zend_Controller_Action
 
     public function avisEtDerogationsDeleteAction(): void
     {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
 
         $dbAvisDerogations->delete('ID_AVIS_DEROGATION = '.$this->getParam('id'));
@@ -3476,7 +3532,7 @@ class DossierController extends Zend_Controller_Action
 
         if (!$zip->close()) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la création du fichier ZIP',
                 'message' => 'Le fichier est vide',
             ]);

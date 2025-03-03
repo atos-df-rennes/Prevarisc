@@ -112,7 +112,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la sauvegarde de la catégorie',
                 'message' => $exception->getMessage(),
             ]);
@@ -172,7 +172,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => 'Erreur lors de la sauvegarde du texte',
                 'message' => $exception->getMessage(),
             ]);
@@ -232,7 +232,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
             ]);
         } catch (Exception $exception) {
             $this->_helper->flashMessenger([
-                'context' => 'error',
+                'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                 'title' => "Erreur lors de la sauvegarde de l'article",
                 'message' => $exception->getMessage(),
             ]);
@@ -361,7 +361,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                 $this->view->assign('idPrescriptionType', $this->view->prescriptionType[0]['ID_PRESCRIPTIONTYPE']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger([
-                    'context' => 'error',
+                    'context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error',
                     'title' => 'Erreur lors de la sauvegarde de la prescription',
                     'message' => $e->getMessage(),
                 ]);
@@ -389,7 +389,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression effectuée.', 'message' => 'Le texte a bien été supprimé']);
                 }
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => "Erreur lors de l'enregistrement.", 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => getenv('PREVARISC_BOOTSTRAP_3') ? 'danger' : 'error', 'title' => "Erreur lors de l'enregistrement.", 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
             }
         }
 

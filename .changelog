@@ -6,6 +6,7 @@ return [
         'feat' => ['label' => 'Évolutions'],
         'perf' => ['label' => 'Performance'],
         'fix' => ['label' => 'Corrections'],
+        'migration' => ['label' => 'Migration Symfony'],
     ],
     'dateFormat' => 'd-m-Y',
 ];

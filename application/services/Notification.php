@@ -11,7 +11,7 @@ class Service_Notification
         self::DOSSIER_PIECES_SESSION_NAMESPACE => 'DERNIERE_VISITE_PIECES_DOSSIER',
     ];
 
-    public function getLastPageVisitDate(string $sessionNamespace): string
+    public function getLastPageVisitDate(string $sessionNamespace): ?string
     {
         $derniereDateVisitePageSession = new Zend_Session_Namespace($sessionNamespace);
 
@@ -30,6 +30,10 @@ class Service_Notification
     public function isNew(array $element, string $elementSessionNamespace): bool
     {
         $derniereDateVisitePage = $this->getLastPageVisitDate($elementSessionNamespace);
+
+        if (null === $derniereDateVisitePage) {
+            return true;
+        }
 
         if (null === $element['DATE_NOTIFICATION']) {
             return false;
@@ -52,7 +56,7 @@ class Service_Notification
         $utilisateur->save();
     }
 
-    private function initLastPageVisitDate(string $sessionNamespace): string
+    private function initLastPageVisitDate(string $sessionNamespace): ?string
     {
         $modelUtilisateur = new Model_DbTable_Utilisateur();
 

@@ -317,7 +317,7 @@ class Service_Dashboard
         $dbEtablissement = new Model_DbTable_Etablissement();
 
         if (!$user['NUMINSEE_COMMUNE']) {
-            return [];
+            return $getCount ? 0 : [];
         }
 
         return $dbEtablissement->listeDesERPOuvertsSousAvisDefavorable(null, $user['NUMINSEE_COMMUNE'], null, $getCount);
